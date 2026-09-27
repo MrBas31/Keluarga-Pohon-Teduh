@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <!-- Firebase App (Core) & Realtime Database SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keluarga Pohon Teduh - Baby & Household Planner</title>
@@ -1385,6 +1388,24 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        // 1. Konfigurasi Firebase milikmu
+        const firebaseConfig = {
+          apiKey: "AIzaSyBp2h914VSiK4tD3JZF0OAPNUfN_Y360os",
+          authDomain: "keluarga-pohon-teduh.firebaseapp.com",
+          databaseURL: "https://keluarga-pohon-teduh-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "keluarga-pohon-teduh",
+          storageBucket: "keluarga-pohon-teduh.firebasestorage.app",
+          messagingSenderId: "452585055826",
+          appId: "1:452585055826:web:135367dd9ca2fb53fc218b"
+        };
+
+        // Inisialisasi koneksi ke Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const dbRef = db.ref('appState');
+
+        let isRemoteUpdate = false;
+        
         // DEFAULT STATE DATA
         let appState = {
             phase: 'prenatal',
@@ -1638,7 +1659,7 @@
 
         // INIT APPLICATION
         window.onload = function() {
-            loadFromLocalStorage();
+            initRealtimeSync();
             
             appState.currentTab = 'dashboard';
             switchPhase(appState.phase || 'prenatal');
@@ -4168,9 +4189,67 @@
             }
         }
 
+        // Fungsi untuk mendengarkan perubahan data secara realtime dari Firebase
+        function initRealtimeSync() {
+          // 1. Muat data awal dari localStorage dulu agar cepat tampil di layar
+          const localData = localStorage.getItem('pohonTeduhState');
+          if (localData) {
+            try {
+              appState = { ...appState, ...JSON.parse(localData) };
+            } catch (e) {
+              console.error("Error parsing local state", e);
+            }
+          }
+
+          // 2. Dengarkan perubahan dari Firebase (Realtime Listener)
+          dbRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+              isRemoteUpdate = true;
+              appState = data;
+      
+              // Simpan salinan terbaru ke localStorage
+              localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
+      
+              // Render/update ulang seluruh tampilan layar otomatis
+              refreshAllViews();
+      
+              isRemoteUpdate = false;
+            }
+          });
+        }
+
+        // Fungsi untuk memperbarui seluruh tampilan UI di layar
+        function refreshAllViews() {
+          if (typeof calculatePregnancyData === 'function') calculatePregnancyData();
+          if (typeof renderGallery === 'function') renderGallery();
+          if (typeof renderDashboardWidgets === 'function') renderDashboardWidgets();
+          if (typeof renderBudgetPieChart === 'function') renderBudgetPieChart(appState.activePieSubMenu || 'ALL');
+          if (typeof renderBudgetSubTabs === 'function') renderBudgetSubTabs();
+          if (typeof renderShoppingItems === 'function') renderShoppingItems();
+          if (typeof renderEmergencyContacts === 'function') renderEmergencyContacts();
+          if (typeof renderHospitalBagTable === 'function') renderHospitalBagTable();
+          if (typeof renderDepartureChecklist === 'function') renderDepartureChecklist();
+          if (typeof renderHusbandRoles === 'function') renderHusbandRoles();
+          if (typeof renderBirthPlan === 'function') renderBirthPlan();
+          if (typeof renderAffirmations === 'function') renderAffirmations();
+          if (typeof renderBabyNames === 'function') renderBabyNames();
+          if (typeof renderHospitals === 'function') renderHospitals();
+          if (typeof renderContractionLogs === 'function') renderContractionLogs();
+          if (typeof renderMedicalRecords === 'function') renderMedicalRecords();
+        }
+        
         // LOCAL STORAGE & EXPORT/IMPORT
         function saveToLocalStorage() {
-            localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
+          if (isRemoteUpdate) return;
+  
+          // 1. Tetap simpan di memori lokal HP/Komputer sebagai cadangan
+          localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
+  
+          // 2. Langsung kirim data terbaru ke Firebase Database agar HP Ollyl menerima datanya
+          dbRef.set(appState).catch(err => {
+            console.error("Gagal menyimpan ke Firebase:", err);
+          });
         }
 
         function loadFromLocalStorage() {
