@@ -1639,6 +1639,10 @@
         // INIT APPLICATION
         window.onload = function() {
             loadFromLocalStorage();
+            
+            // PAKSA SELALU BUKA TAB DASHBOARD SAAT HALAMAN PERTAMA KALI DIBUKA
+            appState.currentTab = 'dashboard';
+            
             switchPhase(appState.phase || 'prenatal');
             calculatePregnancyData();
             renderGallery();
