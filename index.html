@@ -4274,14 +4274,26 @@
         // LOCAL STORAGE & EXPORT/IMPORT
         function saveToLocalStorage() {
           if (isRemoteUpdate) return;
-  
-          // 1. Simpan di memori lokal HP/Laptop
-          localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
-  
-          // 2. Langsung sync & kirim data terbaru ke Firebase Database
-          dbRef.set(appState).catch(err => {
-            console.error("Gagal menyimpan ke Firebase:", err);
-          });
+
+          try {
+            // 1. Bersihkan data dari nilai 'undefined' agar Firebase tidak menolak
+            const cleanState = JSON.parse(JSON.stringify(appState));
+
+            // 2. Simpan di memori lokal HP/Laptop
+            localStorage.setItem('pohonTeduhState', JSON.stringify(cleanState));
+
+            // 3. Kirim ke Firebase Realtime Database
+            dbRef.set(cleanState)
+              .then(() => {
+                console.log("Data berhasil tersimpan di Firebase!");
+              })
+              .catch(err => {
+                console.error("Gagal menyimpan ke Firebase:", err);
+                alert("Gagal menyimpan ke cloud Firebase. Cek koneksi atau rules Firebase!");
+              });
+          } catch (e) {
+            console.error("Error formatting state:", e);
+          }
         }
 
         function exportData() {
