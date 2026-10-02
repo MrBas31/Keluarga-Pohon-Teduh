@@ -4240,27 +4240,48 @@
           if (typeof renderMedicalRecords === 'function') renderMedicalRecords();
         }
         
+        // Fungsi untuk mendengarkan perubahan data secara realtime dari Firebase
+        function initRealtimeSync() {
+          // 1. Muat data awal dari localStorage agar tampilan awal cepat muncul
+          const localData = localStorage.getItem('pohonTeduhState');
+          if (localData) {
+            try {
+              appState = { ...appState, ...JSON.parse(localData) };
+              refreshAllViews(); // PERBAIKAN: Memaksa layar memperbarui tampilan awal
+            } catch (e) {
+              console.error("Error parsing local state", e);
+            }
+          }
+
+          // 2. Dengarkan perubahan dari Firebase secara realtime
+          dbRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+              isRemoteUpdate = true;
+              appState = data;
+      
+              // Simpan salinan terbaru ke localStorage
+              localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
+      
+              // Paksa render ulang seluruh UI di layar
+              refreshAllViews();
+      
+              isRemoteUpdate = false;
+            }
+          });
+        }
+
         // LOCAL STORAGE & EXPORT/IMPORT
         function saveToLocalStorage() {
           if (isRemoteUpdate) return;
   
-          // 1. Tetap simpan di memori lokal HP/Komputer sebagai cadangan
+          // 1. Simpan di memori lokal HP/Laptop
           localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
   
-          // 2. Langsung kirim data terbaru ke Firebase Database agar HP Ollyl menerima datanya
+          // 2. Langsung sync & kirim data terbaru ke Firebase Database
           dbRef.set(appState).catch(err => {
             console.error("Gagal menyimpan ke Firebase:", err);
           });
-        }
-
-        function loadFromLocalStorage() {
-            const saved = localStorage.getItem('pohonTeduhState');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    appState = { ...appState, ...parsed };
-                } catch(e) {}
-            }
         }
 
         function exportData() {
