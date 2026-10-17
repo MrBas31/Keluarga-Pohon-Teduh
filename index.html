@@ -4190,37 +4190,47 @@
             }
         }
 
-        // Fungsi untuk mendengarkan perubahan data secara realtime dari Firebase
+        // ==========================================
+        // SYSTEM SYNC REALTIME FIREBASE (FIREBASE-FIRST)
+        // ==========================================
+
         function initRealtimeSync() {
-          // 1. Muat data awal dari localStorage dulu agar cepat tampil di layar
+          // 1. Ambil cadangan cepat dari LocalStorage agar UI langsung muncul tanpa blank
           const localData = localStorage.getItem('pohonTeduhState');
           if (localData) {
             try {
-              appState = { ...appState, ...JSON.parse(localData) };
+              const parsed = JSON.parse(localData);
+              appState = { ...appState, ...parsed };
+              refreshAllViews();
             } catch (e) {
-              console.error("Error parsing local state", e);
+              console.error("Error parsing local state:", e);
             }
           }
 
-          // 2. Dengarkan perubahan dari Firebase (Realtime Listener)
+          // 2. KONEKSI UTAMA: Dengarkan perubahan Firebase secara Realtime (Cloud First)
           dbRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-              isRemoteUpdate = true;
-              appState = data;
-      
-              // Simpan salinan terbaru ke localStorage
-              localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
-      
-              // Render/update ulang seluruh tampilan layar otomatis
+            const remoteData = snapshot.val();
+            if (remoteData && typeof remoteData === 'object') {
+              isRemoteUpdate = true; // Kunci sementara agar tidak memicu simpan berulang (loop)
+              
+              appState = remoteData;
+              
+              // Simpan data terbaru dari cloud ke memori lokal HP/PC
+              try {
+                localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
+              } catch(e) {}
+              
+              // Paksa render ulang seluruh komponen layar
               refreshAllViews();
-      
+              
               isRemoteUpdate = false;
             }
+          }, (error) => {
+            console.error("Firebase Sync Error:", error);
           });
         }
 
-        // Fungsi untuk memperbarui seluruh tampilan UI di layar
+        // FUNGSI UNTUK MEMPERBARUI SELURUH TAMPILAN UI DI LAYAR
         function refreshAllViews() {
           if (typeof calculatePregnancyData === 'function') calculatePregnancyData();
           if (typeof renderGallery === 'function') renderGallery();
@@ -4239,36 +4249,55 @@
           if (typeof renderContractionLogs === 'function') renderContractionLogs();
           if (typeof renderMedicalRecords === 'function') renderMedicalRecords();
         }
-        
-        // Fungsi untuk mendengarkan perubahan data secara realtime dari Firebase
-        function initRealtimeSync() {
-          // 1. Muat data awal dari localStorage agar tampilan awal cepat muncul
-          const localData = localStorage.getItem('pohonTeduhState');
-          if (localData) {
-            try {
-              appState = { ...appState, ...JSON.parse(localData) };
-              refreshAllViews(); // PERBAIKAN: Memaksa layar memperbarui tampilan awal
-            } catch (e) {
-              console.error("Error parsing local state", e);
-            }
-          }
 
-          // 2. Dengarkan perubahan dari Firebase secara realtime
-          dbRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-              isRemoteUpdate = true;
-              appState = data;
-      
-              // Simpan salinan terbaru ke localStorage
-              localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
-      
-              // Paksa render ulang seluruh UI di layar
-              refreshAllViews();
-      
-              isRemoteUpdate = false;
-            }
-          });
+        // FUNGSI UTAMA PENYIMPANAN DATA KE FIREBASE
+        function saveToLocalStorage() {
+          // Jika perubahan datang dari Firebase (milik pasangan), batalkan pengiriman ulang
+          if (isRemoteUpdate) return;
+
+          try {
+            // 1. Sanitasi data dari nilai 'undefined' agar tidak ditolak Firebase
+            const cleanState = JSON.parse(JSON.stringify(appState));
+
+            // 2. Simpan cadangan di memori lokal HP/Laptop
+            localStorage.setItem('pohonTeduhState', JSON.stringify(cleanState));
+
+            // 3. Kirim langsung ke Firebase Realtime Database
+            dbRef.set(cleanState)
+              .then(() => {
+                console.log("Data berhasil tersinkronisasi ke Firebase Cloud!");
+              })
+              .catch(err => {
+                console.error("Gagal sync ke Firebase:", err);
+                alert("Gagal menyimpan ke cloud. Pastikan aturan 'Rules' Firebase sudah set read & write = true.");
+              });
+          } catch (e) {
+            console.error("Error formatting state:", e);
+          }
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `Pohon_Teduh_Data_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        function importData(event) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    appState = JSON.parse(e.target.result);
+                    saveToLocalStorage();
+                    location.reload();
+                } catch(err) {
+                    alert("Format file JSON tidak valid.");
+                }
+            };
+            reader.readAsText(event.target.files[0]);
         }
 
         // LOCAL STORAGE & EXPORT/IMPORT
