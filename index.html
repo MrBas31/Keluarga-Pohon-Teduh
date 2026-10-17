@@ -4075,6 +4075,14 @@
             if (!boyTbody || !girlTbody) return;
             if (!appState.babyNames) appState.babyNames = [];
 
+            // LOGIKA SORTIR: Favorit (⭐) di atas, lalu urut Abjad (A-Z)
+            const sortLogic = (a, b) => {
+                if (a.fav && !b.fav) return -1;
+                if (!a.fav && b.fav) return 1;
+                return (a.name || '').localeCompare(b.name || '');
+            };
+
+            // Terapkan filter & sortir ke daftar nama Laki-laki dan Perempuan
             const boys = appState.babyNames.filter(n => (n.gender || 'boy') === 'boy');
             const girls = appState.babyNames.filter(n => n.gender === 'girl');
 
