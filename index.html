@@ -79,7 +79,7 @@
             </div>
 
             <!-- LDR SYNC ACTIONS -->
-            <div class="flex gap-2 text-xs">
+            <div class="flex flex-wrap justify-center gap-2 text-xs">
                 <button onclick="manualSaveToFirebase()" id="btn-manual-save" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm" title="Simpan & Paksa Sync ke Firebase Cloud">
                     <i class="fa-solid fa-cloud-arrow-up"></i> <span id="sync-status-text">Simpan Data</span>
                 </button>
@@ -91,6 +91,7 @@
                     <input type="file" id="import-file" onchange="importData(event)" class="hidden" accept=".json">
                 </label>
             </div>
+        </div> <!-- INI DIA TAG PENUTUP YANG HILANG -->
 
         <!-- MAIN TABS NAV (KHUSUS FASE KEHAMILAN) -->
         <nav id="prenatal-nav-tabs" class="max-w-6xl mx-auto px-4 flex space-x-6 overflow-x-auto text-sm border-t border-slate-100 pt-1">
