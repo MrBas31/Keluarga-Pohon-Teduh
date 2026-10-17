@@ -4197,6 +4197,8 @@
         // SYSTEM SYNC REALTIME FIREBASE (FIREBASE-FIRST)
         // ==========================================
 
+        window.hasFetchedCloud = false; // FLAG GEMBOK: Mencegah penimpaan data saat awal loading
+
         function initRealtimeSync() {
           // 1. Ambil cadangan cepat dari LocalStorage agar UI langsung muncul tanpa blank
           const localData = localStorage.getItem('pohonTeduhState');
@@ -4213,6 +4215,8 @@
           // 2. KONEKSI UTAMA: Dengarkan perubahan Firebase secara Realtime (Cloud First)
           dbRef.on('value', (snapshot) => {
             const remoteData = snapshot.val();
+            window.hasFetchedCloud = true; // Buka gembok karena data cloud terbaru sudah berhasil didownload
+            
             if (remoteData && typeof remoteData === 'object') {
               isRemoteUpdate = true; // Kunci sementara agar tidak memicu simpan berulang (loop)
               
@@ -4259,8 +4263,15 @@
 
           try {
             const cleanState = JSON.parse(JSON.stringify(appState));
+            // 1. Selalu simpan ke memori lokal HP/Laptop
             localStorage.setItem('pohonTeduhState', JSON.stringify(cleanState));
 
+            // 2. CEGAH PENIMPAAN: Jika aplikasi belum mendownload data terbaru dari Firebase, larang push ke Cloud!
+            if (!window.hasFetchedCloud) {
+              return; 
+            }
+
+            // 3. Kirim ke Firebase Cloud jika sudah aman
             dbRef.set(cleanState)
               .then(() => {
                 console.log("Data berhasil tersinkronisasi ke Firebase Cloud!");
