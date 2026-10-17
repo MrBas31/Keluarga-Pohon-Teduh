@@ -4252,6 +4252,27 @@
           if (typeof renderMedicalRecords === 'function') renderMedicalRecords();
         }
 
+        // FUNGSI PENYIMPANAN KE FIREBASE
+        function saveToLocalStorage() {
+          if (isRemoteUpdate) return;
+
+          try {
+            const cleanState = JSON.parse(JSON.stringify(appState));
+            localStorage.setItem('pohonTeduhState', JSON.stringify(cleanState));
+
+            dbRef.set(cleanState)
+              .then(() => {
+                console.log("Data berhasil tersinkronisasi ke Firebase Cloud!");
+              })
+              .catch(err => {
+                console.error("Gagal sync ke Firebase:", err);
+                alert("Gagal menyimpan ke cloud. Pastikan aturan 'Rules' Firebase sudah set read & write = true.");
+              });
+          } catch (e) {
+            console.error("Error formatting state:", e);
+          }
+        }
+        
         // FUNGSI SIMPAN MANUAL DENGAN INDIKATOR VISUAL
         function manualSaveToFirebase() {
           const btn = document.getElementById('btn-manual-save');
