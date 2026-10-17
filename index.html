@@ -4083,8 +4083,8 @@
             };
 
             // Terapkan filter & sortir ke daftar nama Laki-laki dan Perempuan
-            const boys = appState.babyNames.filter(n => (n.gender || 'boy') === 'boy');
-            const girls = appState.babyNames.filter(n => n.gender === 'girl');
+            const boys = appState.babyNames.filter(n => (n.gender || 'boy') === 'boy').sort(sortLogic);
+            const girls = appState.babyNames.filter(n => n.gender === 'girl').sort(sortLogic);
 
             const renderTableRows = (arr) => {
                 if (arr.length === 0) {
