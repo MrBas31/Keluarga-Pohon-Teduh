@@ -141,6 +141,12 @@
 
         /* Fix Background Gradient di Card Skrip Afirmasi */
         body.dark-mode .from-sky-50 { background: #1e293b !important; border-color: #334155 !important; }
+
+        /* Fix Bayangan Terang (Halo Putih) di Card Dashboard & Tombol Kontraksi */
+        body.dark-mode .shadow-sky-100,
+        body.dark-mode .shadow-emerald-100 {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5) !important;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12" onclick="closeAllDropdowns()">
