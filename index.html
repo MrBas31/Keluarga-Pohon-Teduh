@@ -1370,6 +1370,8 @@
                 <h2 id="detail-rs-name" class="text-2xl font-bold text-slate-800">--</h2>
                 <p id="detail-rs-address" class="text-xs text-slate-500">--</p>
                 <div class="text-xs font-semibold text-emerald-600 pt-1" id="detail-rs-phone"><i class="fa-solid fa-phone mr-1"></i> --</div>
+                <!-- WADAH BARU UNTUK TOMBOL SOSIAL MEDIA -->
+                <div class="flex flex-wrap gap-2 pt-2" id="detail-rs-socials"></div>
             </div>
 
             <div class="p-4 bg-emerald-50/70 border border-emerald-200/80 rounded-2xl space-y-2">
@@ -1491,6 +1493,30 @@
                 <div>
                     <label class="font-semibold text-slate-700">Alamat Lengkap</label>
                     <input type="text" id="form-rs-address" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                </div>
+                
+                <!-- ISIAN BARU: SOSIAL MEDIA & LINK -->
+                <div class="space-y-2 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                    <div class="font-bold text-slate-700 text-xs"><i class="fa-solid fa-link text-slate-500 mr-1"></i> Link Sosial Media & Web (Opsional)</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-2xs font-semibold text-slate-600">🌐 Website</label>
+                            <input type="text" id="form-rs-web" placeholder="https://..." class="w-full mt-0.5 p-2 border border-slate-200 rounded-lg outline-none text-2xs">
+                        </div>
+                        <div>
+                            <label class="text-2xs font-semibold text-slate-600">🔗 Linktree</label>
+                            <input type="text" id="form-rs-linktree" placeholder="https://linktr.ee/..." class="w-full mt-0.5 p-2 border border-slate-200 rounded-lg outline-none text-2xs">
+                        </div>
+                        <div>
+                            <label class="text-2xs font-semibold text-slate-600">📸 Instagram</label>
+                            <input type="text" id="form-rs-ig" placeholder="@username / link ig" class="w-full mt-0.5 p-2 border border-slate-200 rounded-lg outline-none text-2xs">
+                        </div>
+                        <div>
+                            <label class="text-2xs font-semibold text-slate-600">🎵 TikTok</label>
+                            <input type="text" id="form-rs-tiktok" placeholder="@username / link tiktok" class="w-full mt-0.5 p-2 border border-slate-200 rounded-lg outline-none text-2xs">
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">Cukup ketik username (misal: @herminamadiun) atau paste link lengkapnya.</p>
                 </div>
 
                 <div>
@@ -3992,7 +4018,31 @@
 
             document.getElementById('detail-rs-name').innerText = rs.name;
             document.getElementById('detail-rs-address').innerText = rs.address;
-            document.getElementById('detail-rs-phone').innerHTML = `<i class="fa-solid fa-phone mr-1"></i> Kontak: ${rs.phone || '-'}`;
+            
+            // LOGIKA WHATSAPP OTOMATIS
+            let phoneHtml = '<i class="fa-solid fa-phone mr-1"></i> Kontak: -';
+            if (rs.phone) {
+                const cleanPhone = rs.phone.replace(/[^0-9]/g, '');
+                const waPhone = cleanPhone.startsWith('0') ? '62' + cleanPhone.substring(1) : cleanPhone;
+                phoneHtml = `<a href="https://wa.me/${waPhone}" target="_blank" class="hover:underline hover:text-emerald-500 transition flex items-center gap-1.5" title="Chat WhatsApp RS"><i class="fa-brands fa-whatsapp text-sm text-emerald-500"></i> WhatsApp: ${rs.phone}</a>`;
+            }
+            document.getElementById('detail-rs-phone').innerHTML = phoneHtml;
+            
+            // LOGIKA SOCIAL MEDIA LINKS
+            const socialContainer = document.getElementById('detail-rs-socials');
+            let socialsHtml = '';
+            if (rs.web) socialsHtml += `<a href="${rs.web.startsWith('http') ? rs.web : 'https://'+rs.web}" target="_blank" class="px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg text-2xs font-semibold transition border border-sky-100"><i class="fa-solid fa-globe mr-1"></i> Website</a>`;
+            if (rs.linktree) socialsHtml += `<a href="${rs.linktree.startsWith('http') ? rs.linktree : 'https://'+rs.linktree}" target="_blank" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-2xs font-semibold transition border border-emerald-100"><i class="fa-solid fa-link mr-1"></i> Linktree</a>`;
+            if (rs.ig) {
+                let igLink = rs.ig.includes('instagram.com') ? rs.ig : `https://instagram.com/${rs.ig.replace('@', '')}`;
+                socialsHtml += `<a href="${igLink}" target="_blank" class="px-2.5 py-1 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg text-2xs font-semibold transition border border-pink-100"><i class="fa-brands fa-instagram mr-1"></i> Instagram</a>`;
+            }
+            if (rs.tiktok) {
+                let ttLink = rs.tiktok.includes('tiktok.com') ? rs.tiktok : `https://tiktok.com/@${rs.tiktok.replace('@', '')}`;
+                socialsHtml += `<a href="${ttLink}" target="_blank" class="px-2.5 py-1 bg-slate-800 hover:bg-black text-white rounded-lg text-2xs font-semibold transition shadow-sm"><i class="fa-brands fa-tiktok mr-1"></i> TikTok</a>`;
+            }
+            if (socialContainer) socialContainer.innerHTML = socialsHtml;
+
             document.getElementById('detail-rs-husband-facilities').innerText = rs.husbandFacilities || 'Belum ada data fasilitas pendamping dicatat.';
 
             const matrixContainer = document.getElementById('detail-rs-matrix-container');
@@ -4206,6 +4256,10 @@
                     document.getElementById('form-rs-type').value = rs.type || '';
                     document.getElementById('form-rs-phone').value = rs.phone || '';
                     document.getElementById('form-rs-address').value = rs.address || '';
+                    document.getElementById('form-rs-web').value = rs.web || '';
+                    document.getElementById('form-rs-linktree').value = rs.linktree || '';
+                    document.getElementById('form-rs-ig').value = rs.ig || '';
+                    document.getElementById('form-rs-tiktok').value = rs.tiktok || '';
                     document.getElementById('form-rs-husband-facilities').value = rs.husbandFacilities || '';
                     
                     document.getElementById('form-rs-obgyn-female').value = (rs.obgynFemale || []).join(', ');
@@ -4374,6 +4428,10 @@
             const type = document.getElementById('form-rs-type').value;
             const phone = document.getElementById('form-rs-phone').value;
             const address = document.getElementById('form-rs-address').value;
+            const web = document.getElementById('form-rs-web').value.trim();
+            const linktree = document.getElementById('form-rs-linktree').value.trim();
+            const ig = document.getElementById('form-rs-ig').value.trim();
+            const tiktok = document.getElementById('form-rs-tiktok').value.trim();
             const husbandFacilities = document.getElementById('form-rs-husband-facilities').value;
             
             const obgynFemale = document.getElementById('form-rs-obgyn-female').value.split(',').map(s => s.trim()).filter(Boolean);
@@ -4387,7 +4445,7 @@
 
             const newRSData = {
                 id: id ? Number(id) : Date.now(),
-                name, images, type, phone, address, husbandFacilities,
+                name, images, type, phone, address, web, linktree, ig, tiktok, husbandFacilities,
                 obgynFemale, obgynMale, pediatricians, facilities,
                 methods: tempEditMatrix.methods,
                 classes: tempEditMatrix.classes,
