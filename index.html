@@ -1621,6 +1621,7 @@
 
         // CHART INSTANCE
         let budgetPieChartInstance = null;
+        let medicalGrowthChartInstance = null;
 
         // CONTRACTION TIMER VARS
         let contractionStartTime = null;
@@ -1700,6 +1701,7 @@
             renderHospitals();
             renderContractionLogs();
             renderMedicalRecords();
+            if (typeof renderMedicalChart === 'function') renderMedicalChart(); // <-- Grafik Medis ditambahkan di sini
         };
 
         // HELPER: GDRIVE LINK CONVERTER
@@ -2459,6 +2461,7 @@
 
         // MEDICAL RECORDS & USG VAULT LOGIC (UPGRADED WITH BBJ & PHOTO SLIDER)
         function renderMedicalRecords() {
+            renderMedicalChart(); //
             const container = document.getElementById('medical-records-container');
             if (!container) return;
             if (!appState.medicalRecords) appState.medicalRecords = [];
@@ -2635,6 +2638,109 @@
             document.getElementById('modal-usg-zoom').classList.add('hidden');
         }
 
+        // FUNGSI RENDER GRAFIK PERTUMBUHAN JANIN
+        function renderMedicalChart() {
+            const canvas = document.getElementById('medicalGrowthChart');
+            const emptyState = document.getElementById('medical-chart-empty');
+            if (!canvas) return;
+
+            // Ambil data rekam medis yang punya isian BBJ atau PBJ
+            const records = (appState.medicalRecords || []).filter(r => r.bbj || r.pbj);
+            
+            // Urutkan berdasarkan Usia Kandungan (Angka dari string "32 Minggu")
+            records.sort((a, b) => {
+                const weekA = parseInt(String(a.gestation).replace(/\D/g, '')) || 0;
+                const weekB = parseInt(String(b.gestation).replace(/\D/g, '')) || 0;
+                if (weekA !== weekB) return weekA - weekB;
+                return new Date(a.date) - new Date(b.date);
+            });
+
+            if (records.length === 0) {
+                if (emptyState) emptyState.classList.remove('hidden');
+                if (medicalGrowthChartInstance) {
+                    medicalGrowthChartInstance.destroy();
+                    medicalGrowthChartInstance = null;
+                }
+                return;
+            }
+
+            if (emptyState) emptyState.classList.add('hidden');
+
+            const labels = [];
+            const dataBBJ = [];
+            const dataPBJ = [];
+
+            records.forEach(r => {
+                const week = parseInt(String(r.gestation).replace(/\D/g, '')) || '?';
+                labels.push(`${week} Mgg`);
+                
+                // Ambil angkanya saja dari string (misal: "1850 gram" -> 1850)
+                const bbjNum = parseInt(String(r.bbj).replace(/\D/g, '')) || null;
+                const pbjNum = parseInt(String(r.pbj).replace(/\D/g, '')) || null;
+                
+                dataBBJ.push(bbjNum);
+                dataPBJ.push(pbjNum);
+            });
+
+            if (medicalGrowthChartInstance) {
+                medicalGrowthChartInstance.destroy();
+            }
+
+            const ctx = canvas.getContext('2d');
+            medicalGrowthChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Berat Janin (gram)',
+                            data: dataBBJ,
+                            borderColor: '#0284c7', // Warna Sky
+                            backgroundColor: 'rgba(2, 132, 199, 0.1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#0284c7',
+                            pointRadius: 4,
+                            yAxisID: 'y',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Panjang (cm)',
+                            data: dataPBJ,
+                            borderColor: '#10b981', // Warna Emerald
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#10b981',
+                            pointRadius: 4,
+                            yAxisID: 'y1',
+                            tension: 0.3,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            type: 'linear', display: true, position: 'left',
+                            title: { display: true, text: 'Berat (gram)', font: {size: 10} },
+                            beginAtZero: true
+                        },
+                        y1: {
+                            type: 'linear', display: true, position: 'right',
+                            title: { display: true, text: 'Panjang (cm)', font: {size: 10} },
+                            grid: { drawOnChartArea: false },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: { legend: { labels: { boxWidth: 12, font: {size: 10} } } }
+                }
+            });
+        }
+        
         // WAKE WINDOW TIMER
         function setWakeWindowLimit(limit) {
             appState.wakeLimitMinutes = limit;
@@ -4279,6 +4385,7 @@
           if (typeof renderHospitals === 'function') renderHospitals();
           if (typeof renderContractionLogs === 'function') renderContractionLogs();
           if (typeof renderMedicalRecords === 'function') renderMedicalRecords();
+          if (typeof renderMedicalChart === 'function') renderMedicalChart(); // <-- Grafik Medis ditambahkan di sini
         }
 
         // FUNGSI PENYIMPANAN KE FIREBASE
