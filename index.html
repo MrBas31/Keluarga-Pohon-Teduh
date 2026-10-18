@@ -670,6 +670,20 @@
                     </button>
                 </div>
 
+            <!-- FILTER & SEARCH PUSTAKA (BARU) -->
+                <div class="flex flex-col md:flex-row gap-3 items-center justify-between bg-white p-4 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-2 w-full md:w-auto">
+                        <span class="text-xs text-slate-500 font-semibold whitespace-nowrap"><i class="fa-solid fa-filter mr-1"></i>Kategori:</span>
+                        <select id="ref-category-filter" onchange="renderReferences()" class="text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-sky-500 font-medium text-slate-700 w-full md:w-auto min-w-[160px]">
+                            <option value="ALL">Semua Kategori</option>
+                        </select>
+                    </div>
+                    <div class="w-full md:w-auto relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="ref-search-input" onkeyup="renderReferences()" placeholder="Cari judul atau catatan..." class="w-full md:w-64 pl-8 pr-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-sky-500 text-slate-700">
+                    </div>
+                </div>
+                
             <!-- TABEL REFERENSI (BISA DIGESER KOLOMNYA) -->
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-2">
                     <div class="overflow-x-auto pb-4">
@@ -4415,16 +4429,49 @@
         // ==========================================
         function renderReferences() {
             const tbody = document.getElementById('reference-tbody');
+            const filterDropdown = document.getElementById('ref-category-filter');
+            const searchInput = document.getElementById('ref-search-input');
+            
             if (!tbody) return;
             if (!appState.references) appState.references = [];
 
+            // 1. Update Dropdown Filter Otomatis (Membaca kategori unik yang ada)
+            if (filterDropdown) {
+                const currentFilter = filterDropdown.value || 'ALL';
+                const uniqueCategories = [...new Set(appState.references.map(r => r.category || 'Lainnya'))];
+                
+                filterDropdown.innerHTML = `<option value="ALL">Semua Kategori (${appState.references.length})</option>` + 
+                    uniqueCategories.map(cat => `<option value="${cat}" ${cat === currentFilter ? 'selected' : ''}>${cat}</option>`).join('');
+                
+                filterDropdown.value = currentFilter; // Kembalikan ke pilihan terakhir user
+            }
+
+            // 2. Ambil Nilai Filter & Search
+            const filterVal = filterDropdown ? filterDropdown.value : 'ALL';
+            const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+            // 3. Terapkan Saringan (Filter + Search)
+            const filteredRefs = appState.references.filter(ref => {
+                const matchCategory = filterVal === 'ALL' || (ref.category || 'Lainnya') === filterVal;
+                const matchSearch = !searchVal || 
+                                    (ref.title || '').toLowerCase().includes(searchVal) || 
+                                    (ref.desc || '').toLowerCase().includes(searchVal) ||
+                                    (ref.category || '').toLowerCase().includes(searchVal);
+                return matchCategory && matchSearch;
+            });
+
+            // 4. Render Hasilnya
             if (appState.references.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 italic">Belum ada referensi yang disimpan.</td></tr>`;
                 return;
             }
 
-            // Render menjadi baris tabel <tr> tanpa limitasi pemotongan baris (line-clamp dihapus)
-            tbody.innerHTML = appState.references.map(ref => `
+            if (filteredRefs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 italic">Tidak ada referensi yang cocok dengan pencarian/filtermu.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filteredRefs.map(ref => `
                 <tr class="hover:bg-slate-50/80 transition align-top">
                     <td class="p-3 border-r border-slate-100">
                         <span class="text-2xs font-bold text-sky-700 bg-sky-50 px-2 py-1 rounded-md inline-block whitespace-nowrap">
