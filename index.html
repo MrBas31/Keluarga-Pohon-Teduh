@@ -966,14 +966,18 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3 p-3 bg-sky-50/70 rounded-2xl border border-sky-100">
+                <div class="grid grid-cols-3 gap-2 p-3 bg-sky-50/70 rounded-2xl border border-sky-100">
                     <div>
-                        <label class="font-semibold text-sky-900">Berat Badan Janin (BBJ)</label>
-                        <input type="text" id="form-med-bbj" placeholder="misal: 1850 gram" class="w-full mt-1 p-2.5 bg-white border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-bold text-sky-900">
+                        <label class="text-2xs font-semibold text-sky-900">Berat Janin (BBJ)</label>
+                        <input type="text" id="form-med-bbj" placeholder="misal: 1850 gr" class="w-full mt-1 p-2 bg-white border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-bold text-sky-900 text-xs">
                     </div>
                     <div>
-                        <label class="font-semibold text-sky-900">Panjang Janin (PBJ / Lainnya)</label>
-                        <input type="text" id="form-med-pbj" placeholder="misal: 40 cm" class="w-full mt-1 p-2.5 bg-white border border-sky-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-bold text-sky-900">
+                        <label class="text-2xs font-semibold text-emerald-900">Panjang (CRL)</label>
+                        <input type="text" id="form-med-crl" placeholder="misal: 5 cm" class="w-full mt-1 p-2 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-emerald-900 text-xs" title="Crown-Rump Length (Kepala ke Bokong)">
+                    </div>
+                    <div>
+                        <label class="text-2xs font-semibold text-amber-900">Tulang Paha (FL)</label>
+                        <input type="text" id="form-med-fl" placeholder="misal: 6 cm" class="w-full mt-1 p-2 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none font-bold text-amber-900 text-xs" title="Femur Length (Tulang Paha)">
                     </div>
                 </div>
 
@@ -2792,15 +2796,19 @@
                                 <div>🤰 <strong>Usia Kandungan:</strong> ${med.gestation || '-'}</div>
                             </div>
 
-                            <!-- BBJ & PBJ BADGES -->
-                            <div class="grid grid-cols-2 gap-2 pt-1">
-                                <div class="bg-sky-50 p-2 rounded-xl border border-sky-100 text-2xs">
-                                    <span class="text-sky-700 font-semibold block">👶 Berat Janin (BBJ)</span>
-                                    <span class="font-extrabold text-sky-900 text-xs">${med.bbj || 'Belum dicatat'}</span>
+                            <!-- BBJ, CRL & FL BADGES -->
+                            <div class="grid grid-cols-3 gap-2 pt-1">
+                                <div class="bg-sky-50 p-1.5 rounded-xl border border-sky-100 text-2xs">
+                                    <span class="text-sky-700 font-semibold block">👶 BBJ</span>
+                                    <span class="font-extrabold text-sky-900 text-xs">${med.bbj || '-'}</span>
                                 </div>
-                                <div class="bg-emerald-50 p-2 rounded-xl border border-emerald-100 text-2xs">
-                                    <span class="text-emerald-700 font-semibold block">📏 Panjang / Detail</span>
-                                    <span class="font-extrabold text-emerald-900 text-xs">${med.pbj || 'Belum dicatat'}</span>
+                                <div class="bg-emerald-50 p-1.5 rounded-xl border border-emerald-100 text-2xs">
+                                    <span class="text-emerald-700 font-semibold block" title="Crown-Rump Length">📏 CRL</span>
+                                    <span class="font-extrabold text-emerald-900 text-xs">${med.crl || '-'}</span>
+                                </div>
+                                <div class="bg-amber-50 p-1.5 rounded-xl border border-amber-100 text-2xs">
+                                    <span class="text-amber-700 font-semibold block" title="Femur Length">🦴 FL</span>
+                                    <span class="font-extrabold text-amber-900 text-xs">${med.fl || '-'}</span>
                                 </div>
                             </div>
 
@@ -2860,7 +2868,8 @@
                     document.getElementById('form-med-doctor').value = med.doctor || '';
                     document.getElementById('form-med-gestation').value = med.gestation || '';
                     document.getElementById('form-med-bbj').value = med.bbj || '';
-                    document.getElementById('form-med-pbj').value = med.pbj || '';
+                    document.getElementById('form-med-crl').value = med.crl || '';
+                    document.getElementById('form-med-fl').value = med.fl || '';
                     document.getElementById('form-med-notes').value = med.notes || '';
                     
                     let imgsStr = '';
@@ -2889,7 +2898,8 @@
             const doctor = document.getElementById('form-med-doctor').value.trim();
             const gestation = document.getElementById('form-med-gestation').value.trim();
             const bbj = document.getElementById('form-med-bbj').value.trim();
-            const pbj = document.getElementById('form-med-pbj').value.trim();
+            const crl = document.getElementById('form-med-crl').value.trim();
+            const fl = document.getElementById('form-med-fl').value.trim();
             const notes = document.getElementById('form-med-notes').value.trim();
             const rawImages = document.getElementById('form-med-image').value;
 
@@ -2898,10 +2908,10 @@
             if (id) {
                 const idx = appState.medicalRecords.findIndex(m => m.id == id);
                 if (idx !== -1) {
-                    appState.medicalRecords[idx] = { id: Number(id), date, title, doctor, gestation, bbj, pbj, notes, images };
+                    appState.medicalRecords[idx] = { id: Number(id), date, title, doctor, gestation, bbj, crl, fl, notes, images };
                 }
             } else {
-                appState.medicalRecords.unshift({ id: Date.now(), date, title, doctor, gestation, bbj, pbj, notes, images });
+                appState.medicalRecords.unshift({ id: Date.now(), date, title, doctor, gestation, bbj, crl, fl, notes, images });
             }
 
             renderMedicalRecords();
@@ -2933,10 +2943,9 @@
             const emptyState = document.getElementById('medical-chart-empty');
             if (!canvas) return;
 
-            // Ambil data rekam medis yang punya isian BBJ atau PBJ
-            const records = (appState.medicalRecords || []).filter(r => r.bbj || r.pbj);
+            // Ambil data rekam medis yang punya isian BBJ, CRL, atau FL
+            const records = (appState.medicalRecords || []).filter(r => r.bbj || r.crl || r.fl);
             
-            // Urutkan berdasarkan Usia Kandungan (Angka dari string "32 Minggu")
             records.sort((a, b) => {
                 const weekA = parseInt(String(a.gestation).replace(/\D/g, '')) || 0;
                 const weekB = parseInt(String(b.gestation).replace(/\D/g, '')) || 0;
@@ -2957,18 +2966,21 @@
 
             const labels = [];
             const dataBBJ = [];
-            const dataPBJ = [];
+            const dataCRL = [];
+            const dataFL = [];
 
             records.forEach(r => {
                 const week = parseInt(String(r.gestation).replace(/\D/g, '')) || '?';
                 labels.push(`${week} Mgg`);
                 
-                // Ambil angkanya saja dari string (misal: "1850 gram" -> 1850)
-                const bbjNum = parseInt(String(r.bbj).replace(/\D/g, '')) || null;
-                const pbjNum = parseInt(String(r.pbj).replace(/\D/g, '')) || null;
+                // Hapus huruf, ambil angkanya saja
+                const bbjNum = parseInt(String(r.bbj).replace(/[^\d.]/g, '')) || null;
+                const crlNum = parseInt(String(r.crl).replace(/[^\d.]/g, '')) || null;
+                const flNum = parseInt(String(r.fl).replace(/[^\d.]/g, '')) || null;
                 
                 dataBBJ.push(bbjNum);
-                dataPBJ.push(pbjNum);
+                dataCRL.push(crlNum);
+                dataFL.push(flNum);
             });
 
             if (medicalGrowthChartInstance) {
@@ -2984,7 +2996,7 @@
                         {
                             label: 'Berat Janin (gram)',
                             data: dataBBJ,
-                            borderColor: '#0284c7', // Warna Sky
+                            borderColor: '#0284c7', // Sky
                             backgroundColor: 'rgba(2, 132, 199, 0.1)',
                             borderWidth: 2,
                             pointBackgroundColor: '#0284c7',
@@ -2994,9 +3006,9 @@
                             fill: true
                         },
                         {
-                            label: 'Panjang (cm)',
-                            data: dataPBJ,
-                            borderColor: '#10b981', // Warna Emerald
+                            label: 'Panjang CRL (cm)',
+                            data: dataCRL,
+                            borderColor: '#10b981', // Emerald
                             backgroundColor: 'transparent',
                             borderWidth: 2,
                             pointBackgroundColor: '#10b981',
@@ -3004,6 +3016,18 @@
                             yAxisID: 'y1',
                             tension: 0.3,
                             borderDash: [5, 5]
+                        },
+                        {
+                            label: 'Tulang Paha FL (cm)',
+                            data: dataFL,
+                            borderColor: '#f59e0b', // Amber
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#f59e0b',
+                            pointRadius: 4,
+                            yAxisID: 'y1',
+                            tension: 0.3,
+                            borderDash: [2, 2]
                         }
                     ]
                 },
@@ -3020,7 +3044,7 @@
                         },
                         y1: {
                             type: 'linear', display: true, position: 'right',
-                            title: { display: true, text: 'Panjang (cm)', font: {size: 10} },
+                            title: { display: true, text: 'Panjang/Tulang (cm)', font: {size: 10} },
                             grid: { drawOnChartArea: false },
                             beginAtZero: true
                         }
