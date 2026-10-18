@@ -12,6 +12,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Quill.js Rich Text Editor CDN -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <!-- Chart.js CDN for Budgeting Pie Chart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Fonts: Lora & Plus Jakarta Sans -->
@@ -147,6 +150,24 @@
         body.dark-mode .shadow-emerald-100 {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5) !important;
         }
+
+        /* =======================================
+           RICH TEXT (QUILL) FIX & NIGHT MODE
+           ======================================= */
+        /* Mengembalikan gaya list, bold, italic di tabel */
+        .rich-text-content ul { list-style-type: disc !important; padding-left: 1.5rem !important; margin: 0.5rem 0; }
+        .rich-text-content ol { list-style-type: decimal !important; padding-left: 1.5rem !important; margin: 0.5rem 0; }
+        .rich-text-content b, .rich-text-content strong { font-weight: 800 !important; }
+        .rich-text-content i, .rich-text-content em { font-style: italic !important; }
+        .rich-text-content u { text-decoration: underline !important; }
+        .rich-text-content p { margin-bottom: 0.5rem; }
+        
+        /* Tema Malam untuk Kotak Editor Quill */
+        body.dark-mode .ql-toolbar { background-color: #1e293b !important; border-color: #334155 !important; }
+        body.dark-mode .ql-container { border-color: #334155 !important; background-color: #0f172a !important; color: #f8fafc !important; font-family: 'Plus Jakarta Sans', sans-serif !important;}
+        body.dark-mode .ql-stroke { stroke: #94a3b8 !important; }
+        body.dark-mode .ql-fill { fill: #94a3b8 !important; }
+        body.dark-mode .ql-picker { color: #94a3b8 !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12" onclick="closeAllDropdowns()">
@@ -1617,8 +1638,10 @@
                 </div>
 
                 <div>
-                    <label class="font-semibold text-slate-700">Deskripsi Singkat / Catatan</label>
-                    <textarea id="form-ref-desc" rows="2" placeholder="Catatan penting dari artikel/video ini..." class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none"></textarea>
+                    <label class="font-semibold text-slate-700">Catatan (Bisa Bold, Italic & Bullets)</label>
+                    <div class="mt-1 bg-white border border-slate-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-sky-500 transition">
+                        <div id="quill-editor-container" style="height: 200px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px;"></div>
+                    </div>
                 </div>
 
                 <div>
@@ -1863,6 +1886,16 @@
 
         // FIREWORKS ANIMATION VAR
         let fireworksAnimationId = null;
+
+        // INISIALISASI QUILL EDITOR
+        let quillReference;
+        window.addEventListener('load', function() {
+            quillReference = new Quill('#quill-editor-container', {
+                theme: 'snow',
+                modules: { toolbar: [['bold', 'italic', 'underline'], [{'list':'ordered'}, {'list':'bullet'}], ['clean']] },
+                placeholder: 'Tulis poin-poin penting di sini...'
+            });
+        });
 
         // ==========================================
         // NIGHT MODE (DARK THEME) LOGIC
@@ -4640,9 +4673,10 @@
             // 3. Terapkan Saringan (Filter + Search)
             const filteredRefs = appState.references.filter(ref => {
                 const matchCategory = filterVal === 'ALL' || (ref.category || 'Lainnya') === filterVal;
+                const plainDesc = (ref.desc || '').replace(/<[^>]*>?/gm, '').toLowerCase(); // Bersihkan HTML
                 const matchSearch = !searchVal || 
                                     (ref.title || '').toLowerCase().includes(searchVal) || 
-                                    (ref.desc || '').toLowerCase().includes(searchVal) ||
+                                    plainDesc.includes(searchVal) ||
                                     (ref.category || '').toLowerCase().includes(searchVal);
                 return matchCategory && matchSearch;
             });
@@ -4668,7 +4702,7 @@
                     <td class="p-3 border-r border-slate-100 font-bold text-slate-800 text-sm">
                         ${ref.title}
                     </td>
-                    <td class="p-3 border-r border-slate-100 text-xs text-slate-700 whitespace-pre-line leading-relaxed">
+                    <td class="p-3 border-r border-slate-100 text-xs text-slate-700 leading-relaxed rich-text-content">
                         ${ref.desc || '-'}
                     </td>
                     <td class="p-3 border-r border-slate-100 text-xs">
@@ -4698,12 +4732,13 @@
                     document.getElementById('form-ref-id').value = ref.id;
                     document.getElementById('form-ref-category').value = ref.category || 'Kehamilan';
                     document.getElementById('form-ref-title').value = ref.title || '';
-                    document.getElementById('form-ref-desc').value = ref.desc || '';
+                    quillReference.root.innerHTML = ref.desc || '';
                     document.getElementById('form-ref-link').value = ref.link || '';
                 }
             } else {
                 document.getElementById('modal-reference-title').innerText = "Tambah Referensi Baru";
                 document.getElementById('form-ref-id').value = "";
+                quillReference.root.innerHTML = '';
             }
             document.getElementById('modal-reference').classList.remove('hidden');
         }
@@ -4717,7 +4752,7 @@
             const id = document.getElementById('form-ref-id').value;
             const category = document.getElementById('form-ref-category').value;
             const title = document.getElementById('form-ref-title').value.trim();
-            const desc = document.getElementById('form-ref-desc').value.trim();
+            const desc = quillReference.root.innerHTML.trim();
             const link = document.getElementById('form-ref-link').value.trim();
 
             if (!appState.references) appState.references = [];
