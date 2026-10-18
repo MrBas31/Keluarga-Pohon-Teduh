@@ -110,6 +110,11 @@
         body.dark-mode .text-rose-600, body.dark-mode .text-red-600 { color: #fda4af !important; }
 
         body.dark-mode .bg-pink-50 { background-color: #500724 !important; border-color: #831843 !important; }
+
+        /* Fix untuk baris tabel dan latar yang pakai efek transparan (/80) */
+        body.dark-mode .bg-slate-100\/80 { background-color: #1e293b !important; }
+        body.dark-mode .bg-slate-50\/80 { background-color: #0f172a !important; }
+        body.dark-mode .hover\:bg-slate-50\/80:hover { background-color: #1e293b !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12" onclick="closeAllDropdowns()">
