@@ -441,6 +441,22 @@
                     </div>
                 </div>
 
+                <!-- GRAFIK PERTUMBUHAN JANIN -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+                    <div class="border-b border-slate-100 pb-3">
+                        <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-sky-600"></i> Kurva Pertumbuhan Janin
+                        </h3>
+                        <p class="text-xs text-slate-500">Pantau tren penambahan berat (BBJ) dan panjang (PBJ) berdasarkan usia kandungan</p>
+                    </div>
+                    <div class="w-full h-64 relative">
+                        <canvas id="medicalGrowthChart"></canvas>
+                        <div id="medical-chart-empty" class="hidden absolute inset-0 flex justify-center items-center text-slate-400 italic text-xs bg-white/80 backdrop-blur-sm z-10 rounded-xl">
+                            Belum ada data BBJ / Panjang untuk ditampilkan.
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- CATATAN DOKTER & KONTROL ROUTINE -->
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-100 pb-3">
