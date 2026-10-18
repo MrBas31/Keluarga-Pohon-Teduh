@@ -48,6 +48,68 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        /* =======================================
+           🌙 NIGHT MODE (DARK MODE) OVERRIDES
+           ======================================= */
+        body.dark-mode {
+            background-color: #0f172a !important; /* Latar utama gelap */
+            color: #f8fafc !important; /* Teks terang */
+        }
+        
+        /* Ubah Kotak, Header, & Modal menjadi gelap */
+        body.dark-mode .bg-white,
+        body.dark-mode .bg-slate-50 { 
+            background-color: #1e293b !important; 
+            border-color: #334155 !important; 
+        }
+        
+        /* Sesuaikan Warna Teks */
+        body.dark-mode .text-slate-800, 
+        body.dark-mode .text-slate-700 { color: #f8fafc !important; }
+        body.dark-mode .text-slate-600, 
+        body.dark-mode .text-slate-500,
+        body.dark-mode .text-slate-400 { color: #94a3b8 !important; }
+        
+        /* Sesuaikan Garis Pembatas (Border & Divide) */
+        body.dark-mode .border-slate-100, 
+        body.dark-mode .border-slate-200 { border-color: #334155 !important; }
+        body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #334155 !important; }
+        
+        /* Input & Form (Biar gak silau pas ngetik) */
+        body.dark-mode input, 
+        body.dark-mode select, 
+        body.dark-mode textarea {
+            background-color: #0f172a !important;
+            color: #f8fafc !important;
+            border-color: #334155 !important;
+        }
+
+        /* Tabel (Header) */
+        body.dark-mode table thead {
+            background-color: #0f172a !important;
+            color: #cbd5e1 !important;
+            border-color: #334155 !important;
+        }
+
+        /* Tombol abu-abu bawaan */
+        body.dark-mode .bg-slate-100 { background-color: #334155 !important; color: #f8fafc !important; }
+        body.dark-mode .hover\:bg-slate-200:hover, body.dark-mode tr.hover\:bg-slate-50\/80:hover { background-color: #475569 !important; }
+        body.dark-mode .hover\:bg-slate-50:hover { background-color: #0f172a !important; }
+
+        /* Sesuaikan Kotak Berwarna (Sky, Emerald, Amber, dll) agar warnanya ikut "kalem" */
+        body.dark-mode .bg-sky-50 { background-color: #082f49 !important; border-color: #0c4a6e !important; }
+        body.dark-mode .text-sky-800, body.dark-mode .text-sky-700, body.dark-mode .text-sky-600 { color: #7dd3fc !important; }
+        
+        body.dark-mode .bg-emerald-50 { background-color: #022c22 !important; border-color: #064e3b !important; }
+        body.dark-mode .text-emerald-800, body.dark-mode .text-emerald-700 { color: #6ee7b7 !important; }
+
+        body.dark-mode .bg-amber-50 { background-color: #451a03 !important; border-color: #78350f !important; }
+        body.dark-mode .text-amber-800, body.dark-mode .text-amber-700 { color: #fde047 !important; }
+
+        body.dark-mode .bg-rose-50, body.dark-mode .bg-red-100 { background-color: #4c0519 !important; border-color: #881337 !important; }
+        body.dark-mode .text-rose-600, body.dark-mode .text-red-600 { color: #fda4af !important; }
+
+        body.dark-mode .bg-pink-50 { background-color: #500724 !important; border-color: #831843 !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12" onclick="closeAllDropdowns()">
@@ -90,6 +152,9 @@
                     <i class="fa-solid fa-upload mr-1"></i> Import JSON
                     <input type="file" id="import-file" onchange="importData(event)" class="hidden" accept=".json">
                 </label>
+                <button onclick="toggleDarkMode()" class="px-3 py-1.5 bg-slate-800 dark:bg-amber-400 hover:bg-slate-700 text-slate-100 font-medium rounded-lg transition ml-2 shadow-sm" title="Ganti Tema Gelap/Terang">
+                    <i class="fa-solid fa-moon" id="dark-mode-icon"></i>
+                </button>
             </div>
         </div> <!-- INI DIA TAG PENUTUP YANG HILANG -->
 
@@ -1736,6 +1801,32 @@
         // FIREWORKS ANIMATION VAR
         let fireworksAnimationId = null;
 
+        // ==========================================
+        // NIGHT MODE (DARK THEME) LOGIC
+        // ==========================================
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            
+            // Simpan preferensi ke HP/Laptop
+            localStorage.setItem('pohonTeduhTheme', isDark ? 'dark' : 'light');
+            
+            // Ganti icon Bulan / Matahari
+            const icon = document.getElementById('dark-mode-icon');
+            if (icon) {
+                icon.className = isDark ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon';
+            }
+        }
+
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('pohonTeduhTheme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                const icon = document.getElementById('dark-mode-icon');
+                if (icon) icon.className = 'fa-solid fa-sun text-amber-400';
+            }
+        }
+
         // HELPER: NORMALISASI DATA MATRIKS RS
         function normalizeHospitalMatrix(rs) {
             if (!rs.methods) rs.methods = [];
@@ -1780,6 +1871,7 @@
 
         // INIT APPLICATION
         window.onload = function() {
+            loadThemePreference(); // <-- TAMBAHKAN BARIS INI
             initRealtimeSync();
             
             appState.currentTab = 'dashboard';
