@@ -4747,12 +4747,12 @@
 
             tbody.innerHTML = filteredRefs.map(ref => `
                 <tr class="hover:bg-slate-50/80 transition align-top">
-                    <td class="p-3 border-r border-slate-100">
+                    <td class="p-3 align-top border-r border-slate-100">
                         <span class="text-2xs font-bold text-sky-700 bg-sky-50 px-2 py-1 rounded-md inline-block whitespace-normal break-words">
                             ${ref.category}
                         </span>
                     </td>
-                    <td class="p-3 border-r border-slate-100 font-bold text-slate-800 text-sm">
+                    <td class="p-3 align-top border-r border-slate-100 font-bold text-slate-800 text-sm">
                         ${ref.title}
                     </td>
                     <td class="p-3 align-top border-r border-slate-100 text-xs text-slate-700 leading-relaxed">
@@ -4763,12 +4763,12 @@
                             </div>
                         </div>
                     </td>
-                    <td class="p-3 border-r border-slate-100 text-xs">
+                    <td class="p-3 align-top border-r border-slate-100 text-xs">
                         <a href="${ref.link}" target="_blank" class="font-bold text-sky-600 hover:text-sky-800 flex items-center gap-1.5 transition break-all" title="${ref.link}">
                             <i class="fa-solid fa-arrow-up-right-from-square flex-shrink-0"></i> Buka Link
                         </a>
                     </td>
-                    <td class="p-3 text-center space-y-1 sm:space-y-0 sm:space-x-1 flex flex-col sm:flex-row justify-center items-center">
+                    <td class="p-3 align-top text-center space-y-1 sm:space-y-0 sm:space-x-1 flex flex-col sm:flex-row justify-center items-center">
                         <button onclick="openReferenceModal(${ref.id})" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs transition" title="Edit">
                             <i class="fa-solid fa-pen"></i>
                         </button>
