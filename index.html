@@ -197,6 +197,29 @@
         td .ql-snow .ql-editor p {
             margin-bottom: 0.5rem !important;
         }
+
+        /* =======================================
+           FIX FINAL QUILL: CUKUR HABIS SPASI ATAS BAWAH
+           ======================================= */
+        td .ql-snow .ql-editor {
+            padding: 0 !important;
+        }
+        /* Cukur margin di elemen paling pertama (termasuk bullet points) */
+        td .ql-snow .ql-editor > *:first-child,
+        td .ql-snow .ql-editor ul:first-child,
+        td .ql-snow .ql-editor ol:first-child {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+        /* Cukur margin di elemen paling akhir */
+        td .ql-snow .ql-editor > *:last-child {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        /* Sembunyikan enter (baris kosong) yang gak sengaja kepencet di awal/akhir */
+        td .ql-snow .ql-editor p:empty {
+            display: none !important;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12" onclick="closeAllDropdowns()">
