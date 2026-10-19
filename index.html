@@ -3300,7 +3300,11 @@
                     html += `
                         <tr class="hover:bg-slate-50/80 transition">
                             <td class="p-3 text-center">
-                                <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleItemDone(${item.id})" class="w-4 h-4 text-sky-600 rounded cursor-pointer">
+                                <select onchange="updateStatusBelanja(${item.id}, this.value)" class="p-1.5 rounded-lg text-2xs font-bold border border-slate-200 cursor-pointer outline-none focus:ring-2 focus:ring-sky-500 ${item.status === 'Selesai' || (!item.status && item.done) ? 'text-emerald-700 bg-emerald-50' : (item.status === 'Opsional' ? 'text-slate-500 bg-slate-100' : 'text-rose-700 bg-rose-50')} transition">
+                                    <option value="Prioritas" ${item.status === 'Prioritas' || (!item.status && !item.done) ? 'selected' : ''} class="text-rose-600 font-bold">🚨 Prioritas</option>
+                                    <option value="Opsional" ${item.status === 'Opsional' ? 'selected' : ''} class="text-slate-500 font-bold">⏳ Opsional</option>
+                                    <option value="Selesai" ${item.status === 'Selesai' || (!item.status && item.done) ? 'selected' : ''} class="text-emerald-600 font-bold">✅ Selesai</option>
+                                </select>
                             </td>
                             <td class="p-3">
                                 <div class="font-semibold ${item.done ? 'line-through text-slate-400' : 'text-slate-800'}">${item.name}</div>
@@ -3328,9 +3332,14 @@
             tbody.innerHTML = html;
         }
 
-        function toggleItemDone(id) {
+        function updateStatusBelanja(id, statusBaru) {
             const item = appState.shoppingItems.find(i => i.id === id);
-            if (item) item.done = !item.done;
+            if (item) {
+                // Simpan status teks yang baru dipilih
+                item.status = statusBaru;
+                // Trik ajaib: Tetap update data 'done' lama agar rumus total harga otomatis ikut menyesuaikan tanpa perlu diubah!
+                item.done = (statusBaru === 'Selesai'); 
+            }
             renderShoppingItems();
             saveToLocalStorage();
         }
