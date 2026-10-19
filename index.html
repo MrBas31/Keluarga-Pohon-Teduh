@@ -175,50 +175,6 @@
         body .ql-snow .ql-editor ul { list-style-type: disc !important; padding-left: 1.5rem !important; }
         body .ql-snow .ql-editor ol { list-style-type: decimal !important; padding-left: 1.5rem !important; }
         body .ql-snow .ql-editor li { padding-left: 0.5rem; margin-bottom: 0.25rem; }
-
-        /* =======================================
-           FIX FINAL: SEJAJAR RATA ATAS & HAPUS SPASI ATAS QUILL
-           ======================================= */
-        /* 1. Pastikan semua sel tabel mendarat rapat di baris paling atas */
-        tbody tr td {
-            vertical-align: top !important;
-            padding-top: 1rem !important; /* Biar ada jarak pas di atas */
-            padding-bottom: 1rem !important;
-        }
-
-        /* 2. Cukur habis spasi/margin tak kasat mata di baris pertama teks Quill dalam tabel */
-        td .ql-snow .ql-editor p:first-child,
-        td .ql-snow .ql-editor > *:first-child {
-            margin-top: 0 !important;
-            padding-top: 0 !important;
-        }
-        
-        /* 3. Atur jarak antar paragraf di tabel biar gak terlalu renggang */
-        td .ql-snow .ql-editor p {
-            margin-bottom: 0.5rem !important;
-        }
-
-        /* =======================================
-           FIX FINAL QUILL: CUKUR HABIS SPASI ATAS BAWAH
-           ======================================= */
-        td .ql-snow .ql-editor {
-            padding: 0 !important;
-        }
-        /* Cukur margin di elemen paling pertama (termasuk bullet points) */
-        td .ql-snow .ql-editor > *:first-child,
-        td .ql-snow .ql-editor ul:first-child,
-        td .ql-snow .ql-editor ol:first-child {
-            margin-top: 0 !important;
-            padding-top: 0 !important;
-        }
-        /* Cukur margin di elemen paling akhir */
-        td .ql-snow .ql-editor > *:last-child {
-            margin-bottom: 0 !important;
-            padding-bottom: 0 !important;
-        }
-        /* Sembunyikan enter (baris kosong) yang gak sengaja kepencet di awal/akhir */
-        td .ql-snow .ql-editor p:empty {
-            display: none !important;
         }
     </style>
 </head>
@@ -4781,7 +4737,7 @@
                     <td class="p-3 align-top border-r border-slate-100 text-xs text-slate-700 leading-relaxed">
                         <!-- Dibungkus "baju" Quill agar formatnya identik dengan editor -->
                         <div class="ql-snow">
-                            <div class="ql-editor" style="padding: 0; min-height: auto; font-family: inherit; font-size: inherit;">
+                            <div class="ql-editor">
                                 ${ref.desc || '-'}
                             </div>
                         </div>
