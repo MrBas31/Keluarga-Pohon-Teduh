@@ -177,11 +177,13 @@
         body .ql-snow .ql-editor li { padding-left: 0.5rem; margin-bottom: 0.25rem; }
 
         /* =======================================
-           FIX SPASI SILUMAN (MARGIN ATAS) QUILL
+           FIX PENYAKIT TABEL SEJAJAR (RATA ATAS)
            ======================================= */
-        body .ql-snow .ql-editor { padding: 0 !important; }
-        body .ql-snow .ql-editor > *:first-child { margin-top: 0 !important; padding-top: 0 !important; }
-        body .ql-snow .ql-editor p { margin-top: 0 !important; margin-bottom: 0.25rem !important; }
+        /* 1. Paksa semua isi kolom di tabel mulai sejajar dari garis atas (nggak ngambang di tengah) */
+        tbody td { vertical-align: top !important; }
+        
+        /* 2. Cukur spasi atas paragraf Quill HANYA di dalam tabel (Form ngedit tetap aman & lega!) */
+        td .ql-snow .ql-editor > *:first-child { margin-top: 0 !important; padding-top: 0 !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12" onclick="closeAllDropdowns()">
