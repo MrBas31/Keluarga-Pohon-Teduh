@@ -1344,7 +1344,8 @@
                     </div>
                     <div>
                         <label class="font-semibold text-slate-700">Kategori Barang</label>
-                        <input type="text" id="form-item-category" required placeholder="misal: Pakaian, Alat Mandi" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                        <input type="text" id="form-item-category" list="shopping-category-list" autocomplete="off" required placeholder="misal: Pakaian, Alat Mandi" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                        <datalist id="shopping-category-list"></datalist>
                     </div>
                 </div>
 
@@ -3352,6 +3353,15 @@
             mainSelect.innerHTML = appState.budgetCategories.map(c => `
                 <option value="${c}">${c}</option>
             `).join('');
+
+            // --- TAMBAHAN LOGIKA DATALIST KATEGORI BELANJA ---
+            const datalist = document.getElementById('shopping-category-list');
+            if (datalist) {
+                // Kumpulkan semua kategori yang sudah ada di database belanja dan buang duplikatnya
+                const uniqueCats = [...new Set((appState.shoppingItems || []).map(i => i.category).filter(Boolean))];
+                datalist.innerHTML = uniqueCats.map(cat => `<option value="${cat}">`).join('');
+            }
+            // -------------------------------------------------
 
             if (id) {
                 const item = appState.shoppingItems.find(i => i.id === id);
