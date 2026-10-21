@@ -5081,14 +5081,18 @@
                 <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1 relative group hover:bg-slate-100 transition">
                     <div class="font-bold text-slate-800 text-sm pr-8">${c.text}</div>
                     <div class="text-2xs text-slate-500 leading-relaxed italic">${c.meaning}</div>
-                    <button onclick="saveRacikan('${c.text}', '${c.meaning.replace(/'/g, "\\'")}', '${c.gender}')" class="absolute top-2.5 right-2.5 text-sky-600 hover:text-sky-800 bg-sky-50 hover:bg-sky-200 p-1.5 rounded-lg text-xs transition" title="Simpan Kombinasi">
+                    <button onclick="saveRacikan('${encodeURIComponent(c.text)}', '${encodeURIComponent(c.meaning)}', '${c.gender}')" class="absolute top-2.5 right-2.5 text-sky-600 hover:text-sky-800 bg-sky-50 hover:bg-sky-200 p-1.5 rounded-lg text-xs transition" title="Simpan Kombinasi">
                         <i class="fa-solid fa-bookmark"></i>
                     </button>
                 </div>
             `).join('');
         }
 
-        function saveRacikan(text, meaning, gender) {
+        function saveRacikan(encodedText, encodedMeaning, gender) {
+            // Bongkar bungkusannya biar kembali jadi teks normal
+            const text = decodeURIComponent(encodedText);
+            const meaning = decodeURIComponent(encodedMeaning);
+            
             if (!appState.savedRacikan) appState.savedRacikan = [];
             const exists = appState.savedRacikan.find(r => r.text === text);
             if (!exists) {
