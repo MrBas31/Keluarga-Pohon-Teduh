@@ -2181,7 +2181,7 @@
             return url.trim();
         }
 
-        /// ==========================================
+        // ==========================================
         // SISTEM GALERI GANDA (PRENATAL & POSTNATAL)
         // ==========================================
         let currentPostnatalGalleryIndex = 0; // State khusus slider bayi
@@ -2283,28 +2283,27 @@
             if (menu) menu.classList.toggle('hidden');
         }
 
-        // Modal otomatis mendeteksi dari dashboard mana ia dipanggil
         function openGalleryModal(type = 'prenatal') {
             activeGalleryType = type; 
-            document.getElementById('gallery-photo-url').value = '';
-            document.getElementById('gallery-photo-title').value = '';
-            document.getElementById('gallery-photo-caption').value = '';
-            document.getElementById('gallery-modal').classList.remove('hidden');
+            document.getElementById('gallery-form').reset();
+            document.getElementById('form-gallery-id').value = '';
+            document.getElementById('modal-gallery-title').innerText = type === 'prenatal' ? 'Tambah Foto Kehamilan' : 'Tambah Foto Si Kecil';
+            document.getElementById('modal-gallery').classList.remove('hidden');
         }
 
-        function saveGalleryPhoto() {
-            const url = document.getElementById('gallery-photo-url').value.trim();
-            const title = document.getElementById('gallery-photo-title').value.trim();
-            const caption = document.getElementById('gallery-photo-caption').value.trim();
+        function closeGalleryModal() {
+            document.getElementById('modal-gallery').classList.add('hidden');
+        }
 
-            if (!url || !title) {
-                alert("URL foto dan judul wajib diisi!");
-                return;
-            }
+        function saveGalleryForm(event) {
+            event.preventDefault();
+            const title = document.getElementById('form-gallery-title-input').value.trim();
+            const url = document.getElementById('form-gallery-url').value.trim();
+            const caption = document.getElementById('form-gallery-caption').value.trim();
 
-            const newPhoto = { id: Date.now(), url, title, caption };
+            const newPhoto = { id: Date.now(), title, url, caption };
 
-            // Simpan ke database yang sesuai
+            // Simpan ke database yang sesuai berdasarkan tombol yang diklik
             if (activeGalleryType === 'prenatal') {
                 if (!appState.gallery) appState.gallery = [];
                 appState.gallery.unshift(newPhoto);
@@ -2315,9 +2314,9 @@
                 currentPostnatalGalleryIndex = 0;
             }
 
-            saveToLocalStorage();
             renderGallery();
-            closeModal('gallery-modal');
+            saveToLocalStorage();
+            closeGalleryModal();
         }
 
         function deleteGalleryPhoto(id, type) {
@@ -2329,8 +2328,8 @@
                     appState.postnatalGallery = appState.postnatalGallery.filter(item => item.id !== id);
                     currentPostnatalGalleryIndex = 0;
                 }
-                saveToLocalStorage();
                 renderGallery();
+                saveToLocalStorage();
             }
         }
 
