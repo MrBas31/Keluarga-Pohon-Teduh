@@ -119,10 +119,6 @@
         body.dark-mode .bg-slate-50\/80 { background-color: #0f172a !important; }
         body.dark-mode .hover\:bg-slate-50\/80:hover { background-color: #1e293b !important; }
 
-        /* Fix Tombol Bookmark Racikan di Dark Mode */
-        body.dark-mode .bg-sky-50.hover\\:bg-sky-200:hover { background-color: #0c4a6e !important; color: #7dd3fc !important; }
-        body.dark-mode .text-sky-600 { color: #38bdf8 !important; }
-
         /* =======================================
            Fix Background Transparan & Teks di Menu RS
            ======================================= */
@@ -749,31 +745,6 @@
                     <button onclick="openBabyNameModal()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl transition shadow-sm">
                         <i class="fa-solid fa-plus mr-1"></i> Tambah Referensi Nama
                     </button>
-                </div>
-
-                <!-- WIDGET RACIKAN NAMA OTOMATIS -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-slate-100 pb-3">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-base">✨ Racikan Nama Otomatis (3 Kata)</h3>
-                            <p class="text-xs text-slate-500">Kombinasi dari nama-nama favorit (⭐) yang sesuai posisinya</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="generateRacikan('boy')" class="px-3 py-2 bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs rounded-xl transition border border-sky-100"><i class="fa-solid fa-mars mr-1"></i> Racik Laki-laki</button>
-                            <button onclick="generateRacikan('girl')" class="px-3 py-2 bg-pink-50 text-pink-700 hover:bg-pink-100 font-bold text-xs rounded-xl transition border border-pink-100"><i class="fa-solid fa-venus mr-1"></i> Racik Perempuan</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Area Hasil Generate -->
-                    <div id="racikan-results-container" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto no-scrollbar">
-                        <div class="col-span-full text-center text-slate-400 italic text-xs py-4">Klik tombol racik di atas untuk melihat semua kemungkinan kombinasi nama.</div>
-                    </div>
-
-                    <!-- Area Kandidat Tersimpan -->
-                    <div class="pt-4 border-t border-slate-100 space-y-2 hidden" id="saved-racikan-section">
-                        <h4 class="font-bold text-slate-700 text-xs">💖 Kandidat Racikan Tersimpan</h4>
-                        <div id="saved-racikan-container" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
-                    </div>
                 </div>
 
                 <!-- TABEL NAMA LAKI-LAKI -->
@@ -4946,7 +4917,6 @@
           if (typeof renderMedicalRecords === 'function') renderMedicalRecords();
           if (typeof renderMedicalChart === 'function') renderMedicalChart(); // <-- Grafik Medis ditambahkan di sini
           if (typeof renderReferences === 'function') renderReferences();
-          if (typeof renderSavedRacikan === 'function') renderSavedRacikan();
         }
 
         // FUNGSI PENYIMPANAN KE FIREBASE
@@ -5037,99 +5007,6 @@
                 }
             };
             reader.readAsText(event.target.files[0]);
-        }
-
-        // ==========================================
-        // FITUR GENERATOR RACIKAN NAMA
-        // ==========================================
-        if (!appState.savedRacikan) appState.savedRacikan = [];
-
-        function generateRacikan(gender) {
-            // Ambil semua nama favorit sesuai gender
-            const favs = appState.babyNames.filter(n => n.gender === gender && n.fav);
-            
-            // Pisahkan berdasarkan label posisi
-            const depans = favs.filter(n => n.position.includes('Depan'));
-            const tengahs = favs.filter(n => n.position.includes('Tengah'));
-            const belakangs = favs.filter(n => n.position.includes('Belakang'));
-
-            let combos = [];
-            
-            // Looping 3 lapis untuk mencari semua kemungkinan kombinasi
-            depans.forEach(d => {
-                tengahs.forEach(t => {
-                    belakangs.forEach(b => {
-                        // Syarat: Ketiga kata tidak boleh dari ID nama yang sama
-                        if (d.id !== t.id && d.id !== b.id && t.id !== b.id) {
-                            combos.push({
-                                text: `${d.name} ${t.name} ${b.name}`,
-                                meaning: `${d.meaning} — ${t.meaning} — ${b.meaning}`,
-                                gender: gender
-                            });
-                        }
-                    });
-                });
-            });
-
-            const container = document.getElementById('racikan-results-container');
-            if (combos.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center text-rose-400 font-medium text-xs py-4">Kandidat nama (⭐) dengan posisi yang pas belum cukup untuk dirangkai menjadi 3 kata.</div>`;
-                return;
-            }
-
-            container.innerHTML = combos.map((c) => `
-                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1 relative group hover:bg-slate-100 transition">
-                    <div class="font-bold text-slate-800 text-sm pr-8">${c.text}</div>
-                    <div class="text-2xs text-slate-500 leading-relaxed italic">${c.meaning}</div>
-                    <button onclick="saveRacikan('${encodeURIComponent(c.text)}', '${encodeURIComponent(c.meaning)}', '${c.gender}')" class="absolute top-2.5 right-2.5 text-sky-600 hover:text-sky-800 bg-sky-50 hover:bg-sky-200 p-1.5 rounded-lg text-xs transition" title="Simpan Kombinasi">
-                        <i class="fa-solid fa-bookmark"></i>
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function saveRacikan(encodedText, encodedMeaning, gender) {
-            // Bongkar bungkusannya biar kembali jadi teks normal
-            const text = decodeURIComponent(encodedText);
-            const meaning = decodeURIComponent(encodedMeaning);
-            
-            if (!appState.savedRacikan) appState.savedRacikan = [];
-            const exists = appState.savedRacikan.find(r => r.text === text);
-            if (!exists) {
-                appState.savedRacikan.push({ id: Date.now(), text, meaning, gender });
-                renderSavedRacikan();
-                saveToLocalStorage();
-            }
-        }
-
-        function removeSavedRacikan(id) {
-            appState.savedRacikan = appState.savedRacikan.filter(r => r.id !== id);
-            renderSavedRacikan();
-            saveToLocalStorage();
-        }
-
-        function renderSavedRacikan() {
-            const section = document.getElementById('saved-racikan-section');
-            const container = document.getElementById('saved-racikan-container');
-            if (!section || !container) return;
-
-            if (!appState.savedRacikan || appState.savedRacikan.length === 0) {
-                section.classList.add('hidden');
-                return;
-            }
-
-            section.classList.remove('hidden');
-            container.innerHTML = appState.savedRacikan.map(r => `
-                <div class="flex justify-between items-start p-2.5 bg-gradient-to-r from-amber-50 to-transparent border-l-4 border-amber-400 rounded-r-xl group">
-                    <div>
-                        <div class="font-bold text-amber-900 text-xs">${r.gender === 'boy' ? '👦' : '👧'} ${r.text}</div>
-                        <div class="text-3xs text-amber-700 mt-0.5">${r.meaning}</div>
-                    </div>
-                    <button onclick="removeSavedRacikan(${r.id})" class="text-rose-400 hover:text-rose-600 p-1 transition text-xs opacity-0 group-hover:opacity-100">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            `).join('');
         }
     </script>
 </body>
