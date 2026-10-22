@@ -876,17 +876,28 @@
                         <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">👶</div>
                         <div class="space-y-3 relative z-10">
                             <div class="flex justify-between items-center gap-2">
-                                <button onclick="editBabyProfile()" class="inline-block px-3 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full text-2xs font-semibold uppercase tracking-wider transition group" title="Klik untuk edit Nama dan Tanggal Lahir">
-                                    👶 Dashboard Tumbuh Kembang <span id="display-baby-name" class="font-bold border-b border-dashed border-white/50 pb-0.5">Si Kecil</span> <i class="fa-solid fa-pen text-3xs ml-1 opacity-70 group-hover:opacity-100"></i>
-                                </button>
+                                <span class="inline-block px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-2xs font-semibold uppercase tracking-wider">
+                                    👶 Dashboard Tumbuh Kembang Si Kecil
+                                </span>
                             </div>
                             
-                            <h2 class="text-2xl md:text-3xl font-extrabold font-brand tracking-tight">
-                                Selamat Datang ke Dunia, Buah Hati Kami 🩷
+                            <h2 class="text-2xl md:text-3xl font-extrabold font-brand tracking-tight flex items-center gap-2 flex-wrap">
+                                <span id="display-welcome-title">Welcome to the World, Baby Boy 🩵</span>
+                                <button onclick="toggleBabyGender()" class="text-xs bg-white/20 hover:bg-white/30 backdrop-blur-md px-2.5 py-1.5 rounded-lg transition shadow-sm" title="Ganti Boy / Girl">
+                                    <i class="fa-solid fa-mars-and-venus"></i>
+                                </button>
                             </h2>
                             
-                            <div class="flex items-center gap-2 text-emerald-100 text-xs md:text-sm font-medium">
-                                <i class="fa-solid fa-cake-candles"></i> Tanggal Lahir: <span id="display-baby-dob" class="font-bold text-white">Belum diatur</span>
+                            <div class="space-y-1.5 mt-2">
+                                <div class="flex items-center gap-2 text-emerald-100 text-xs md:text-sm font-medium">
+                                    <i class="fa-solid fa-id-card w-4 text-center"></i> Nama Lengkap: 
+                                    <span id="display-baby-full-name" onclick="editBabyProfile()" class="font-bold text-white border-b border-dashed border-white/50 pb-0.5 cursor-pointer hover:text-emerald-200 transition" title="Klik untuk edit Nama & Tanggal Lahir">Belum diatur</span>
+                                    <i class="fa-solid fa-pen text-3xs opacity-70"></i>
+                                </div>
+                                <div class="flex items-center gap-2 text-emerald-100 text-xs md:text-sm font-medium">
+                                    <i class="fa-solid fa-cake-candles w-4 text-center"></i> Tanggal Lahir: 
+                                    <span id="display-baby-dob" class="font-bold text-white">Belum diatur</span>
+                                </div>
                             </div>
 
                             <div class="pt-4 grid grid-cols-3 gap-3">
@@ -896,11 +907,11 @@
                                 </div>
                                 <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
                                     <div class="text-xl md:text-2xl font-bold" id="display-baby-weight">--</div>
-                                    <div class="text-2xs text-emerald-100 mt-0.5">Berat (gr)</div>
+                                    <div class="text-2xs text-emerald-100 mt-0.5">Berat (kg)</div>
                                 </div>
                                 <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
                                     <div class="text-xl md:text-2xl font-bold" id="display-baby-length">--</div>
-                                    <div class="text-2xs text-emerald-100 mt-0.5">Panjang (cm)</div>
+                                    <div class="text-2xs text-emerald-100 mt-0.5">Tinggi (cm)</div>
                                 </div>
                             </div>
                         </div>
@@ -2538,12 +2549,47 @@
             }
         }
 
+        // LOGIKA PROFIL BAYI (NAMA & TANGGAL LAHIR)
+        function editBabyProfile() {
+            const currentName = appState.babyName || 'Si Kecil';
+            const newName = prompt("Masukkan Nama Lengkap Si Kecil:", currentName);
+            if (newName !== null && newName.trim() !== '') {
+                appState.babyName = newName.trim();
+                
+                const currentDob = appState.babyBirthDate || ''; 
+                const newDob = prompt("Masukkan Tanggal Lahir (Format: YYYY-MM-DD):", currentDob);
+                if (newDob !== null) {
+                    appState.babyBirthDate = newDob.trim();
+                }
+                saveToLocalStorage();
+                renderBabyProfile();
+            }
+        }
+
+        function toggleBabyGender() {
+            appState.babyGender = appState.babyGender === 'girl' ? 'boy' : 'girl';
+            saveToLocalStorage();
+            renderBabyProfile();
+        }
+
         function renderBabyProfile() {
-            const nameEl = document.getElementById('display-baby-name');
+            // Atur Judul Boy / Girl
+            const titleEl = document.getElementById('display-welcome-title');
+            if (titleEl) {
+                if (appState.babyGender === 'girl') {
+                    titleEl.innerHTML = "Welcome to the World, Baby Girl 🩷";
+                } else {
+                    titleEl.innerHTML = "Welcome to the World, Baby Boy 🩵";
+                }
+            }
+
+            // Nama Lengkap
+            const nameEl = document.getElementById('display-baby-full-name');
+            if (nameEl) nameEl.innerText = appState.babyName || 'Belum diatur';
+            
+            // Usia & Tanggal Lahir
             const dobEl = document.getElementById('display-baby-dob');
             const ageEl = document.getElementById('display-baby-age');
-            
-            if (nameEl) nameEl.innerText = appState.babyName || 'Si Kecil';
             
             if (appState.babyBirthDate) {
                 const dobDate = new Date(appState.babyBirthDate);
@@ -2551,21 +2597,31 @@
                     const options = { day: 'numeric', month: 'long', year: 'numeric' };
                     if (dobEl) dobEl.innerText = dobDate.toLocaleDateString('id-ID', options);
                     
-                    // Hitung Usia (Hari / Minggu / Bulan)
+                    // Hitung Usia (Y M D)
                     const today = new Date();
-                    const diffTime = today - dobDate;
-                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                    let years = today.getFullYear() - dobDate.getFullYear();
+                    let months = today.getMonth() - dobDate.getMonth();
+                    let days = today.getDate() - dobDate.getDate();
                     
-                    if (diffDays < 0) {
+                    if (days < 0) {
+                        months--;
+                        const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                        days += prevMonth.getDate();
+                    }
+                    if (months < 0) {
+                        years--;
+                        months += 12;
+                    }
+                    
+                    let ageString = "";
+                    if (years > 0) ageString += `${years}Y `;
+                    if (months > 0) ageString += `${months}M `;
+                    if (days > 0 || ageString === "") ageString += `${days}D`; 
+                    
+                    if (today < dobDate) {
                         if (ageEl) ageEl.innerText = "Belum lahir";
-                    } else if (diffDays < 14) {
-                        if (ageEl) ageEl.innerText = `${diffDays} Hari`;
-                    } else if (diffDays < 60) {
-                        const weeks = Math.floor(diffDays / 7);
-                        if (ageEl) ageEl.innerText = `${weeks} Mgg`;
                     } else {
-                        const months = Math.floor(diffDays / 30);
-                        if (ageEl) ageEl.innerText = `${months} Bln`;
+                        if (ageEl) ageEl.innerText = ageString.trim();
                     }
                 }
             } else {
@@ -2573,15 +2629,24 @@
                 if (ageEl) ageEl.innerText = "--";
             }
             
-            // Tarik data BB/PB terakhir dari menu medis
+            // Tarik & Konversi Data BB (gr ke kg) / PB terakhir dari menu medis
             const weightEl = document.getElementById('display-baby-weight');
             const lengthEl = document.getElementById('display-baby-length');
+            
             if (appState.medicalRecords && appState.medicalRecords.length > 0) {
                 const recordsWithData = appState.medicalRecords.filter(r => r.bbj || r.crl);
                 if (recordsWithData.length > 0) {
-                    // Asumsi data terbaru ada di index 0 (karena kita pakai unshift saat simpan)
                     const latest = recordsWithData[0];
-                    if (weightEl) weightEl.innerText = latest.bbj ? parseInt(String(latest.bbj).replace(/\D/g, '')) || '--' : '--';
+                    if (weightEl) {
+                        let bbjGram = parseInt(String(latest.bbj).replace(/\D/g, ''));
+                        if (!isNaN(bbjGram)) {
+                            // Konversi Gram ke KG, hilangkan angka 0 di belakang koma jika pas
+                            let bbjKg = parseFloat((bbjGram / 1000).toFixed(2));
+                            weightEl.innerText = bbjKg;
+                        } else {
+                            weightEl.innerText = '--';
+                        }
+                    }
                     if (lengthEl) lengthEl.innerText = latest.crl ? parseInt(String(latest.crl).replace(/\D/g, '')) || '--' : '--';
                 }
             }
