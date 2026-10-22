@@ -2126,9 +2126,13 @@
 
         // CLOSE ALL DROPDOWNS ON OUTSIDE CLICK
         function closeAllDropdowns() {
-            const galleryMenu = document.getElementById('gallery-menu-dropdown');
-            if (galleryMenu && !galleryMenu.classList.contains('hidden')) {
-                galleryMenu.classList.add('hidden');
+            const galleryMenuPre = document.getElementById('gallery-menu-dropdown-prenatal');
+            if (galleryMenuPre && !galleryMenuPre.classList.contains('hidden')) {
+                galleryMenuPre.classList.add('hidden');
+            }
+            const galleryMenuPost = document.getElementById('gallery-menu-dropdown-postnatal');
+            if (galleryMenuPost && !galleryMenuPost.classList.contains('hidden')) {
+                galleryMenuPost.classList.add('hidden');
             }
             const hplMenu = document.getElementById('hpl-menu-dropdown');
             if (hplMenu && !hplMenu.classList.contains('hidden')) {
@@ -2177,27 +2181,48 @@
             return url.trim();
         }
 
-        // UNIFIED GALLERY FUNCTIONS
-        function renderGallery() {
-            const container = document.getElementById('dashboard-gallery-container');
-            if (!container) return;
-            if (!appState.gallery) appState.gallery = [];
+        /// ==========================================
+        // SISTEM GALERI GANDA (PRENATAL & POSTNATAL)
+        // ==========================================
+        let currentPostnatalGalleryIndex = 0; // State khusus slider bayi
+        let activeGalleryType = 'prenatal';   // Deteksi modal simpan ke mana
 
-            if (appState.gallery.length === 0) {
+        function renderGallery() {
+            _renderGalleryInstance('dashboard-gallery-container', 'prenatal');
+            _renderGalleryInstance('postnatal-gallery-container', 'postnatal');
+        }
+
+        function _renderGalleryInstance(containerId, galleryType) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            // Bikin database khusus postnatal jika belum ada
+            if (!appState.gallery) appState.gallery = [];
+            if (!appState.postnatalGallery) appState.postnatalGallery = [];
+            
+            const galleryData = galleryType === 'prenatal' ? appState.gallery : appState.postnatalGallery;
+            let currentIndex = galleryType === 'prenatal' ? currentGalleryIndex : currentPostnatalGalleryIndex;
+
+            if (galleryData.length === 0) {
                 container.innerHTML = `
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 h-full w-full flex flex-col justify-center items-center text-center space-y-3 min-h-[300px]">
                         <i class="fa-solid fa-images text-3xl text-slate-300"></i>
                         <p class="text-xs text-slate-400 italic">Belum ada foto di galeri.</p>
-                        <button onclick="openGalleryModal()" class="px-4 py-2 bg-sky-600 text-white rounded-xl text-xs font-semibold">
-                            <i class="fa-solid fa-plus mr-1"></i> Tambah Foto Pertama
+                        <button onclick="openGalleryModal('${galleryType}')" class="px-4 py-2 bg-sky-600 text-white rounded-xl text-xs font-semibold hover:bg-sky-700 transition">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah Foto
                         </button>
                     </div>
                 `;
                 return;
             }
 
-            if (currentGalleryIndex >= appState.gallery.length) currentGalleryIndex = 0;
-            const item = appState.gallery[currentGalleryIndex];
+            if (currentIndex >= galleryData.length) {
+                currentIndex = 0;
+                if (galleryType === 'prenatal') currentGalleryIndex = 0;
+                else currentPostnatalGalleryIndex = 0;
+            }
+            
+            const item = galleryData[currentIndex];
             const displayUrl = formatPhotoUrl(item.url);
 
             container.innerHTML = `
@@ -2207,19 +2232,19 @@
                         
                         <div class="flex justify-between items-center z-10">
                             <span class="text-xs font-bold text-white drop-shadow-[0_1.5px_1.5px_rgba(0,0,0,0.8)] tracking-wide">
-                                Galeri Foto (${currentGalleryIndex + 1}/${appState.gallery.length})
+                                Galeri Foto (${currentIndex + 1}/${galleryData.length})
                             </span>
                             
                             <div class="relative">
-                                <button onclick="toggleGalleryMenu(event)" class="w-8 h-8 bg-black/40 hover:bg-black/70 backdrop-blur-md text-white rounded-full flex items-center justify-center transition shadow-sm" title="Opsi Galeri">
+                                <button onclick="toggleGalleryMenu(event, '${galleryType}')" class="w-8 h-8 bg-black/40 hover:bg-black/70 backdrop-blur-md text-white rounded-full flex items-center justify-center transition shadow-sm" title="Opsi Galeri">
                                     <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
                                 </button>
                                 
-                                <div id="gallery-menu-dropdown" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 z-30 text-xs text-slate-700">
-                                    <button onclick="openGalleryModal(); toggleGalleryMenu(event);" class="w-full text-left px-3.5 py-2 hover:bg-sky-50 hover:text-sky-700 font-semibold flex items-center gap-2 transition">
+                                <div id="gallery-menu-dropdown-${galleryType}" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 z-30 text-xs text-slate-700">
+                                    <button onclick="openGalleryModal('${galleryType}'); toggleGalleryMenu(event, '${galleryType}');" class="w-full text-left px-3.5 py-2 hover:bg-sky-50 hover:text-sky-700 font-semibold flex items-center gap-2 transition">
                                         <i class="fa-solid fa-plus text-sky-600"></i> Tambah Foto Baru
                                     </button>
-                                    <button onclick="deleteGalleryPhoto(${item.id}); toggleGalleryMenu(event);" class="w-full text-left px-3.5 py-2 hover:bg-rose-50 hover:text-rose-600 font-semibold flex items-center gap-2 transition">
+                                    <button onclick="deleteGalleryPhoto(${item.id}, '${galleryType}'); toggleGalleryMenu(event, '${galleryType}');" class="w-full text-left px-3.5 py-2 hover:bg-rose-50 hover:text-rose-600 font-semibold flex items-center gap-2 transition">
                                         <i class="fa-solid fa-trash text-rose-600"></i> Hapus Foto Ini
                                     </button>
                                 </div>
@@ -2232,15 +2257,15 @@
                             
                             <div class="flex justify-between items-center pt-2">
                                 <div class="flex gap-1">
-                                    ${appState.gallery.map((_, idx) => `
-                                        <span onclick="setGalleryIndex(${idx})" class="h-1.5 rounded-full cursor-pointer transition-all duration-300 ${idx === currentGalleryIndex ? 'bg-white w-5' : 'bg-white/40 w-1.5'}"></span>
+                                    ${galleryData.map((_, idx) => `
+                                        <span onclick="setGalleryIndex(${idx}, '${galleryType}')" class="h-1.5 rounded-full cursor-pointer transition-all duration-300 ${idx === currentIndex ? 'bg-white w-5' : 'bg-white/40 w-1.5'}"></span>
                                     `).join('')}
                                 </div>
                                 <div class="flex gap-1.5">
-                                    <button onclick="prevGallerySlide()" class="w-7 h-7 bg-black/40 hover:bg-black/70 backdrop-blur-md rounded-full text-xs text-white flex items-center justify-center transition">
+                                    <button onclick="prevGallerySlide('${galleryType}')" class="w-7 h-7 bg-black/40 hover:bg-black/70 backdrop-blur-md rounded-full text-xs text-white flex items-center justify-center transition">
                                         <i class="fa-solid fa-chevron-left"></i>
                                     </button>
-                                    <button onclick="nextGallerySlide()" class="w-7 h-7 bg-black/40 hover:bg-black/70 backdrop-blur-md rounded-full text-xs text-white flex items-center justify-center transition">
+                                    <button onclick="nextGallerySlide('${galleryType}')" class="w-7 h-7 bg-black/40 hover:bg-black/70 backdrop-blur-md rounded-full text-xs text-white flex items-center justify-center transition">
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </button>
                                 </div>
@@ -2252,10 +2277,96 @@
             `;
         }
 
-        function toggleGalleryMenu(e) {
+        function toggleGalleryMenu(e, type) {
             if (e) e.stopPropagation();
-            const menu = document.getElementById('gallery-menu-dropdown');
+            const menu = document.getElementById(`gallery-menu-dropdown-${type}`);
             if (menu) menu.classList.toggle('hidden');
+        }
+
+        // Modal otomatis mendeteksi dari dashboard mana ia dipanggil
+        function openGalleryModal(type = 'prenatal') {
+            activeGalleryType = type; 
+            document.getElementById('gallery-photo-url').value = '';
+            document.getElementById('gallery-photo-title').value = '';
+            document.getElementById('gallery-photo-caption').value = '';
+            document.getElementById('gallery-modal').classList.remove('hidden');
+        }
+
+        function saveGalleryPhoto() {
+            const url = document.getElementById('gallery-photo-url').value.trim();
+            const title = document.getElementById('gallery-photo-title').value.trim();
+            const caption = document.getElementById('gallery-photo-caption').value.trim();
+
+            if (!url || !title) {
+                alert("URL foto dan judul wajib diisi!");
+                return;
+            }
+
+            const newPhoto = { id: Date.now(), url, title, caption };
+
+            // Simpan ke database yang sesuai
+            if (activeGalleryType === 'prenatal') {
+                if (!appState.gallery) appState.gallery = [];
+                appState.gallery.unshift(newPhoto);
+                currentGalleryIndex = 0;
+            } else {
+                if (!appState.postnatalGallery) appState.postnatalGallery = [];
+                appState.postnatalGallery.unshift(newPhoto);
+                currentPostnatalGalleryIndex = 0;
+            }
+
+            saveToLocalStorage();
+            renderGallery();
+            closeModal('gallery-modal');
+        }
+
+        function deleteGalleryPhoto(id, type) {
+            if (confirm("Apakah Anda yakin ingin menghapus foto ini?")) {
+                if (type === 'prenatal') {
+                    appState.gallery = appState.gallery.filter(item => item.id !== id);
+                    currentGalleryIndex = 0;
+                } else {
+                    appState.postnatalGallery = appState.postnatalGallery.filter(item => item.id !== id);
+                    currentPostnatalGalleryIndex = 0;
+                }
+                saveToLocalStorage();
+                renderGallery();
+            }
+        }
+
+        function nextGallerySlide(type) {
+            if (type === 'prenatal') {
+                if (appState.gallery && appState.gallery.length > 0) {
+                    currentGalleryIndex = (currentGalleryIndex + 1) % appState.gallery.length;
+                }
+            } else {
+                if (appState.postnatalGallery && appState.postnatalGallery.length > 0) {
+                    currentPostnatalGalleryIndex = (currentPostnatalGalleryIndex + 1) % appState.postnatalGallery.length;
+                }
+            }
+            renderGallery();
+        }
+
+        function prevGallerySlide(type) {
+            if (type === 'prenatal') {
+                if (appState.gallery && appState.gallery.length > 0) {
+                    currentGalleryIndex = (currentGalleryIndex - 1 + appState.gallery.length) % appState.gallery.length;
+                }
+            } else {
+                if (appState.postnatalGallery && appState.postnatalGallery.length > 0) {
+                    currentPostnatalGalleryIndex = (currentPostnatalGalleryIndex - 1 + appState.postnatalGallery.length) % appState.postnatalGallery.length;
+                }
+            }
+            renderGallery();
+        }
+
+        function setGalleryIndex(index, type) {
+            if (type === 'prenatal') {
+                currentGalleryIndex = index;
+            } else {
+                currentPostnatalGalleryIndex = index;
+            }
+            renderGallery();
         }
 
         function toggleHplMenu(e) {
