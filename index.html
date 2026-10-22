@@ -894,9 +894,12 @@
                                     <span id="display-baby-full-name" onclick="editBabyProfile()" class="font-bold text-white border-b border-dashed border-white/50 pb-0.5 cursor-pointer hover:text-emerald-200 transition" title="Klik untuk edit Nama & Tanggal Lahir">Belum diatur</span>
                                     <i class="fa-solid fa-pen text-3xs opacity-70"></i>
                                 </div>
-                                <div class="flex items-center gap-2 text-emerald-100 text-xs md:text-sm font-medium">
-                                    <i class="fa-solid fa-cake-candles w-4 text-center"></i> Tanggal Lahir: 
-                                    <span id="display-baby-dob" class="font-bold text-white">Belum diatur</span>
+                                <div class="flex items-start gap-2 text-emerald-100 text-xs md:text-sm font-medium">
+                                    <i class="fa-solid fa-cake-candles w-4 text-center mt-0.5"></i> 
+                                    <div>
+                                        <div>Tanggal Lahir: <span id="display-baby-dob" class="font-bold text-white">Belum diatur</span></div>
+                                        <div id="display-baby-dob-hijri" class="text-2xs text-emerald-200 mt-0.5 font-normal italic"></div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -2589,6 +2592,7 @@
             
             // Usia & Tanggal Lahir
             const dobEl = document.getElementById('display-baby-dob');
+            const hijriEl = document.getElementById('display-baby-dob-hijri');
             const ageEl = document.getElementById('display-baby-age');
             
             if (appState.babyBirthDate) {
@@ -2596,6 +2600,16 @@
                 if (!isNaN(dobDate)) {
                     const options = { day: 'numeric', month: 'long', year: 'numeric' };
                     if (dobEl) dobEl.innerText = dobDate.toLocaleDateString('id-ID', options);
+                    
+                    // Konversi otomatis ke Kalender Hijriyah
+                    if (hijriEl) {
+                        try {
+                            const hijriFormatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' });
+                            hijriEl.innerText = hijriFormatter.format(dobDate) + ' H';
+                        } catch (e) {
+                            hijriEl.innerText = ''; // Jaga-jaga kalau browser lama tidak support
+                        }
+                    }
                     
                     // Hitung Usia (Y M D)
                     const today = new Date();
@@ -2626,6 +2640,7 @@
                 }
             } else {
                 if (dobEl) dobEl.innerText = "Belum diatur";
+                if (hijriEl) hijriEl.innerText = "";
                 if (ageEl) ageEl.innerText = "--";
             }
             
@@ -2640,7 +2655,6 @@
                     if (weightEl) {
                         let bbjGram = parseInt(String(latest.bbj).replace(/\D/g, ''));
                         if (!isNaN(bbjGram)) {
-                            // Konversi Gram ke KG, hilangkan angka 0 di belakang koma jika pas
                             let bbjKg = parseFloat((bbjGram / 1000).toFixed(2));
                             weightEl.innerText = bbjKg;
                         } else {
