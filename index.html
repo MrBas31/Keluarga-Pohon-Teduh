@@ -895,10 +895,11 @@
                                     <i class="fa-solid fa-pen text-3xs opacity-70"></i>
                                 </div>
                                 <div class="flex items-start gap-2 text-emerald-100 text-xs md:text-sm font-medium">
-                                    <i class="fa-solid fa-cake-candles w-4 text-center mt-0.5"></i> 
-                                    <div>
-                                        <div>Tanggal Lahir: <span id="display-baby-dob" class="font-bold text-white">Belum diatur</span></div>
-                                        <div id="display-baby-dob-hijri" class="text-2xs text-emerald-200 mt-0.5 font-normal italic"></div>
+                                    <i class="fa-solid fa-cake-candles w-4 text-center mt-1"></i> 
+                                    <span class="whitespace-nowrap">Tanggal Lahir:</span>
+                                    <div class="flex flex-col">
+                                        <span id="display-baby-dob" class="font-bold text-white">Belum diatur</span>
+                                        <span id="display-baby-dob-hijri" class="text-xs md:text-sm text-emerald-200 font-normal italic mt-0.5"></span>
                                     </div>
                                 </div>
                             </div>
@@ -2605,7 +2606,10 @@
                     if (hijriEl) {
                         try {
                             const hijriFormatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' });
-                            hijriEl.innerText = hijriFormatter.format(dobDate) + ' H';
+                            let hijriText = hijriFormatter.format(dobDate);
+                            // Hapus embel-embel "AH" atau "H" bawaan browser agar tidak double
+                            hijriText = hijriText.replace(/\s*(AH|H)\s*$/i, ''); 
+                            hijriEl.innerText = hijriText + ' H';
                         } catch (e) {
                             hijriEl.innerText = ''; // Jaga-jaga kalau browser lama tidak support
                         }
