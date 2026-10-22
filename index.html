@@ -257,9 +257,27 @@
         </nav>
 
         <!-- MAIN TABS NAV (KHUSUS FASE BAYI LAHIR) -->
-        <nav id="postnatal-nav-tabs" class="max-w-6xl mx-auto px-4 flex space-x-6 overflow-x-auto text-sm border-t border-slate-100 pt-1 hidden">
-            <button class="tab-btn active py-2.5 whitespace-nowrap">
-                <i class="fa-solid fa-house-baby mr-1"></i> Dashboard Bayi Lahir
+        <nav id="postnatal-nav-tabs" class="max-w-6xl mx-auto px-4 flex space-x-6 overflow-x-auto text-sm border-t border-slate-100 pt-1 hidden no-scrollbar">
+            <button onclick="switchPostnatalTab('post-dashboard')" id="tab-post-dashboard" class="tab-btn active py-2.5 whitespace-nowrap">
+                <i class="fa-solid fa-baby-carriage mr-1"></i> Beranda Si Kecil
+            </button>
+            <button onclick="switchPostnatalTab('post-log')" id="tab-post-log" class="tab-btn py-2.5 whitespace-nowrap">
+                <i class="fa-solid fa-clipboard-list mr-1"></i> Log Harian
+            </button>
+            <button onclick="switchPostnatalTab('post-belanja')" id="tab-post-belanja" class="tab-btn py-2.5 whitespace-nowrap">
+                <i class="fa-solid fa-cart-shopping mr-1"></i> Belanja Bulanan
+            </button>
+            <button onclick="switchPostnatalTab('post-rs')" id="tab-post-rs" class="tab-btn py-2.5 whitespace-nowrap">
+                <i class="fa-solid fa-hospital-user mr-1"></i> RS & DSA
+            </button>
+            <button onclick="switchPostnatalTab('post-medis')" id="tab-post-medis" class="tab-btn py-2.5 whitespace-nowrap">
+                <i class="fa-solid fa-notes-medical mr-1"></i> Medis
+            </button>
+            <button onclick="switchPostnatalTab('post-stimulasi')" id="tab-post-stimulasi" class="tab-btn py-2.5 whitespace-nowrap">
+                <i class="fa-solid fa-shapes mr-1"></i> Stimulasi & Tumbuh
+            </button>
+            <button onclick="switchPostnatalTab('post-pustaka')" id="tab-post-pustaka" class="tab-btn py-2.5 whitespace-nowrap">
+                <i class="fa-solid fa-book-open-reader mr-1"></i> Pustaka Ayah Bunda
             </button>
         </nav>
     </header>
@@ -2358,6 +2376,19 @@
             if (tabId === 'budget') {
                 renderBudgetPieChart(appState.activePieSubMenu || 'ALL');
             }
+        }
+
+        // SWITCH TAB (UNTUK MENU FASE BAYI LAHIR)
+        function switchPostnatalTab(tabId) {
+            appState.currentPostnatalTab = tabId;
+            const tabs = ['post-dashboard', 'post-log', 'post-belanja', 'post-rs', 'post-medis', 'post-stimulasi', 'post-pustaka'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                const sec = document.getElementById(`sec-${t}`);
+                if (btn) btn.classList.toggle('active', t === tabId);
+                if (sec) sec.classList.toggle('hidden', t !== tabId);
+            });
+            saveToLocalStorage();
         }
 
         // EDIT HPL
