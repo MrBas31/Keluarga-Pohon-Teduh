@@ -870,48 +870,118 @@
             
             <!-- TAB 1: BERANDA SI KECIL -->
             <section id="sec-post-dashboard" class="space-y-6">
-                <!-- HERO CARD / DASHBOARD SELAMAT DATANG SI KECIL -->
-                <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-slate-800 rounded-3xl p-6 md:p-8 text-white shadow-xl shadow-emerald-100 relative overflow-hidden">
-                    <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">👶</div>
-                    <div class="space-y-3 relative z-10">
-                        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-2xs font-semibold uppercase tracking-wider">
-                            👶 Dashboard Tumbuh Tumbuh Si Kecil
-                        </span>
-                        <h2 class="text-2xl md:text-3xl font-extrabold font-brand tracking-tight">
-                            Selamat Datang Buah Hati Fikri & Ollyl!
-                        </h2>
-                        <p class="text-emerald-100 text-xs md:text-sm">
-                            Ruang khusus pemantauan tumbuh kembang, timer waktu bangun (wake window), dan stimulasi harian bayi.
-                        </p>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                    <!-- HERO CARD: PROFIL BAYI -->
+                    <div class="lg:col-span-7 bg-gradient-to-r from-emerald-600 via-teal-600 to-slate-800 rounded-3xl p-6 md:p-8 text-white shadow-xl shadow-emerald-100 relative overflow-hidden flex flex-col justify-between h-full min-h-[300px]">
+                        <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">👶</div>
+                        <div class="space-y-3 relative z-10">
+                            <div class="flex justify-between items-center gap-2">
+                                <button onclick="editBabyProfile()" class="inline-block px-3 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full text-2xs font-semibold uppercase tracking-wider transition group" title="Klik untuk edit Nama dan Tanggal Lahir">
+                                    👶 Dashboard Tumbuh Kembang <span id="display-baby-name" class="font-bold border-b border-dashed border-white/50 pb-0.5">Si Kecil</span> <i class="fa-solid fa-pen text-3xs ml-1 opacity-70 group-hover:opacity-100"></i>
+                                </button>
+                            </div>
+                            
+                            <h2 class="text-2xl md:text-3xl font-extrabold font-brand tracking-tight">
+                                Selamat Datang ke Dunia, Buah Hati Kami 🩷
+                            </h2>
+                            
+                            <div class="flex items-center gap-2 text-emerald-100 text-xs md:text-sm font-medium">
+                                <i class="fa-solid fa-cake-candles"></i> Tanggal Lahir: <span id="display-baby-dob" class="font-bold text-white">Belum diatur</span>
+                            </div>
+
+                            <div class="pt-4 grid grid-cols-3 gap-3">
+                                <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
+                                    <div class="text-xl md:text-2xl font-bold" id="display-baby-age">--</div>
+                                    <div class="text-2xs text-emerald-100 mt-0.5">Usia Bayi</div>
+                                </div>
+                                <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
+                                    <div class="text-xl md:text-2xl font-bold" id="display-baby-weight">--</div>
+                                    <div class="text-2xs text-emerald-100 mt-0.5">Berat (gr)</div>
+                                </div>
+                                <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
+                                    <div class="text-xl md:text-2xl font-bold" id="display-baby-length">--</div>
+                                    <div class="text-2xs text-emerald-100 mt-0.5">Panjang (cm)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-6 flex items-center gap-3 z-10">
+                            <div class="text-xs text-emerald-100 italic font-brand" id="display-baby-quote">
+                                "Merangkai hari demi hari, merayakan setiap tumbuh kembang kecil yang berharga."
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- GALERI FOTO (Numpang sistem galeri kehamilan dulu) -->
+                    <div class="lg:col-span-5 h-full" id="postnatal-gallery-container">
+                        <div class="bg-slate-900 rounded-3xl h-full min-h-[300px] flex items-center justify-center border border-slate-200 shadow-md">
+                            <p class="text-slate-400 text-xs italic">Slider Galeri Foto</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- WAKE WINDOW TIMER CARD -->
-                <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-3xl p-6 md:p-8 text-white shadow-xl shadow-emerald-100 relative overflow-hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                        <div class="md:col-span-2 space-y-3">
-                            <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold uppercase tracking-wider">
-                                👶 Wake Window & Sleep Tracker
-                            </span>
-                            <h2 class="text-3xl font-extrabold">Timer Bangun Bayi</h2>
-                            <p class="text-emerald-100 text-sm">Cegah bayi terlalu lelah (*overtired*) dengan mengontrol waktu bangunnya.</p>
-                            
-                            <div class="flex flex-wrap gap-2 pt-2">
-                                <button onclick="setWakeWindowLimit(45)" class="px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-medium">0-4 Mgg (30-60m)</button>
-                                <button onclick="setWakeWindowLimit(60)" class="px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-medium">1-2 Bln (45-90m)</button>
-                                <button onclick="setWakeWindowLimit(90)" class="px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-medium">2-3 Bln (60-90m)</button>
+                <!-- 4 WIDGET RINGKASAN (CANGKANG KOSONG) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Widget 1: Log Harian -->
+                    <div onclick="switchPostnatalTab('post-log')" class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between cursor-pointer hover:shadow-md transition hover:border-sky-200 group">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-2xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md">Log Harian</span>
+                                <i class="fa-solid fa-clipboard-list text-sky-600 text-sm"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm">Aktivitas Terakhir</h4>
+                            <div class="mt-2 text-xs font-medium text-slate-500 space-y-1">
+                                <div>🍼 Nyusu: <span class="font-bold text-slate-700">-</span></div>
+                                <div>💤 Tidur: <span class="font-bold text-slate-700">-</span></div>
+                                <div>🧻 Popok: <span class="font-bold text-slate-700">-</span></div>
                             </div>
                         </div>
+                        <div class="pt-2 border-t border-slate-100 text-right"><span class="text-3xs text-sky-600 font-bold uppercase group-hover:pr-1 transition-all">Buka Log →</span></div>
+                    </div>
 
-                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-center space-y-3">
-                            <div class="text-xs text-emerald-100 font-medium">Lama Bayi Bangun</div>
-                            <div class="text-5xl font-mono font-bold" id="wake-window-timer">00:00</div>
-                            <div class="text-xs text-emerald-200">Batas Rekomendasi: <span id="wake-limit-display">60</span> mnt</div>
-                            
-                            <button onclick="toggleWakeTimer()" id="btn-wake-timer" class="w-full py-2.5 bg-white text-emerald-700 font-bold rounded-xl shadow transition hover:bg-emerald-50">
-                                Mulai Waktu Bangun
-                            </button>
+                    <!-- Widget 2: Stimulasi -->
+                    <div onclick="switchPostnatalTab('post-stimulasi')" class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between cursor-pointer hover:shadow-md transition hover:border-amber-200 group">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-2xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">Stimulasi</span>
+                                <i class="fa-solid fa-shapes text-amber-600 text-sm"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm">Fokus Bulan Ini</h4>
+                            <p class="mt-2 text-xs font-medium text-slate-500 line-clamp-3">
+                                Perbanyak Tummy Time dan interaksi suara (mengobrol) untuk melatih otot leher & respons bayi.
+                            </p>
                         </div>
+                        <div class="pt-2 border-t border-slate-100 text-right"><span class="text-3xs text-amber-600 font-bold uppercase group-hover:pr-1 transition-all">Lihat Panduan →</span></div>
+                    </div>
+
+                    <!-- Widget 3: Medis -->
+                    <div onclick="switchPostnatalTab('post-medis')" class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between cursor-pointer hover:shadow-md transition hover:border-emerald-200 group">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-2xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">Medis & Vaksin</span>
+                                <i class="fa-solid fa-syringe text-emerald-600 text-sm"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm">Jadwal Terdekat</h4>
+                            <div class="mt-2 text-xs font-medium text-slate-500">
+                                <div class="font-bold text-slate-700">Vaksin BCG & Polio 1</div>
+                                <div class="mt-0.5">Usia 1 Bulan</div>
+                            </div>
+                        </div>
+                        <div class="pt-2 border-t border-slate-100 text-right"><span class="text-3xs text-emerald-600 font-bold uppercase group-hover:pr-1 transition-all">Cek Jadwal →</span></div>
+                    </div>
+
+                    <!-- Widget 4: Belanja -->
+                    <div onclick="switchPostnatalTab('post-belanja')" class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between cursor-pointer hover:shadow-md transition hover:border-pink-200 group">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-2xs font-bold uppercase tracking-wider text-pink-700 bg-pink-50 px-2 py-0.5 rounded-md">Restock</span>
+                                <i class="fa-solid fa-cart-shopping text-pink-600 text-sm"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm">Status Bulanan</h4>
+                            <div class="mt-2 text-xs font-medium text-slate-500">
+                                Pengeluaran rutin untuk popok, kapas, dan sabun mandi akan terekap di sini.
+                            </div>
+                        </div>
+                        <div class="pt-2 border-t border-slate-100 text-right"><span class="text-3xs text-pink-600 font-bold uppercase group-hover:pr-1 transition-all">Buka Tracker →</span></div>
                     </div>
                 </div>
             </section>
@@ -2075,6 +2145,7 @@
             renderHospitals();
             renderContractionLogs();
             renderMedicalRecords();
+            renderBabyProfile();
             if (typeof renderMedicalChart === 'function') renderMedicalChart(); // <-- Grafik Medis ditambahkan di sini
             if (typeof renderReferences === 'function') renderReferences(); // <-- Referensi ditambahkan di sini
         };
@@ -2450,6 +2521,72 @@
             }
         }
 
+        // LOGIKA PROFIL BAYI (NAMA & TANGGAL LAHIR)
+        function editBabyProfile() {
+            const currentName = appState.babyName || 'Si Kecil';
+            const newName = prompt("Masukkan Nama Panggilan Si Kecil:", currentName);
+            if (newName !== null && newName.trim() !== '') {
+                appState.babyName = newName.trim();
+                
+                const currentDob = appState.babyBirthDate || ''; 
+                const newDob = prompt("Masukkan Tanggal Lahir (Format: YYYY-MM-DD):", currentDob);
+                if (newDob !== null) {
+                    appState.babyBirthDate = newDob.trim();
+                }
+                saveToLocalStorage();
+                renderBabyProfile();
+            }
+        }
+
+        function renderBabyProfile() {
+            const nameEl = document.getElementById('display-baby-name');
+            const dobEl = document.getElementById('display-baby-dob');
+            const ageEl = document.getElementById('display-baby-age');
+            
+            if (nameEl) nameEl.innerText = appState.babyName || 'Si Kecil';
+            
+            if (appState.babyBirthDate) {
+                const dobDate = new Date(appState.babyBirthDate);
+                if (!isNaN(dobDate)) {
+                    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                    if (dobEl) dobEl.innerText = dobDate.toLocaleDateString('id-ID', options);
+                    
+                    // Hitung Usia (Hari / Minggu / Bulan)
+                    const today = new Date();
+                    const diffTime = today - dobDate;
+                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays < 0) {
+                        if (ageEl) ageEl.innerText = "Belum lahir";
+                    } else if (diffDays < 14) {
+                        if (ageEl) ageEl.innerText = `${diffDays} Hari`;
+                    } else if (diffDays < 60) {
+                        const weeks = Math.floor(diffDays / 7);
+                        if (ageEl) ageEl.innerText = `${weeks} Mgg`;
+                    } else {
+                        const months = Math.floor(diffDays / 30);
+                        if (ageEl) ageEl.innerText = `${months} Bln`;
+                    }
+                }
+            } else {
+                if (dobEl) dobEl.innerText = "Belum diatur";
+                if (ageEl) ageEl.innerText = "--";
+            }
+            
+            // Tarik data BB/PB terakhir dari menu medis
+            const weightEl = document.getElementById('display-baby-weight');
+            const lengthEl = document.getElementById('display-baby-length');
+            if (appState.medicalRecords && appState.medicalRecords.length > 0) {
+                const recordsWithData = appState.medicalRecords.filter(r => r.bbj || r.crl);
+                if (recordsWithData.length > 0) {
+                    // Asumsi data terbaru ada di index 0 (karena kita pakai unshift saat simpan)
+                    const latest = recordsWithData[0];
+                    if (weightEl) weightEl.innerText = latest.bbj ? parseInt(String(latest.bbj).replace(/\D/g, '')) || '--' : '--';
+                    if (lengthEl) lengthEl.innerText = latest.crl ? parseInt(String(latest.crl).replace(/\D/g, '')) || '--' : '--';
+                }
+            }
+        }
+        
         // PREGNANCY CALCULATOR
         function calculatePregnancyData() {
             if (!appState.hpl) appState.hpl = '2026-12-16';
@@ -4996,6 +5133,7 @@
           if (typeof renderMedicalRecords === 'function') renderMedicalRecords();
           if (typeof renderMedicalChart === 'function') renderMedicalChart(); // <-- Grafik Medis ditambahkan di sini
           if (typeof renderReferences === 'function') renderReferences();
+          if (typeof renderBabyProfile === 'function') renderBabyProfile();
         }
 
         // FUNGSI PENYIMPANAN KE FIREBASE
