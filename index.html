@@ -1007,11 +1007,11 @@
                 <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div class="flex items-center gap-3 w-full md:w-auto justify-center">
                         <button onclick="changeLogDate(-1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition"><i class="fa-solid fa-chevron-left"></i></button>
-                        <div class="relative relative-date-picker group">
-                            <input type="date" id="log-date-picker" onchange="setDateFromPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                            <div class="flex flex-col items-center px-4 py-1 bg-sky-50 rounded-xl border border-sky-100 group-hover:border-sky-300 transition">
-                                <span class="text-3xs font-bold text-sky-600 uppercase tracking-wider">Pilih Tanggal</span>
-                                <span id="display-log-date" class="font-bold text-sky-900 text-sm">Hari Ini</span>
+                        <div class="relative group cursor-pointer" onclick="document.getElementById('log-date-picker').showPicker()">
+                            <input type="date" id="log-date-picker" onchange="setDateFromPicker()" class="absolute inset-0 w-0 h-0 opacity-0 -z-10">
+                            <div class="flex flex-col items-center px-4 py-1 bg-sky-500/10 rounded-xl border border-sky-500/20 group-hover:border-sky-400 transition pointer-events-none">
+                                <span class="text-3xs font-bold text-sky-400 uppercase tracking-wider">Pilih Tanggal</span>
+                                <span id="display-log-date" class="font-bold text-sky-100 text-sm">Hari Ini</span>
                             </div>
                         </div>
                         <button onclick="changeLogDate(1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition"><i class="fa-solid fa-chevron-right"></i></button>
@@ -1928,6 +1928,7 @@
                             <label class="font-semibold text-slate-700">Jenis</label>
                             <select id="form-log-makan-sub" onchange="toggleMakanFields()" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none">
                                 <option value="Menyusui">🤱 Menyusui (DBF)</option>
+                                <option value="ASIP">🍼 Minum ASI Perah (ASIP)</option>
                                 <option value="Minum">🍼 Susu Botol / Sufor</option>
                                 <option value="Makan">🥣 Makan (MPASI)</option>
                             </select>
@@ -1963,9 +1964,21 @@
                     </div>
 
                     <!-- Pompa ASI -->
-                    <div id="field-pompa" class="hidden">
-                        <label class="font-semibold text-slate-700">Hasil Pompa (ml)</label>
-                        <input type="number" id="form-log-pompa-ml" required placeholder="misal: 120" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none">
+                    <div id="field-pompa" class="hidden space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="font-semibold text-slate-700">Kiri (ml)</label>
+                                <input type="number" id="form-log-pompa-kiri" placeholder="Opsional" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="font-semibold text-slate-700">Kanan (ml)</label>
+                                <input type="number" id="form-log-pompa-kanan" placeholder="Opsional" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-700">Total Pompa (ml)</label>
+                            <input type="number" id="form-log-pompa-ml" placeholder="Isi ini jika Kiri/Kanan kosong..." class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none">
+                        </div>
                     </div>
                 </div>
 
@@ -5680,7 +5693,7 @@
             document.getElementById('field-makanan').classList.add('hidden');
 
             if (sub === 'Menyusui') document.getElementById('field-menyusui').classList.remove('hidden');
-            else if (sub === 'Minum') document.getElementById('field-minum').classList.remove('hidden');
+            else if (sub === 'Minum' || sub === 'ASIP') document.getElementById('field-minum').classList.remove('hidden');
             else if (sub === 'Makan') document.getElementById('field-makanan').classList.remove('hidden');
         }
 
@@ -5690,20 +5703,13 @@
             document.getElementById('form-log-id').value = id || '';
             document.getElementById('form-log-category').value = category;
             
-            const titles = {
-                'Makan': '🍼 Catat Makan & Minum',
-                'Tidur': '💤 Catat Waktu Tidur',
-                'Buang Air': '🧻 Catat Ganti Popok',
-                'Pompa ASI': '⚕️ Catat Pompa ASI'
-            };
+            const titles = { 'Makan': '🍼 Catat Makan & Minum', 'Tidur': '💤 Catat Waktu Tidur', 'Buang Air': '🧻 Catat Ganti Popok', 'Pompa ASI': '⚕️ Catat Pompa ASI' };
             document.getElementById('modal-log-title').innerHTML = titles[category];
 
-            // Default waktu saat ini
             const now = new Date();
             document.getElementById('form-log-start-date').value = now.toISOString().slice(0, 10);
             document.getElementById('form-log-start-time').value = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
             
-            // Sembunyikan semua dynamic field dulu
             const dynCont = document.getElementById('dynamic-log-fields');
             dynCont.classList.remove('hidden');
             ['field-makan', 'field-buang-air', 'field-pompa'].forEach(c => document.getElementById(c).classList.add('hidden'));
@@ -5716,10 +5722,9 @@
             } else if (category === 'Pompa ASI') {
                 document.getElementById('field-pompa').classList.remove('hidden');
             } else {
-                dynCont.classList.add('hidden'); // Tidur gak butuh field dinamis
+                dynCont.classList.add('hidden');
             }
 
-            // Kalau mode Edit, isi fieldnya (Ini sambungan dari kodemu yang terpotong)
             if (id) {
                 const log = appState.dailyLogs.find(l => l.id === id);
                 if (log) {
@@ -5734,7 +5739,7 @@
                         if (log.subCategory === 'Menyusui') {
                             document.getElementById('form-log-kiri').value = log.kiri || '';
                             document.getElementById('form-log-kanan').value = log.kanan || '';
-                        } else if (log.subCategory === 'Minum') {
+                        } else if (log.subCategory === 'Minum' || log.subCategory === 'ASIP') {
                             document.getElementById('form-log-ml').value = log.ml || '';
                         } else if (log.subCategory === 'Makan') {
                             document.getElementById('form-log-makanan').value = log.makanan || '';
@@ -5743,11 +5748,12 @@
                     } else if (category === 'Buang Air') {
                         document.getElementById('form-log-bab-type').value = log.babType || 'Pipis';
                     } else if (category === 'Pompa ASI') {
+                        document.getElementById('form-log-pompa-kiri').value = log.kiri || '';
+                        document.getElementById('form-log-pompa-kanan').value = log.kanan || '';
                         document.getElementById('form-log-pompa-ml').value = log.ml || '';
                     }
                 }
             }
-
             document.getElementById('modal-daily-log').classList.remove('hidden');
         }
 
@@ -5767,8 +5773,7 @@
 
             let logData = { 
                 id: id ? Number(id) : Date.now(), 
-                category, startDate, startTime, endDate, endTime, notes,
-                createdAt: new Date().toISOString()
+                category, startDate, startTime, endDate, endTime, notes, createdAt: new Date().toISOString()
             };
 
             if (category === 'Makan') {
@@ -5777,7 +5782,7 @@
                     logData.kiri = Number(document.getElementById('form-log-kiri').value) || 0;
                     logData.kanan = Number(document.getElementById('form-log-kanan').value) || 0;
                     logData.durationMinutes = logData.kiri + logData.kanan;
-                } else if (logData.subCategory === 'Minum') {
+                } else if (logData.subCategory === 'Minum' || logData.subCategory === 'ASIP') {
                     logData.ml = Number(document.getElementById('form-log-ml').value) || 0;
                 } else if (logData.subCategory === 'Makan') {
                     logData.makanan = document.getElementById('form-log-makanan').value.trim();
@@ -5785,11 +5790,21 @@
             } else if (category === 'Buang Air') {
                 logData.babType = document.getElementById('form-log-bab-type').value;
             } else if (category === 'Pompa ASI') {
-                logData.ml = Number(document.getElementById('form-log-pompa-ml').value) || 0;
-                // Khusus Pompa ASI, default hapus required pada modal, tapi kita pastiin datanya masuk.
+                let pk = Number(document.getElementById('form-log-pompa-kiri').value) || 0;
+                let pn = Number(document.getElementById('form-log-pompa-kanan').value) || 0;
+                let pTotal = Number(document.getElementById('form-log-pompa-ml').value) || 0;
+
+                if (pTotal > 0 && pk === 0 && pn === 0) {
+                    logData.kiri = pTotal / 2;
+                    logData.kanan = pTotal / 2;
+                    logData.ml = pTotal;
+                } else {
+                    logData.kiri = pk;
+                    logData.kanan = pn;
+                    logData.ml = pk + pn || pTotal;
+                }
             }
 
-            // Hitung durasi otomatis jika start & end diisi (Khusus Tidur / Pompa / DLL)
             if (startDate && startTime && endDate && endTime && (!logData.durationMinutes || category === 'Tidur')) {
                 const start = new Date(`${startDate}T${startTime}`);
                 const end = new Date(`${endDate}T${endTime}`);
@@ -5820,40 +5835,32 @@
         }
 
         function renderDailyLogs() {
-            // Update Label Tanggal
             const displayDate = document.getElementById('display-log-date');
             document.getElementById('log-date-picker').value = currentDateLog;
             
             const today = new Date().toISOString().slice(0, 10);
-            if (currentDateLog === today) {
-                displayDate.innerText = "Hari Ini";
-            } else {
-                displayDate.innerText = new Date(currentDateLog).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-            }
+            if (currentDateLog === today) displayDate.innerText = "Hari Ini";
+            else displayDate.innerText = new Date(currentDateLog).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
 
             const timelineCont = document.getElementById('log-timeline-container');
             const summaryCont = document.getElementById('log-summary-container');
             if (!timelineCont || !summaryCont) return;
 
             if (!appState.dailyLogs) appState.dailyLogs = [];
-            
-            // Filter data sesuai tanggal yang dipilih (Cek StartDate atau EndDate)
             const dailyData = appState.dailyLogs.filter(l => l.startDate === currentDateLog || l.endDate === currentDateLog)
                                 .sort((a, b) => new Date(`${b.startDate}T${b.startTime}`) - new Date(`${a.startDate}T${a.startTime}`));
 
             if (dailyData.length === 0) {
-                timelineCont.innerHTML = `<div class="text-center text-slate-400 italic text-xs py-8 relative z-10">Belum ada aktivitas dicatat pada tanggal ini.</div>`;
+                timelineCont.innerHTML = `<div class="text-center text-slate-400 italic text-xs py-8 relative z-10">Belum ada aktivitas dicatat.</div>`;
                 summaryCont.innerHTML = `<div class="text-slate-400 italic text-xs">Data kosong.</div>`;
                 return;
             }
 
-            // STATISTIK RINGKASAN
             let sumMakan = 0, sumMinumMl = 0, sumTidurMins = 0, sumPup = 0, sumPipis = 0, sumPompa = 0;
-            
             dailyData.forEach(l => {
                 if (l.category === 'Makan') {
                     sumMakan++;
-                    if (l.subCategory === 'Minum') sumMinumMl += (l.ml || 0);
+                    if (l.subCategory === 'Minum' || l.subCategory === 'ASIP') sumMinumMl += (l.ml || 0);
                 } else if (l.category === 'Tidur') {
                     sumTidurMins += (l.durationMinutes || 0);
                 } else if (l.category === 'Buang Air') {
@@ -5865,27 +5872,26 @@
             });
 
             summaryCont.innerHTML = `
-                <div class="flex justify-between text-xs items-center p-2 bg-rose-50 text-rose-700 rounded-lg font-medium border border-rose-100"><span class="flex items-center gap-1.5"><i class="fa-solid fa-utensils w-4 text-center"></i> Makan/Nyusu</span> <strong>${sumMakan} kali ${sumMinumMl > 0 ? `(${sumMinumMl} ml)` : ''}</strong></div>
-                <div class="flex justify-between text-xs items-center p-2 bg-indigo-50 text-indigo-700 rounded-lg font-medium border border-indigo-100"><span class="flex items-center gap-1.5"><i class="fa-solid fa-moon w-4 text-center"></i> Tidur</span> <strong>${Math.floor(sumTidurMins/60)}j ${sumTidurMins%60}m</strong></div>
-                <div class="flex justify-between text-xs items-center p-2 bg-amber-50 text-amber-700 rounded-lg font-medium border border-amber-100"><span class="flex items-center gap-1.5"><i class="fa-solid fa-poop w-4 text-center"></i> Popok</span> <strong>${sumPipis} Pipis, ${sumPup} Pup</strong></div>
-                <div class="flex justify-between text-xs items-center p-2 bg-teal-50 text-teal-700 rounded-lg font-medium border border-teal-100"><span class="flex items-center gap-1.5"><i class="fa-solid fa-pump-medical w-4 text-center"></i> Pompa ASI</span> <strong>${sumPompa} ml</strong></div>
+                <div class="flex justify-between text-xs items-center p-2 bg-rose-500/10 text-rose-400 rounded-lg font-medium border border-rose-500/20"><span class="flex items-center gap-1.5"><i class="fa-solid fa-utensils w-4 text-center"></i> Makan/Nyusu</span> <strong>${sumMakan} kali ${sumMinumMl > 0 ? `(${sumMinumMl} ml)` : ''}</strong></div>
+                <div class="flex justify-between text-xs items-center p-2 bg-indigo-500/10 text-indigo-400 rounded-lg font-medium border border-indigo-500/20"><span class="flex items-center gap-1.5"><i class="fa-solid fa-moon w-4 text-center"></i> Tidur</span> <strong>${Math.floor(sumTidurMins/60)}j ${sumTidurMins%60}m</strong></div>
+                <div class="flex justify-between text-xs items-center p-2 bg-amber-500/10 text-amber-400 rounded-lg font-medium border border-amber-500/20"><span class="flex items-center gap-1.5"><i class="fa-solid fa-poop w-4 text-center"></i> Popok</span> <strong>${sumPipis} Pipis, ${sumPup} Pup</strong></div>
+                <div class="flex justify-between text-xs items-center p-2 bg-teal-500/10 text-teal-400 rounded-lg font-medium border border-teal-500/20"><span class="flex items-center gap-1.5"><i class="fa-solid fa-pump-medical w-4 text-center"></i> Pompa ASI</span> <strong>${sumPompa} ml</strong></div>
             `;
 
-            // RENDER TIMELINE
-            const icons = { 'Makan': 'fa-utensils text-rose-500 bg-rose-100', 'Tidur': 'fa-moon text-indigo-500 bg-indigo-100', 'Buang Air': 'fa-poop text-amber-500 bg-amber-100', 'Pompa ASI': 'fa-pump-medical text-teal-500 bg-teal-100' };
+            const icons = { 'Makan': 'fa-utensils text-rose-400 bg-rose-500/10 border-rose-500/20', 'Tidur': 'fa-moon text-indigo-400 bg-indigo-500/10 border-indigo-500/20', 'Buang Air': 'fa-poop text-amber-400 bg-amber-500/10 border-amber-500/20', 'Pompa ASI': 'fa-pump-medical text-teal-400 bg-teal-500/10 border-teal-500/20' };
 
             timelineCont.innerHTML = dailyData.map(log => {
                 let detailText = '';
                 if (log.category === 'Makan') {
                     if (log.subCategory === 'Menyusui') detailText = `DBF (L: ${log.kiri}m, R: ${log.kanan}m)`;
-                    else if (log.subCategory === 'Minum') detailText = `Minum ${log.ml} ml`;
+                    else if (log.subCategory === 'Minum' || log.subCategory === 'ASIP') detailText = `${log.subCategory} ${log.ml} ml`;
                     else detailText = `Menu: ${log.makanan}`;
                 } else if (log.category === 'Tidur') {
                     detailText = log.durationMinutes ? `${Math.floor(log.durationMinutes/60)}j ${log.durationMinutes%60}m` : 'Sedang tidur...';
                 } else if (log.category === 'Buang Air') {
                     detailText = `Ganti Popok: ${log.babType}`;
                 } else if (log.category === 'Pompa ASI') {
-                    detailText = `Hasil: ${log.ml} ml`;
+                    detailText = `Total: ${log.ml} ml ${log.kiri || log.kanan ? `(L: ${log.kiri}ml, R: ${log.kanan}ml)` : ''}`;
                 }
 
                 let timeStr = log.startTime;
@@ -5893,23 +5899,21 @@
 
                 return `
                     <div class="relative flex items-start gap-4 group z-10">
-                        <div class="absolute left-5 -translate-x-px md:mx-auto md:translate-x-0 h-full w-0.5 bg-slate-200 top-8 group-last:hidden"></div>
-                        
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border-2 border-white shadow-sm z-10 ${icons[log.category].split(' ')[2]}">
-                            <i class="fa-solid ${icons[log.category].split(' ')[0]} ${icons[log.category].split(' ')[1]} text-sm"></i>
+                        <div class="absolute left-5 -translate-x-px md:mx-auto md:translate-x-0 h-full w-px bg-slate-700 top-8 group-last:hidden"></div>
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-slate-700 shadow-sm z-10 ${icons[log.category].split(' ').slice(1).join(' ')}">
+                            <i class="fa-solid ${icons[log.category].split(' ')[0]} text-sm"></i>
                         </div>
-                        
-                        <div class="flex-1 bg-slate-50 hover:bg-slate-100 transition p-3 rounded-2xl border border-slate-200/60 shadow-sm relative">
+                        <div class="flex-1 bg-slate-800 hover:bg-slate-700/80 transition p-3 rounded-2xl border border-slate-700 shadow-sm relative">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <div class="text-2xs font-bold text-sky-700 bg-sky-100/50 px-1.5 py-0.5 rounded uppercase mb-1 inline-block">${timeStr}</div>
-                                    <h4 class="font-bold text-slate-800 text-sm">${log.category} ${log.subCategory ? `<span class="font-medium text-slate-500">• ${log.subCategory}</span>` : ''}</h4>
-                                    <p class="text-xs font-semibold text-slate-600 mt-0.5">${detailText}</p>
-                                    ${log.notes ? `<p class="text-xs text-slate-500 italic mt-1 bg-white p-2 rounded-lg border border-slate-100">"${log.notes}"</p>` : ''}
+                                    <div class="text-2xs font-bold text-sky-400 bg-sky-500/10 px-1.5 py-0.5 rounded uppercase mb-1 inline-block">${timeStr}</div>
+                                    <h4 class="font-bold text-slate-200 text-sm">${log.category} ${log.subCategory ? `<span class="font-medium text-slate-400">• ${log.subCategory}</span>` : ''}</h4>
+                                    <p class="text-xs font-semibold text-slate-400 mt-0.5">${detailText}</p>
+                                    ${log.notes ? `<p class="text-xs text-slate-400 italic mt-1 bg-slate-900/50 p-2 rounded-lg border border-slate-700/50">"${log.notes}"</p>` : ''}
                                 </div>
                                 <div class="flex gap-1 shrink-0">
-                                    <button onclick="openLogModal('${log.category}', ${log.id})" class="p-1.5 text-slate-400 hover:text-sky-600 transition"><i class="fa-solid fa-pen text-xs"></i></button>
-                                    <button onclick="deleteDailyLog(${log.id})" class="p-1.5 text-slate-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                                    <button onclick="openLogModal('${log.category}', ${log.id})" class="p-1.5 text-slate-500 hover:text-sky-400 transition"><i class="fa-solid fa-pen text-xs"></i></button>
+                                    <button onclick="deleteDailyLog(${log.id})" class="p-1.5 text-slate-500 hover:text-rose-400 transition"><i class="fa-solid fa-trash text-xs"></i></button>
                                 </div>
                             </div>
                         </div>
