@@ -1003,10 +1003,75 @@
 
             <!-- TAB 2: LOG HARIAN -->
             <section id="sec-post-log" class="hidden space-y-6">
-                <div class="p-8 bg-white rounded-3xl border border-slate-100 text-center space-y-3 shadow-sm">
-                    <div class="text-4xl opacity-50">📋</div>
-                    <h3 class="font-bold text-slate-700">Log Harian Si Kecil</h3>
-                    <p class="text-xs text-slate-500">Area untuk mencatat jam menyusu, tidur, dan ganti popok akan segera dibangun.</p>
+                <!-- 1. TIME MACHINE (NAVIGASI TANGGAL) -->
+                <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex items-center justify-between">
+                    <button onclick="changeLogDate(-1)" class="w-10 h-10 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded-xl transition flex items-center justify-center">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="flex flex-col items-center relative">
+                        <span class="text-3xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Catatan Tanggal</span>
+                        <div class="relative flex items-center">
+                            <input type="date" id="log-date-picker" onchange="changeLogDate(0, this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            <h3 id="log-date-display" class="font-extrabold text-slate-800 text-lg flex items-center gap-2 cursor-pointer hover:text-sky-600 transition">
+                                Hari Ini <i class="fa-solid fa-caret-down text-sm text-slate-400"></i>
+                            </h3>
+                        </div>
+                    </div>
+                    <button onclick="changeLogDate(1)" class="w-10 h-10 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded-xl transition flex items-center justify-center">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- 2. WAKE WINDOW TIMER (Otomatis muncul kalau bayi lagi bangun) -->
+                <div id="wake-window-container" class="hidden bg-gradient-to-r from-amber-100 to-amber-50 rounded-3xl p-5 border border-amber-200/60 shadow-sm flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center gap-1.5 text-amber-800 font-bold text-sm">
+                            <i class="fa-regular fa-sun animate-spin-slow"></i> Waktu Terjaga (Wake Window)
+                        </div>
+                        <p class="text-xs text-amber-700 mt-1 font-medium">Bayi sudah bangun sejak <span id="wake-start-time-text" class="font-bold">--:--</span></p>
+                    </div>
+                    <div class="text-2xl font-extrabold text-amber-600 font-mono tracking-tighter bg-white/60 px-3 py-1 rounded-xl shadow-sm" id="wake-window-timer-display">
+                        0j 0m
+                    </div>
+                </div>
+
+                <!-- 3. TOMBOL AKSI CEPAT -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="openLogModal('Makan')" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-200 transition flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 bg-sky-50 text-sky-600 rounded-full flex items-center justify-center text-xl group-hover:scale-110 transition duration-300">🍽️</div>
+                        <span class="font-bold text-slate-700 text-xs">Makan/Minum</span>
+                    </button>
+                    <button onclick="openLogModal('Tidur')" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center text-xl group-hover:scale-110 transition duration-300">💤</div>
+                        <span class="font-bold text-slate-700 text-xs">Tidur</span>
+                    </button>
+                    <button onclick="openLogModal('BuangAir')" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-xl group-hover:scale-110 transition duration-300">🧻</div>
+                        <span class="font-bold text-slate-700 text-xs">Buang Air</span>
+                    </button>
+                    <button onclick="openLogModal('Pompa')" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-pink-200 transition flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 bg-pink-50 text-pink-500 rounded-full flex items-center justify-center text-xl group-hover:scale-110 transition duration-300">🍼</div>
+                        <span class="font-bold text-slate-700 text-xs">Pompa ASI</span>
+                    </button>
+                </div>
+
+                <!-- 4. RINGKASAN & TIMELINE HARIAN -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-5">
+                    <h3 class="font-bold text-slate-800 flex items-center justify-between border-b border-slate-100 pb-3">
+                        <span>📋 Riwayat Aktivitas</span>
+                        <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg font-medium" id="log-total-count">0 Catatan</span>
+                    </h3>
+                    
+                    <!-- Kotak Ringkasan Angka -->
+                    <div class="grid grid-cols-4 gap-2 pb-4 border-b border-slate-100" id="log-summary-stats">
+                        <!-- Diisi via JS -->
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="space-y-4 relative" id="log-timeline-list">
+                        <!-- Garis vertikal timeline ada di dalam JS -->
+                        <div class="text-center text-slate-400 italic text-xs py-4">Belum ada aktivitas dicatat pada tanggal ini.</div>
+                    </div>
                 </div>
             </section>
 
@@ -1828,6 +1893,103 @@
         </div>
     </div>
 
+    <!-- MODAL: INPUT LOG HARIAN -->
+    <div id="modal-daily-log" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeLogModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 id="modal-log-title" class="text-lg font-bold text-slate-800 flex items-center gap-2">Catat Aktivitas</h2>
+            
+            <form id="daily-log-form" onsubmit="saveLogForm(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="form-log-id">
+                <input type="hidden" id="form-log-category">
+
+                <!-- TANGGAL & WAKTU MULAI (Wajib untuk semua) -->
+                <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                    <div>
+                        <label class="font-semibold text-slate-700">Tanggal Mulai</label>
+                        <input type="date" id="form-log-start-date" required class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-700">Jam Mulai</label>
+                        <input type="time" id="form-log-start-time" required class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-mono">
+                    </div>
+                </div>
+
+                <!-- DYNAMIC FIELD: SUB-KATEGORI MAKAN -->
+                <div id="field-makan-type" class="hidden">
+                    <label class="font-semibold text-slate-700">Jenis Pemberian</label>
+                    <select id="form-log-makan-sub" onchange="toggleDynamicFields()" class="w-full mt-1 p-2.5 bg-sky-50 border border-sky-100 text-sky-800 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-bold">
+                        <option value="Menyusui">🤱 Menyusui Langsung (DBF)</option>
+                        <option value="Minum">🍼 Minum (Botol / Sufor / ASIP)</option>
+                        <option value="Makan">🥣 Makan (MPASI)</option>
+                    </select>
+                </div>
+
+                <!-- DYNAMIC FIELD: SUB-KATEGORI BUANG AIR -->
+                <div id="field-buang-air-type" class="hidden">
+                    <label class="font-semibold text-slate-700 block mb-1.5">Apa isi popoknya?</label>
+                    <div class="flex gap-2">
+                        <label class="flex-1 text-center cursor-pointer">
+                            <input type="radio" name="buang_air_type" value="Pipis" class="peer hidden" checked>
+                            <div class="p-2 border border-slate-200 rounded-xl peer-checked:bg-sky-100 peer-checked:border-sky-300 peer-checked:text-sky-800 font-bold transition">💦 Pipis</div>
+                        </label>
+                        <label class="flex-1 text-center cursor-pointer">
+                            <input type="radio" name="buang_air_type" value="Pup" class="peer hidden">
+                            <div class="p-2 border border-slate-200 rounded-xl peer-checked:bg-amber-100 peer-checked:border-amber-300 peer-checked:text-amber-800 font-bold transition">💩 Pup</div>
+                        </label>
+                        <label class="flex-1 text-center cursor-pointer">
+                            <input type="radio" name="buang_air_type" value="Keduanya" class="peer hidden">
+                            <div class="p-2 border border-slate-200 rounded-xl peer-checked:bg-emerald-100 peer-checked:border-emerald-300 peer-checked:text-emerald-800 font-bold transition">💦 & 💩</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- DYNAMIC FIELD: DURASI KIRI & KANAN (Khusus Menyusui) -->
+                <div id="field-durasi-dbf" class="hidden grid grid-cols-2 gap-3 bg-pink-50/50 p-3 rounded-2xl border border-pink-100">
+                    <div>
+                        <label class="font-semibold text-pink-800">Payudara Kiri (Menit)</label>
+                        <input type="number" id="form-log-dur-kiri" min="0" placeholder="0" class="w-full mt-1 p-2 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none text-center font-bold">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-pink-800">Payudara Kanan (Menit)</label>
+                        <input type="number" id="form-log-dur-kanan" min="0" placeholder="0" class="w-full mt-1 p-2 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none text-center font-bold">
+                    </div>
+                </div>
+
+                <!-- DYNAMIC FIELD: VOLUME ML (Khusus Minum Botol & Pompa ASI) -->
+                <div id="field-volume" class="hidden">
+                    <label class="font-semibold text-slate-700">Volume (ml)</label>
+                    <input type="number" id="form-log-volume" min="0" placeholder="Contoh: 60" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none text-lg font-bold text-center">
+                </div>
+
+                <!-- DYNAMIC FIELD: TANGGAL & WAKTU SELESAI (Khusus Tidur, Pompa, Makan MPASI) -->
+                <div id="field-waktu-selesai" class="hidden grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                    <div>
+                        <label class="font-semibold text-slate-700">Tanggal Selesai</label>
+                        <input type="date" id="form-log-end-date" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-700">Jam Selesai</label>
+                        <input type="time" id="form-log-end-time" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-mono">
+                    </div>
+                </div>
+
+                <!-- CATATAN BEBAS -->
+                <div>
+                    <label class="font-semibold text-slate-700">Catatan (Opsional)</label>
+                    <textarea id="form-log-notes" rows="2" placeholder="Warna pup, bayi rewel, dll..." class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none"></textarea>
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeLogModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl shadow-md">Simpan Log</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // 1. Konfigurasi Firebase milikmu
@@ -2167,6 +2329,8 @@
             renderBabyProfile();
             if (typeof renderMedicalChart === 'function') renderMedicalChart(); // <-- Grafik Medis ditambahkan di sini
             if (typeof renderReferences === 'function') renderReferences(); // <-- Referensi ditambahkan di sini
+            if (typeof renderDailyLogs === 'function') renderDailyLogs();
+            if (typeof updateWakeWindow === 'function') updateWakeWindow();
         };
 
         // HELPER: GDRIVE LINK CONVERTER
@@ -5401,6 +5565,8 @@
           if (typeof renderMedicalChart === 'function') renderMedicalChart(); // <-- Grafik Medis ditambahkan di sini
           if (typeof renderReferences === 'function') renderReferences();
           if (typeof renderBabyProfile === 'function') renderBabyProfile();
+          if (typeof renderDailyLogs === 'function') renderDailyLogs();
+          if (typeof updateWakeWindow === 'function') updateWakeWindow();
         }
 
         // FUNGSI PENYIMPANAN KE FIREBASE
@@ -5492,6 +5658,318 @@
             };
             reader.readAsText(event.target.files[0]);
         }
+
+        // ==========================================
+        // LOG HARIAN & WAKE WINDOW LOGIC
+        // ==========================================
+        let currentDateLog = new Date().toISOString().slice(0, 10);
+        let wakeWindowIntervalId = null;
+
+        function changeLogDate(offset) {
+            const date = new Date(currentDateLog);
+            date.setDate(date.getDate() + offset);
+            currentDateLog = date.toISOString().slice(0, 10);
+            document.getElementById('log-date-picker').value = currentDateLog;
+            renderDailyLogs();
+        }
+
+        function setDateFromPicker() {
+            const pickerVal = document.getElementById('log-date-picker').value;
+            if (pickerVal) {
+                currentDateLog = pickerVal;
+                renderDailyLogs();
+            }
+        }
+
+        function toggleMakanFields() {
+            const sub = document.getElementById('form-log-makan-sub').value;
+            document.getElementById('field-menyusui').classList.add('hidden');
+            document.getElementById('field-minum').classList.add('hidden');
+            document.getElementById('field-makanan').classList.add('hidden');
+
+            if (sub === 'Menyusui') document.getElementById('field-menyusui').classList.remove('hidden');
+            else if (sub === 'Minum') document.getElementById('field-minum').classList.remove('hidden');
+            else if (sub === 'Makan') document.getElementById('field-makanan').classList.remove('hidden');
+        }
+
+        function openLogModal(category, id = null) {
+            const form = document.getElementById('daily-log-form');
+            form.reset();
+            document.getElementById('form-log-id').value = id || '';
+            document.getElementById('form-log-category').value = category;
+            
+            const titles = {
+                'Makan': '🍼 Catat Makan & Minum',
+                'Tidur': '💤 Catat Waktu Tidur',
+                'Buang Air': '🧻 Catat Ganti Popok',
+                'Pompa ASI': '⚕️ Catat Pompa ASI'
+            };
+            document.getElementById('modal-log-title').innerHTML = titles[category];
+
+            // Default waktu saat ini
+            const now = new Date();
+            document.getElementById('form-log-start-date').value = now.toISOString().slice(0, 10);
+            document.getElementById('form-log-start-time').value = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            
+            // Sembunyikan semua dynamic field dulu
+            const dynCont = document.getElementById('dynamic-log-fields');
+            dynCont.classList.remove('hidden');
+            ['field-makan', 'field-buang-air', 'field-pompa'].forEach(c => document.getElementById(c).classList.add('hidden'));
+
+            if (category === 'Makan') {
+                document.getElementById('field-makan').classList.remove('hidden');
+                toggleMakanFields();
+            } else if (category === 'Buang Air') {
+                document.getElementById('field-buang-air').classList.remove('hidden');
+            } else if (category === 'Pompa ASI') {
+                document.getElementById('field-pompa').classList.remove('hidden');
+            } else {
+                dynCont.classList.add('hidden'); // Tidur gak butuh field dinamis
+            }
+
+            // Kalau mode Edit, isi fieldnya (Ini sambungan dari kodemu yang terpotong)
+            if (id) {
+                const log = appState.dailyLogs.find(l => l.id === id);
+                if (log) {
+                    document.getElementById('form-log-start-date').value = log.startDate;
+                    document.getElementById('form-log-start-time').value = log.startTime;
+                    if (log.endDate) document.getElementById('form-log-end-date').value = log.endDate;
+                    if (log.endTime) document.getElementById('form-log-end-time').value = log.endTime;
+                    if (log.notes) document.getElementById('form-log-notes').value = log.notes;
+                    
+                    if (category === 'Makan') {
+                        document.getElementById('form-log-makan-sub').value = log.subCategory;
+                        if (log.subCategory === 'Menyusui') {
+                            document.getElementById('form-log-kiri').value = log.kiri || '';
+                            document.getElementById('form-log-kanan').value = log.kanan || '';
+                        } else if (log.subCategory === 'Minum') {
+                            document.getElementById('form-log-ml').value = log.ml || '';
+                        } else if (log.subCategory === 'Makan') {
+                            document.getElementById('form-log-makanan').value = log.makanan || '';
+                        }
+                        toggleMakanFields();
+                    } else if (category === 'Buang Air') {
+                        document.getElementById('form-log-bab-type').value = log.babType || 'Pipis';
+                    } else if (category === 'Pompa ASI') {
+                        document.getElementById('form-log-pompa-ml').value = log.ml || '';
+                    }
+                }
+            }
+
+            document.getElementById('modal-daily-log').classList.remove('hidden');
+        }
+
+        function closeLogModal() {
+            document.getElementById('modal-daily-log').classList.add('hidden');
+        }
+
+        function saveDailyLog(event) {
+            event.preventDefault();
+            const id = document.getElementById('form-log-id').value;
+            const category = document.getElementById('form-log-category').value;
+            const startDate = document.getElementById('form-log-start-date').value;
+            const startTime = document.getElementById('form-log-start-time').value;
+            const endDate = document.getElementById('form-log-end-date').value;
+            const endTime = document.getElementById('form-log-end-time').value;
+            const notes = document.getElementById('form-log-notes').value.trim();
+
+            let logData = { 
+                id: id ? Number(id) : Date.now(), 
+                category, startDate, startTime, endDate, endTime, notes,
+                createdAt: new Date().toISOString()
+            };
+
+            if (category === 'Makan') {
+                logData.subCategory = document.getElementById('form-log-makan-sub').value;
+                if (logData.subCategory === 'Menyusui') {
+                    logData.kiri = Number(document.getElementById('form-log-kiri').value) || 0;
+                    logData.kanan = Number(document.getElementById('form-log-kanan').value) || 0;
+                    logData.durationMinutes = logData.kiri + logData.kanan;
+                } else if (logData.subCategory === 'Minum') {
+                    logData.ml = Number(document.getElementById('form-log-ml').value) || 0;
+                } else if (logData.subCategory === 'Makan') {
+                    logData.makanan = document.getElementById('form-log-makanan').value.trim();
+                }
+            } else if (category === 'Buang Air') {
+                logData.babType = document.getElementById('form-log-bab-type').value;
+            } else if (category === 'Pompa ASI') {
+                logData.ml = Number(document.getElementById('form-log-pompa-ml').value) || 0;
+                // Khusus Pompa ASI, default hapus required pada modal, tapi kita pastiin datanya masuk.
+            }
+
+            // Hitung durasi otomatis jika start & end diisi (Khusus Tidur / Pompa / DLL)
+            if (startDate && startTime && endDate && endTime && (!logData.durationMinutes || category === 'Tidur')) {
+                const start = new Date(`${startDate}T${startTime}`);
+                const end = new Date(`${endDate}T${endTime}`);
+                logData.durationMinutes = Math.max(0, Math.floor((end - start) / 60000));
+            }
+
+            if (!appState.dailyLogs) appState.dailyLogs = [];
+            if (id) {
+                const idx = appState.dailyLogs.findIndex(l => l.id == id);
+                if (idx !== -1) appState.dailyLogs[idx] = logData;
+            } else {
+                appState.dailyLogs.push(logData);
+            }
+
+            closeLogModal();
+            saveToLocalStorage();
+            renderDailyLogs();
+            updateWakeWindow();
+        }
+
+        function deleteDailyLog(id) {
+            if (confirm("Hapus catatan aktivitas ini?")) {
+                appState.dailyLogs = appState.dailyLogs.filter(l => l.id !== id);
+                saveToLocalStorage();
+                renderDailyLogs();
+                updateWakeWindow();
+            }
+        }
+
+        function renderDailyLogs() {
+            // Update Label Tanggal
+            const displayDate = document.getElementById('display-log-date');
+            document.getElementById('log-date-picker').value = currentDateLog;
+            
+            const today = new Date().toISOString().slice(0, 10);
+            if (currentDateLog === today) {
+                displayDate.innerText = "Hari Ini";
+            } else {
+                displayDate.innerText = new Date(currentDateLog).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+            }
+
+            const timelineCont = document.getElementById('log-timeline-container');
+            const summaryCont = document.getElementById('log-summary-container');
+            if (!timelineCont || !summaryCont) return;
+
+            if (!appState.dailyLogs) appState.dailyLogs = [];
+            
+            // Filter data sesuai tanggal yang dipilih (Cek StartDate atau EndDate)
+            const dailyData = appState.dailyLogs.filter(l => l.startDate === currentDateLog || l.endDate === currentDateLog)
+                                .sort((a, b) => new Date(`${b.startDate}T${b.startTime}`) - new Date(`${a.startDate}T${a.startTime}`));
+
+            if (dailyData.length === 0) {
+                timelineCont.innerHTML = `<div class="text-center text-slate-400 italic text-xs py-8 relative z-10">Belum ada aktivitas dicatat pada tanggal ini.</div>`;
+                summaryCont.innerHTML = `<div class="text-slate-400 italic text-xs">Data kosong.</div>`;
+                return;
+            }
+
+            // STATISTIK RINGKASAN
+            let sumMakan = 0, sumMinumMl = 0, sumTidurMins = 0, sumPup = 0, sumPipis = 0, sumPompa = 0;
+            
+            dailyData.forEach(l => {
+                if (l.category === 'Makan') {
+                    sumMakan++;
+                    if (l.subCategory === 'Minum') sumMinumMl += (l.ml || 0);
+                } else if (l.category === 'Tidur') {
+                    sumTidurMins += (l.durationMinutes || 0);
+                } else if (l.category === 'Buang Air') {
+                    if (l.babType === 'Pup' || l.babType === 'Keduanya') sumPup++;
+                    if (l.babType === 'Pipis' || l.babType === 'Keduanya') sumPipis++;
+                } else if (l.category === 'Pompa ASI') {
+                    sumPompa += (l.ml || 0);
+                }
+            });
+
+            summaryCont.innerHTML = `
+                <div class="flex justify-between text-xs items-center p-2 bg-rose-50 text-rose-700 rounded-lg font-medium border border-rose-100"><span class="flex items-center gap-1.5"><i class="fa-solid fa-utensils w-4 text-center"></i> Makan/Nyusu</span> <strong>${sumMakan} kali ${sumMinumMl > 0 ? `(${sumMinumMl} ml)` : ''}</strong></div>
+                <div class="flex justify-between text-xs items-center p-2 bg-indigo-50 text-indigo-700 rounded-lg font-medium border border-indigo-100"><span class="flex items-center gap-1.5"><i class="fa-solid fa-moon w-4 text-center"></i> Tidur</span> <strong>${Math.floor(sumTidurMins/60)}j ${sumTidurMins%60}m</strong></div>
+                <div class="flex justify-between text-xs items-center p-2 bg-amber-50 text-amber-700 rounded-lg font-medium border border-amber-100"><span class="flex items-center gap-1.5"><i class="fa-solid fa-poop w-4 text-center"></i> Popok</span> <strong>${sumPipis} Pipis, ${sumPup} Pup</strong></div>
+                <div class="flex justify-between text-xs items-center p-2 bg-teal-50 text-teal-700 rounded-lg font-medium border border-teal-100"><span class="flex items-center gap-1.5"><i class="fa-solid fa-pump-medical w-4 text-center"></i> Pompa ASI</span> <strong>${sumPompa} ml</strong></div>
+            `;
+
+            // RENDER TIMELINE
+            const icons = { 'Makan': 'fa-utensils text-rose-500 bg-rose-100', 'Tidur': 'fa-moon text-indigo-500 bg-indigo-100', 'Buang Air': 'fa-poop text-amber-500 bg-amber-100', 'Pompa ASI': 'fa-pump-medical text-teal-500 bg-teal-100' };
+
+            timelineCont.innerHTML = dailyData.map(log => {
+                let detailText = '';
+                if (log.category === 'Makan') {
+                    if (log.subCategory === 'Menyusui') detailText = `DBF (L: ${log.kiri}m, R: ${log.kanan}m)`;
+                    else if (log.subCategory === 'Minum') detailText = `Minum ${log.ml} ml`;
+                    else detailText = `Menu: ${log.makanan}`;
+                } else if (log.category === 'Tidur') {
+                    detailText = log.durationMinutes ? `${Math.floor(log.durationMinutes/60)}j ${log.durationMinutes%60}m` : 'Sedang tidur...';
+                } else if (log.category === 'Buang Air') {
+                    detailText = `Ganti Popok: ${log.babType}`;
+                } else if (log.category === 'Pompa ASI') {
+                    detailText = `Hasil: ${log.ml} ml`;
+                }
+
+                let timeStr = log.startTime;
+                if (log.endTime) timeStr += ` - ${log.endTime}`;
+
+                return `
+                    <div class="relative flex items-start gap-4 group z-10">
+                        <div class="absolute left-5 -translate-x-px md:mx-auto md:translate-x-0 h-full w-0.5 bg-slate-200 top-8 group-last:hidden"></div>
+                        
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border-2 border-white shadow-sm z-10 ${icons[log.category].split(' ')[2]}">
+                            <i class="fa-solid ${icons[log.category].split(' ')[0]} ${icons[log.category].split(' ')[1]} text-sm"></i>
+                        </div>
+                        
+                        <div class="flex-1 bg-slate-50 hover:bg-slate-100 transition p-3 rounded-2xl border border-slate-200/60 shadow-sm relative">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="text-2xs font-bold text-sky-700 bg-sky-100/50 px-1.5 py-0.5 rounded uppercase mb-1 inline-block">${timeStr}</div>
+                                    <h4 class="font-bold text-slate-800 text-sm">${log.category} ${log.subCategory ? `<span class="font-medium text-slate-500">• ${log.subCategory}</span>` : ''}</h4>
+                                    <p class="text-xs font-semibold text-slate-600 mt-0.5">${detailText}</p>
+                                    ${log.notes ? `<p class="text-xs text-slate-500 italic mt-1 bg-white p-2 rounded-lg border border-slate-100">"${log.notes}"</p>` : ''}
+                                </div>
+                                <div class="flex gap-1 shrink-0">
+                                    <button onclick="openLogModal('${log.category}', ${log.id})" class="p-1.5 text-slate-400 hover:text-sky-600 transition"><i class="fa-solid fa-pen text-xs"></i></button>
+                                    <button onclick="deleteDailyLog(${log.id})" class="p-1.5 text-slate-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // FUNGSI WAKE WINDOW (Mencari waktu tidur terakhir yang sudah selesai)
+        function updateWakeWindow() {
+            if (wakeWindowIntervalId) clearInterval(wakeWindowIntervalId);
+            const display = document.getElementById('wake-window-display');
+            if (!display) return;
+
+            if (!appState.dailyLogs) {
+                display.innerText = "-- Jam -- Menit";
+                return;
+            }
+
+            // Cari log Tidur yang punya End Date & End Time, urutkan dari yang terbaru selesainya
+            const sleepLogs = appState.dailyLogs
+                .filter(l => l.category === 'Tidur' && l.endDate && l.endTime)
+                .sort((a, b) => new Date(`${b.endDate}T${b.endTime}`) - new Date(`${a.endDate}T${a.endTime}`));
+
+            if (sleepLogs.length === 0) {
+                display.innerText = "Belum ada data";
+                return;
+            }
+
+            const lastWakeTime = new Date(`${sleepLogs[0].endDate}T${sleepLogs[0].endTime}`);
+            
+            wakeWindowIntervalId = setInterval(() => {
+                const now = new Date();
+                const diffMs = now - lastWakeTime;
+                
+                if (diffMs < 0) {
+                    display.innerText = "0 Jam 0 Menit";
+                } else {
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const hrs = Math.floor(diffMins / 60);
+                    const mins = diffMins % 60;
+                    display.innerText = `${hrs} Jam ${mins} Menit`;
+                }
+            }, 60000); // Update setiap 1 menit
+
+            // Panggil sekali agar tidak nunggu 1 menit pertama
+            const now = new Date();
+            const diffMins = Math.floor(Math.max(0, now - lastWakeTime) / 60000);
+            display.innerText = `${Math.floor(diffMins / 60)} Jam ${diffMins % 60} Menit`;
+        }
+
+        // Jangan lupa panggil renderDailyLogs dan updateWakeWindow saat refreshAllViews berjalan
     </script>
 </body>
 </html>
