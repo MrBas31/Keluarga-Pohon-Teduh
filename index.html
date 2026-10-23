@@ -2345,18 +2345,23 @@
         }
 
         // Bikin auto-slide jalan dengan lancar di fase yang sedang dibuka
+        // Bikin auto-slide jalan dengan lancar di fase yang sedang dibuka
         function startGalleryAutoSlide() {
             if (galleryAutoInterval) clearInterval(galleryAutoInterval);
             galleryAutoInterval = setInterval(() => {
-                if (appState.phase === 'prenatal' && appState.gallery && appState.gallery.length > 1) {
-                    nextGallerySlide('prenatal');
-                } else if (appState.phase === 'postnatal' && appState.postnatalGallery && appState.postnatalGallery.length > 1) {
-                    nextGallerySlide('postnatal');
+                if (appState.phase === 'prenatal') {
+                    if (appState.gallery && appState.gallery.length > 1) {
+                        nextGallerySlide('prenatal');
+                    }
+                } else if (appState.phase === 'postnatal') {
+                    if (appState.postnatalGallery && appState.postnatalGallery.length > 1) {
+                        nextGallerySlide('postnatal');
+                    }
                 }
             }, 5000);
         }
 
-        function nextGallerySlide(type) {
+        function nextGallerySlide(type = 'prenatal') {
             if (type === 'prenatal') {
                 if (appState.gallery && appState.gallery.length > 0) {
                     currentGalleryIndex = (currentGalleryIndex + 1) % appState.gallery.length;
@@ -2369,7 +2374,7 @@
             renderGallery();
         }
 
-        function prevGallerySlide(type) {
+        function prevGallerySlide(type = 'prenatal') {
             if (type === 'prenatal') {
                 if (appState.gallery && appState.gallery.length > 0) {
                     currentGalleryIndex = (currentGalleryIndex - 1 + appState.gallery.length) % appState.gallery.length;
@@ -2382,7 +2387,7 @@
             renderGallery();
         }
 
-        function setGalleryIndex(index, type) {
+        function setGalleryIndex(index, type = 'prenatal') {
             if (type === 'prenatal') {
                 currentGalleryIndex = index;
             } else {
@@ -2537,32 +2542,6 @@
             appState.babyBorn = false;
             switchPhase('prenatal');
             saveToLocalStorage();
-        }
-
-        function startGalleryAutoSlide() {
-            if (galleryAutoInterval) clearInterval(galleryAutoInterval);
-            galleryAutoInterval = setInterval(() => {
-                if (appState.gallery && appState.gallery.length > 1) {
-                    nextGallerySlide();
-                }
-            }, 5000);
-        }
-
-        function nextGallerySlide() {
-            if (!appState.gallery || appState.gallery.length === 0) return;
-            currentGalleryIndex = (currentGalleryIndex + 1) % appState.gallery.length;
-            renderGallery();
-        }
-
-        function prevGallerySlide() {
-            if (!appState.gallery || appState.gallery.length === 0) return;
-            currentGalleryIndex = (currentGalleryIndex - 1 + appState.gallery.length) % appState.gallery.length;
-            renderGallery();
-        }
-
-        function setGalleryIndex(idx) {
-            currentGalleryIndex = idx;
-            renderGallery();
         }
 
         // Modal otomatis mendeteksi dari dashboard mana ia dipanggil
