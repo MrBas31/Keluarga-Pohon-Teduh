@@ -1003,74 +1003,69 @@
 
             <!-- TAB 2: LOG HARIAN -->
             <section id="sec-post-log" class="hidden space-y-6">
-                <!-- 1. TIME MACHINE (NAVIGASI TANGGAL) -->
-                <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 flex items-center justify-between">
-                    <button onclick="changeLogDate(-1)" class="w-10 h-10 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded-xl transition flex items-center justify-center">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <div class="flex flex-col items-center relative">
-                        <span class="text-3xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Catatan Tanggal</span>
-                        <div class="relative flex items-center">
-                            <input type="date" id="log-date-picker" onchange="changeLogDate(0, this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            <h3 id="log-date-display" class="font-extrabold text-slate-800 text-lg flex items-center gap-2 cursor-pointer hover:text-sky-600 transition">
-                                Hari Ini <i class="fa-solid fa-caret-down text-sm text-slate-400"></i>
-                            </h3>
+                <!-- NAVIGASI TANGGAL & WAKE WINDOW -->
+                <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="flex items-center gap-3 w-full md:w-auto justify-center">
+                        <button onclick="changeLogDate(-1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition"><i class="fa-solid fa-chevron-left"></i></button>
+                        <div class="relative relative-date-picker group">
+                            <input type="date" id="log-date-picker" onchange="setDateFromPicker()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            <div class="flex flex-col items-center px-4 py-1 bg-sky-50 rounded-xl border border-sky-100 group-hover:border-sky-300 transition">
+                                <span class="text-3xs font-bold text-sky-600 uppercase tracking-wider">Pilih Tanggal</span>
+                                <span id="display-log-date" class="font-bold text-sky-900 text-sm">Hari Ini</span>
+                            </div>
                         </div>
+                        <button onclick="changeLogDate(1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
-                    <button onclick="changeLogDate(1)" class="w-10 h-10 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded-xl transition flex items-center justify-center">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>
-                </div>
 
-                <!-- 2. WAKE WINDOW TIMER (Otomatis muncul kalau bayi lagi bangun) -->
-                <div id="wake-window-container" class="hidden bg-gradient-to-r from-amber-100 to-amber-50 rounded-3xl p-5 border border-amber-200/60 shadow-sm flex items-center justify-between">
-                    <div>
-                        <div class="flex items-center gap-1.5 text-amber-800 font-bold text-sm">
-                            <i class="fa-regular fa-sun animate-spin-slow"></i> Waktu Terjaga (Wake Window)
+                    <!-- WAKE WINDOW TIMER -->
+                    <div class="flex items-center gap-2 bg-emerald-50 px-4 py-2.5 rounded-2xl border border-emerald-100 w-full md:w-auto justify-center">
+                        <i class="fa-solid fa-clock text-emerald-600 text-lg"></i>
+                        <div>
+                            <div class="text-2xs font-bold text-emerald-700 uppercase tracking-wider">Si Kecil Terjaga Selama</div>
+                            <div id="wake-window-display" class="font-bold text-emerald-900 text-sm">-- Jam -- Menit</div>
                         </div>
-                        <p class="text-xs text-amber-700 mt-1 font-medium">Bayi sudah bangun sejak <span id="wake-start-time-text" class="font-bold">--:--</span></p>
-                    </div>
-                    <div class="text-2xl font-extrabold text-amber-600 font-mono tracking-tighter bg-white/60 px-3 py-1 rounded-xl shadow-sm" id="wake-window-timer-display">
-                        0j 0m
                     </div>
                 </div>
 
-                <!-- 3. TOMBOL AKSI CEPAT -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <button onclick="openLogModal('Makan')" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-200 transition flex flex-col items-center gap-2 group">
-                        <div class="w-12 h-12 bg-sky-50 text-sky-600 rounded-full flex items-center justify-center text-xl group-hover:scale-110 transition duration-300">🍽️</div>
-                        <span class="font-bold text-slate-700 text-xs">Makan/Minum</span>
+                <!-- 4 TOMBOL QUICK LOG -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <button onclick="openLogModal('Makan')" class="p-4 bg-white rounded-2xl border border-rose-100 shadow-sm hover:shadow-md hover:border-rose-300 transition flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 text-xl group-hover:scale-110 transition-transform"><i class="fa-solid fa-utensils"></i></div>
+                        <span class="font-bold text-slate-700 text-xs">Makan & Minum</span>
                     </button>
-                    <button onclick="openLogModal('Tidur')" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition flex flex-col items-center gap-2 group">
-                        <div class="w-12 h-12 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center text-xl group-hover:scale-110 transition duration-300">💤</div>
+                    <button onclick="openLogModal('Tidur')" class="p-4 bg-white rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md hover:border-indigo-300 transition flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500 text-xl group-hover:scale-110 transition-transform"><i class="fa-solid fa-moon"></i></div>
                         <span class="font-bold text-slate-700 text-xs">Tidur</span>
                     </button>
-                    <button onclick="openLogModal('BuangAir')" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition flex flex-col items-center gap-2 group">
-                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-xl group-hover:scale-110 transition duration-300">🧻</div>
+                    <button onclick="openLogModal('Buang Air')" class="p-4 bg-white rounded-2xl border border-amber-100 shadow-sm hover:shadow-md hover:border-amber-300 transition flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 text-xl group-hover:scale-110 transition-transform"><i class="fa-solid fa-poop"></i></div>
                         <span class="font-bold text-slate-700 text-xs">Buang Air</span>
                     </button>
-                    <button onclick="openLogModal('Pompa')" class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-pink-200 transition flex flex-col items-center gap-2 group">
-                        <div class="w-12 h-12 bg-pink-50 text-pink-500 rounded-full flex items-center justify-center text-xl group-hover:scale-110 transition duration-300">🍼</div>
+                    <button onclick="openLogModal('Pompa ASI')" class="p-4 bg-white rounded-2xl border border-teal-100 shadow-sm hover:shadow-md hover:border-teal-300 transition flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center text-teal-500 text-xl group-hover:scale-110 transition-transform"><i class="fa-solid fa-pump-medical"></i></div>
                         <span class="font-bold text-slate-700 text-xs">Pompa ASI</span>
                     </button>
                 </div>
 
-                <!-- 4. RINGKASAN & TIMELINE HARIAN -->
-                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-5">
-                    <h3 class="font-bold text-slate-800 flex items-center justify-between border-b border-slate-100 pb-3">
-                        <span>📋 Riwayat Aktivitas</span>
-                        <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg font-medium" id="log-total-count">0 Catatan</span>
-                    </h3>
-                    
-                    <!-- Kotak Ringkasan Angka -->
-                    <div class="grid grid-cols-4 gap-2 pb-4 border-b border-slate-100" id="log-summary-stats">
-                        <!-- Diisi via JS -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- RINGKASAN HARIAN -->
+                    <div class="lg:col-span-4 space-y-4">
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                            <h3 class="font-bold text-slate-800 text-sm mb-3 border-b border-slate-100 pb-2">📊 Ringkasan Harian</h3>
+                            <div class="space-y-3" id="log-summary-container">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Timeline -->
-                    <div class="space-y-4 relative" id="log-timeline-list">
-                        <!-- Garis vertikal timeline ada di dalam JS -->
-                        <div class="text-center text-slate-400 italic text-xs py-4">Belum ada aktivitas dicatat pada tanggal ini.</div>
+                    <!-- TIMELINE RIWAYAT -->
+                    <div class="lg:col-span-8">
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 h-full min-h-[400px]">
+                            <h3 class="font-bold text-slate-800 text-sm mb-4 border-b border-slate-100 pb-2">🕰️ Riwayat Aktivitas</h3>
+                            <div class="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-slate-200 before:to-transparent" id="log-timeline-container">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1893,98 +1888,95 @@
         </div>
     </div>
 
-    <!-- MODAL: INPUT LOG HARIAN -->
+    <!-- MODAL: FORM LOG HARIAN -->
     <div id="modal-daily-log" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closeLogModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+            <button onclick="closeLogModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
             <h2 id="modal-log-title" class="text-lg font-bold text-slate-800 flex items-center gap-2">Catat Aktivitas</h2>
-            
-            <form id="daily-log-form" onsubmit="saveLogForm(event)" class="space-y-4 text-xs">
+
+            <form id="daily-log-form" onsubmit="saveDailyLog(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="form-log-id">
                 <input type="hidden" id="form-log-category">
 
-                <!-- TANGGAL & WAKTU MULAI (Wajib untuk semua) -->
-                <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="font-semibold text-slate-700">Tanggal Mulai</label>
-                        <input type="date" id="form-log-start-date" required class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                        <label class="font-semibold text-slate-700">Tgl Mulai</label>
+                        <input type="date" id="form-log-start-date" required class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none bg-slate-50">
                     </div>
                     <div>
                         <label class="font-semibold text-slate-700">Jam Mulai</label>
-                        <input type="time" id="form-log-start-time" required class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-mono">
+                        <input type="time" id="form-log-start-time" required class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none bg-slate-50">
                     </div>
                 </div>
 
-                <!-- DYNAMIC FIELD: SUB-KATEGORI MAKAN -->
-                <div id="field-makan-type" class="hidden">
-                    <label class="font-semibold text-slate-700">Jenis Pemberian</label>
-                    <select id="form-log-makan-sub" onchange="toggleDynamicFields()" class="w-full mt-1 p-2.5 bg-sky-50 border border-sky-100 text-sky-800 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-bold">
-                        <option value="Menyusui">🤱 Menyusui Langsung (DBF)</option>
-                        <option value="Minum">🍼 Minum (Botol / Sufor / ASIP)</option>
-                        <option value="Makan">🥣 Makan (MPASI)</option>
-                    </select>
-                </div>
-
-                <!-- DYNAMIC FIELD: SUB-KATEGORI BUANG AIR -->
-                <div id="field-buang-air-type" class="hidden">
-                    <label class="font-semibold text-slate-700 block mb-1.5">Apa isi popoknya?</label>
-                    <div class="flex gap-2">
-                        <label class="flex-1 text-center cursor-pointer">
-                            <input type="radio" name="buang_air_type" value="Pipis" class="peer hidden" checked>
-                            <div class="p-2 border border-slate-200 rounded-xl peer-checked:bg-sky-100 peer-checked:border-sky-300 peer-checked:text-sky-800 font-bold transition">💦 Pipis</div>
-                        </label>
-                        <label class="flex-1 text-center cursor-pointer">
-                            <input type="radio" name="buang_air_type" value="Pup" class="peer hidden">
-                            <div class="p-2 border border-slate-200 rounded-xl peer-checked:bg-amber-100 peer-checked:border-amber-300 peer-checked:text-amber-800 font-bold transition">💩 Pup</div>
-                        </label>
-                        <label class="flex-1 text-center cursor-pointer">
-                            <input type="radio" name="buang_air_type" value="Keduanya" class="peer hidden">
-                            <div class="p-2 border border-slate-200 rounded-xl peer-checked:bg-emerald-100 peer-checked:border-emerald-300 peer-checked:text-emerald-800 font-bold transition">💦 & 💩</div>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- DYNAMIC FIELD: DURASI KIRI & KANAN (Khusus Menyusui) -->
-                <div id="field-durasi-dbf" class="hidden grid grid-cols-2 gap-3 bg-pink-50/50 p-3 rounded-2xl border border-pink-100">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="font-semibold text-pink-800">Payudara Kiri (Menit)</label>
-                        <input type="number" id="form-log-dur-kiri" min="0" placeholder="0" class="w-full mt-1 p-2 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none text-center font-bold">
+                        <label class="font-semibold text-slate-700">Tgl Selesai (Opsional)</label>
+                        <input type="date" id="form-log-end-date" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none bg-slate-50">
                     </div>
                     <div>
-                        <label class="font-semibold text-pink-800">Payudara Kanan (Menit)</label>
-                        <input type="number" id="form-log-dur-kanan" min="0" placeholder="0" class="w-full mt-1 p-2 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-500 outline-none text-center font-bold">
+                        <label class="font-semibold text-slate-700">Jam Selesai (Opsional)</label>
+                        <input type="time" id="form-log-end-time" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none bg-slate-50">
                     </div>
                 </div>
 
-                <!-- DYNAMIC FIELD: VOLUME ML (Khusus Minum Botol & Pompa ASI) -->
-                <div id="field-volume" class="hidden">
-                    <label class="font-semibold text-slate-700">Volume (ml)</label>
-                    <input type="number" id="form-log-volume" min="0" placeholder="Contoh: 60" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none text-lg font-bold text-center">
+                <!-- DYNAMIC FIELDS -->
+                <div id="dynamic-log-fields" class="space-y-3 bg-slate-50 p-3 rounded-2xl border border-slate-100 hidden">
+                    <!-- Makan & Minum -->
+                    <div id="field-makan" class="hidden space-y-3">
+                        <div>
+                            <label class="font-semibold text-slate-700">Jenis</label>
+                            <select id="form-log-makan-sub" onchange="toggleMakanFields()" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none">
+                                <option value="Menyusui">🤱 Menyusui (DBF)</option>
+                                <option value="Minum">🍼 Susu Botol / Sufor</option>
+                                <option value="Makan">🥣 Makan (MPASI)</option>
+                            </select>
+                        </div>
+                        <div id="field-menyusui" class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="font-semibold text-slate-700">Kiri (Menit)</label>
+                                <input type="number" id="form-log-kiri" placeholder="0" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="font-semibold text-slate-700">Kanan (Menit)</label>
+                                <input type="number" id="form-log-kanan" placeholder="0" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none">
+                            </div>
+                        </div>
+                        <div id="field-minum" class="hidden">
+                            <label class="font-semibold text-slate-700">Jumlah (ml)</label>
+                            <input type="number" id="form-log-ml" placeholder="misal: 60" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none">
+                        </div>
+                        <div id="field-makanan" class="hidden">
+                            <label class="font-semibold text-slate-700">Menu Makanan</label>
+                            <input type="text" id="form-log-makanan" placeholder="misal: Bubur saring ati ayam" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Buang Air -->
+                    <div id="field-buang-air" class="hidden">
+                        <label class="font-semibold text-slate-700">Kondisi Popok</label>
+                        <select id="form-log-bab-type" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none">
+                            <option value="Pipis">💧 Pipis Saja</option>
+                            <option value="Pup">💩 Pup Saja</option>
+                            <option value="Keduanya">💧💩 Keduanya</option>
+                        </select>
+                    </div>
+
+                    <!-- Pompa ASI -->
+                    <div id="field-pompa" class="hidden">
+                        <label class="font-semibold text-slate-700">Hasil Pompa (ml)</label>
+                        <input type="number" id="form-log-pompa-ml" required placeholder="misal: 120" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none">
+                    </div>
                 </div>
 
-                <!-- DYNAMIC FIELD: TANGGAL & WAKTU SELESAI (Khusus Tidur, Pompa, Makan MPASI) -->
-                <div id="field-waktu-selesai" class="hidden grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                    <div>
-                        <label class="font-semibold text-slate-700">Tanggal Selesai</label>
-                        <input type="date" id="form-log-end-date" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="font-semibold text-slate-700">Jam Selesai</label>
-                        <input type="time" id="form-log-end-time" class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-mono">
-                    </div>
-                </div>
-
-                <!-- CATATAN BEBAS -->
                 <div>
-                    <label class="font-semibold text-slate-700">Catatan (Opsional)</label>
-                    <textarea id="form-log-notes" rows="2" placeholder="Warna pup, bayi rewel, dll..." class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none"></textarea>
+                    <label class="font-semibold text-slate-700">Catatan Tambahan (Opsional)</label>
+                    <textarea id="form-log-notes" rows="2" placeholder="Warna pup, rewel, dsb..." class="w-full mt-1 p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none"></textarea>
                 </div>
 
                 <div class="pt-2 flex justify-end gap-2">
                     <button type="button" onclick="closeLogModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl shadow-md">Simpan Log</button>
+                    <button type="submit" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl shadow-sm">Simpan Log</button>
                 </div>
             </form>
         </div>
