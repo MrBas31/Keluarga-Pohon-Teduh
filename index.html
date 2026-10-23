@@ -2283,11 +2283,11 @@
             if (menu) menu.classList.toggle('hidden');
         }
 
+        // Modal otomatis mendeteksi dari dashboard mana ia dipanggil
         function openGalleryModal(type = 'prenatal') {
-            activeGalleryType = type; 
+            activeGalleryType = type;
             document.getElementById('gallery-form').reset();
             document.getElementById('form-gallery-id').value = '';
-            document.getElementById('modal-gallery-title').innerText = type === 'prenatal' ? 'Tambah Foto Kehamilan' : 'Tambah Foto Si Kecil';
             document.getElementById('modal-gallery').classList.remove('hidden');
         }
 
@@ -2295,22 +2295,33 @@
             document.getElementById('modal-gallery').classList.add('hidden');
         }
 
+        // Fungsi simpan otomatis memisah data berdasarkan fase yang sedang aktif
         function saveGalleryForm(event) {
             event.preventDefault();
+            const id = document.getElementById('form-gallery-id').value;
             const title = document.getElementById('form-gallery-title-input').value.trim();
             const url = document.getElementById('form-gallery-url').value.trim();
             const caption = document.getElementById('form-gallery-caption').value.trim();
 
-            const newPhoto = { id: Date.now(), title, url, caption };
+            const newPhoto = { id: id ? Number(id) : Date.now(), title, url, caption };
 
-            // Simpan ke database yang sesuai berdasarkan tombol yang diklik
             if (activeGalleryType === 'prenatal') {
                 if (!appState.gallery) appState.gallery = [];
-                appState.gallery.unshift(newPhoto);
+                if (id) {
+                    const idx = appState.gallery.findIndex(g => g.id == id);
+                    if (idx !== -1) appState.gallery[idx] = newPhoto;
+                } else {
+                    appState.gallery.unshift(newPhoto);
+                }
                 currentGalleryIndex = 0;
             } else {
                 if (!appState.postnatalGallery) appState.postnatalGallery = [];
-                appState.postnatalGallery.unshift(newPhoto);
+                if (id) {
+                    const idx = appState.postnatalGallery.findIndex(g => g.id == id);
+                    if (idx !== -1) appState.postnatalGallery[idx] = newPhoto;
+                } else {
+                    appState.postnatalGallery.unshift(newPhoto);
+                }
                 currentPostnatalGalleryIndex = 0;
             }
 
@@ -2320,17 +2331,29 @@
         }
 
         function deleteGalleryPhoto(id, type) {
-            if (confirm("Apakah Anda yakin ingin menghapus foto ini?")) {
+            if (confirm("Hapus foto ini dari galeri?")) {
                 if (type === 'prenatal') {
-                    appState.gallery = appState.gallery.filter(item => item.id !== id);
+                    appState.gallery = appState.gallery.filter(g => g.id !== id);
                     currentGalleryIndex = 0;
                 } else {
-                    appState.postnatalGallery = appState.postnatalGallery.filter(item => item.id !== id);
+                    appState.postnatalGallery = appState.postnatalGallery.filter(g => g.id !== id);
                     currentPostnatalGalleryIndex = 0;
                 }
                 renderGallery();
                 saveToLocalStorage();
             }
+        }
+
+        // Bikin auto-slide jalan dengan lancar di fase yang sedang dibuka
+        function startGalleryAutoSlide() {
+            if (galleryAutoInterval) clearInterval(galleryAutoInterval);
+            galleryAutoInterval = setInterval(() => {
+                if (appState.phase === 'prenatal' && appState.gallery && appState.gallery.length > 1) {
+                    nextGallerySlide('prenatal');
+                } else if (appState.phase === 'postnatal' && appState.postnatalGallery && appState.postnatalGallery.length > 1) {
+                    nextGallerySlide('postnatal');
+                }
+            }, 5000);
         }
 
         function nextGallerySlide(type) {
