@@ -3745,8 +3745,16 @@
                                 </select>
                             </td>
                             <td class="p-3">
-                                <div class="font-semibold ${item.done ? 'line-through text-slate-400' : 'text-slate-800'}">${item.name}</div>
-                                ${item.brand ? `<div class="text-2xs text-slate-400">Brand: ${item.brand}</div>` : ''}
+                                <div class="flex items-center gap-3">
+                                    <div class="flex flex-col gap-1 bg-slate-50 p-1 rounded-md border border-slate-200/60 shadow-sm">
+                                        <button onclick="moveShoppingItem(${item.id}, 'up')" class="text-slate-400 hover:text-sky-600 transition px-1" title="Geser ke Atas"><i class="fa-solid fa-chevron-up text-3xs"></i></button>
+                                        <button onclick="moveShoppingItem(${item.id}, 'down')" class="text-slate-400 hover:text-sky-600 transition px-1" title="Geser ke Bawah"><i class="fa-solid fa-chevron-down text-3xs"></i></button>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold ${item.done ? 'line-through text-slate-400' : 'text-slate-800'}">${item.name}</div>
+                                        ${item.brand ? `<div class="text-2xs text-slate-400">Brand: ${item.brand}</div>` : ''}
+                                    </div>
+                                </div>
                             </td>
                             <td class="p-3 text-center font-medium text-slate-600">${item.qty || '1'}</td>
                             <td class="p-3">${linksContainerHtml}</td>
@@ -3770,6 +3778,44 @@
             tbody.innerHTML = html;
         }
 
+        // FUNGSI MENGGESER URUTAN ITEM BELANJA
+        function moveShoppingItem(id, direction) {
+            const itemIndex = appState.shoppingItems.findIndex(i => i.id === id);
+            if (itemIndex < 0) return;
+            
+            const item = appState.shoppingItems[itemIndex];
+            let targetIndex = -1;
+            
+            // Cari tetangga terdekat di atas/bawah yang Kategori & Sub-Menu-nya sama persis
+            if (direction === 'up') {
+                for (let i = itemIndex - 1; i >= 0; i--) {
+                    if ((appState.shoppingItems[i].mainCategory || 'Keperluan Baby') === (item.mainCategory || 'Keperluan Baby') && 
+                        (appState.shoppingItems[i].category || 'Umum') === (item.category || 'Umum')) {
+                        targetIndex = i;
+                        break;
+                    }
+                }
+            } else {
+                for (let i = itemIndex + 1; i < appState.shoppingItems.length; i++) {
+                    if ((appState.shoppingItems[i].mainCategory || 'Keperluan Baby') === (item.mainCategory || 'Keperluan Baby') && 
+                        (appState.shoppingItems[i].category || 'Umum') === (item.category || 'Umum')) {
+                        targetIndex = i;
+                        break;
+                    }
+                }
+            }
+            
+            if (targetIndex !== -1) {
+                // Tukar posisi datanya
+                const temp = appState.shoppingItems[itemIndex];
+                appState.shoppingItems[itemIndex] = appState.shoppingItems[targetIndex];
+                appState.shoppingItems[targetIndex] = temp;
+                
+                renderShoppingItems();
+                saveToLocalStorage();
+            }
+        }
+        
         function updateStatusBelanja(id, statusBaru) {
             const item = appState.shoppingItems.find(i => i.id === id);
             if (item) {
