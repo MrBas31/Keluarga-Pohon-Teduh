@@ -6271,7 +6271,10 @@
         const nowLocalShopping = new Date();
         let currentShoppingMonth = `${nowLocalShopping.getFullYear()}-${String(nowLocalShopping.getMonth() + 1).padStart(2, '0')}`;
         let postShoppingChartInstance = null;
+        let currentPostSubmenu = 'Keseluruhan';
+        let postSubmenusList = ['Keperluan Baby', 'Keperluan Ibu', 'Aqiqah']; // Default Sub-menu
 
+        // --- 1. NAVIGASI BULAN & BUDGET ---
         function changeShoppingMonth(offset) {
             const [year, month] = currentShoppingMonth.split('-');
             let d = new Date(year, month - 1 + offset, 1);
@@ -6282,24 +6285,55 @@
         function saveMonthlyBudget() {
             const val = document.getElementById('monthly-budget-input').value;
             if (!appState.postnatalBudgets) appState.postnatalBudgets = {};
-            appState.postnatalBudgets[currentShoppingMonth] = Number(val) || 6000000; // Default 6 Juta
+            appState.postnatalBudgets[currentShoppingMonth] = Number(val) || 6000000;
             saveToLocalStorage();
             renderPostShopping();
         }
 
-        function openPostShoppingModal(id = null) {
-            document.getElementById('post-shopping-form').reset();
-            document.getElementById('form-ps-id').value = id || '';
-            document.getElementById('modal-post-shopping-title').innerText = id ? 'Edit Barang' : 'Tambah Barang';
+        // --- 2. LOGIKA SUB-MENU ---
+        function setPostSubmenu(submenu) {
+            currentPostSubmenu = submenu;
+            document.getElementById('post-filter-category').value = 'all'; // Reset filter kategori
+            renderPostShopping();
+        }
 
+        function promptNewPostSubmenu() {
+            const name = prompt("Masukkan nama Sub-Menu baru (misal: Perawatan Bayi):");
+            if (name && name.trim() !== '') {
+                const cleanName = name.trim();
+                if (!postSubmenusList.includes(cleanName)) postSubmenusList.push(cleanName);
+                setPostSubmenu(cleanName);
+            }
+        }
+
+        // --- 3. OPERASI DATA (CRUD) MODAL ---
+        function openPostShoppingModal(id = null) {
+            const form = document.getElementById('post-shopping-form');
+            form.reset();
+            document.getElementById('form-ps-id').value = id || '';
+            document.getElementById('modal-post-shopping-title').innerText = id ? 'Edit Item Belanja' : 'Tambah Item Belanja Baru';
+
+            // Sinkronisasi opsi dropdown sub-menu
+            const subSelect = document.getElementById('form-ps-submenu');
+            subSelect.innerHTML = postSubmenusList.map(sm => `<option value="${sm}">${sm}</option>`).join('');
+            
             if (id) {
                 const item = appState.postnatalShopping.find(i => i.id === id);
                 if (item) {
-                    document.getElementById('form-ps-name').value = item.name;
+                    document.getElementById('form-ps-submenu').value = item.submenu || 'Keperluan Baby';
                     document.getElementById('form-ps-category').value = item.category;
-                    document.getElementById('form-ps-type').value = item.type || 'Sekali Beli';
-                    document.getElementById('form-ps-price').value = item.price;
+                    document.getElementById('form-ps-name').value = item.name;
                     document.getElementById('form-ps-qty').value = item.qty;
+                    document.getElementById('form-ps-brand').value = item.brand || '';
+                    document.getElementById('form-ps-type').value = item.type || 'Sekali Beli';
+                    document.getElementById('form-ps-link').value = item.link || '';
+                    document.getElementById('form-ps-est').value = item.price || 0;
+                    document.getElementById('form-ps-actual').value = item.actual || 0;
+                    document.getElementById('form-ps-done').checked = item.done;
+                }
+            } else {
+                if (currentPostSubmenu !== 'Keseluruhan' && postSubmenusList.includes(currentPostSubmenu)) {
+                    subSelect.value = currentPostSubmenu;
                 }
             }
             document.getElementById('modal-post-shopping').classList.remove('hidden');
@@ -6314,17 +6348,27 @@
             const id = document.getElementById('form-ps-id').value;
             if (!appState.postnatalShopping) appState.postnatalShopping = [];
             
+            const isDone = document.getElementById('form-ps-done').checked;
+            let existingItem = id ? appState.postnatalShopping.find(i => i.id == id) : null;
+
             let item = {
                 id: id ? Number(id) : Date.now(),
-                period: id ? appState.postnatalShopping.find(i => i.id == id).period : currentShoppingMonth, // Kunci ke bulan aktif
-                name: document.getElementById('form-ps-name').value,
+                period: existingItem ? existingItem.period : currentShoppingMonth,
+                submenu: document.getElementById('form-ps-submenu').value,
                 category: document.getElementById('form-ps-category').value,
+                name: document.getElementById('form-ps-name').value,
+                qty: document.getElementById('form-ps-qty').value,
+                brand: document.getElementById('form-ps-brand').value,
                 type: document.getElementById('form-ps-type').value,
-                price: Number(document.getElementById('form-ps-price').value) || 0,
-                qty: Number(document.getElementById('form-ps-qty').value) || 1,
-                done: id ? appState.postnatalShopping.find(i => i.id == id).done : false,
-                purchasedAt: id ? appState.postnatalShopping.find(i => i.id == id).purchasedAt : null
+                link: document.getElementById('form-ps-link').value,
+                price: Number(document.getElementById('form-ps-est').value) || 0,
+                actual: Number(document.getElementById('form-ps-actual').value) || 0,
+                done: isDone,
+                purchasedAt: isDone ? (existingItem?.purchasedAt || new Date().toISOString().slice(0,10)) : null
             };
+
+            // Pastikan submenu baru tersimpan di daftar global
+            if (!postSubmenusList.includes(item.submenu)) postSubmenusList.push(item.submenu);
 
             if (id) {
                 const idx = appState.postnatalShopping.findIndex(i => i.id == id);
@@ -6338,20 +6382,19 @@
             renderPostShopping();
         }
 
-        function deletePostShoppingItem(id) {
-            if (confirm('Hapus barang ini dari daftar?')) {
-                appState.postnatalShopping = appState.postnatalShopping.filter(i => i.id !== id);
+        function togglePostShoppingStatus(id, isChecked) {
+            const item = appState.postnatalShopping.find(i => i.id === id);
+            if (item) {
+                item.done = isChecked;
+                item.purchasedAt = isChecked ? new Date().toISOString().slice(0, 10) : null;
                 saveToLocalStorage();
                 renderPostShopping();
             }
         }
 
-        function togglePostShoppingStatus(id, isChecked) {
-            const item = appState.postnatalShopping.find(i => i.id === id);
-            if (item) {
-                item.done = isChecked;
-                // Suntikkan Timestamp Tanggal Beli
-                item.purchasedAt = isChecked ? new Date().toISOString().slice(0, 10) : null;
+        function deletePostShoppingItem(id) {
+            if (confirm('Hapus item belanja ini?')) {
+                appState.postnatalShopping = appState.postnatalShopping.filter(i => i.id !== id);
                 saveToLocalStorage();
                 renderPostShopping();
             }
@@ -6360,17 +6403,21 @@
         function buyAgainPostShopping(id) {
             const oldItem = appState.postnatalShopping.find(i => i.id === id);
             if (!oldItem) return;
-            // Buka Modal dengan data lama, TAPI id dikosongkan agar jadi barang baru
             openPostShoppingModal();
-            document.getElementById('form-ps-name').value = oldItem.name;
+            document.getElementById('form-ps-submenu').value = oldItem.submenu;
             document.getElementById('form-ps-category').value = oldItem.category;
-            document.getElementById('form-ps-type').value = oldItem.type;
-            document.getElementById('form-ps-price').value = oldItem.price;
+            document.getElementById('form-ps-name').value = oldItem.name;
             document.getElementById('form-ps-qty').value = oldItem.qty;
+            document.getElementById('form-ps-brand').value = oldItem.brand;
+            document.getElementById('form-ps-type').value = oldItem.type;
+            document.getElementById('form-ps-link').value = oldItem.link;
+            document.getElementById('form-ps-est').value = oldItem.price;
+            document.getElementById('form-ps-actual').value = 0; // Reset aktual untuk bulan baru
+            document.getElementById('form-ps-done').checked = false;
             document.getElementById('form-ps-id').value = '';
         }
 
-        // --- SISTEM TARIK BARANG KEHAMILAN ---
+        // --- 4. TARIK BARANG KEHAMILAN ---
         function openPullPregnancyModal() {
             const listCont = document.getElementById('pull-pregnancy-list');
             if (!appState.shoppingItems || appState.shoppingItems.length === 0) {
@@ -6378,11 +6425,11 @@
             } else {
                 const pending = appState.shoppingItems.filter(i => !i.done);
                 if (pending.length === 0) {
-                    listCont.innerHTML = `<div class="text-xs text-slate-400 p-4 text-center">Yeay! Semua barang kehamilan sudah terbeli! 🎉</div>`;
+                    listCont.innerHTML = `<div class="text-xs text-slate-400 p-4 text-center">Semua barang kehamilan sudah terbeli! 🎉</div>`;
                 } else {
                     listCont.innerHTML = pending.map(i => `
-                        <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition group">
-                            <input type="checkbox" value="${i.id}" class="pull-item-cb w-4 h-4 rounded text-indigo-500 focus:ring-indigo-500 bg-slate-800 border-slate-600">
+                        <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition">
+                            <input type="checkbox" value="${i.id}" class="pull-item-cb w-4 h-4 rounded text-indigo-500 bg-slate-800 border-slate-600 focus:ring-indigo-500">
                             <div class="flex-1">
                                 <div class="font-semibold text-slate-200">${i.name}</div>
                                 <div class="text-2xs text-slate-400">${i.category || 'Umum'} • Rp ${(i.price || 0).toLocaleString('id-ID')}</div>
@@ -6394,33 +6441,30 @@
             document.getElementById('modal-pull-pregnancy').classList.remove('hidden');
         }
 
-        function closePullPregnancyModal() {
-            document.getElementById('modal-pull-pregnancy').classList.add('hidden');
-        }
+        function closePullPregnancyModal() { document.getElementById('modal-pull-pregnancy').classList.add('hidden'); }
 
         function executePullPregnancy() {
             const cbs = document.querySelectorAll('.pull-item-cb:checked');
-            if (cbs.length === 0) {
-                closePullPregnancyModal();
-                return;
-            }
+            if (cbs.length === 0) return closePullPregnancyModal();
             if (!appState.postnatalShopping) appState.postnatalShopping = [];
             
             cbs.forEach(cb => {
                 const oldId = Number(cb.value);
                 const oldItem = appState.shoppingItems.find(i => i.id === oldId);
                 if (oldItem) {
-                    // Hapus dari memori kehamilan
                     appState.shoppingItems = appState.shoppingItems.filter(i => i.id !== oldId);
-                    // Pindah ke memori bulan aktif bayi lahir
                     appState.postnatalShopping.push({
-                        id: Date.now() + Math.random(), // id baru
-                        period: currentShoppingMonth, // bulan yang sedang aktif
+                        id: Date.now() + Math.random(),
+                        period: currentShoppingMonth,
+                        submenu: oldItem.submenu || 'Keperluan Ibu', // Default mapping
+                        category: oldItem.category || 'Pindahan',
                         name: oldItem.name,
-                        category: oldItem.category || 'Pindahan Kehamilan',
-                        type: 'Sekali Beli', // Default non-restock
+                        qty: oldItem.qty || '1',
+                        brand: oldItem.brand || '',
+                        type: 'Sekali Beli',
+                        link: oldItem.link || '',
                         price: oldItem.price || 0,
-                        qty: oldItem.qty || 1,
+                        actual: oldItem.actual || 0,
                         done: false,
                         purchasedAt: null
                     });
@@ -6432,146 +6476,208 @@
             renderPostShopping();
         }
 
-        // --- RENDER UTAMA ---
+        // --- 5. RENDER UTAMA ---
         function renderPostShopping() {
             if (!appState.postnatalBudgets) appState.postnatalBudgets = {};
             if (!appState.postnatalShopping) appState.postnatalShopping = [];
 
-            // 1. Tampilkan Kalender Bulan
+            // Update Label Kalender & Budget
             const [year, month] = currentShoppingMonth.split('-');
-            const date = new Date(year, month - 1);
-            document.getElementById('display-shopping-month').innerText = date.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-
-            // 2. Tampilkan Target Budget (Bisa diedit)
+            const dateObj = new Date(year, month - 1);
+            document.getElementById('display-shopping-month').innerText = dateObj.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+            
             let budget = appState.postnatalBudgets[currentShoppingMonth];
             if (budget === undefined) budget = 6000000;
             document.getElementById('monthly-budget-input').value = budget;
 
-            // 3. Ekstrak Data Khusus Bulan Ini Saja
+            // Ekstrak Data Bulan Ini Saja
             const monthItems = appState.postnatalShopping.filter(i => i.period === currentShoppingMonth);
             
-            // 4. Kalkulasi Keuangan
-            let spent = 0, totalItems = monthItems.length, doneItems = 0;
-            let categoryData = {}; // Data untuk Pie Chart
+            // Render Sub-Menus (Pastikan list update)
+            monthItems.forEach(i => { if (i.submenu && !postSubmenusList.includes(i.submenu)) postSubmenusList.push(i.submenu); });
+            
+            const renderSubmenuBtns = (containerId) => {
+                let html = `<button onclick="setPostSubmenu('Keseluruhan')" class="px-4 py-1.5 rounded-xl text-xs font-bold transition ${currentPostSubmenu === 'Keseluruhan' ? 'bg-[#0ea5e9] text-white shadow-md' : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700'}"><i class="fa-solid fa-layer-group"></i> Keseluruhan</button>`;
+                postSubmenusList.forEach(sm => {
+                    const icon = sm.includes('Baby') ? '👶' : sm.includes('Ibu') ? '🤰' : sm.includes('Aqiqah') ? '📁' : '📌';
+                    html += `<button onclick="setPostSubmenu('${sm}')" class="px-4 py-1.5 rounded-xl text-xs font-bold transition ${currentPostSubmenu === sm ? 'bg-[#0ea5e9] text-white shadow-md' : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700'}">${icon} ${sm}</button>`;
+                });
+                document.getElementById(containerId).innerHTML = html;
+            };
+            renderSubmenuBtns('post-chart-submenus');
+            renderSubmenuBtns('post-list-submenus');
 
-            monthItems.forEach(item => {
-                if (item.done) {
-                    const cost = item.price * item.qty;
-                    spent += cost;
+            // Hitung Keuangan & Progress Global
+            let totalActualMonth = 0, doneItems = 0;
+            monthItems.forEach(i => {
+                if (i.done) {
+                    totalActualMonth += (i.actual || 0);
                     doneItems++;
-                    
-                    if (!categoryData[item.category]) categoryData[item.category] = 0;
-                    categoryData[item.category] += cost;
                 }
             });
 
-            const remaining = budget - spent;
-            const pSpent = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
+            // Update Widget Atas
+            const sisaAnggaran = budget - totalActualMonth;
+            document.getElementById('post-top-sisa').innerText = `Rp ${sisaAnggaran.toLocaleString('id-ID')}`;
+            document.getElementById('post-top-sisa').className = `font-bold text-sm ${sisaAnggaran < 0 ? 'text-rose-400' : 'text-emerald-400'}`;
+            document.getElementById('post-top-progress-text').innerText = `${doneItems} / ${monthItems.length}`;
+            const progPercent = monthItems.length === 0 ? 0 : Math.min(100, Math.round((doneItems / monthItems.length) * 100));
+            document.getElementById('post-top-progress-bar').style.width = `${progPercent}%`;
+            document.getElementById('post-top-progress-bar').className = `h-full rounded-full transition-all duration-500 ${progPercent > 90 ? 'bg-emerald-500' : 'bg-sky-500'}`;
 
-            // 5. Render Ringkasan Progress Bar
-            document.getElementById('post-shopping-summary').innerHTML = `
-                <div class="flex justify-between items-end mb-2">
-                    <div>
-                        <div class="text-xs text-slate-400">Total Terpakai</div>
-                        <div class="font-bold text-lg text-slate-200">Rp ${spent.toLocaleString('id-ID')}</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xs text-slate-400">Sisa Anggaran</div>
-                        <div class="font-bold text-sm ${remaining < 0 ? 'text-rose-400' : 'text-emerald-400'}">Rp ${remaining.toLocaleString('id-ID')}</div>
-                    </div>
-                </div>
-                <div class="w-full bg-slate-700 rounded-full h-2.5 mb-1 overflow-hidden">
-                    <div class="h-full rounded-full transition-all duration-500 ${pSpent > 90 ? 'bg-rose-500' : 'bg-sky-500'}" style="width: ${pSpent}%"></div>
-                </div>
-                <div class="text-2xs text-slate-400 text-right">${doneItems} dari ${totalItems} barang terbeli</div>
-            `;
+            // Update Ringkasan Summary Kartu 2
+            document.getElementById('post-summary-total').innerText = `Rp ${totalActualMonth.toLocaleString('id-ID')}`;
 
-            // 6. Render Pie Chart
-            renderPostShoppingChart(categoryData);
+            // Filter by Submenu
+            let activeItems = currentPostSubmenu === 'Keseluruhan' ? monthItems : monthItems.filter(i => i.submenu === currentPostSubmenu);
 
-            // 7. Render Daftar Barang (Kategori & Status)
+            // Update Opsi Filter Kategori
+            const catSelect = document.getElementById('post-filter-category');
+            const currentCatFilter = catSelect.value;
+            const uniqueCats = [...new Set(activeItems.map(i => i.category))];
+            catSelect.innerHTML = `<option value="all">Semua Kategori (${uniqueCats.length})</option>` + uniqueCats.map(c => `<option value="${c}">${c}</option>`).join('');
+            if (uniqueCats.includes(currentCatFilter)) catSelect.value = currentCatFilter;
+
+            // Terapkan Filter Kategori
+            if (catSelect.value !== 'all') activeItems = activeItems.filter(i => i.category === catSelect.value);
+
+            // Hitung Realisasi Sub-Menu & Data Chart
+            let subMenuActual = 0;
+            let chartData = {};
+            activeItems.forEach(i => {
+                if (i.done) {
+                    const act = i.actual || 0;
+                    subMenuActual += act;
+                    if (!chartData[i.category]) chartData[i.category] = 0;
+                    chartData[i.category] += act;
+                }
+            });
+            document.getElementById('post-summary-realisasi').innerText = `Rp ${subMenuActual.toLocaleString('id-ID')}`;
+
+            // Render Chart & Legend
+            renderPostChart(chartData, subMenuActual);
+
+            // Render Daftar Tabel Grid
             const listCont = document.getElementById('post-shopping-list-container');
-            if (monthItems.length === 0) {
-                listCont.innerHTML = `<div class="text-center py-10 text-slate-400 text-sm italic">Belum ada daftar belanja untuk periode ini.</div>`;
-            } else {
-                monthItems.sort((a, b) => {
-                    if (a.category !== b.category) return a.category.localeCompare(b.category);
-                    return (a.done === b.done) ? 0 : a.done ? 1 : -1;
-                });
-
-                let html = '';
-                let currentCat = '';
-                monthItems.forEach(item => {
-                    if (item.category !== currentCat) {
-                        html += `<h4 class="font-bold text-slate-300 text-sm mt-6 mb-3 border-b border-slate-700 pb-1 flex items-center gap-2"><i class="fa-solid fa-tag text-sky-400"></i> ${item.category}</h4>`;
-                        currentCat = item.category;
-                    }
-
-                    const cost = item.price * item.qty;
-                    const isHabisPakai = item.type === 'Habis Pakai';
-                    
-                    html += `
-                        <div class="flex items-center gap-4 bg-slate-800 p-4 rounded-2xl border ${item.done ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-slate-700'} shadow-sm transition group mb-3">
-                            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="togglePostShoppingStatus(${item.id}, this.checked)" class="w-5 h-5 rounded text-emerald-500 focus:ring-emerald-500 bg-slate-900 border-slate-600 cursor-pointer shrink-0">
-                            
-                            <div class="flex-1 min-w-0">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <div class="font-semibold truncate ${item.done ? 'line-through text-slate-500' : 'text-slate-200'}">${item.name}</div>
-                                    ${isHabisPakai ? `<span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.5 rounded-md flex-shrink-0"><i class="fa-solid fa-rotate"></i> Habis Pakai</span>` : ''}
-                                </div>
-                                <div class="text-xs text-slate-400 mt-0.5">Rp ${item.price.toLocaleString('id-ID')} x ${item.qty} = <span class="font-medium text-slate-300">Rp ${cost.toLocaleString('id-ID')}</span></div>
-                                ${item.purchasedAt ? `<div class="text-3xs text-emerald-400/80 mt-1"><i class="fa-solid fa-check-double"></i> Dibeli ${new Date(item.purchasedAt).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'})}</div>` : ''}
-                            </div>
-
-                            <div class="flex flex-col sm:flex-row gap-2 shrink-0">
-                                ${(item.done && isHabisPakai) ? `<button onclick="buyAgainPostShopping(${item.id})" class="p-2 text-xs bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 rounded-xl transition" title="Beli Lagi Bulan Ini"><i class="fa-solid fa-cart-plus"></i> Restock</button>` : ''}
-                                <div class="flex gap-1 justify-end">
-                                    <button onclick="openPostShoppingModal(${item.id})" class="p-2 text-slate-400 hover:text-sky-400 transition" title="Edit"><i class="fa-solid fa-pen text-xs"></i></button>
-                                    <button onclick="deletePostShoppingItem(${item.id})" class="p-2 text-slate-400 hover:text-rose-400 transition" title="Hapus"><i class="fa-solid fa-trash text-xs"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                listCont.innerHTML = html;
+            if (activeItems.length === 0) {
+                listCont.innerHTML = `<div class="text-center py-10 text-slate-500 italic text-sm bg-[#0f172a]/50 rounded-xl border border-slate-700/50">Belum ada item di sub-menu ini.</div>`;
+                return;
             }
+
+            // Grouping by Category
+            const grouped = {};
+            activeItems.forEach(i => {
+                if (!grouped[i.category]) grouped[i.category] = [];
+                grouped[i.category].push(i);
+            });
+
+            let html = '';
+            Object.keys(grouped).forEach(cat => {
+                let catEst = 0, catAct = 0;
+                grouped[cat].forEach(i => {
+                    catEst += (i.price || 0);
+                    if (i.done) catAct += (i.actual || 0);
+                });
+
+                // Header Kategori
+                html += `
+                <div class="bg-[#1e293b] p-3 rounded-xl flex justify-between items-center mb-3 mt-4">
+                    <div class="font-bold text-sky-400 text-[11px] uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-layer-group"></i> KATEGORI: ${cat} (${grouped[cat].length} ITEM)</div>
+                    <div class="text-[10px] text-slate-400 flex gap-4">
+                        <span>Est: Rp ${catEst.toLocaleString('id-ID')}</span>
+                        <span class="text-emerald-400 font-bold">Realisasi: Rp ${catAct.toLocaleString('id-ID')}</span>
+                    </div>
+                </div>`;
+
+                // Baris Item
+                grouped[cat].forEach(item => {
+                    const isRestock = item.type === 'Habis Pakai';
+                    html += `
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-[#0f172a] p-3 rounded-xl border ${item.done ? 'border-emerald-500/20' : 'border-slate-700/50'} hover:border-slate-600 transition group mb-2">
+                        
+                        <!-- Col 2: Status & Restock -->
+                        <div class="col-span-2 flex items-center gap-2">
+                            <label class="flex items-center gap-2 cursor-pointer bg-[#1e293b] px-3 py-1.5 rounded-lg border border-slate-700 shadow-sm">
+                                <input type="checkbox" ${item.done ? 'checked' : ''} onchange="togglePostShoppingStatus(${item.id}, this.checked)" class="w-4 h-4 rounded text-emerald-500 bg-slate-800 border-slate-600 focus:ring-emerald-500">
+                                <span class="text-[10px] font-bold ${item.done ? 'text-emerald-400' : 'text-slate-400'} uppercase">${item.done ? 'Selesai' : 'Belum'}</span>
+                            </label>
+                            ${(item.done && isRestock) ? `<button onclick="buyAgainPostShopping(${item.id})" class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-1 rounded-lg text-xs hover:bg-amber-500/20 transition" title="Restock Bulan Ini"><i class="fa-solid fa-cart-plus"></i></button>` : ''}
+                        </div>
+
+                        <!-- Col 3: Nama & Brand -->
+                        <div class="col-span-3">
+                            <div class="font-bold text-slate-200 text-sm ${item.done ? 'line-through text-slate-500' : ''}">${item.name}</div>
+                            ${item.brand ? `<div class="text-[10px] text-slate-400 bg-slate-800 inline-block px-1.5 py-0.5 rounded border border-slate-700 mt-0.5">${item.brand}</div>` : ''}
+                        </div>
+
+                        <!-- Col 1: Qty -->
+                        <div class="col-span-1 text-center font-medium text-slate-300 text-xs">${item.qty}</div>
+
+                        <!-- Col 2: Link -->
+                        <div class="col-span-2 text-center">
+                            ${item.link ? `<a href="${item.link.split('\n')[0]}" target="_blank" class="text-[10px] text-sky-400 hover:text-sky-300 bg-sky-500/10 px-2 py-1 rounded-lg transition line-clamp-1"><i class="fa-solid fa-link"></i> Link/Toko</a>` : '-'}
+                        </div>
+
+                        <!-- Col 2: Estimasi -->
+                        <div class="col-span-2 text-right text-xs font-medium text-slate-400">Rp ${(item.price || 0).toLocaleString('id-ID')}</div>
+
+                        <!-- Col 1: Aktual -->
+                        <div class="col-span-1 text-right font-bold text-xs ${item.done ? 'text-emerald-400' : 'text-slate-500'}">Rp ${(item.actual || 0).toLocaleString('id-ID')}</div>
+
+                        <!-- Col 1: Aksi -->
+                        <div class="col-span-1 flex justify-center gap-1">
+                            <button onclick="openPostShoppingModal(${item.id})" class="w-7 h-7 bg-slate-800 hover:bg-sky-900/30 text-slate-400 hover:text-sky-400 rounded-lg flex items-center justify-center transition border border-slate-700/50"><i class="fa-solid fa-pen text-[10px]"></i></button>
+                            <button onclick="deletePostShoppingItem(${item.id})" class="w-7 h-7 bg-slate-800 hover:bg-rose-900/30 text-slate-400 hover:text-rose-400 rounded-lg flex items-center justify-center transition border border-slate-700/50"><i class="fa-solid fa-trash text-[10px]"></i></button>
+                        </div>
+                    </div>`;
+                });
+            });
+            listCont.innerHTML = html;
         }
 
-        // Fungsi Render Pie Chart Dark Mode
-        function renderPostShoppingChart(catData) {
+        function renderPostChart(catData, totalActual) {
             const ctx = document.getElementById('postShoppingChart');
-            if (!ctx) return;
-            
+            const legendCont = document.getElementById('post-chart-legend');
+            if (!ctx || !legendCont) return;
+
             const labels = Object.keys(catData);
             const data = Object.values(catData);
             
             if (postShoppingChartInstance) postShoppingChartInstance.destroy();
 
-            if (labels.length === 0) {
+            if (labels.length === 0 || totalActual === 0) {
                  postShoppingChartInstance = new Chart(ctx, {
                     type: 'doughnut',
-                    data: { labels: ['Belum ada pengeluaran'], datasets: [{ data: [1], backgroundColor: ['#334155'], borderWidth: 0 }] },
+                    data: { labels: ['Belum ada pengeluaran'], datasets: [{ data: [1], backgroundColor: ['#1e293b'], borderWidth: 0 }] },
                     options: { responsive: true, cutout: '75%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
                 });
+                legendCont.innerHTML = `<div class="text-sm text-slate-500 italic text-center">Belum ada realisasi untuk divisualisasikan.</div>`;
                 return;
             }
 
             const colors = ['#38bdf8', '#fb7185', '#34d399', '#fbbf24', '#c084fc', '#818cf8', '#f87171', '#4ade80'];
             postShoppingChartInstance = new Chart(ctx, {
                 type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{ data: data, backgroundColor: colors, borderColor: '#1e293b', borderWidth: 2 }]
-                },
-                options: {
-                    responsive: true,
-                    cutout: '70%',
-                    plugins: {
-                        legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 10 } } },
-                        tooltip: { callbacks: { label: function(c) { return ' Rp ' + c.parsed.toLocaleString('id-ID'); } } }
-                    }
-                }
+                data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderColor: '#1a2332', borderWidth: 2 }] },
+                options: { responsive: true, cutout: '70%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' Rp ' + c.parsed.toLocaleString('id-ID') } } } }
             });
+
+            // Custom Legend 100% mirip UI Kehamilan
+            legendCont.innerHTML = labels.map((label, idx) => {
+                const val = data[idx];
+                const pct = Math.round((val / totalActual) * 100);
+                const col = colors[idx % colors.length];
+                return `
+                <div class="flex justify-between items-center bg-[#1e293b] p-2.5 rounded-xl border border-slate-700/50 mb-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full" style="background-color: ${col};"></div>
+                        <div class="font-bold text-slate-300 text-xs">${label}</div>
+                    </div>
+                    <div class="font-bold text-slate-200 text-xs text-right">
+                        Rp ${val.toLocaleString('id-ID')} <span class="text-slate-500 font-normal text-[10px] ml-1">(${pct}%)</span>
+                    </div>
+                </div>`;
+            }).join('');
         }
     </script>
 </body>
