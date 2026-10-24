@@ -1079,66 +1079,57 @@
                 </div>
             </section>
 
-            <!-- TAB 3: BELANJA BULANAN (POSTNATAL) -->
+           <!-- TAB 3: BELANJA BULANAN (POSTNATAL) -->
             <section id="sec-post-belanja" class="hidden space-y-6">
                 <!-- NAVIGASI BULAN, WIDGET TENGAH, & BUDGET -->
-                <div class="bg-[#1e293b] p-4 rounded-2xl shadow-sm border border-slate-700 flex flex-col md:flex-row justify-between items-center gap-4">
-                    
-                    <!-- Kiri: Navigasi Bulan -->
+                <div class="bg-white dark:bg-[#1e293b] p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div class="flex items-center gap-3 shrink-0">
-                        <button onclick="changeShoppingMonth(-1)" class="w-8 h-8 flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-full transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                        <div class="flex flex-col items-center px-4 py-1 bg-sky-900/30 rounded-xl border border-sky-700/50">
-                            <span class="text-[10px] font-bold text-sky-400 uppercase tracking-wider">Periode Belanja</span>
-                            <span id="display-shopping-month" class="font-bold text-sky-100 text-sm">--</span>
+                        <button onclick="changeShoppingMonth(-1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded-full transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <div class="flex flex-col items-center px-4 py-1 bg-sky-50 dark:bg-sky-900/30 rounded-xl border border-sky-200 dark:border-sky-700/50">
+                            <span class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-wider">Periode Belanja</span>
+                            <span id="display-shopping-month" class="font-bold text-sky-900 dark:text-sky-100 text-sm">--</span>
                         </div>
-                        <button onclick="changeShoppingMonth(1)" class="w-8 h-8 flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-full transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                        <button onclick="changeShoppingMonth(1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded-full transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
 
-                    <!-- Tengah: Widget Sisa Anggaran & Progress -->
                     <div class="hidden md:flex flex-1 items-center justify-center gap-6 px-4">
                         <div class="flex flex-col items-center">
-                            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-1">Sisa Anggaran</span>
-                            <div class="bg-[#0f172a] px-4 py-1 rounded-lg border border-slate-700 shadow-inner">
-                                <span id="post-top-sisa" class="font-bold text-emerald-400 text-sm">Rp 0</span>
+                            <span class="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-1">Sisa Anggaran</span>
+                            <div class="bg-slate-50 dark:bg-[#0f172a] px-4 py-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-inner">
+                                <span id="post-top-sisa" class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">Rp 0</span>
                             </div>
                         </div>
-                        
-                        <div class="h-8 w-px bg-slate-700"></div>
-
+                        <div class="h-8 w-px bg-slate-200 dark:bg-slate-700"></div>
                         <div class="flex flex-col items-center min-w-[140px]">
-                            <div class="flex justify-between w-full text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-1">
-                                <span>Checklist</span>
-                                <span id="post-top-progress-text">0 / 0</span>
+                            <div class="flex justify-between w-full text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-1">
+                                <span>Checklist</span><span id="post-top-progress-text">0 / 0</span>
                             </div>
-                            <div class="w-full bg-[#0f172a] rounded-full h-2 border border-slate-700 overflow-hidden">
+                            <div class="w-full bg-slate-100 dark:bg-[#0f172a] rounded-full h-2 border border-slate-200 dark:border-slate-700 overflow-hidden">
                                 <div id="post-top-progress-bar" class="bg-sky-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Kanan: Target Anggaran -->
-                    <div class="flex items-center gap-3 bg-emerald-900/20 px-4 py-2 rounded-xl border border-emerald-700/30 shrink-0">
-                        <i class="fa-solid fa-wallet text-emerald-400"></i>
+                    <div class="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-900/20 px-4 py-2 rounded-xl border border-emerald-200 dark:border-emerald-700/30 shrink-0">
+                        <i class="fa-solid fa-wallet text-emerald-600 dark:text-emerald-400"></i>
                         <div class="flex flex-col">
-                            <label class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Target Anggaran</label>
+                            <label class="text-[10px] font-bold text-emerald-700 dark:text-emerald-500 uppercase tracking-wider">Target Anggaran</label>
                             <div class="flex items-center gap-1">
-                                <span class="text-emerald-300 font-bold text-sm">Rp</span>
-                                <input type="number" id="monthly-budget-input" onchange="saveMonthlyBudget()" class="bg-transparent border-b border-emerald-600/50 text-emerald-100 font-bold text-sm outline-none w-24 focus:border-emerald-400 transition" value="6000000">
+                                <span class="text-emerald-600 dark:text-emerald-300 font-bold text-sm">Rp</span>
+                                <input type="number" id="monthly-budget-input" onchange="saveMonthlyBudget()" class="bg-transparent border-b border-emerald-300 dark:border-emerald-600/50 text-emerald-800 dark:text-emerald-100 font-bold text-sm outline-none w-24 focus:border-emerald-500 dark:focus:border-emerald-400 transition" value="6000000">
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- KARTU 1: VISUALISASI CHART -->
-                <div class="bg-[#1a2332] rounded-2xl shadow-sm border border-slate-700/80 p-5">
+                <div class="bg-white dark:bg-[#1a2332] rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700/80 p-5">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                         <div>
-                            <h3 class="font-bold text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-chart-pie text-sky-400"></i> Visualisasi Pengeluaran Realisasi Per Kategori</h3>
-                            <p class="text-xs text-slate-400 mt-1">Pilih sub-menu untuk melihat proporsi pengeluaran yang telah dibeli</p>
+                            <h3 class="font-bold text-slate-800 dark:text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-chart-pie text-sky-500 dark:text-sky-400"></i> Visualisasi Pengeluaran Realisasi Per Kategori</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pilih sub-menu untuk melihat proporsi pengeluaran yang telah dibeli</p>
                         </div>
-                        <div id="post-chart-submenus" class="flex flex-wrap gap-2">
-                            <!-- Tombol Sub-Menu Chart di-render via JS -->
-                        </div>
+                        <div id="post-chart-submenus" class="flex flex-wrap gap-2"></div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                         <div class="flex justify-center"><canvas id="postShoppingChart" class="max-w-[240px] max-h-[240px]"></canvas></div>
@@ -1147,20 +1138,20 @@
                 </div>
 
                 <!-- KARTU 2: CHECKLIST & BUDGETING -->
-                <div class="bg-[#1a2332] rounded-2xl shadow-sm border border-slate-700/80 p-5">
+                <div class="bg-white dark:bg-[#1a2332] rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700/80 p-5">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                         <div>
-                            <h3 class="font-bold text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-slate-300"></i> Checklist & Budgeting Persiapan</h3>
-                            <p class="text-xs text-slate-400 mt-1">Realisasi hanya dihitung dari item yang sudah **dicentang (selesai dibeli)**</p>
+                            <h3 class="font-bold text-slate-800 dark:text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-slate-600 dark:text-slate-300"></i> Checklist & Budgeting Persiapan</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Realisasi hanya dihitung dari item yang sudah **dicentang (selesai dibeli)**</p>
                         </div>
                         <div class="flex gap-3">
-                            <div class="bg-[#1e293b] border border-slate-700 rounded-xl p-3 text-right">
-                                <div class="text-[10px] text-slate-400 uppercase">Realisasi Sub-Menu Ini</div>
-                                <div id="post-summary-realisasi" class="text-sky-400 font-bold text-sm">Rp 0</div>
+                            <div class="bg-slate-50 dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-right">
+                                <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Realisasi Sub-Menu Ini</div>
+                                <div id="post-summary-realisasi" class="text-sky-600 dark:text-sky-400 font-bold text-sm">Rp 0</div>
                             </div>
-                            <div class="bg-[#0f172a] border border-slate-700 rounded-xl p-3 text-right">
-                                <div class="text-[10px] text-slate-400 uppercase">Total Keseluruhan</div>
-                                <div id="post-summary-total" class="text-sky-400 font-bold text-sm">Rp 0</div>
+                            <div class="bg-slate-100 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-right">
+                                <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Total Keseluruhan</div>
+                                <div id="post-summary-total" class="text-sky-600 dark:text-sky-400 font-bold text-sm">Rp 0</div>
                             </div>
                         </div>
                     </div>
@@ -1168,17 +1159,13 @@
                     <!-- Filter & Sub Menu -->
                     <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
                         <div class="flex flex-wrap gap-2 items-center">
-                            <div id="post-list-submenus" class="flex flex-wrap gap-2 items-center">
-                                <!-- Tombol Sub-Menu Utama di-render via JS -->
-                            </div>
-                            <!-- Tombol Tambah Sub-Menu Baru -->
-                            <button onclick="promptNewPostSubmenu()" class="px-3 py-1.5 border border-sky-500/50 text-sky-400 hover:bg-sky-500/10 rounded-xl text-xs font-semibold transition flex items-center gap-1">
-                                <i class="fa-solid fa-plus"></i> Sub-Menu Baru
-                            </button>
+                            <div id="post-list-submenus" class="flex flex-wrap gap-2 items-center"></div>
+                            <button onclick="promptNewPostSubmenu()" class="px-3 py-1.5 border border-sky-500/50 text-sky-600 dark:text-sky-400 hover:bg-sky-50 dark:hover:bg-sky-500/10 rounded-xl text-xs font-semibold transition flex items-center gap-1"><i class="fa-solid fa-plus"></i> Sub-Menu Baru</button>
+                            <button id="btn-hapus-submenu" onclick="deleteActivePostSubmenu()" class="hidden px-3 py-1.5 border border-rose-500/50 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl text-xs font-semibold transition flex items-center gap-1"><i class="fa-solid fa-trash"></i> Hapus Sub-Menu</button>
                         </div>
                         <div class="flex items-center gap-3">
-                            <span class="text-xs text-slate-400"><i class="fa-solid fa-filter"></i> Filter Kategori:</span>
-                            <select id="post-filter-category" onchange="renderPostShopping()" class="bg-[#1e293b] text-xs text-slate-200 border border-slate-700 rounded-lg px-3 py-1.5 outline-none focus:border-sky-500">
+                            <span class="text-xs text-slate-500 dark:text-slate-400"><i class="fa-solid fa-filter"></i> Filter Kategori:</span>
+                            <select id="post-filter-category" onchange="renderPostShopping()" class="bg-slate-50 dark:bg-[#1e293b] text-xs text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 outline-none focus:border-sky-500">
                                 <option value="all">Semua Kategori</option>
                             </select>
                         </div>
@@ -1186,12 +1173,11 @@
 
                     <!-- Tombol Aksi Global -->
                     <div class="flex justify-end gap-2 mb-4">
-                        <button onclick="openPullPregnancyModal()" class="px-3 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-boxes-packing"></i> Tarik Barang Kehamilan</button>
+                        <button onclick="openPullPregnancyModal()" class="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-boxes-packing"></i> Tarik Barang Kehamilan</button>
                         <button onclick="openPostShoppingModal()" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-semibold transition shadow-sm"><i class="fa-solid fa-plus"></i> Tambah Barang</button>
                     </div>
 
-                    <!-- Header Tabel -->
-                    <div class="hidden md:grid grid-cols-12 gap-4 border-b border-slate-700 pb-2 mb-2 px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    <div class="hidden md:grid grid-cols-12 gap-4 border-b border-slate-200 dark:border-slate-700 pb-2 mb-2 px-2 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         <div class="col-span-2">STATUS</div>
                         <div class="col-span-3">BARANG / DETAIL</div>
                         <div class="col-span-1 text-center">JUMLAH</div>
@@ -1200,8 +1186,6 @@
                         <div class="col-span-1 text-right">AKTUAL (RP)</div>
                         <div class="col-span-1 text-center">AKSI</div>
                     </div>
-
-                    <!-- Container List -->
                     <div id="post-shopping-list-container" class="space-y-4 pb-4"></div>
                 </div>
             </section>
@@ -6126,11 +6110,12 @@
                         <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-slate-700 shadow-sm z-10 ${icons[log.category].split(' ').slice(1).join(' ')}">
                             <i class="fa-solid ${icons[log.category].split(' ')[0]} text-sm"></i>
                         </div>
-                        <div class="flex-1 bg-slate-800 hover:bg-slate-700/80 transition p-3 rounded-2xl border border-slate-700 shadow-sm relative">
+                        // TIMPA BARIS INI (Ganti bg-slate-800 menjadi bg-white dark:bg-slate-800 dst)
+                        <div class="flex-1 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 transition p-3 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm relative">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <div class="text-2xs font-bold text-sky-400 bg-sky-500/10 px-1.5 py-0.5 rounded uppercase mb-1 inline-block">${timeStr}</div>
-                                    <h4 class="font-bold text-slate-200 text-sm">${log.category} ${log.subCategory ? `<span class="font-medium text-slate-400">• ${log.subCategory}</span>` : ''}</h4>
+                                    <div class="text-2xs font-bold text-sky-600 dark:text-sky-400 bg-sky-100 dark:bg-sky-500/10 px-1.5 py-0.5 rounded uppercase mb-1 inline-block">${timeStr}</div>
+                                    <h4 class="font-bold text-slate-800 dark:text-slate-200 text-sm">${log.category} ${log.subCategory ? `<span class="font-medium text-slate-500 dark:text-slate-400">• ${log.subCategory}</span>` : ''}</h4>
                                     <p class="text-xs font-semibold text-slate-400 mt-0.5">${detailText}</p>
                                     ${log.notes ? `<p class="text-xs text-slate-400 italic mt-1 bg-slate-900/50 p-2 rounded-lg border border-slate-700/50">"${log.notes}"</p>` : ''}
                                 </div>
@@ -6272,7 +6257,7 @@
         let currentShoppingMonth = `${nowLocalShopping.getFullYear()}-${String(nowLocalShopping.getMonth() + 1).padStart(2, '0')}`;
         let postShoppingChartInstance = null;
         let currentPostSubmenu = 'Keseluruhan';
-        let postSubmenusList = ['Keperluan Baby', 'Keperluan Ibu', 'Aqiqah']; // Default Sub-menu
+        let postSubmenusList = []; // Default kosong
 
         // --- 1. NAVIGASI BULAN & BUDGET ---
         function changeShoppingMonth(offset) {
@@ -6303,6 +6288,18 @@
                 const cleanName = name.trim();
                 if (!postSubmenusList.includes(cleanName)) postSubmenusList.push(cleanName);
                 setPostSubmenu(cleanName);
+            }
+        }
+
+        function deleteActivePostSubmenu() {
+            if (currentPostSubmenu === 'Keseluruhan') return;
+            if (confirm(`Hapus Sub-Menu "${currentPostSubmenu}" beserta seluruh barang di dalamnya?`)) {
+                // Hapus barang-barangnya
+                appState.postnatalShopping = appState.postnatalShopping.filter(i => i.submenu !== currentPostSubmenu);
+                // Hapus dari list submenu
+                postSubmenusList = postSubmenusList.filter(sm => sm !== currentPostSubmenu);
+                setPostSubmenu('Keseluruhan');
+                saveToLocalStorage();
             }
         }
 
@@ -6506,6 +6503,11 @@
             };
             renderSubmenuBtns('post-chart-submenus');
             renderSubmenuBtns('post-list-submenus');
+
+            // Munculkan tombol hapus jika bukan menu keseluruhan
+            const btnHapus = document.getElementById('btn-hapus-submenu');
+            if (currentPostSubmenu !== 'Keseluruhan') btnHapus.classList.remove('hidden');
+            else btnHapus.classList.add('hidden');
 
             // Hitung Keuangan & Progress Global
             let totalActualMonth = 0, doneItems = 0;
