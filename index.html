@@ -1081,9 +1081,11 @@
 
             <!-- TAB 3: BELANJA BULANAN (POSTNATAL) -->
             <section id="sec-post-belanja" class="hidden space-y-6">
-                <!-- NAVIGASI BULAN & BUDGET -->
+                <!-- NAVIGASI BULAN, WIDGET TENGAH, & BUDGET -->
                 <div class="bg-[#1e293b] p-4 rounded-2xl shadow-sm border border-slate-700 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div class="flex items-center gap-3">
+                    
+                    <!-- Kiri: Navigasi Bulan -->
+                    <div class="flex items-center gap-3 shrink-0">
                         <button onclick="changeShoppingMonth(-1)" class="w-8 h-8 flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-full transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         <div class="flex flex-col items-center px-4 py-1 bg-sky-900/30 rounded-xl border border-sky-700/50">
                             <span class="text-[10px] font-bold text-sky-400 uppercase tracking-wider">Periode Belanja</span>
@@ -1092,7 +1094,30 @@
                         <button onclick="changeShoppingMonth(1)" class="w-8 h-8 flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-full transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
 
-                    <div class="flex items-center gap-3 bg-emerald-900/20 px-4 py-2 rounded-xl border border-emerald-700/30">
+                    <!-- Tengah: Widget Sisa Anggaran & Progress -->
+                    <div class="hidden md:flex flex-1 items-center justify-center gap-6 px-4">
+                        <div class="flex flex-col items-center">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-1">Sisa Anggaran</span>
+                            <div class="bg-[#0f172a] px-4 py-1 rounded-lg border border-slate-700 shadow-inner">
+                                <span id="post-top-sisa" class="font-bold text-emerald-400 text-sm">Rp 0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="h-8 w-px bg-slate-700"></div>
+
+                        <div class="flex flex-col items-center min-w-[140px]">
+                            <div class="flex justify-between w-full text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-1">
+                                <span>Checklist</span>
+                                <span id="post-top-progress-text">0 / 0</span>
+                            </div>
+                            <div class="w-full bg-[#0f172a] rounded-full h-2 border border-slate-700 overflow-hidden">
+                                <div id="post-top-progress-bar" class="bg-sky-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kanan: Target Anggaran -->
+                    <div class="flex items-center gap-3 bg-emerald-900/20 px-4 py-2 rounded-xl border border-emerald-700/30 shrink-0">
                         <i class="fa-solid fa-wallet text-emerald-400"></i>
                         <div class="flex flex-col">
                             <label class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Target Anggaran</label>
