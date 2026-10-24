@@ -1081,10 +1081,55 @@
 
             <!-- TAB 3: BELANJA BULANAN -->
             <section id="sec-post-belanja" class="hidden space-y-6">
-                <div class="p-8 bg-white rounded-3xl border border-slate-100 text-center space-y-3 shadow-sm">
-                    <div class="text-4xl opacity-50">🛒</div>
-                    <h3 class="font-bold text-slate-700">Restock Belanja Bulanan</h3>
-                    <p class="text-xs text-slate-500">Area tracker pengeluaran popok & susu dengan fitur "Beli Lagi" akan segera dibangun.</p>
+                <!-- NAVIGASI BULAN & BUDGET -->
+                <div class="bg-slate-800 p-4 rounded-3xl shadow-sm border border-slate-700 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="flex items-center gap-3 w-full md:w-auto justify-center">
+                        <button onclick="changeShoppingMonth(-1)" class="w-8 h-8 flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-full transition"><i class="fa-solid fa-chevron-left"></i></button>
+                        <div class="flex flex-col items-center px-4 py-1 bg-sky-500/10 rounded-xl border border-sky-500/20">
+                            <span class="text-3xs font-bold text-sky-400 uppercase tracking-wider">Periode Belanja</span>
+                            <span id="display-shopping-month" class="font-bold text-sky-100 text-sm">--</span>
+                        </div>
+                        <button onclick="changeShoppingMonth(1)" class="w-8 h-8 flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-full transition"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+
+                    <div class="flex items-center gap-3 w-full md:w-auto justify-center bg-emerald-500/10 px-4 py-2.5 rounded-2xl border border-emerald-500/20">
+                        <i class="fa-solid fa-wallet text-emerald-400 text-lg"></i>
+                        <div class="flex flex-col">
+                            <label class="text-3xs font-bold text-emerald-400 uppercase tracking-wider">Target Anggaran</label>
+                            <div class="flex items-center gap-1">
+                                <span class="text-emerald-200 font-bold text-sm">Rp</span>
+                                <input type="number" id="monthly-budget-input" onchange="saveMonthlyBudget()" class="bg-transparent border-b border-emerald-500/50 text-emerald-100 font-bold text-sm outline-none w-24 focus:border-emerald-300 transition" value="6000000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RINGKASAN & CHART -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-slate-800 p-5 rounded-3xl shadow-sm border border-slate-700 flex flex-col justify-center">
+                        <h3 class="font-bold text-slate-200 text-sm mb-4 border-b border-slate-700 pb-2">📊 Realisasi Budget Bulan Ini</h3>
+                        <div id="post-shopping-summary" class="space-y-3">
+                            <!-- Diisi via JS -->
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-3xl shadow-sm border border-slate-700 flex items-center justify-center min-h-[200px]">
+                        <canvas id="postShoppingChart" class="max-w-[200px] max-h-[200px]"></canvas>
+                    </div>
+                </div>
+
+                <!-- TOMBOL AKSI -->
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <button onclick="openPullPregnancyModal()" class="w-full sm:w-auto px-4 py-2.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 rounded-xl font-semibold text-xs transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-boxes-packing"></i> Tarik Barang Kehamilan
+                    </button>
+                    <button onclick="openPostShoppingModal()" class="w-full sm:w-auto px-4 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-semibold text-xs transition shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Tambah Barang
+                    </button>
+                </div>
+
+                <!-- DAFTAR BELANJA -->
+                <div id="post-shopping-list-container" class="space-y-6 pb-10">
+                    <!-- Di-render via JS -->
                 </div>
             </section>
 
@@ -2004,6 +2049,71 @@
         </div>
     </div>
 
+    <!-- MODAL: TAMBAH/EDIT BELANJA BULANAN -->
+    <div id="modal-post-shopping" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
+        <div class="bg-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-700 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closePostShoppingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-200 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="modal-post-shopping-title" class="text-lg font-bold text-slate-200">Tambah Barang</h2>
+
+            <form id="post-shopping-form" onsubmit="savePostShoppingItem(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="form-ps-id">
+                
+                <div>
+                    <label class="font-semibold text-slate-300">Nama Barang</label>
+                    <input type="text" id="form-ps-name" required placeholder="misal: Popok Merries Nb" class="w-full mt-1 p-2 bg-slate-900/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none text-slate-200">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="font-semibold text-slate-300">Kategori Baru / Ada</label>
+                        <input type="text" id="form-ps-category" required placeholder="misal: Popok" class="w-full mt-1 p-2 bg-slate-900/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none text-slate-200">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-300">Sifat Barang</label>
+                        <select id="form-ps-type" class="w-full mt-1 p-2 bg-slate-900/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none text-slate-200">
+                            <option value="Sekali Beli">1️⃣ Sekali Beli</option>
+                            <option value="Habis Pakai">🔄 Habis Pakai</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="font-semibold text-slate-300">Harga Satuan (Rp)</label>
+                        <input type="number" id="form-ps-price" required placeholder="0" class="w-full mt-1 p-2 bg-slate-900/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none text-slate-200">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-300">Jumlah (Qty)</label>
+                        <input type="number" id="form-ps-qty" required value="1" min="1" class="w-full mt-1 p-2 bg-slate-900/50 border border-slate-700 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none text-slate-200">
+                    </div>
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closePostShoppingModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-xl">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-xl shadow-sm">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: TARIK BARANG KEHAMILAN -->
+    <div id="modal-pull-pregnancy" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
+        <div class="bg-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-700 relative max-h-[80vh] flex flex-col">
+            <button onclick="closePullPregnancyModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-200 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            <h2 class="text-lg font-bold text-slate-200">Tarik Barang Hamil</h2>
+            <p class="text-xs text-slate-400">Pilih barang yang belum terbeli dari fase sebelumnya untuk dipindah ke bulan ini.</p>
+            
+            <div id="pull-pregnancy-list" class="flex-1 overflow-y-auto space-y-3 pr-2 py-2 border-t border-b border-slate-700">
+                <!-- Render via JS -->
+            </div>
+
+            <div class="pt-2 flex justify-end gap-2">
+                <button type="button" onclick="closePullPregnancyModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-xl text-xs">Batal</button>
+                <button onclick="executePullPregnancy()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-sm text-xs">Tarik Terpilih</button>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // 1. Konfigurasi Firebase milikmu
@@ -2345,6 +2455,7 @@
             if (typeof renderReferences === 'function') renderReferences(); // <-- Referensi ditambahkan di sini
             if (typeof renderDailyLogs === 'function') renderDailyLogs();
             if (typeof updateWakeWindow === 'function') updateWakeWindow();
+            if (typeof renderPostShopping === 'function') renderPostShopping();
         };
 
         // HELPER: GDRIVE LINK CONVERTER
@@ -5581,6 +5692,7 @@
           if (typeof renderBabyProfile === 'function') renderBabyProfile();
           if (typeof renderDailyLogs === 'function') renderDailyLogs();
           if (typeof updateWakeWindow === 'function') updateWakeWindow();
+          if (typeof renderPostShopping === 'function') renderPostShopping();
         }
 
         // FUNGSI PENYIMPANAN KE FIREBASE
@@ -6051,7 +6163,314 @@
             display.innerText = `${Math.floor(diffMins / 60)} Jam ${diffMins % 60} Menit`;
         }
 
-        // Jangan lupa panggil renderDailyLogs dan updateWakeWindow saat refreshAllViews berjalan
+        // ==========================================
+        // BELANJA BULANAN & RESTOCK POSTNATAL
+        // ==========================================
+        const nowLocalShopping = new Date();
+        let currentShoppingMonth = `${nowLocalShopping.getFullYear()}-${String(nowLocalShopping.getMonth() + 1).padStart(2, '0')}`;
+        let postShoppingChartInstance = null;
+
+        function changeShoppingMonth(offset) {
+            const [year, month] = currentShoppingMonth.split('-');
+            let d = new Date(year, month - 1 + offset, 1);
+            currentShoppingMonth = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+            renderPostShopping();
+        }
+
+        function saveMonthlyBudget() {
+            const val = document.getElementById('monthly-budget-input').value;
+            if (!appState.postnatalBudgets) appState.postnatalBudgets = {};
+            appState.postnatalBudgets[currentShoppingMonth] = Number(val) || 6000000; // Default 6 Juta
+            saveToLocalStorage();
+            renderPostShopping();
+        }
+
+        function openPostShoppingModal(id = null) {
+            document.getElementById('post-shopping-form').reset();
+            document.getElementById('form-ps-id').value = id || '';
+            document.getElementById('modal-post-shopping-title').innerText = id ? 'Edit Barang' : 'Tambah Barang';
+
+            if (id) {
+                const item = appState.postnatalShopping.find(i => i.id === id);
+                if (item) {
+                    document.getElementById('form-ps-name').value = item.name;
+                    document.getElementById('form-ps-category').value = item.category;
+                    document.getElementById('form-ps-type').value = item.type || 'Sekali Beli';
+                    document.getElementById('form-ps-price').value = item.price;
+                    document.getElementById('form-ps-qty').value = item.qty;
+                }
+            }
+            document.getElementById('modal-post-shopping').classList.remove('hidden');
+        }
+
+        function closePostShoppingModal() {
+            document.getElementById('modal-post-shopping').classList.add('hidden');
+        }
+
+        function savePostShoppingItem(e) {
+            e.preventDefault();
+            const id = document.getElementById('form-ps-id').value;
+            if (!appState.postnatalShopping) appState.postnatalShopping = [];
+            
+            let item = {
+                id: id ? Number(id) : Date.now(),
+                period: id ? appState.postnatalShopping.find(i => i.id == id).period : currentShoppingMonth, // Kunci ke bulan aktif
+                name: document.getElementById('form-ps-name').value,
+                category: document.getElementById('form-ps-category').value,
+                type: document.getElementById('form-ps-type').value,
+                price: Number(document.getElementById('form-ps-price').value) || 0,
+                qty: Number(document.getElementById('form-ps-qty').value) || 1,
+                done: id ? appState.postnatalShopping.find(i => i.id == id).done : false,
+                purchasedAt: id ? appState.postnatalShopping.find(i => i.id == id).purchasedAt : null
+            };
+
+            if (id) {
+                const idx = appState.postnatalShopping.findIndex(i => i.id == id);
+                appState.postnatalShopping[idx] = item;
+            } else {
+                appState.postnatalShopping.push(item);
+            }
+            
+            closePostShoppingModal();
+            saveToLocalStorage();
+            renderPostShopping();
+        }
+
+        function deletePostShoppingItem(id) {
+            if (confirm('Hapus barang ini dari daftar?')) {
+                appState.postnatalShopping = appState.postnatalShopping.filter(i => i.id !== id);
+                saveToLocalStorage();
+                renderPostShopping();
+            }
+        }
+
+        function togglePostShoppingStatus(id, isChecked) {
+            const item = appState.postnatalShopping.find(i => i.id === id);
+            if (item) {
+                item.done = isChecked;
+                // Suntikkan Timestamp Tanggal Beli
+                item.purchasedAt = isChecked ? new Date().toISOString().slice(0, 10) : null;
+                saveToLocalStorage();
+                renderPostShopping();
+            }
+        }
+
+        function buyAgainPostShopping(id) {
+            const oldItem = appState.postnatalShopping.find(i => i.id === id);
+            if (!oldItem) return;
+            // Buka Modal dengan data lama, TAPI id dikosongkan agar jadi barang baru
+            openPostShoppingModal();
+            document.getElementById('form-ps-name').value = oldItem.name;
+            document.getElementById('form-ps-category').value = oldItem.category;
+            document.getElementById('form-ps-type').value = oldItem.type;
+            document.getElementById('form-ps-price').value = oldItem.price;
+            document.getElementById('form-ps-qty').value = oldItem.qty;
+            document.getElementById('form-ps-id').value = '';
+        }
+
+        // --- SISTEM TARIK BARANG KEHAMILAN ---
+        function openPullPregnancyModal() {
+            const listCont = document.getElementById('pull-pregnancy-list');
+            if (!appState.shoppingItems || appState.shoppingItems.length === 0) {
+                listCont.innerHTML = `<div class="text-xs text-slate-400 p-4 text-center">Tidak ada data belanja dari fase kehamilan.</div>`;
+            } else {
+                const pending = appState.shoppingItems.filter(i => !i.done);
+                if (pending.length === 0) {
+                    listCont.innerHTML = `<div class="text-xs text-slate-400 p-4 text-center">Yeay! Semua barang kehamilan sudah terbeli! 🎉</div>`;
+                } else {
+                    listCont.innerHTML = pending.map(i => `
+                        <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition group">
+                            <input type="checkbox" value="${i.id}" class="pull-item-cb w-4 h-4 rounded text-indigo-500 focus:ring-indigo-500 bg-slate-800 border-slate-600">
+                            <div class="flex-1">
+                                <div class="font-semibold text-slate-200">${i.name}</div>
+                                <div class="text-2xs text-slate-400">${i.category || 'Umum'} • Rp ${(i.price || 0).toLocaleString('id-ID')}</div>
+                            </div>
+                        </label>
+                    `).join('');
+                }
+            }
+            document.getElementById('modal-pull-pregnancy').classList.remove('hidden');
+        }
+
+        function closePullPregnancyModal() {
+            document.getElementById('modal-pull-pregnancy').classList.add('hidden');
+        }
+
+        function executePullPregnancy() {
+            const cbs = document.querySelectorAll('.pull-item-cb:checked');
+            if (cbs.length === 0) {
+                closePullPregnancyModal();
+                return;
+            }
+            if (!appState.postnatalShopping) appState.postnatalShopping = [];
+            
+            cbs.forEach(cb => {
+                const oldId = Number(cb.value);
+                const oldItem = appState.shoppingItems.find(i => i.id === oldId);
+                if (oldItem) {
+                    // Hapus dari memori kehamilan
+                    appState.shoppingItems = appState.shoppingItems.filter(i => i.id !== oldId);
+                    // Pindah ke memori bulan aktif bayi lahir
+                    appState.postnatalShopping.push({
+                        id: Date.now() + Math.random(), // id baru
+                        period: currentShoppingMonth, // bulan yang sedang aktif
+                        name: oldItem.name,
+                        category: oldItem.category || 'Pindahan Kehamilan',
+                        type: 'Sekali Beli', // Default non-restock
+                        price: oldItem.price || 0,
+                        qty: oldItem.qty || 1,
+                        done: false,
+                        purchasedAt: null
+                    });
+                }
+            });
+            closePullPregnancyModal();
+            saveToLocalStorage();
+            if (typeof renderShoppingItems === 'function') renderShoppingItems(); // Update layar kehamilan
+            renderPostShopping();
+        }
+
+        // --- RENDER UTAMA ---
+        function renderPostShopping() {
+            if (!appState.postnatalBudgets) appState.postnatalBudgets = {};
+            if (!appState.postnatalShopping) appState.postnatalShopping = [];
+
+            // 1. Tampilkan Kalender Bulan
+            const [year, month] = currentShoppingMonth.split('-');
+            const date = new Date(year, month - 1);
+            document.getElementById('display-shopping-month').innerText = date.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+
+            // 2. Tampilkan Target Budget (Bisa diedit)
+            let budget = appState.postnatalBudgets[currentShoppingMonth];
+            if (budget === undefined) budget = 6000000;
+            document.getElementById('monthly-budget-input').value = budget;
+
+            // 3. Ekstrak Data Khusus Bulan Ini Saja
+            const monthItems = appState.postnatalShopping.filter(i => i.period === currentShoppingMonth);
+            
+            // 4. Kalkulasi Keuangan
+            let spent = 0, totalItems = monthItems.length, doneItems = 0;
+            let categoryData = {}; // Data untuk Pie Chart
+
+            monthItems.forEach(item => {
+                if (item.done) {
+                    const cost = item.price * item.qty;
+                    spent += cost;
+                    doneItems++;
+                    
+                    if (!categoryData[item.category]) categoryData[item.category] = 0;
+                    categoryData[item.category] += cost;
+                }
+            });
+
+            const remaining = budget - spent;
+            const pSpent = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
+
+            // 5. Render Ringkasan Progress Bar
+            document.getElementById('post-shopping-summary').innerHTML = `
+                <div class="flex justify-between items-end mb-2">
+                    <div>
+                        <div class="text-xs text-slate-400">Total Terpakai</div>
+                        <div class="font-bold text-lg text-slate-200">Rp ${spent.toLocaleString('id-ID')}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-slate-400">Sisa Anggaran</div>
+                        <div class="font-bold text-sm ${remaining < 0 ? 'text-rose-400' : 'text-emerald-400'}">Rp ${remaining.toLocaleString('id-ID')}</div>
+                    </div>
+                </div>
+                <div class="w-full bg-slate-700 rounded-full h-2.5 mb-1 overflow-hidden">
+                    <div class="h-full rounded-full transition-all duration-500 ${pSpent > 90 ? 'bg-rose-500' : 'bg-sky-500'}" style="width: ${pSpent}%"></div>
+                </div>
+                <div class="text-2xs text-slate-400 text-right">${doneItems} dari ${totalItems} barang terbeli</div>
+            `;
+
+            // 6. Render Pie Chart
+            renderPostShoppingChart(categoryData);
+
+            // 7. Render Daftar Barang (Kategori & Status)
+            const listCont = document.getElementById('post-shopping-list-container');
+            if (monthItems.length === 0) {
+                listCont.innerHTML = `<div class="text-center py-10 text-slate-400 text-sm italic">Belum ada daftar belanja untuk periode ini.</div>`;
+            } else {
+                monthItems.sort((a, b) => {
+                    if (a.category !== b.category) return a.category.localeCompare(b.category);
+                    return (a.done === b.done) ? 0 : a.done ? 1 : -1;
+                });
+
+                let html = '';
+                let currentCat = '';
+                monthItems.forEach(item => {
+                    if (item.category !== currentCat) {
+                        html += `<h4 class="font-bold text-slate-300 text-sm mt-6 mb-3 border-b border-slate-700 pb-1 flex items-center gap-2"><i class="fa-solid fa-tag text-sky-400"></i> ${item.category}</h4>`;
+                        currentCat = item.category;
+                    }
+
+                    const cost = item.price * item.qty;
+                    const isHabisPakai = item.type === 'Habis Pakai';
+                    
+                    html += `
+                        <div class="flex items-center gap-4 bg-slate-800 p-4 rounded-2xl border ${item.done ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-slate-700'} shadow-sm transition group mb-3">
+                            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="togglePostShoppingStatus(${item.id}, this.checked)" class="w-5 h-5 rounded text-emerald-500 focus:ring-emerald-500 bg-slate-900 border-slate-600 cursor-pointer shrink-0">
+                            
+                            <div class="flex-1 min-w-0">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <div class="font-semibold truncate ${item.done ? 'line-through text-slate-500' : 'text-slate-200'}">${item.name}</div>
+                                    ${isHabisPakai ? `<span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.5 rounded-md flex-shrink-0"><i class="fa-solid fa-rotate"></i> Habis Pakai</span>` : ''}
+                                </div>
+                                <div class="text-xs text-slate-400 mt-0.5">Rp ${item.price.toLocaleString('id-ID')} x ${item.qty} = <span class="font-medium text-slate-300">Rp ${cost.toLocaleString('id-ID')}</span></div>
+                                ${item.purchasedAt ? `<div class="text-3xs text-emerald-400/80 mt-1"><i class="fa-solid fa-check-double"></i> Dibeli ${new Date(item.purchasedAt).toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'})}</div>` : ''}
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-2 shrink-0">
+                                ${(item.done && isHabisPakai) ? `<button onclick="buyAgainPostShopping(${item.id})" class="p-2 text-xs bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 rounded-xl transition" title="Beli Lagi Bulan Ini"><i class="fa-solid fa-cart-plus"></i> Restock</button>` : ''}
+                                <div class="flex gap-1 justify-end">
+                                    <button onclick="openPostShoppingModal(${item.id})" class="p-2 text-slate-400 hover:text-sky-400 transition" title="Edit"><i class="fa-solid fa-pen text-xs"></i></button>
+                                    <button onclick="deletePostShoppingItem(${item.id})" class="p-2 text-slate-400 hover:text-rose-400 transition" title="Hapus"><i class="fa-solid fa-trash text-xs"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                listCont.innerHTML = html;
+            }
+        }
+
+        // Fungsi Render Pie Chart Dark Mode
+        function renderPostShoppingChart(catData) {
+            const ctx = document.getElementById('postShoppingChart');
+            if (!ctx) return;
+            
+            const labels = Object.keys(catData);
+            const data = Object.values(catData);
+            
+            if (postShoppingChartInstance) postShoppingChartInstance.destroy();
+
+            if (labels.length === 0) {
+                 postShoppingChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: { labels: ['Belum ada pengeluaran'], datasets: [{ data: [1], backgroundColor: ['#334155'], borderWidth: 0 }] },
+                    options: { responsive: true, cutout: '75%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+                });
+                return;
+            }
+
+            const colors = ['#38bdf8', '#fb7185', '#34d399', '#fbbf24', '#c084fc', '#818cf8', '#f87171', '#4ade80'];
+            postShoppingChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{ data: data, backgroundColor: colors, borderColor: '#1e293b', borderWidth: 2 }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 10 } } },
+                        tooltip: { callbacks: { label: function(c) { return ' Rp ' + c.parsed.toLocaleString('id-ID'); } } }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
