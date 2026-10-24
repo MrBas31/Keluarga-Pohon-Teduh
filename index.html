@@ -6112,21 +6112,21 @@
 
                 return `
                     <div class="relative flex items-start gap-4 group z-10">
-                        <div class="absolute left-5 -translate-x-px md:mx-auto md:translate-x-0 h-full w-px bg-slate-300 dark:bg-slate-700 top-8 group-last:hidden"></div>
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-slate-300 dark:border-slate-700 shadow-sm z-10 ${icons[log.category].split(' ').slice(1).join(' ')}">
+                        <div class="absolute left-5 -translate-x-px md:mx-auto md:translate-x-0 h-full w-px bg-slate-300 top-8 group-last:hidden"></div>
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-slate-300 shadow-sm z-10 ${icons[log.category].split(' ').slice(1).join(' ')}">
                             <i class="fa-solid ${icons[log.category].split(' ')[0]} text-sm"></i>
                         </div>
-                        <div class="flex-1 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 transition p-3 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm relative">
+                        <div class="flex-1 bg-white hover:bg-slate-50 transition p-3 rounded-2xl border border-slate-200 shadow-sm relative">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <div class="text-2xs font-bold text-sky-600 dark:text-sky-400 bg-sky-100 dark:bg-sky-500/10 px-1.5 py-0.5 rounded uppercase mb-1 inline-block">${timeStr}</div>
-                                    <h4 class="font-bold text-slate-800 dark:text-slate-200 text-sm">${log.category} ${log.subCategory ? `<span class="font-medium text-slate-500 dark:text-slate-400">• ${log.subCategory}</span>` : ''}</h4>
-                                    <p class="text-xs font-semibold text-slate-600 dark:text-slate-400 mt-0.5">${detailText}</p>
-                                    ${log.notes ? `<p class="text-xs text-slate-500 dark:text-slate-400 italic mt-1 bg-slate-50 dark:bg-slate-900/50 p-2 rounded-lg border border-slate-200 dark:border-slate-700/50">"${log.notes}"</p>` : ''}
+                                    <div class="text-2xs font-bold text-sky-600 bg-sky-100 px-1.5 py-0.5 rounded uppercase mb-1 inline-block">${timeStr}</div>
+                                    <h4 class="font-bold text-slate-800 text-sm">${log.category} ${log.subCategory ? `<span class="font-medium text-slate-500">• ${log.subCategory}</span>` : ''}</h4>
+                                    <p class="text-xs font-semibold text-slate-600 mt-0.5">${detailText}</p>
+                                    ${log.notes ? `<p class="text-xs text-slate-500 italic mt-1 bg-slate-50 p-2 rounded-lg border border-slate-200">"${log.notes}"</p>` : ''}
                                 </div>
                                 <div class="flex gap-1 shrink-0">
-                                    <button onclick="openLogModal('${log.category}', ${log.id})" class="p-1.5 text-slate-400 hover:text-sky-500 dark:hover:text-sky-400 transition"><i class="fa-solid fa-pen text-xs"></i></button>
-                                    <button onclick="deleteDailyLog(${log.id})" class="p-1.5 text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                                    <button onclick="openLogModal('${log.category}', ${log.id})" class="p-1.5 text-slate-400 hover:text-sky-500 transition"><i class="fa-solid fa-pen text-xs"></i></button>
+                                    <button onclick="deleteDailyLog(${log.id})" class="p-1.5 text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash text-xs"></i></button>
                                 </div>
                             </div>
                         </div>
