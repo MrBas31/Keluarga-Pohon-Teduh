@@ -1109,7 +1109,7 @@
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                         <div>
                             <h3 class="font-bold text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-chart-pie text-sky-400"></i> Visualisasi Pengeluaran Realisasi Per Kategori</h3>
-                            <p class="text-xs text-slate-400 mt-1">Pilih sub-menu untuk melihat proporsi pengeluaran yang telah dibeli[cite: 4]</p>
+                            <p class="text-xs text-slate-400 mt-1">Pilih sub-menu untuk melihat proporsi pengeluaran yang telah dibeli</p>
                         </div>
                         <div id="post-chart-submenus" class="flex flex-wrap gap-2">
                             <!-- Tombol Sub-Menu Chart di-render via JS -->
@@ -1126,15 +1126,15 @@
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                         <div>
                             <h3 class="font-bold text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-slate-300"></i> Checklist & Budgeting Persiapan</h3>
-                            <p class="text-xs text-slate-400 mt-1">Realisasi hanya dihitung dari item yang sudah **dicentang (selesai dibeli)**[cite: 6]</p>
+                            <p class="text-xs text-slate-400 mt-1">Realisasi hanya dihitung dari item yang sudah **dicentang (selesai dibeli)**</p>
                         </div>
                         <div class="flex gap-3">
                             <div class="bg-[#1e293b] border border-slate-700 rounded-xl p-3 text-right">
-                                <div class="text-[10px] text-slate-400 uppercase">Realisasi Sub-Menu Ini[cite: 6]</div>
+                                <div class="text-[10px] text-slate-400 uppercase">Realisasi Sub-Menu Ini</div>
                                 <div id="post-summary-realisasi" class="text-sky-400 font-bold text-sm">Rp 0</div>
                             </div>
                             <div class="bg-[#0f172a] border border-slate-700 rounded-xl p-3 text-right">
-                                <div class="text-[10px] text-slate-400 uppercase">Total Keseluruhan[cite: 6]</div>
+                                <div class="text-[10px] text-slate-400 uppercase">Total Keseluruhan</div>
                                 <div id="post-summary-total" class="text-sky-400 font-bold text-sm">Rp 0</div>
                             </div>
                         </div>
@@ -1142,11 +1142,17 @@
 
                     <!-- Filter & Sub Menu -->
                     <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-                        <div id="post-list-submenus" class="flex flex-wrap gap-2 items-center">
-                            <!-- Tombol Sub-Menu (Keperluan Baby, Ibu, dll) & + Sub-Menu Baru di-render via JS[cite: 6] -->
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div id="post-list-submenus" class="flex flex-wrap gap-2 items-center">
+                                <!-- Tombol Sub-Menu Utama di-render via JS -->
+                            </div>
+                            <!-- Tombol Tambah Sub-Menu Baru -->
+                            <button onclick="promptNewPostSubmenu()" class="px-3 py-1.5 border border-sky-500/50 text-sky-400 hover:bg-sky-500/10 rounded-xl text-xs font-semibold transition flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i> Sub-Menu Baru
+                            </button>
                         </div>
                         <div class="flex items-center gap-3">
-                            <span class="text-xs text-slate-400"><i class="fa-solid fa-filter"></i> Filter Kategori:[cite: 6]</span>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-filter"></i> Filter Kategori:</span>
                             <select id="post-filter-category" onchange="renderPostShopping()" class="bg-[#1e293b] text-xs text-slate-200 border border-slate-700 rounded-lg px-3 py-1.5 outline-none focus:border-sky-500">
                                 <option value="all">Semua Kategori</option>
                             </select>
@@ -1161,13 +1167,13 @@
 
                     <!-- Header Tabel -->
                     <div class="hidden md:grid grid-cols-12 gap-4 border-b border-slate-700 pb-2 mb-2 px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        <div class="col-span-2">STATUS[cite: 6]</div>
-                        <div class="col-span-3">BARANG / DETAIL[cite: 6]</div>
-                        <div class="col-span-1 text-center">JUMLAH[cite: 6]</div>
-                        <div class="col-span-2 text-center">LINK ONLINE / TOKO OFFLINE[cite: 6]</div>
-                        <div class="col-span-2 text-right">ESTIMASI (RP)[cite: 6]</div>
-                        <div class="col-span-1 text-right">AKTUAL (RP)[cite: 6]</div>
-                        <div class="col-span-1 text-center">AKSI[cite: 6]</div>
+                        <div class="col-span-2">STATUS</div>
+                        <div class="col-span-3">BARANG / DETAIL</div>
+                        <div class="col-span-1 text-center">JUMLAH</div>
+                        <div class="col-span-2 text-center">LINK ONLINE / TOKO OFFLINE</div>
+                        <div class="col-span-2 text-right">ESTIMASI (RP)</div>
+                        <div class="col-span-1 text-right">AKTUAL (RP)</div>
+                        <div class="col-span-1 text-center">AKSI</div>
                     </div>
 
                     <!-- Container List -->
@@ -2095,42 +2101,42 @@
     <div id="modal-post-shopping" class="fixed inset-0 bg-[#0f172a]/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
         <div class="bg-[#1e293b] rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-700 relative max-h-[90vh] overflow-y-auto">
             <button onclick="closePostShoppingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-200 text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <h2 id="modal-post-shopping-title" class="text-lg font-bold text-slate-200">Tambah Item Belanja Baru[cite: 5]</h2>
+            <h2 id="modal-post-shopping-title" class="text-lg font-bold text-slate-200">Tambah Item Belanja Baru</h2>
 
             <form id="post-shopping-form" onsubmit="savePostShoppingItem(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="form-ps-id">
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="font-bold text-slate-300">Sub-Menu Utama[cite: 5]</label>
+                        <label class="font-bold text-slate-300">Sub-Menu Utama</label>
                         <select id="form-ps-submenu" required class="w-full mt-1 p-2.5 bg-[#0f172a] border border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-200">
+                            <!-- Opsi Sub-menu akan diisi otomatis via JS agar sinkron dengan yang kamu buat -->
                             <option value="Keperluan Baby">👶 Keperluan Baby</option>
                             <option value="Keperluan Ibu">🤰 Keperluan Ibu</option>
-                            <option value="Aqiqah">📁 Aqiqah</option>
                         </select>
                     </div>
                     <div>
-                        <label class="font-bold text-slate-300">Kategori Barang[cite: 5]</label>
+                        <label class="font-bold text-slate-300">Kategori Barang</label>
                         <input type="text" id="form-ps-category" required placeholder="misal: Pakaian, Alat Mandi" class="w-full mt-1 p-2.5 bg-[#0f172a] border border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-200">
                     </div>
                 </div>
 
                 <div>
-                    <label class="font-bold text-slate-300">Nama Barang / Detail[cite: 5]</label>
+                    <label class="font-bold text-slate-300">Nama Barang / Detail</label>
                     <input type="text" id="form-ps-name" required placeholder="misal: Baju Kurung Newborn" class="w-full mt-1 p-2.5 bg-[#0f172a] border border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-200">
                 </div>
 
                 <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <label class="font-bold text-slate-300">Jumlah (Qty)[cite: 5]</label>
+                        <label class="font-bold text-slate-300">Jumlah (Qty)</label>
                         <input type="text" id="form-ps-qty" required placeholder="misal: 3 set / 1 pcs" class="w-full mt-1 p-2.5 bg-[#0f172a] border border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-200">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-300">Brand / Merek[cite: 5]</label>
+                        <label class="font-bold text-slate-300">Brand / Merek</label>
                         <input type="text" id="form-ps-brand" placeholder="misal: Velvet Junior" class="w-full mt-1 p-2.5 bg-[#0f172a] border border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-200">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-300 text-amber-400">Sifat Barang (Restock)</label>
+                        <label class="font-bold text-slate-300 text-amber-400">Sifat (Restock)</label>
                         <select id="form-ps-type" class="w-full mt-1 p-2.5 bg-[#0f172a] border border-slate-700 rounded-xl focus:border-amber-500 outline-none text-slate-200">
                             <option value="Sekali Beli">1️⃣ Sekali Beli</option>
                             <option value="Habis Pakai">🔄 Habis Pakai</option>
@@ -2139,29 +2145,29 @@
                 </div>
 
                 <div>
-                    <label class="font-bold text-slate-300">Link Online Shop & Alamat Toko[cite: 5]</label>
+                    <label class="font-bold text-slate-300">Link Online Shop & Alamat Toko</label>
                     <textarea id="form-ps-link" rows="3" placeholder="Gunakan Enter atau koma untuk beberapa item..." class="w-full mt-1 p-2.5 bg-[#0f172a] border border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-200 text-xs font-mono"></textarea>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="font-bold text-slate-300">Estimasi Budget (Rp)[cite: 5]</label>
+                        <label class="font-bold text-slate-300">Estimasi Budget (Rp)</label>
                         <input type="number" id="form-ps-est" required placeholder="0" class="w-full mt-1 p-2.5 bg-[#0f172a] border border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-200">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-300">Pengeluaran Real / Aktual (Rp)[cite: 5]</label>
+                        <label class="font-bold text-slate-300">Pengeluaran Real / Aktual (Rp)</label>
                         <input type="number" id="form-ps-actual" required placeholder="0" class="w-full mt-1 p-2.5 bg-[#0f172a] border border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-200">
                     </div>
                 </div>
 
                 <div class="flex items-center gap-3 pt-2">
                     <input type="checkbox" id="form-ps-done" class="w-5 h-5 rounded text-sky-500 bg-[#0f172a] border-slate-600 focus:ring-sky-500">
-                    <label for="form-ps-done" class="font-bold text-slate-200">Sudah Selesai Dibeli (Ceklis Status)[cite: 5]</label>
+                    <label for="form-ps-done" class="font-bold text-slate-200">Sudah Selesai Dibeli (Ceklis Status)</label>
                 </div>
 
                 <div class="pt-4 flex justify-end gap-3 border-t border-slate-700">
-                    <button type="button" onclick="closePostShoppingModal()" class="px-5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold rounded-xl transition">Batal[cite: 5]</button>
-                    <button type="submit" class="px-5 py-2 bg-[#0ea5e9] hover:bg-sky-500 text-white font-bold rounded-xl shadow-sm transition">Simpan Barang[cite: 5]</button>
+                    <button type="button" onclick="closePostShoppingModal()" class="px-5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold rounded-xl transition">Batal</button>
+                    <button type="submit" class="px-5 py-2 bg-[#0ea5e9] hover:bg-sky-500 text-white font-bold rounded-xl shadow-sm transition">Simpan Barang</button>
                 </div>
             </form>
         </div>
