@@ -5971,11 +5971,28 @@
                 
                 if (bDateRaw) {
                     const birthDate = new Date(bDateRaw);
-                    const diffTime = Math.abs(nowLocal - birthDate);
-                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                    const months = Math.floor(diffDays / 30);
-                    const days = diffDays % 30;
-                    badgeUsia.innerText = `👶 Usia: ${months > 0 ? months + ' Bln ' : ''}${days} Hari`;
+                    
+                    let years = nowLocal.getFullYear() - birthDate.getFullYear();
+                    let months = nowLocal.getMonth() - birthDate.getMonth();
+                    let days = nowLocal.getDate() - birthDate.getDate();
+
+                    // Penyesuaian jika hari atau bulan minus
+                    if (days < 0) {
+                        months--;
+                        const prevMonth = new Date(nowLocal.getFullYear(), nowLocal.getMonth(), 0);
+                        days += prevMonth.getDate();
+                    }
+                    if (months < 0) {
+                        years--;
+                        months += 12;
+                    }
+
+                    let ageString = '👶 Usia: ';
+                    if (years > 0) ageString += `${years} Thn `;
+                    if (months > 0) ageString += `${months} Bln `;
+                    ageString += `${days} Hari`;
+
+                    badgeUsia.innerText = ageString.trim();
                 } else {
                     badgeUsia.innerText = `👶 Usia: --`;
                 }
