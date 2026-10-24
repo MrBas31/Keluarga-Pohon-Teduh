@@ -1017,6 +1017,15 @@
                         <button onclick="changeLogDate(1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
 
+                    <!-- PUSAT INFO DINAMIS (TENGAH) -->
+                    <div class="hidden md:flex flex-col items-center justify-center text-center">
+                        <div class="flex items-center gap-2 mb-1">
+                            <div id="badge-usia-log" class="text-xs font-bold text-slate-200 bg-slate-700/50 px-3 py-1 rounded-full border border-slate-600">👶 Usia: --</div>
+                            <button id="btn-jump-today" onclick="jumpToToday()" class="hidden text-xs font-bold text-sky-400 hover:text-sky-300 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/20 px-3 py-1 rounded-full transition shadow-sm">📅 Ke Hari Ini</button>
+                        </div>
+                        <div id="last-log-hint" class="text-2xs text-slate-400 italic">Aktivitas terakhir: Belum ada</div>
+                    </div>
+
                     <!-- WAKE WINDOW TIMER -->
                     <div class="flex items-center gap-2 bg-emerald-50 px-4 py-2.5 rounded-2xl border border-emerald-100 w-full md:w-auto justify-center">
                         <i class="fa-solid fa-clock text-emerald-600 text-lg"></i>
@@ -5920,6 +5929,53 @@
                     </div>
                 `;
             }).join('');
+            
+            updateCenterInfo();
+        }
+
+        // Fungsi Tombol Melompat ke Hari Ini
+        function jumpToToday() {
+            currentDateLog = new Date().toISOString().slice(0, 10);
+            document.getElementById('log-date-picker').value = currentDateLog;
+            renderDailyLogs();
+        }
+
+        // Fungsi Update Pusat Info Tengah (Panggil ini di dalam renderDailyLogs)
+        function updateCenterInfo() {
+            const today = new Date().toISOString().slice(0, 10);
+            const btnJump = document.getElementById('btn-jump-today');
+            const badgeUsia = document.getElementById('badge-usia-log');
+            const hintLast = document.getElementById('last-log-hint');
+
+            // 1. Munculkan/Sembunyikan tombol "Ke Hari Ini"
+            if (currentDateLog !== today) {
+                btnJump.classList.remove('hidden');
+                badgeUsia.classList.add('hidden'); // Sembunyikan umur kalau lagi lihat masa lalu
+            } else {
+                btnJump.classList.add('hidden');
+                badgeUsia.classList.remove('hidden');
+                
+                // Kalkulasi Umur (Ambil dari data profil postnatal)
+                if (appState.postnatalProfile && appState.postnatalProfile.birthDate) {
+                    const birthDate = new Date(appState.postnatalProfile.birthDate);
+                    const now = new Date();
+                    const diffTime = Math.abs(now - birthDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    const months = Math.floor(diffDays / 30);
+                    const days = diffDays % 30;
+                    badgeUsia.innerText = `👶 Usia: ${months > 0 ? months + ' Bln ' : ''}${days} Hari`;
+                }
+            }
+
+            // 2. Cari aktivitas paling terakhir secara global
+            if (appState.dailyLogs && appState.dailyLogs.length > 0) {
+                // Urutkan semua log berdasarkan waktu pembuatan terbaru (bisa sesuaikan logika urutanmu)
+                const allLogs = [...appState.dailyLogs].sort((a, b) => new Date(`${b.startDate}T${b.startTime}`) - new Date(`${a.startDate}T${a.startTime}`));
+                const last = allLogs[0];
+                hintLast.innerText = `Terakhir: ${last.category} ${last.subCategory ? '('+last.subCategory+')' : ''} pada ${last.startTime}`;
+            } else {
+                hintLast.innerText = `Aktivitas terakhir: Belum ada data`;
+            }
         }
 
         // FUNGSI WAKE WINDOW (Mencari waktu tidur terakhir yang sudah selesai)
