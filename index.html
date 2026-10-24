@@ -1079,58 +1079,58 @@
                 </div>
             </section>
 
-           <!-- TAB 3: BELANJA BULANAN (POSTNATAL) -->
+            <!-- TAB 3: BELANJA BULANAN (POSTNATAL) -->
             <section id="sec-post-belanja" class="hidden space-y-6">
                 <!-- NAVIGASI BULAN, WIDGET TENGAH, & BUDGET -->
-                <div class="bg-white dark:bg-[#1e293b] p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div class="flex items-center gap-3 shrink-0">
-                        <button onclick="changeShoppingMonth(-1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded-full transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                        <div class="flex flex-col items-center px-4 py-1 bg-sky-50 dark:bg-sky-900/30 rounded-xl border border-sky-200 dark:border-sky-700/50">
-                            <span class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase tracking-wider">Periode Belanja</span>
-                            <span id="display-shopping-month" class="font-bold text-sky-900 dark:text-sky-100 text-sm">--</span>
+                        <button onclick="changeShoppingMonth(-1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <div class="flex flex-col items-center px-4 py-1 bg-sky-50 rounded-xl border border-sky-200">
+                            <span class="text-[10px] font-bold text-sky-600 uppercase tracking-wider">Periode Belanja</span>
+                            <span id="display-shopping-month" class="font-bold text-sky-900 text-sm">--</span>
                         </div>
-                        <button onclick="changeShoppingMonth(1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded-full transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                        <button onclick="changeShoppingMonth(1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
-
+            
                     <div class="hidden md:flex flex-1 items-center justify-center gap-6 px-4">
                         <div class="flex flex-col items-center">
-                            <span class="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-1">Sisa Anggaran</span>
-                            <div class="bg-slate-50 dark:bg-[#0f172a] px-4 py-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-inner">
-                                <span id="post-top-sisa" class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">Rp 0</span>
+                            <span class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold mb-1">Sisa Anggaran</span>
+                            <div class="bg-slate-50 px-4 py-1 rounded-lg border border-slate-200 shadow-inner">
+                                <span id="post-top-sisa" class="font-bold text-emerald-600 text-sm">Rp 0</span>
                             </div>
                         </div>
                         
-                        <div class="h-8 w-px bg-slate-200 dark:bg-slate-700"></div>
-
+                        <div class="h-8 w-px bg-slate-200"></div>
+            
                         <div class="flex flex-col items-center min-w-[140px]">
-                            <div class="flex justify-between w-full text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-1">
+                            <div class="flex justify-between w-full text-[10px] text-slate-500 uppercase tracking-wider font-semibold mb-1">
                                 <span>Checklist</span>
                                 <span id="post-top-progress-text">0 / 0</span>
                             </div>
-                            <div class="w-full bg-slate-100 dark:bg-[#0f172a] rounded-full h-2 border border-slate-200 dark:border-slate-700 overflow-hidden">
+                            <div class="w-full bg-slate-100 rounded-full h-2 border border-slate-200 overflow-hidden">
                                 <div id="post-top-progress-bar" class="bg-sky-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-900/20 px-4 py-2 rounded-xl border border-emerald-200 dark:border-emerald-700/30 shrink-0">
-                        <i class="fa-solid fa-wallet text-emerald-600 dark:text-emerald-400"></i>
+            
+                    <div class="flex items-center gap-3 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-200 shrink-0">
+                        <i class="fa-solid fa-wallet text-emerald-600"></i>
                         <div class="flex flex-col">
-                            <label class="text-[10px] font-bold text-emerald-700 dark:text-emerald-500 uppercase tracking-wider">Target Anggaran</label>
+                            <label class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Target Anggaran</label>
                             <div class="flex items-center gap-1">
-                                <span class="text-emerald-600 dark:text-emerald-300 font-bold text-sm">Rp</span>
-                                <input type="number" id="monthly-budget-input" onchange="saveMonthlyBudget()" class="bg-transparent border-b border-emerald-300 dark:border-emerald-600/50 text-emerald-800 dark:text-emerald-100 font-bold text-sm outline-none w-24 focus:border-emerald-500 dark:focus:border-emerald-400 transition" value="6000000">
+                                <span class="text-emerald-600 font-bold text-sm">Rp</span>
+                                <input type="number" id="monthly-budget-input" onchange="saveMonthlyBudget()" class="bg-transparent border-b border-emerald-300 text-emerald-800 font-bold text-sm outline-none w-24 focus:border-emerald-500 transition" value="6000000">
                             </div>
                         </div>
                     </div>
                 </div>
-
+            
                 <!-- KARTU 1: VISUALISASI CHART -->
-                <div class="bg-white dark:bg-[#1a2332] rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700/80 p-5">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                         <div>
-                            <h3 class="font-bold text-slate-800 dark:text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-chart-pie text-sky-500 dark:text-sky-400"></i> Visualisasi Pengeluaran Realisasi Per Kategori</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pilih sub-menu untuk melihat proporsi pengeluaran yang telah dibeli</p>
+                            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2"><i class="fa-solid fa-chart-pie text-sky-500"></i> Visualisasi Pengeluaran Realisasi Per Kategori</h3>
+                            <p class="text-xs text-slate-500 mt-1">Pilih sub-menu untuk melihat proporsi pengeluaran yang telah dibeli</p>
                         </div>
                         <div id="post-chart-submenus" class="flex flex-wrap gap-2"></div>
                     </div>
@@ -1139,53 +1139,53 @@
                         <div id="post-chart-legend" class="space-y-2"></div>
                     </div>
                 </div>
-
+            
                 <!-- KARTU 2: CHECKLIST & BUDGETING -->
-                <div class="bg-white dark:bg-[#1a2332] rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700/80 p-5">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                         <div>
-                            <h3 class="font-bold text-slate-800 dark:text-slate-200 text-base flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-slate-600 dark:text-slate-300"></i> Checklist & Budgeting Persiapan</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Realisasi hanya dihitung dari item yang sudah **dicentang (selesai dibeli)**</p>
+                            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-slate-600"></i> Checklist & Budgeting Persiapan</h3>
+                            <p class="text-xs text-slate-500 mt-1">Realisasi hanya dihitung dari item yang sudah **dicentang (selesai dibeli)**</p>
                         </div>
                         <div class="flex gap-3">
-                            <div class="bg-slate-50 dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-right">
-                                <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Realisasi Sub-Menu Ini</div>
-                                <div id="post-summary-realisasi" class="text-sky-600 dark:text-sky-400 font-bold text-sm">Rp 0</div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-right">
+                                <div class="text-[10px] text-slate-500 uppercase">Realisasi Sub-Menu Ini</div>
+                                <div id="post-summary-realisasi" class="text-sky-600 font-bold text-sm">Rp 0</div>
                             </div>
-                            <div class="bg-slate-100 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-right">
-                                <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Total Keseluruhan</div>
-                                <div id="post-summary-total" class="text-sky-600 dark:text-sky-400 font-bold text-sm">Rp 0</div>
+                            <div class="bg-slate-100 border border-slate-200 rounded-xl p-3 text-right">
+                                <div class="text-[10px] text-slate-500 uppercase">Total Keseluruhan</div>
+                                <div id="post-summary-total" class="text-sky-600 font-bold text-sm">Rp 0</div>
                             </div>
                         </div>
                     </div>
-
+            
                     <!-- Filter & Sub Menu -->
                     <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
                         <div class="flex flex-wrap gap-2 items-center">
                             <div id="post-list-submenus" class="flex flex-wrap gap-2 items-center"></div>
-                            <button onclick="promptNewPostSubmenu()" class="px-3 py-1.5 border border-sky-500/50 text-sky-600 dark:text-sky-400 hover:bg-sky-50 dark:hover:bg-sky-500/10 rounded-xl text-xs font-semibold transition flex items-center gap-1">
+                            <button onclick="promptNewPostSubmenu()" class="px-3 py-1.5 border border-sky-500/50 text-sky-600 hover:bg-sky-50 rounded-xl text-xs font-semibold transition flex items-center gap-1">
                                 <i class="fa-solid fa-plus"></i> Sub-Menu Baru
                             </button>
-                            <button id="btn-hapus-submenu" onclick="deleteActivePostSubmenu()" class="hidden px-3 py-1.5 border border-rose-500/50 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl text-xs font-semibold transition flex items-center gap-1">
+                            <button id="btn-hapus-submenu" onclick="deleteActivePostSubmenu()" class="hidden px-3 py-1.5 border border-rose-500/50 text-rose-600 hover:bg-rose-50 rounded-xl text-xs font-semibold transition flex items-center gap-1">
                                 <i class="fa-solid fa-trash"></i> Hapus Sub-Menu
                             </button>
                         </div>
                         <div class="flex items-center gap-3">
-                            <span class="text-xs text-slate-500 dark:text-slate-400"><i class="fa-solid fa-filter"></i> Filter Kategori:</span>
-                            <select id="post-filter-category" onchange="renderPostShopping()" class="bg-slate-50 dark:bg-[#1e293b] text-xs text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 outline-none focus:border-sky-500">
+                            <span class="text-xs text-slate-500"><i class="fa-solid fa-filter"></i> Filter Kategori:</span>
+                            <select id="post-filter-category" onchange="renderPostShopping()" class="bg-slate-50 text-xs text-slate-800 border border-slate-200 rounded-lg px-3 py-1.5 outline-none focus:border-sky-500">
                                 <option value="all">Semua Kategori</option>
                             </select>
                         </div>
                     </div>
-
+            
                     <!-- Tombol Aksi Global -->
                     <div class="flex justify-end gap-2 mb-4">
-                        <button onclick="openPullPregnancyModal()" class="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-boxes-packing"></i> Tarik Barang Kehamilan</button>
+                        <button onclick="openPullPregnancyModal()" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border border-indigo-200 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-boxes-packing"></i> Tarik Barang Kehamilan</button>
                         <button onclick="openPostShoppingModal()" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-semibold transition shadow-sm"><i class="fa-solid fa-plus"></i> Tambah Barang</button>
                     </div>
-
+            
                     <!-- Header Tabel -->
-                    <div class="hidden md:grid grid-cols-12 gap-4 border-b border-slate-200 dark:border-slate-700 pb-2 mb-2 px-2 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    <div class="hidden md:grid grid-cols-12 gap-4 border-b border-slate-200 pb-2 mb-2 px-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                         <div class="col-span-2">STATUS</div>
                         <div class="col-span-3">BARANG / DETAIL</div>
                         <div class="col-span-1 text-center">JUMLAH</div>
@@ -1194,7 +1194,7 @@
                         <div class="col-span-1 text-right">AKTUAL (RP)</div>
                         <div class="col-span-1 text-center">AKSI</div>
                     </div>
-
+            
                     <!-- Container List -->
                     <div id="post-shopping-list-container" class="space-y-4 pb-4"></div>
                 </div>
@@ -2117,71 +2117,71 @@
     </div>
 
     <!-- MODAL: TAMBAH/EDIT BELANJA BULANAN -->
-    <div id="modal-post-shopping" class="fixed inset-0 bg-slate-900/50 dark:bg-[#0f172a]/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
-        <div class="bg-white dark:bg-[#1e293b] rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-700 relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closePostShoppingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <h2 id="modal-post-shopping-title" class="text-lg font-bold text-slate-800 dark:text-slate-200">Tambah Item Belanja Baru</h2>
-
+    <div id="modal-post-shopping" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-200 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closePostShoppingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="modal-post-shopping-title" class="text-lg font-bold text-slate-800">Tambah Item Belanja Baru</h2>
+    
             <form id="post-shopping-form" onsubmit="savePostShoppingItem(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="form-ps-id">
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="font-bold text-slate-700 dark:text-slate-300">Sub-Menu Utama</label>
-                        <select id="form-ps-submenu" required class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-800 dark:text-slate-200"></select>
+                        <label class="font-bold text-slate-700">Sub-Menu Utama</label>
+                        <select id="form-ps-submenu" required class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-slate-800"></select>
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 dark:text-slate-300">Kategori Barang</label>
-                        <input type="text" id="form-ps-category" required placeholder="misal: Pakaian, Alat Mandi" class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-800 dark:text-slate-200">
+                        <label class="font-bold text-slate-700">Kategori Barang</label>
+                        <input type="text" id="form-ps-category" required placeholder="misal: Pakaian, Alat Mandi" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-slate-800">
                     </div>
                 </div>
-
+    
                 <div>
-                    <label class="font-bold text-slate-700 dark:text-slate-300">Nama Barang / Detail</label>
-                    <input type="text" id="form-ps-name" required placeholder="misal: Baju Kurung Newborn" class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-800 dark:text-slate-200">
+                    <label class="font-bold text-slate-700">Nama Barang / Detail</label>
+                    <input type="text" id="form-ps-name" required placeholder="misal: Baju Kurung Newborn" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-slate-800">
                 </div>
-
+    
                 <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <label class="font-bold text-slate-700 dark:text-slate-300">Jumlah (Qty)</label>
-                        <input type="text" id="form-ps-qty" required placeholder="misal: 3 set / 1 pcs" class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-800 dark:text-slate-200">
+                        <label class="font-bold text-slate-700">Jumlah (Qty)</label>
+                        <input type="text" id="form-ps-qty" required placeholder="misal: 3 set / 1 pcs" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-slate-800">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 dark:text-slate-300">Brand / Merek</label>
-                        <input type="text" id="form-ps-brand" placeholder="misal: Velvet Junior" class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-800 dark:text-slate-200">
+                        <label class="font-bold text-slate-700">Brand / Merek</label>
+                        <input type="text" id="form-ps-brand" placeholder="misal: Velvet Junior" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-slate-800">
                     </div>
                     <div>
-                        <label class="font-bold text-amber-600 dark:text-amber-400">Sifat (Restock)</label>
-                        <select id="form-ps-type" class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl focus:border-amber-500 outline-none text-slate-800 dark:text-slate-200">
+                        <label class="font-bold text-amber-600">Sifat (Restock)</label>
+                        <select id="form-ps-type" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-amber-500 outline-none text-slate-800">
                             <option value="Sekali Beli">1️⃣ Sekali Beli</option>
                             <option value="Habis Pakai">🔄 Habis Pakai</option>
                         </select>
                     </div>
                 </div>
-
+    
                 <div>
-                    <label class="font-bold text-slate-700 dark:text-slate-300">Link Online Shop & Alamat Toko</label>
-                    <textarea id="form-ps-link" rows="3" placeholder="Gunakan Enter atau koma untuk beberapa item..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-800 dark:text-slate-200 text-xs font-mono"></textarea>
+                    <label class="font-bold text-slate-700">Link Online Shop & Alamat Toko</label>
+                    <textarea id="form-ps-link" rows="3" placeholder="Gunakan Enter atau koma untuk beberapa item..." class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-slate-800 text-xs font-mono"></textarea>
                 </div>
-
+    
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="font-bold text-slate-700 dark:text-slate-300">Estimasi Budget (Rp)</label>
-                        <input type="number" id="form-ps-est" required placeholder="0" class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-800 dark:text-slate-200">
+                        <label class="font-bold text-slate-700">Estimasi Budget (Rp)</label>
+                        <input type="number" id="form-ps-est" required placeholder="0" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-slate-800">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 dark:text-slate-300">Pengeluaran Real / Aktual (Rp)</label>
-                        <input type="number" id="form-ps-actual" required placeholder="0" class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-xl focus:border-sky-500 outline-none text-slate-800 dark:text-slate-200">
+                        <label class="font-bold text-slate-700">Pengeluaran Real / Aktual (Rp)</label>
+                        <input type="number" id="form-ps-actual" required placeholder="0" class="w-full mt-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-slate-800">
                     </div>
                 </div>
-
+    
                 <div class="flex items-center gap-3 pt-2">
-                    <input type="checkbox" id="form-ps-done" class="w-5 h-5 rounded text-sky-500 bg-slate-50 dark:bg-[#0f172a] border-slate-300 dark:border-slate-600 focus:ring-sky-500 cursor-pointer">
-                    <label for="form-ps-done" class="font-bold text-slate-800 dark:text-slate-200 cursor-pointer">Sudah Selesai Dibeli (Ceklis Status)</label>
+                    <input type="checkbox" id="form-ps-done" class="w-5 h-5 rounded text-sky-500 bg-slate-50 border-slate-300 focus:ring-sky-500 cursor-pointer">
+                    <label for="form-ps-done" class="font-bold text-slate-800 cursor-pointer">Sudah Selesai Dibeli (Ceklis Status)</label>
                 </div>
-
-                <div class="pt-4 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-700">
-                    <button type="button" onclick="closePostShoppingModal()" class="px-5 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-bold rounded-xl transition">Batal</button>
+    
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-200">
+                    <button type="button" onclick="closePostShoppingModal()" class="px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition">Batal</button>
                     <button type="submit" class="px-5 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl shadow-sm transition">Simpan Barang</button>
                 </div>
             </form>
@@ -6495,10 +6495,10 @@
             monthItems.forEach(i => { if (i.submenu && !postSubmenusList.includes(i.submenu)) postSubmenusList.push(i.submenu); });
             
             const renderSubmenuBtns = (containerId) => {
-                let html = `<button onclick="setPostSubmenu('Keseluruhan')" class="px-4 py-1.5 rounded-xl text-xs font-bold transition ${currentPostSubmenu === 'Keseluruhan' ? 'bg-sky-500 text-white shadow-md' : 'bg-slate-100 dark:bg-slate-700/50 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'}"><i class="fa-solid fa-layer-group"></i> Keseluruhan</button>`;
+                let html = `<button onclick="setPostSubmenu('Keseluruhan')" class="px-4 py-1.5 rounded-xl text-xs font-bold transition ${currentPostSubmenu === 'Keseluruhan' ? 'bg-sky-500 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}"><i class="fa-solid fa-layer-group"></i> Keseluruhan</button>`;
                 postSubmenusList.forEach(sm => {
                     const icon = sm.includes('Baby') ? '👶' : sm.includes('Ibu') ? '🤰' : sm.includes('Aqiqah') ? '📁' : '📌';
-                    html += `<button onclick="setPostSubmenu('${sm}')" class="px-4 py-1.5 rounded-xl text-xs font-bold transition ${currentPostSubmenu === sm ? 'bg-sky-500 text-white shadow-md' : 'bg-slate-100 dark:bg-slate-700/50 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'}">${icon} ${sm}</button>`;
+                    html += `<button onclick="setPostSubmenu('${sm}')" class="px-4 py-1.5 rounded-xl text-xs font-bold transition ${currentPostSubmenu === sm ? 'bg-sky-500 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">${icon} ${sm}</button>`;
                 });
                 document.getElementById(containerId).innerHTML = html;
             };
@@ -6516,7 +6516,7 @@
 
             const sisaAnggaran = budget - totalActualMonth;
             document.getElementById('post-top-sisa').innerText = `Rp ${sisaAnggaran.toLocaleString('id-ID')}`;
-            document.getElementById('post-top-sisa').className = `font-bold text-sm ${sisaAnggaran < 0 ? 'text-rose-500 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}`;
+            document.getElementById('post-top-sisa').className = `font-bold text-sm ${sisaAnggaran < 0 ? 'text-rose-500' : 'text-emerald-600'}`;
             document.getElementById('post-top-progress-text').innerText = `${doneItems} / ${monthItems.length}`;
             const progPercent = monthItems.length === 0 ? 0 : Math.min(100, Math.round((doneItems / monthItems.length) * 100));
             document.getElementById('post-top-progress-bar').style.width = `${progPercent}%`;
@@ -6550,7 +6550,7 @@
 
             const listCont = document.getElementById('post-shopping-list-container');
             if (activeItems.length === 0) {
-                listCont.innerHTML = `<div class="text-center py-10 text-slate-500 italic text-sm bg-slate-50 dark:bg-[#0f172a]/50 rounded-xl border border-slate-200 dark:border-slate-700/50">Belum ada item di sub-menu ini.</div>`;
+                listCont.innerHTML = `<div class="text-center py-10 text-slate-500 italic text-sm bg-slate-50 rounded-xl border border-slate-200">Belum ada item di sub-menu ini.</div>`;
                 return;
             }
 
@@ -6569,45 +6569,45 @@
                 });
 
                 html += `
-                <div class="bg-slate-100 dark:bg-[#1e293b] p-3 rounded-xl flex justify-between items-center mb-3 mt-4">
-                    <div class="font-bold text-sky-600 dark:text-sky-400 text-[11px] uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-layer-group"></i> KATEGORI: ${cat} (${grouped[cat].length} ITEM)</div>
-                    <div class="text-[10px] text-slate-500 dark:text-slate-400 flex gap-4">
+                <div class="bg-slate-100 p-3 rounded-xl flex justify-between items-center mb-3 mt-4">
+                    <div class="font-bold text-sky-600 text-[11px] uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-layer-group"></i> KATEGORI: ${cat} (${grouped[cat].length} ITEM)</div>
+                    <div class="text-[10px] text-slate-500 flex gap-4">
                         <span>Est: Rp ${catEst.toLocaleString('id-ID')}</span>
-                        <span class="text-emerald-600 dark:text-emerald-400 font-bold">Realisasi: Rp ${catAct.toLocaleString('id-ID')}</span>
+                        <span class="text-emerald-600 font-bold">Realisasi: Rp ${catAct.toLocaleString('id-ID')}</span>
                     </div>
                 </div>`;
 
                 grouped[cat].forEach(item => {
                     const isRestock = item.type === 'Habis Pakai';
                     html += `
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-white dark:bg-[#0f172a] p-3 rounded-xl border ${item.done ? 'border-emerald-300 dark:border-emerald-500/20' : 'border-slate-200 dark:border-slate-700/50'} hover:border-slate-300 dark:hover:border-slate-600 transition group mb-2">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-white p-3 rounded-xl border ${item.done ? 'border-emerald-300' : 'border-slate-200'} hover:border-slate-300 transition group mb-2">
                         
                         <div class="col-span-2 flex items-center gap-2">
-                            <label class="flex items-center gap-2 cursor-pointer bg-slate-50 dark:bg-[#1e293b] px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
-                                <input type="checkbox" ${item.done ? 'checked' : ''} onchange="togglePostShoppingStatus(${item.id}, this.checked)" class="w-4 h-4 rounded text-emerald-500 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 focus:ring-emerald-500">
-                                <span class="text-[10px] font-bold ${item.done ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'} uppercase">${item.done ? 'Selesai' : 'Belum'}</span>
+                            <label class="flex items-center gap-2 cursor-pointer bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                                <input type="checkbox" ${item.done ? 'checked' : ''} onchange="togglePostShoppingStatus(${item.id}, this.checked)" class="w-4 h-4 rounded text-emerald-500 bg-white border-slate-300 focus:ring-emerald-500">
+                                <span class="text-[10px] font-bold ${item.done ? 'text-emerald-600' : 'text-slate-500'} uppercase">${item.done ? 'Selesai' : 'Belum'}</span>
                             </label>
-                            ${(item.done && isRestock) ? `<button onclick="buyAgainPostShopping(${item.id})" class="bg-amber-100 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 px-2 py-1 rounded-lg text-xs hover:bg-amber-200 dark:hover:bg-amber-500/20 transition" title="Restock Bulan Ini"><i class="fa-solid fa-cart-plus"></i></button>` : ''}
+                            ${(item.done && isRestock) ? `<button onclick="buyAgainPostShopping(${item.id})" class="bg-amber-100 text-amber-600 border border-amber-200 px-2 py-1 rounded-lg text-xs hover:bg-amber-200 transition" title="Restock Bulan Ini"><i class="fa-solid fa-cart-plus"></i></button>` : ''}
                         </div>
 
                         <div class="col-span-3">
-                            <div class="font-bold text-slate-800 dark:text-slate-200 text-sm ${item.done ? 'line-through text-slate-400 dark:text-slate-500' : ''}">${item.name}</div>
-                            ${item.brand ? `<div class="text-[10px] text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 inline-block px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700 mt-0.5">${item.brand}</div>` : ''}
+                            <div class="font-bold text-slate-800 text-sm ${item.done ? 'line-through text-slate-400' : ''}">${item.name}</div>
+                            ${item.brand ? `<div class="text-[10px] text-slate-500 bg-slate-100 inline-block px-1.5 py-0.5 rounded border border-slate-200 mt-0.5">${item.brand}</div>` : ''}
                         </div>
 
-                        <div class="col-span-1 text-center font-medium text-slate-600 dark:text-slate-300 text-xs">${item.qty}</div>
+                        <div class="col-span-1 text-center font-medium text-slate-600 text-xs">${item.qty}</div>
 
                         <div class="col-span-2 text-center">
-                            ${item.link ? `<a href="${item.link.split('\n')[0]}" target="_blank" class="text-[10px] text-sky-600 dark:text-sky-400 hover:text-sky-500 bg-sky-50 dark:bg-sky-500/10 px-2 py-1 rounded-lg transition line-clamp-1"><i class="fa-solid fa-link"></i> Link/Toko</a>` : '-'}
+                            ${item.link ? `<a href="${item.link.split('\n')[0]}" target="_blank" class="text-[10px] text-sky-600 hover:text-sky-500 bg-sky-50 px-2 py-1 rounded-lg transition line-clamp-1"><i class="fa-solid fa-link"></i> Link/Toko</a>` : '-'}
                         </div>
 
-                        <div class="col-span-2 text-right text-xs font-medium text-slate-500 dark:text-slate-400">Rp ${(item.price || 0).toLocaleString('id-ID')}</div>
+                        <div class="col-span-2 text-right text-xs font-medium text-slate-500">Rp ${(item.price || 0).toLocaleString('id-ID')}</div>
 
-                        <div class="col-span-1 text-right font-bold text-xs ${item.done ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500'}">Rp ${(item.actual || 0).toLocaleString('id-ID')}</div>
+                        <div class="col-span-1 text-right font-bold text-xs ${item.done ? 'text-emerald-600' : 'text-slate-400'}">Rp ${(item.actual || 0).toLocaleString('id-ID')}</div>
 
                         <div class="col-span-1 flex justify-center gap-1">
-                            <button onclick="openPostShoppingModal(${item.id})" class="w-7 h-7 bg-slate-100 dark:bg-slate-800 hover:bg-sky-100 dark:hover:bg-sky-900/30 text-slate-500 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-400 rounded-lg flex items-center justify-center transition border border-slate-200 dark:border-slate-700/50"><i class="fa-solid fa-pen text-[10px]"></i></button>
-                            <button onclick="deletePostShoppingItem(${item.id})" class="w-7 h-7 bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 dark:hover:bg-rose-900/30 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg flex items-center justify-center transition border border-slate-200 dark:border-slate-700/50"><i class="fa-solid fa-trash text-[10px]"></i></button>
+                            <button onclick="openPostShoppingModal(${item.id})" class="w-7 h-7 bg-slate-100 hover:bg-sky-100 text-slate-500 hover:text-sky-600 rounded-lg flex items-center justify-center transition border border-slate-200"><i class="fa-solid fa-pen text-[10px]"></i></button>
+                            <button onclick="deletePostShoppingItem(${item.id})" class="w-7 h-7 bg-slate-100 hover:bg-rose-100 text-slate-500 hover:text-rose-600 rounded-lg flex items-center justify-center transition border border-slate-200"><i class="fa-solid fa-trash text-[10px]"></i></button>
                         </div>
                     </div>`;
                 });
@@ -6631,7 +6631,7 @@
                     data: { labels: ['Belum ada pengeluaran'], datasets: [{ data: [1], backgroundColor: ['#cbd5e1'], borderWidth: 0 }] },
                     options: { responsive: true, cutout: '75%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
                 });
-                legendCont.innerHTML = `<div class="text-sm text-slate-400 dark:text-slate-500 italic text-center">Belum ada realisasi untuk divisualisasikan.</div>`;
+                legendCont.innerHTML = `<div class="text-sm text-slate-400 italic text-center">Belum ada realisasi untuk divisualisasikan.</div>`;
                 return;
             }
 
@@ -6647,13 +6647,13 @@
                 const pct = Math.round((val / totalActual) * 100);
                 const col = colors[idx % colors.length];
                 return `
-                <div class="flex justify-between items-center bg-slate-50 dark:bg-[#1e293b] p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/50 mb-2">
+                <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-200 mb-2">
                     <div class="flex items-center gap-3">
                         <div class="w-3 h-3 rounded-full" style="background-color: ${col};"></div>
-                        <div class="font-bold text-slate-700 dark:text-slate-300 text-xs">${label}</div>
+                        <div class="font-bold text-slate-700 text-xs">${label}</div>
                     </div>
-                    <div class="font-bold text-slate-800 dark:text-slate-200 text-xs text-right">
-                        Rp ${val.toLocaleString('id-ID')} <span class="text-slate-400 dark:text-slate-500 font-normal text-[10px] ml-1">(${pct}%)</span>
+                    <div class="font-bold text-slate-800 text-xs text-right">
+                        Rp ${val.toLocaleString('id-ID')} <span class="text-slate-400 font-normal text-[10px] ml-1">(${pct}%)</span>
                     </div>
                 </div>`;
             }).join('');
