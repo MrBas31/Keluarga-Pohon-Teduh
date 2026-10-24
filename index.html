@@ -5942,34 +5942,47 @@
 
         // Fungsi Update Pusat Info Tengah (Panggil ini di dalam renderDailyLogs)
         function updateCenterInfo() {
-            const today = new Date().toISOString().slice(0, 10);
+            // Ambil tanggal HARI INI sesuai waktu lokal HP/Laptop (Bebas bug zona waktu)
+            const nowLocal = new Date();
+            const year = nowLocal.getFullYear();
+            const month = String(nowLocal.getMonth() + 1).padStart(2, '0');
+            const day = String(nowLocal.getDate()).padStart(2, '0');
+            const todayLocal = `${year}-${month}-${day}`;
+            
             const btnJump = document.getElementById('btn-jump-today');
             const badgeUsia = document.getElementById('badge-usia-log');
             const hintLast = document.getElementById('last-log-hint');
 
+            if (!btnJump || !badgeUsia || !hintLast) return;
+
             // 1. Munculkan/Sembunyikan tombol "Ke Hari Ini"
-            if (currentDateLog !== today) {
+            if (currentDateLog !== todayLocal) {
                 btnJump.classList.remove('hidden');
-                badgeUsia.classList.add('hidden'); // Sembunyikan umur kalau lagi lihat masa lalu
+                badgeUsia.classList.add('hidden'); // Sembunyikan badge usia kalau di masa lalu
             } else {
                 btnJump.classList.add('hidden');
                 badgeUsia.classList.remove('hidden');
                 
-                // Kalkulasi Umur (Ambil dari data profil postnatal)
-                if (appState.postnatalProfile && appState.postnatalProfile.birthDate) {
-                    const birthDate = new Date(appState.postnatalProfile.birthDate);
-                    const now = new Date();
-                    const diffTime = Math.abs(now - birthDate);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                // 2. Kalkulasi Umur (Otomatis mendeteksi di mana data tanggal lahir disimpan)
+                const bDateRaw = appState.babyBirthDate || appState.birthDate || 
+                                (appState.babyProfile && appState.babyProfile.birthDate) || 
+                                (appState.profile && appState.profile.birthDate) || 
+                                (appState.postnatalProfile && appState.postnatalProfile.birthDate);
+                
+                if (bDateRaw) {
+                    const birthDate = new Date(bDateRaw);
+                    const diffTime = Math.abs(nowLocal - birthDate);
+                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
                     const months = Math.floor(diffDays / 30);
                     const days = diffDays % 30;
                     badgeUsia.innerText = `👶 Usia: ${months > 0 ? months + ' Bln ' : ''}${days} Hari`;
+                } else {
+                    badgeUsia.innerText = `👶 Usia: --`;
                 }
             }
 
-            // 2. Cari aktivitas paling terakhir secara global
+            // 3. Aktivitas Terakhir
             if (appState.dailyLogs && appState.dailyLogs.length > 0) {
-                // Urutkan semua log berdasarkan waktu pembuatan terbaru (bisa sesuaikan logika urutanmu)
                 const allLogs = [...appState.dailyLogs].sort((a, b) => new Date(`${b.startDate}T${b.startTime}`) - new Date(`${a.startDate}T${a.startTime}`));
                 const last = allLogs[0];
                 hintLast.innerText = `Terakhir: ${last.category} ${last.subCategory ? '('+last.subCategory+')' : ''} pada ${last.startTime}`;
