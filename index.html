@@ -935,22 +935,31 @@
                 </div>
 
                 <!-- 4 WIDGET RINGKASAN (CANGKANG KOSONG) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Widget 1: Log Harian -->
-                    <div onclick="switchPostnatalTab('post-log')" class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between cursor-pointer hover:shadow-md transition hover:border-sky-200 group">
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-2xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md">Log Harian</span>
-                                <i class="fa-solid fa-clipboard-list text-sky-600 text-sm"></i>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- WIDGET 1: LOG HARIAN (HARI INI) -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                        <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-sky-500"></i> Ringkasan Aktivitas Hari Ini</h3>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-rose-50 p-3 rounded-xl border border-rose-100 flex flex-col justify-center">
+                                <div class="text-[10px] text-rose-500 uppercase font-bold mb-1"><i class="fa-solid fa-utensils"></i> Makan/Minum</div>
+                                <div id="dash-log-makan" class="text-sm font-bold text-rose-700">Belum ada</div>
                             </div>
-                            <h4 class="font-bold text-slate-800 text-sm">Aktivitas Terakhir</h4>
-                            <div class="mt-2 text-xs font-medium text-slate-500 space-y-1">
-                                <div>🍼 Nyusu: <span class="font-bold text-slate-700">-</span></div>
-                                <div>💤 Tidur: <span class="font-bold text-slate-700">-</span></div>
-                                <div>🧻 Popok: <span class="font-bold text-slate-700">-</span></div>
+                            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100 flex flex-col justify-center">
+                                <div class="text-[10px] text-indigo-500 uppercase font-bold mb-1"><i class="fa-solid fa-moon"></i> Tidur</div>
+                                <div id="dash-log-tidur" class="text-sm font-bold text-indigo-700">0j 0m</div>
+                            </div>
+                            <div class="bg-amber-50 p-3 rounded-xl border border-amber-100 flex flex-col justify-center">
+                                <div class="text-[10px] text-amber-500 uppercase font-bold mb-1"><i class="fa-solid fa-poop"></i> Popok</div>
+                                <div id="dash-log-popok" class="text-sm font-bold text-amber-700">0 Pipis, 0 Pup</div>
+                            </div>
+                            <div class="bg-teal-50 p-3 rounded-xl border border-teal-100 flex flex-col justify-center">
+                                <div class="text-[10px] text-teal-500 uppercase font-bold mb-1"><i class="fa-solid fa-pump-medical"></i> Pompa ASI</div>
+                                <div id="dash-log-pompa" class="text-sm font-bold text-teal-700">0 ml</div>
                             </div>
                         </div>
-                        <div class="pt-2 border-t border-slate-100 text-right"><span class="text-3xs text-sky-600 font-bold uppercase group-hover:pr-1 transition-all">Buka Log →</span></div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
+                            <span class="text-slate-500">Aktivitas Terakhir:</span> <strong id="dash-log-last" class="text-slate-700">Belum ada data</strong>
+                        </div>
                     </div>
 
                     <!-- Widget 2: Stimulasi -->
@@ -984,19 +993,23 @@
                         <div class="pt-2 border-t border-slate-100 text-right"><span class="text-3xs text-emerald-600 font-bold uppercase group-hover:pr-1 transition-all">Cek Jadwal →</span></div>
                     </div>
 
-                    <!-- Widget 4: Belanja -->
-                    <div onclick="switchPostnatalTab('post-belanja')" class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between cursor-pointer hover:shadow-md transition hover:border-pink-200 group">
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-2xs font-bold uppercase tracking-wider text-pink-700 bg-pink-50 px-2 py-0.5 rounded-md">Restock</span>
-                                <i class="fa-solid fa-cart-shopping text-pink-600 text-sm"></i>
+                    <!-- WIDGET 4: RINGKASAN ANGGARAN BULAN INI -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                        <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center gap-2"><i class="fa-solid fa-wallet text-emerald-500"></i> Anggaran Belanja Bulan Ini</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-200">
+                                <div class="text-xs text-slate-500 uppercase font-bold">Target Anggaran</div>
+                                <div id="dash-budget-target" class="text-sm font-bold text-slate-800">Rp 0</div>
                             </div>
-                            <h4 class="font-bold text-slate-800 text-sm">Status Bulanan</h4>
-                            <div class="mt-2 text-xs font-medium text-slate-500">
-                                Pengeluaran rutin untuk popok, kapas, dan sabun mandi akan terekap di sini.
+                            <div class="flex justify-between items-center p-3 bg-sky-50 rounded-xl border border-sky-100">
+                                <div class="text-xs text-sky-600 uppercase font-bold">Total Realisasi</div>
+                                <div id="dash-budget-realisasi" class="text-sm font-bold text-sky-700">Rp 0</div>
+                            </div>
+                            <div class="flex justify-between items-center p-3 rounded-xl border bg-emerald-50 border-emerald-200" id="dash-budget-sisa-container">
+                                <div class="text-xs uppercase font-bold text-emerald-600" id="dash-budget-sisa-label">Sisa Anggaran</div>
+                                <div id="dash-budget-sisa" class="text-lg font-bold text-emerald-700">Rp 0</div>
                             </div>
                         </div>
-                        <div class="pt-2 border-t border-slate-100 text-right"><span class="text-3xs text-pink-600 font-bold uppercase group-hover:pr-1 transition-all">Buka Tracker →</span></div>
                     </div>
                 </div>
             </section>
@@ -2548,6 +2561,8 @@
             if (typeof renderDailyLogs === 'function') renderDailyLogs();
             if (typeof updateWakeWindow === 'function') updateWakeWindow();
             if (typeof renderPostShopping === 'function') renderPostShopping();
+            // <-- UPDATE WIDGET DASHBOARD BARU DIPANGGIL DI SINI -->
+            updateDashboardWidgets();
         };
 
         // HELPER: GDRIVE LINK CONVERTER
@@ -5785,6 +5800,7 @@
           if (typeof renderDailyLogs === 'function') renderDailyLogs();
           if (typeof updateWakeWindow === 'function') updateWakeWindow();
           if (typeof renderPostShopping === 'function') renderPostShopping();
+          updateDashboardWidgets();
         }
 
         // FUNGSI PENYIMPANAN KE FIREBASE
@@ -6035,6 +6051,7 @@
             closeLogModal();
             saveToLocalStorage();
             renderDailyLogs();
+            updateDashboardWidgets();
             updateWakeWindow();
         }
 
@@ -6382,6 +6399,7 @@
             closePostShoppingModal();
             saveToLocalStorage();
             renderPostShopping();
+            updateDashboardWidgets();
         }
 
         function togglePostShoppingStatus(id, isChecked) {
@@ -6391,6 +6409,7 @@
                 item.purchasedAt = isChecked ? new Date().toISOString().slice(0, 10) : null;
                 saveToLocalStorage();
                 renderPostShopping();
+                updateDashboardWidgets();
             }
         }
 
@@ -6399,6 +6418,7 @@
                 appState.postnatalShopping = appState.postnatalShopping.filter(i => i.id !== id);
                 saveToLocalStorage();
                 renderPostShopping();
+                updateDashboardWidgets();
             }
         }
 
@@ -6657,6 +6677,79 @@
                     </div>
                 </div>`;
             }).join('');
+        }
+
+        function updateDashboardWidgets() {
+            // 1. Update Widget Log Harian
+            const today = new Date().toISOString().slice(0, 10);
+            const dailyData = (appState.dailyLogs || []).filter(l => l.startDate === today || l.endDate === today)
+                              .sort((a, b) => new Date(`${b.startDate}T${b.startTime}`) - new Date(`${a.startDate}T${a.startTime}`));
+        
+            let sumMinumMl = 0, sumTidurMins = 0, sumPup = 0, sumPipis = 0, sumPompa = 0, sumMakan = 0;
+            
+            dailyData.forEach(l => {
+                if (l.category === 'Makan') {
+                    sumMakan++;
+                    if (l.subCategory === 'Minum' || l.subCategory === 'ASIP') sumMinumMl += (l.ml || 0);
+                } else if (l.category === 'Tidur') {
+                    sumTidurMins += (l.durationMinutes || 0);
+                } else if (l.category === 'Buang Air') {
+                    if (l.babType === 'Pup' || l.babType === 'Keduanya') sumPup++;
+                    if (l.babType === 'Pipis' || l.babType === 'Keduanya') sumPipis++;
+                } else if (l.category === 'Pompa ASI') {
+                    sumPompa += (l.ml || 0);
+                }
+            });
+        
+            const labelMakan = sumMakan > 0 ? `${sumMakan}x ${sumMinumMl > 0 ? `(${sumMinumMl}ml)` : ''}` : 'Belum ada';
+            document.getElementById('dash-log-makan').innerText = labelMakan;
+            document.getElementById('dash-log-tidur').innerText = `${Math.floor(sumTidurMins/60)}j ${sumTidurMins%60}m`;
+            document.getElementById('dash-log-popok').innerText = `${sumPipis} Pipis, ${sumPup} Pup`;
+            document.getElementById('dash-log-pompa').innerText = `${sumPompa} ml`;
+        
+            if (dailyData.length > 0) {
+                const lastLog = dailyData[0];
+                document.getElementById('dash-log-last').innerText = `${lastLog.category} pada ${lastLog.startTime}`;
+            } else {
+                document.getElementById('dash-log-last').innerText = 'Belum ada aktivitas hari ini';
+            }
+        
+            // 2. Update Widget Anggaran Belanja
+            const currentMonth = new Date().toISOString().slice(0, 7);
+            let targetBudget = (appState.postnatalBudgets && appState.postnatalBudgets[currentMonth]) !== undefined 
+                                ? appState.postnatalBudgets[currentMonth] : 6000000;
+            
+            let totalRealisasi = 0;
+            if (appState.postnatalShopping) {
+                appState.postnatalShopping.forEach(item => {
+                    if (item.period === currentMonth && item.done) {
+                        totalRealisasi += (item.actual || 0);
+                    }
+                });
+            }
+        
+            const sisaAnggaran = targetBudget - totalRealisasi;
+        
+            document.getElementById('dash-budget-target').innerText = `Rp ${targetBudget.toLocaleString('id-ID')}`;
+            document.getElementById('dash-budget-realisasi').innerText = `Rp ${totalRealisasi.toLocaleString('id-ID')}`;
+            
+            const sisaCont = document.getElementById('dash-budget-sisa-container');
+            const sisaLabel = document.getElementById('dash-budget-sisa-label');
+            const sisaVal = document.getElementById('dash-budget-sisa');
+        
+            if (sisaAnggaran < 0) {
+                sisaCont.className = 'flex justify-between items-center p-3 rounded-xl border bg-rose-50 border-rose-200';
+                sisaLabel.className = 'text-xs uppercase font-bold text-rose-600';
+                sisaLabel.innerText = 'Overbudget';
+                sisaVal.className = 'text-lg font-bold text-rose-700';
+                sisaVal.innerText = `- Rp ${Math.abs(sisaAnggaran).toLocaleString('id-ID')}`;
+            } else {
+                sisaCont.className = 'flex justify-between items-center p-3 rounded-xl border bg-emerald-50 border-emerald-200';
+                sisaLabel.className = 'text-xs uppercase font-bold text-emerald-600';
+                sisaLabel.innerText = 'Sisa Anggaran';
+                sisaVal.className = 'text-lg font-bold text-emerald-700';
+                sisaVal.innerText = `Rp ${sisaAnggaran.toLocaleString('id-ID')}`;
+            }
         }
     </script>
 </body>
