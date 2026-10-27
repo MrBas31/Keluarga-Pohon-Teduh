@@ -5992,7 +5992,7 @@
           if (typeof renderPostShopping === 'function') renderPostShopping();
           renderRsDsa();
           updateDashboardWidgets();
-          renderMedicalChart();
+          if (typeof renderKmsChart === 'function') renderKmsChart(); // (Ini tambahan baru untuk grafik KMS anak)
         }
 
         // FUNGSI PENYIMPANAN KE FIREBASE
@@ -7306,7 +7306,7 @@
             }
         };
         
-        function renderMedicalChart() {
+        function renderKmsChart() {
             const container = document.querySelector("#kms-chart-container");
             if (!container) return;
         
@@ -7374,8 +7374,8 @@
         }
         
         // 4. Pengendali Tombol UI
-        function setKmsGender(gender) { currentKmsGender = gender; renderMedicalChart(); }
-        function setKmsMetric(metric) { currentKmsMetric = metric; renderMedicalChart(); }
+        function setKmsGender(gender) { currentKmsGender = gender; renderKmsChart(); }
+        function setKmsMetric(metric) { currentKmsMetric = metric; renderKmsChart(); }
         
         function updateKmsUi() {
             ['boy', 'girl'].forEach(g => {
@@ -7434,7 +7434,7 @@
         
             saveToLocalStorage();
             closeModalKms();
-            renderMedicalChart();
+            renderKmsChart();
         }
 
         function editKmsData(bulan) {
@@ -7458,7 +7458,7 @@
             if(confirm(`Yakin ingin menghapus data bulan ke-${bulan}?`)) {
                 appState.kmsData = appState.kmsData.filter(d => d.bulan !== bulan);
                 saveToLocalStorage();
-                renderMedicalChart();
+                renderKmsChart();
             }
         }
     </script>
