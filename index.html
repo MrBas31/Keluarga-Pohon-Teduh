@@ -1237,8 +1237,8 @@
                 </button>
             
                 <!-- Wadah Daftar Kartu RS -->
-                <div id="rs-dsa-list" class="space-y-4">
-                    <!-- Kartu RS dan daftar DSA akan muncul di sini via JavaScript -->
+                <div id="rs-dsa-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <!-- Kartu RS akan masuk ke sini -->
                 </div>
             </section>
 
@@ -2232,27 +2232,39 @@
 
     <!-- MODAL TAMBAH/EDIT RUMAH SAKIT -->
     <div id="modal-rs" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-4">
-        <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-xl max-h-[90vh] overflow-y-auto">
-            <h3 id="modal-rs-title" class="text-lg font-bold text-slate-800 mb-4">Tambah Rumah Sakit</h3>
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-3xl p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <h3 id="modal-rs-title" class="text-lg font-bold text-slate-800 dark:text-white mb-4">Tambah Rumah Sakit</h3>
             <input type="hidden" id="rs-id">
             
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 mb-1">Nama Rumah Sakit / Klinik <span class="text-red-500">*</span></label>
-                    <input type="text" id="rs-nama" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="Contoh: RS Awal Bros">
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Nama Rumah Sakit <span class="text-red-500">*</span></label>
+                    <input type="text" id="rs-nama" class="w-full p-3 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 mb-1">Kota <span class="text-red-500">*</span></label>
-                    <input type="text" id="rs-kota" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="Contoh: Tangerang Selatan">
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Kota <span class="text-red-500">*</span></label>
+                    <input type="text" id="rs-kota" class="w-full p-3 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 mb-1">Link Google Maps (Opsional)</label>
-                    <input type="url" id="rs-maps" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="https://maps.app.goo.gl/...">
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Alamat Lengkap</label>
+                    <textarea id="rs-alamat" rows="2" class="w-full p-3 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">URL Foto RS (Opsional)</label>
+                    <input type="url" id="rs-foto" class="w-full p-3 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm" placeholder="https://...">
+                </div>
+                
+                <div class="border-t border-slate-100 dark:border-slate-700 pt-4 mt-2">
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">Tautan Ekstra (Web, IG, Maps)</label>
+                    <div id="rs-links-container" class="space-y-2 mb-3"></div>
+                    <button onclick="addRsLinkRow()" class="text-xs font-bold text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-3 py-2 rounded-lg w-full text-center hover:bg-blue-100 dark:hover:bg-blue-800">
+                        <i class="fa-solid fa-plus mr-1"></i> Tambah Tautan
+                    </button>
                 </div>
             </div>
             
             <div class="flex gap-3 mt-6">
-                <button onclick="closeModalRs()" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold">Batal</button>
+                <button onclick="closeModalRs()" class="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 py-3 rounded-xl font-bold">Batal</button>
                 <button onclick="saveRs()" class="flex-1 bg-blue-500 text-white py-3 rounded-xl font-bold">Simpan</button>
             </div>
         </div>
@@ -2271,7 +2283,7 @@
                     <input type="text" id="dsa-nama" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="Contoh: dr. Fikri, Sp.A">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 mb-1">Nomor WA / Pendaftaran (Opsional)</label>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">Nomor WA (format: 628....)</label>
                     <input type="tel" id="dsa-kontak" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="08123456789">
                 </div>
                 <div>
@@ -6843,7 +6855,6 @@
             const filterKota = document.getElementById('filter-kota-rs');
             if (!container) return; 
         
-            // Bikin dropdown kota otomatis
             const semuaKota = [...new Set(appState.rsDsa.map(rs => rs.kota))].filter(Boolean);
             let opsiKota = '<option value="Semua">Semua Kota</option>';
             semuaKota.forEach(kota => {
@@ -6853,83 +6864,70 @@
             filterKota.innerHTML = opsiKota;
             filterKota.value = currentFilter || 'Semua';
         
-            // Filter data RS sesuai pilihan dropdown
             let dataTampil = appState.rsDsa;
             if (filterKota.value !== 'Semua') {
                 dataTampil = appState.rsDsa.filter(rs => rs.kota === filterKota.value);
             }
+            
+            // Urutkan yang utama di atas
+            dataTampil.sort((a, b) => (b.isUtama ? 1 : 0) - (a.isUtama ? 1 : 0));
         
             if (dataTampil.length === 0) {
-                container.innerHTML = `<div class="text-center p-8 text-slate-500 text-sm">Belum ada data RS/Klinik di area ini.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center p-8 text-slate-500">Belum ada data RS/Klinik di area ini.</div>`;
                 return;
             }
         
             let html = '';
             dataTampil.forEach(rs => {
-                let dsaHtml = '';
+                // Render List Dokter
+                let dsaListHtml = '<div class="text-sm text-slate-500 dark:text-slate-400 italic">Belum ada data dokter</div>';
                 if (rs.dsa && rs.dsa.length > 0) {
-                    rs.dsa.forEach(dokter => {
-                        let jadwalHtml = '';
-                        if (dokter.jadwal && dokter.jadwal.length > 0) {
-                            dokter.jadwal.forEach(j => {
-                                jadwalHtml += `<div class="flex justify-between text-sm text-slate-600 dark:text-slate-400">
-                                    <span>${j.hari}</span>
-                                    <span class="font-medium">${j.mulai} - ${j.selesai}</span>
-                                </div>`;
-                            });
-                        } else {
-                            jadwalHtml = `<div class="text-sm text-slate-400 italic">Belum ada jadwal</div>`;
-                        }
-        
-                        dsaHtml += `
-                        <div class="border-t border-slate-100 dark:border-slate-700 py-4 mt-2">
-                            <div class="flex justify-between items-start mb-3">
-                                <div>
-                                    <h5 class="font-bold text-slate-700 dark:text-slate-200">${dokter.nama}</h5>
-                                    ${dokter.catatan ? `<p class="text-xs text-slate-500 mt-1 italic">"${dokter.catatan}"</p>` : ''}
-                                </div>
-                                <button onclick="toggleFavoriteDsa('${rs.id}', '${dokter.id}')" class="text-xl ${dokter.isFavorite ? 'text-yellow-400 drop-shadow-md' : 'text-slate-300 hover:text-yellow-400'} transition">
-                                    <i class="fa-solid fa-star"></i>
-                                </button>
-                            </div>
-                            
-                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl mb-3">
-                                <h6 class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 border-b border-slate-200 dark:border-slate-700 pb-1">Jadwal Praktik:</h6>
-                                <div class="space-y-1">
-                                    ${jadwalHtml}
-                                </div>
-                            </div>
-                            
-                            <div class="flex flex-wrap gap-2">
-                                ${dokter.kontak ? `<a href="https://wa.me/${dokter.kontak.replace(/^0/, '62')}" target="_blank" class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-lg font-bold hover:bg-green-200"><i class="fa-brands fa-whatsapp mr-1"></i> WA</a>` : ''}
-                                <button onclick="openModalDsa('${rs.id}', '${dokter.id}')" class="text-xs bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg font-bold hover:bg-slate-200"><i class="fa-solid fa-pen mr-1"></i> Edit</button>
-                                <button onclick="deleteDsa('${rs.id}', '${dokter.id}')" class="text-xs bg-red-50 text-red-500 dark:bg-red-900/30 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100"><i class="fa-solid fa-trash mr-1"></i> Hapus</button>
-                            </div>
-                        </div>`;
-                    });
+                    dsaListHtml = rs.dsa.map(d => `<li class="text-sm text-slate-600 dark:text-slate-300">• ${d.nama} ${d.isFavorite ? '⭐' : ''}</li>`).join('');
                 }
         
+                // Render Links
+                let linksHtml = '';
+                if (rs.links && rs.links.length > 0) {
+                    linksHtml = `<div class="flex flex-wrap gap-2 mt-3">` + rs.links.map(l => {
+                        let icon = 'fa-link';
+                        if(l.tipe === 'IG') icon = 'fa-instagram';
+                        if(l.tipe === 'WA') icon = 'fa-whatsapp';
+                        if(l.tipe === 'Maps') icon = 'fa-map-location-dot';
+                        if(l.tipe === 'Web') icon = 'fa-globe';
+                        return `<a href="${l.url}" target="_blank" class="text-xs border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700"><i class="fa-solid ${icon} mr-1"></i>${l.tipe}</a>`;
+                    }).join('') + `</div>`;
+                }
+        
+                const fotoUrl = rs.foto || 'https://via.placeholder.com/400x200?text=Foto+Rumah+Sakit';
+        
                 html += `
-                <div class="bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-3xl p-5 shadow-sm">
-                    <div class="flex justify-between items-start mb-2">
-                        <div>
-                            <h4 class="font-bold text-lg text-slate-800 dark:text-white">${rs.nama}</h4>
-                            <span class="inline-block bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-bold px-2.5 py-1 rounded-full mt-1">${rs.kota}</span>
-                        </div>
-                        <div class="flex gap-2">
-                            ${rs.maps ? `<a href="${rs.maps}" target="_blank" class="w-8 h-8 flex items-center justify-center bg-blue-50 text-blue-500 rounded-full hover:bg-blue-100"><i class="fa-solid fa-map-location-dot"></i></a>` : ''}
-                            <button onclick="openModalRs('${rs.id}')" class="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-500 rounded-full hover:bg-slate-200"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteRs('${rs.id}')" class="w-8 h-8 flex items-center justify-center bg-red-50 text-red-400 rounded-full hover:bg-red-100"><i class="fa-solid fa-trash"></i></button>
-                        </div>
+                <div class="bg-[#1e293b] border border-slate-700 rounded-3xl overflow-hidden shadow-lg flex flex-col">
+                    <div class="relative h-48 bg-slate-800">
+                        <img src="${fotoUrl}" class="w-full h-full object-cover opacity-80" alt="Foto RS">
+                        <button onclick="setUtamaRs('${rs.id}')" class="absolute top-3 right-3 bg-black/50 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full hover:bg-black/70 border border-white/20 transition">
+                            <i class="fa-solid fa-star ${rs.isUtama ? 'text-yellow-400' : 'text-white'} mr-1"></i> ${rs.isUtama ? 'RS Utama' : 'Pilih Utama'}
+                        </button>
                     </div>
                     
-                    <div class="mt-2">
-                        ${dsaHtml}
+                    <div class="p-5 flex-1 flex flex-col">
+                        <h4 class="font-bold text-xl text-white mb-1">${rs.nama}</h4>
+                        <p class="text-xs text-slate-400 mb-4"><i class="fa-solid fa-location-dot mr-1"></i>${rs.alamat || rs.kota}</p>
+                        
+                        ${linksHtml}
+                        
+                        <div class="mt-4 flex-1">
+                            <p class="text-sm font-bold text-blue-400 mb-1"><i class="fa-solid fa-user-doctor mr-1"></i> Dokter Anak:</p>
+                            <ul class="space-y-1">
+                                ${dsaListHtml}
+                            </ul>
+                        </div>
+                        
+                        <div class="flex gap-2 mt-5">
+                            <button onclick="openModalRs('${rs.id}')" class="bg-slate-700 text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-600"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteRs('${rs.id}')" class="bg-red-900/30 text-red-400 w-10 h-10 rounded-xl flex items-center justify-center hover:bg-red-900/50"><i class="fa-solid fa-trash"></i></button>
+                            <button class="flex-1 bg-blue-600/20 text-blue-400 border border-blue-600/30 py-2 rounded-xl text-sm font-bold hover:bg-blue-600/40 transition">Lihat Detail & Jadwal ➔</button>
+                        </div>
                     </div>
-                    
-                    <button onclick="openModalDsa('${rs.id}')" class="w-full mt-4 border-2 border-dashed border-slate-200 dark:border-slate-700 text-slate-500 text-sm font-bold py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                        <i class="fa-solid fa-plus mr-1"></i> Tambah DSA di sini
-                    </button>
                 </div>
                 `;
             });
@@ -6940,20 +6938,38 @@
         function openModalRs(id = null) {
             document.getElementById('modal-rs').classList.remove('hidden');
             document.getElementById('modal-rs').classList.add('flex');
+            document.getElementById('rs-links-container').innerHTML = '';
+            
             if (id) {
                 document.getElementById('modal-rs-title').innerText = 'Edit Rumah Sakit';
                 const rs = appState.rsDsa.find(item => item.id === id);
                 document.getElementById('rs-id').value = rs.id;
                 document.getElementById('rs-nama').value = rs.nama;
                 document.getElementById('rs-kota').value = rs.kota;
-                document.getElementById('rs-maps').value = rs.maps || '';
+                document.getElementById('rs-alamat').value = rs.alamat || '';
+                document.getElementById('rs-foto').value = rs.foto || '';
+                if (rs.links) rs.links.forEach(l => addRsLinkRow(l.tipe, l.url));
             } else {
                 document.getElementById('modal-rs-title').innerText = 'Tambah Rumah Sakit';
                 document.getElementById('rs-id').value = '';
                 document.getElementById('rs-nama').value = '';
                 document.getElementById('rs-kota').value = '';
-                document.getElementById('rs-maps').value = '';
+                document.getElementById('rs-alamat').value = '';
+                document.getElementById('rs-foto').value = '';
             }
+        }
+        
+        function addRsLinkRow(tipe = 'Web', url = '') {
+            const container = document.getElementById('rs-links-container');
+            const rowId = 'link-' + Date.now() + Math.floor(Math.random()*1000);
+            const options = ['Web', 'IG', 'WA', 'Maps', 'Lainnya'].map(t => `<option value="${t}" ${tipe===t?'selected':''}>${t}</option>`).join('');
+            
+            container.insertAdjacentHTML('beforeend', `
+            <div id="${rowId}" class="flex gap-2 link-row">
+                <select class="link-tipe p-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm w-24">${options}</select>
+                <input type="text" class="link-url flex-1 p-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm" value="${url}" placeholder="URL / Nomor">
+                <button onclick="document.getElementById('${rowId}').remove()" class="text-red-400 hover:text-red-600 px-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>`);
         }
         
         function closeModalRs() {
@@ -6962,25 +6978,29 @@
         }
         
         function saveRs() {
-            // Pengaman: pastikan wadah array rsDsa selalu ada
             if (!appState.rsDsa) appState.rsDsa = [];
-        
             const id = document.getElementById('rs-id').value;
             const nama = document.getElementById('rs-nama').value.trim();
             const kota = document.getElementById('rs-kota').value.trim();
-            const maps = document.getElementById('rs-maps').value.trim();
-            
             if (!nama || !kota) return alert('Nama RS dan Kota wajib diisi!');
         
+            const links = [];
+            document.querySelectorAll('.link-row').forEach(row => {
+                links.push({ tipe: row.querySelector('.link-tipe').value, url: row.querySelector('.link-url').value });
+            });
+        
+            const data = {
+                nama, kota, 
+                alamat: document.getElementById('rs-alamat').value.trim(),
+                foto: document.getElementById('rs-foto').value.trim(),
+                links
+            };
+        
             if (id) {
-                const index = appState.rsDsa.findIndex(item => item.id === id);
-                if (index !== -1) {
-                    appState.rsDsa[index].nama = nama;
-                    appState.rsDsa[index].kota = kota;
-                    appState.rsDsa[index].maps = maps;
-                }
+                const idx = appState.rsDsa.findIndex(item => item.id === id);
+                appState.rsDsa[idx] = { ...appState.rsDsa[idx], ...data };
             } else {
-                appState.rsDsa.push({ id: 'rs-' + Date.now(), nama, kota, maps, dsa: [] });
+                appState.rsDsa.push({ id: 'rs-' + Date.now(), ...data, isUtama: false, dsa: [] });
             }
             
             saveToLocalStorage(); 
@@ -6994,6 +7014,12 @@
                 saveToLocalStorage();
                 renderRsDsa();
             }
+        }
+
+        function setUtamaRs(id) {
+            appState.rsDsa.forEach(rs => rs.isUtama = (rs.id === id));
+            saveToLocalStorage();
+            renderRsDsa();
         }
         
         // 4. Sistem Modal & Simpan Data Jadwal Dokter Dinamis
