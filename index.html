@@ -6962,22 +6962,28 @@
         }
         
         function saveRs() {
+            // Pengaman: pastikan wadah array rsDsa selalu ada
+            if (!appState.rsDsa) appState.rsDsa = [];
+        
             const id = document.getElementById('rs-id').value;
             const nama = document.getElementById('rs-nama').value.trim();
             const kota = document.getElementById('rs-kota').value.trim();
             const maps = document.getElementById('rs-maps').value.trim();
+            
             if (!nama || !kota) return alert('Nama RS dan Kota wajib diisi!');
         
             if (id) {
                 const index = appState.rsDsa.findIndex(item => item.id === id);
-                appState.rsDsa[index].nama = nama;
-                appState.rsDsa[index].kota = kota;
-                appState.rsDsa[index].maps = maps;
+                if (index !== -1) {
+                    appState.rsDsa[index].nama = nama;
+                    appState.rsDsa[index].kota = kota;
+                    appState.rsDsa[index].maps = maps;
+                }
             } else {
                 appState.rsDsa.push({ id: 'rs-' + Date.now(), nama, kota, maps, dsa: [] });
             }
             
-            saveToLocalStorage(); // Panggil fungsi simpan ke LocalStorage andalanmu
+            saveToLocalStorage(); 
             closeModalRs();
             renderRsDsa();
         }
