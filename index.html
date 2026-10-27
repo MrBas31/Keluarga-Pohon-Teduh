@@ -2344,6 +2344,41 @@
         </div>
     </div>
 
+    <!-- MODAL TAMBAH DATA KMS -->
+    <div id="modal-kms" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-[#1e293b] w-full max-w-sm rounded-3xl p-6 shadow-xl">
+            <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4">Catat Pertumbuhan</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Bulan Ke- (Usia) <span class="text-red-500">*</span></label>
+                    <input type="number" id="kms-bulan" min="0" max="24" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Contoh: 0 (Baru Lahir)">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Berat Badan (kg)</label>
+                        <input type="number" step="0.1" id="kms-bb" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Misal: 3.2">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Tinggi Badan (cm)</label>
+                        <input type="number" step="0.1" id="kms-tb" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Misal: 50">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Lingkar Kepala (cm)</label>
+                    <input type="number" step="0.1" id="kms-lk" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Misal: 34">
+                </div>
+            </div>
+            
+            <div class="flex gap-3 mt-6">
+                <button onclick="closeModalKms()" class="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 py-3 rounded-xl font-bold hover:bg-slate-200 dark:hover:bg-slate-700">Batal</button>
+                <button onclick="saveKmsData()" class="flex-1 bg-blue-500 text-white py-3 rounded-xl font-bold hover:bg-blue-600">Simpan Data</button>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // 1. Konfigurasi Firebase milikmu
@@ -5927,6 +5962,7 @@
           if (typeof renderPostShopping === 'function') renderPostShopping();
           renderRsDsa();
           updateDashboardWidgets();
+          renderMedicalChart();
         }
 
         // FUNGSI PENYIMPANAN KE FIREBASE
@@ -7218,6 +7254,123 @@
             appState.rsDsa[rsIndex].dsa[dsaIndex].isFavorite = !appState.rsDsa[rsIndex].dsa[dsaIndex].isFavorite;
             saveToLocalStorage();
             renderRsDsa();
+        }
+
+        // 1. Inisialisasi State & Variabel Global
+        if (!appState.kmsData) appState.kmsData = [];
+        let currentKmsGender = 'boy';
+        let currentKmsMetric = 'BB';
+        let kmsChart = null;
+        
+        // 2. Database Standar WHO (0-12 Bulan) - Batas Bawah & Batas Atas
+        const standarWHO = {
+            boy: {
+                BB: { min: [2.5, 3.4, 4.3, 5.0, 5.6, 6.0, 6.4, 6.7, 6.9, 7.1, 7.4, 7.6, 7.7], max: [4.4, 5.8, 7.1, 8.0, 8.7, 9.3, 9.8, 10.3, 10.7, 11.0, 11.4, 11.7, 12.0] },
+                TB: { min: [46.1, 50.8, 54.4, 57.3, 59.7, 61.7, 63.3, 64.8, 66.2, 67.5, 68.7, 69.9, 71.0], max: [53.7, 58.6, 62.4, 65.5, 68.0, 70.1, 71.9, 73.5, 75.0, 76.5, 77.9, 79.2, 80.5] },
+                LK: { min: [31.9, 34.9, 36.8, 38.1, 39.2, 40.1, 40.8, 41.5, 42.0, 42.5, 43.0, 43.4, 43.8], max: [37.0, 39.6, 41.5, 42.9, 44.0, 45.0, 45.8, 46.4, 47.0, 47.5, 48.0, 48.4, 48.8] }
+            },
+            girl: {
+                BB: { min: [2.4, 3.2, 4.0, 4.5, 5.0, 5.4, 5.7, 6.0, 6.3, 6.5, 6.7, 6.9, 7.0], max: [4.2, 5.5, 6.6, 7.5, 8.2, 8.8, 9.3, 9.8, 10.2, 10.5, 10.9, 11.2, 11.5] },
+                TB: { min: [45.4, 49.8, 53.0, 55.6, 57.8, 59.6, 61.2, 62.7, 64.0, 65.3, 66.5, 67.7, 68.9], max: [52.9, 57.6, 61.1, 64.0, 66.4, 68.5, 70.3, 71.9, 73.5, 75.0, 76.4, 77.8, 79.2] },
+                LK: { min: [31.5, 34.3, 36.0, 37.2, 38.2, 39.0, 39.7, 40.4, 40.9, 41.4, 41.9, 42.3, 42.7], max: [36.2, 38.8, 40.5, 41.8, 42.9, 43.8, 44.6, 45.3, 45.9, 46.4, 46.9, 47.3, 47.7] }
+            }
+        };
+        
+        // 3. Fungsi Render Grafik KMS
+        function renderMedicalChart() {
+            const container = document.querySelector("#kms-chart-container");
+            if (!container) return;
+        
+            // Siapkan data anak (Miqdad)
+            const sortedData = [...appState.kmsData].sort((a, b) => a.bulan - b.bulan);
+            const dataAnak = Array.from({ length: 13 }, (_, i) => {
+                const record = sortedData.find(d => d.bulan === i);
+                return record ? record[currentKmsMetric.toLowerCase()] : null;
+            });
+        
+            // Ambil batas WHO sesuai gender & metrik saat ini
+            const std = standarWHO[currentKmsGender][currentKmsMetric];
+            const warnaTema = currentKmsGender === 'boy' ? '#3b82f6' : '#ec4899'; // Biru atau Pink
+            const namaMetrik = currentKmsMetric === 'BB' ? 'Berat (kg)' : currentKmsMetric === 'TB' ? 'Tinggi (cm)' : 'Lingkar Kepala (cm)';
+        
+            const options = {
+                series: [
+                    { name: "Anak Saya", data: dataAnak, type: 'line' },
+                    { name: "Batas Atas WHO", data: std.max, type: 'area' },
+                    { name: "Batas Bawah WHO", data: std.min, type: 'area' }
+                ],
+                chart: { type: 'line', height: 350, toolbar: { show: false }, fontFamily: 'inherit' },
+                colors: [warnaTema, 'rgba(167, 243, 208, 0.4)', 'rgba(254, 202, 202, 0.4)'],
+                stroke: { width: [4, 2, 2], curve: 'smooth' },
+                fill: { type: ['solid', 'solid', 'solid'], opacity: [1, 0.2, 0.2] },
+                markers: { size: [6, 0, 0] },
+                xaxis: { categories: ['Bulan 0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], labels: { style: { colors: '#94a3b8' } } },
+                yaxis: { title: { text: namaMetrik, style: { color: '#94a3b8' } }, labels: { style: { colors: '#94a3b8' } } },
+                grid: { borderColor: '#334155', strokeDashArray: 4 },
+                theme: { mode: 'dark' },
+                legend: { show: true, position: 'top' }
+            };
+        
+            if (kmsChart) kmsChart.destroy();
+            kmsChart = new ApexCharts(container, options);
+            kmsChart.render();
+            updateKmsUi();
+        }
+        
+        // 4. Pengendali Tombol UI
+        function setKmsGender(gender) { currentKmsGender = gender; renderMedicalChart(); }
+        function setKmsMetric(metric) { currentKmsMetric = metric; renderMedicalChart(); }
+        
+        function updateKmsUi() {
+            ['boy', 'girl'].forEach(g => {
+                const btn = document.getElementById(`btn-gender-${g}`);
+                if(btn) {
+                    btn.className = currentKmsGender === g 
+                        ? (g === 'boy' ? 'px-4 py-2 rounded-lg text-sm font-bold bg-blue-500 text-white shadow-md' : 'px-4 py-2 rounded-lg text-sm font-bold bg-pink-500 text-white shadow-md')
+                        : 'px-4 py-2 rounded-lg text-sm font-bold text-slate-500 hover:text-slate-300 transition';
+                }
+            });
+            ['bb', 'tb', 'lk'].forEach(m => {
+                const btn = document.getElementById(`btn-metric-${m}`);
+                if(btn) {
+                    btn.className = currentKmsMetric === m.toUpperCase()
+                        ? 'px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-white shadow-sm'
+                        : 'px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-300 transition';
+                }
+            });
+        }
+        
+        // 5. Fungsi Modal & Simpan Data
+        function openModalKms() {
+            document.getElementById('modal-kms').classList.remove('hidden');
+            document.getElementById('modal-kms').classList.add('flex');
+            document.getElementById('kms-bulan').value = '';
+            document.getElementById('kms-bb').value = '';
+            document.getElementById('kms-tb').value = '';
+            document.getElementById('kms-lk').value = '';
+        }
+        function closeModalKms() {
+            document.getElementById('modal-kms').classList.add('hidden');
+            document.getElementById('modal-kms').classList.remove('flex');
+        }
+        function saveKmsData() {
+            const bulan = parseInt(document.getElementById('kms-bulan').value);
+            if (isNaN(bulan) || bulan < 0 || bulan > 12) return alert('Masukkan bulan antara 0 sampai 12!');
+            
+            const data = {
+                bulan: bulan,
+                bb: parseFloat(document.getElementById('kms-bb').value) || null,
+                tb: parseFloat(document.getElementById('kms-tb').value) || null,
+                lk: parseFloat(document.getElementById('kms-lk').value) || null
+            };
+        
+            const idx = appState.kmsData.findIndex(d => d.bulan === bulan);
+            if (idx !== -1) appState.kmsData[idx] = data;
+            else appState.kmsData.push(data);
+        
+            saveToLocalStorage();
+            closeModalKms();
+            renderMedicalChart();
         }
     </script>
 </body>
