@@ -17,6 +17,8 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <!-- Chart.js CDN for Budgeting Pie Chart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ApexCharts CDN for KMS Tumbuh Kembang -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <!-- Google Fonts: Lora & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -556,7 +558,7 @@
                 </div>
             </section>
 
-            <!-- TAB MEDIS -->
+            <!-- TAB 4 : MEDIS -->
             <section id="sec-medis" class="hidden space-y-6">
                 <!-- HITUNG KONTRAKSI PERSALINAN WIDGET -->
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
@@ -1244,10 +1246,42 @@
 
             <!-- TAB 5: MEDIS -->
             <section id="sec-post-medis" class="hidden space-y-6">
-                <div class="p-8 bg-white rounded-3xl border border-slate-100 text-center space-y-3 shadow-sm">
-                    <div class="text-4xl opacity-50">🩺</div>
-                    <h3 class="font-bold text-slate-700">Catatan Medis & Imunisasi</h3>
-                    <p class="text-xs text-slate-500">Jadwal imunisasi dan riwayat kontrol kesehatan si kecil akan segera dibangun.</p>
+                <!-- Header Medis -->
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-[#1e293b] p-5 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white"><i class="fa-solid fa-notes-medical text-blue-500 mr-2"></i>Rekam Medis & KMS</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Pantau Grafik Tumbuh Kembang (KMS) Miqdad</p>
+                    </div>
+                    
+                    <!-- Toggle Gender KMS -->
+                    <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <button id="btn-gender-boy" onclick="setKmsGender('boy')" class="px-4 py-2 rounded-lg text-sm font-bold bg-blue-500 text-white shadow-md transition">Laki-laki</button>
+                        <button id="btn-gender-girl" onclick="setKmsGender('girl')" class="px-4 py-2 rounded-lg text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-pink-500 transition">Perempuan</button>
+                    </div>
+                </div>
+            
+                <!-- Submenu Navigasi Medis (KMS, Riwayat Kontrol, Q&A) -->
+                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                    <button class="bg-blue-50 dark:bg-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/50 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap">Grafik KMS</button>
+                    <button class="bg-slate-50 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap opacity-50 cursor-not-allowed">Riwayat Kontrol (Segera)</button>
+                    <button class="bg-slate-50 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap opacity-50 cursor-not-allowed">Q&A Dokter (Segera)</button>
+                </div>
+            
+                <!-- Area Grafik KMS -->
+                <div class="bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-3xl p-5 shadow-lg">
+                    <!-- Tipe Grafik (BB/TB/LK) -->
+                    <div class="flex gap-2 mb-6 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-xl w-max border border-slate-200 dark:border-slate-700">
+                        <button onclick="setKmsMetric('BB')" id="btn-metric-bb" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-white transition">Berat (BB)</button>
+                        <button onclick="setKmsMetric('TB')" id="btn-metric-tb" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">Tinggi (TB)</button>
+                        <button onclick="setKmsMetric('LK')" id="btn-metric-lk" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">Lingkar Kepala</button>
+                    </div>
+                    
+                    <!-- Wadah Rendering ApexCharts -->
+                    <div id="kms-chart-container" class="w-full h-[350px]"></div>
+                    
+                    <button onclick="openModalKms()" class="w-full mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-2xl transition shadow-md shadow-blue-500/30">
+                        <i class="fa-solid fa-plus mr-1"></i> Catat Pertumbuhan Bulan Ini
+                    </button>
                 </div>
             </section>
 
