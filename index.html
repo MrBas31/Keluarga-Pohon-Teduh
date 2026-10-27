@@ -6977,7 +6977,7 @@
                 appState.rsDsa.push({ id: 'rs-' + Date.now(), nama, kota, maps, dsa: [] });
             }
             
-            saveData(); // Panggil fungsi simpan ke LocalStorage andalanmu
+            saveToLocalStorage(); // Panggil fungsi simpan ke LocalStorage andalanmu
             closeModalRs();
             renderRsDsa();
         }
@@ -6985,7 +6985,7 @@
         function deleteRs(id) {
             if(confirm('Yakin ingin menghapus RS ini beserta semua data dokternya?')) {
                 appState.rsDsa = appState.rsDsa.filter(item => item.id !== id);
-                saveData();
+                saveToLocalStorage();
                 renderRsDsa();
             }
         }
@@ -7068,7 +7068,7 @@
                 appState.rsDsa[rsIndex].dsa.push({ id: 'dsa-' + Date.now(), nama, kontak, catatan, jadwal, isFavorite: false });
             }
             
-            saveData();
+            saveToLocalStorage();
             closeModalDsa();
             renderRsDsa();
         }
@@ -7077,7 +7077,7 @@
             if(confirm('Hapus profil DSA ini?')) {
                 const rsIndex = appState.rsDsa.findIndex(item => item.id === rsId);
                 appState.rsDsa[rsIndex].dsa = appState.rsDsa[rsIndex].dsa.filter(item => item.id !== dsaId);
-                saveData();
+                saveToLocalStorage();
                 renderRsDsa();
             }
         }
@@ -7086,7 +7086,7 @@
             const rsIndex = appState.rsDsa.findIndex(item => item.id === rsId);
             const dsaIndex = appState.rsDsa[rsIndex].dsa.findIndex(item => item.id === dsaId);
             appState.rsDsa[rsIndex].dsa[dsaIndex].isFavorite = !appState.rsDsa[rsIndex].dsa[dsaIndex].isFavorite;
-            saveData();
+            saveToLocalStorage();
             renderRsDsa();
         }
     </script>
