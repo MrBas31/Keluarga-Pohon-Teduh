@@ -7306,11 +7306,10 @@
             }
         };
         
-        // 3. Fungsi Render Grafik KMS
         function renderMedicalChart() {
             const container = document.querySelector("#kms-chart-container");
             if (!container) return;
-
+        
             // PENGAMAN: Pastikan wadah data KMS tidak kosong
             if (!appState.kmsData) appState.kmsData = [];
         
@@ -7323,7 +7322,7 @@
         
             // Ambil batas WHO sesuai gender & metrik saat ini
             const std = standarWHO[currentKmsGender][currentKmsMetric];
-            const warnaTema = currentKmsGender === 'boy' ? '#3b82f6' : '#ec4899'; // Biru atau Pink
+            const warnaTema = currentKmsGender === 'boy' ? '#3b82f6' : '#ec4899'; 
             const namaMetrik = currentKmsMetric === 'BB' ? 'Berat (kg)' : currentKmsMetric === 'TB' ? 'Tinggi (cm)' : 'Lingkar Kepala (cm)';
         
             const options = {
@@ -7348,6 +7347,30 @@
             kmsChart = new ApexCharts(container, options);
             kmsChart.render();
             updateKmsUi();
+        
+            // RENDER RIWAYAT KE DALAM HTML (Sekarang menyatu dengan aman di sini)
+            const historyContainer = document.getElementById('kms-history-list');
+            if (historyContainer) {
+                let historyHtml = '';
+                if (sortedData.length === 0) {
+                    historyHtml = '<div class="text-xs text-slate-500 italic">Belum ada riwayat pencatatan.</div>';
+                } else {
+                    sortedData.forEach(d => {
+                        historyHtml += `
+                        <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700 mb-2">
+                            <div>
+                                <p class="text-sm font-bold text-slate-700 dark:text-white">Bulan ke-${d.bulan}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">BB: ${d.bb || '-'} kg | TB: ${d.tb || '-'} cm | LK: ${d.lk || '-'} cm</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="editKmsData(${d.bulan})" class="w-8 h-8 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 flex items-center justify-center transition"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="deleteKmsData(${d.bulan})" class="w-8 h-8 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                            </div>
+                        </div>`;
+                    });
+                }
+                historyContainer.innerHTML = historyHtml;
+            }
         }
         
         // 4. Pengendali Tombol UI
