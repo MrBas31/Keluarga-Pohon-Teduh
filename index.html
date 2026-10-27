@@ -1282,6 +1282,12 @@
                     <button onclick="openModalKms()" class="w-full mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-2xl transition shadow-md shadow-blue-500/30">
                         <i class="fa-solid fa-plus mr-1"></i> Catat Pertumbuhan Bulan Ini
                     </button>
+
+                    <!-- Daftar Riwayat Pertumbuhan -->
+                    <div class="mt-6 border-t border-slate-100 dark:border-slate-700 pt-5">
+                        <h4 class="text-sm font-bold text-slate-800 dark:text-slate-300 mb-3">Riwayat Pertumbuhan:</h4>
+                        <div id="kms-history-list" class="space-y-2 max-h-48 overflow-y-auto pr-2"></div>
+                    </div>
                 </div>
             </section>
 
@@ -4061,6 +4067,30 @@
                     plugins: { legend: { labels: { boxWidth: 12, font: {size: 10} } } }
                 }
             });
+
+            // Render Riwayat ke dalam HTML
+            const historyContainer = document.getElementById('kms-history-list');
+            if (historyContainer) {
+                let historyHtml = '';
+                if (sortedData.length === 0) {
+                    historyHtml = '<div class="text-xs text-slate-500 italic">Belum ada riwayat pencatatan.</div>';
+                } else {
+                    sortedData.forEach(d => {
+                        historyHtml += `
+                        <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700">
+                            <div>
+                                <p class="text-sm font-bold text-slate-700 dark:text-white">Bulan ke-${d.bulan}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">BB: ${d.bb || '-'} kg | TB: ${d.tb || '-'} cm | LK: ${d.lk || '-'} cm</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="editKmsData(${d.bulan})" class="w-8 h-8 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 flex items-center justify-center transition"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="deleteKmsData(${d.bulan})" class="w-8 h-8 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                            </div>
+                        </div>`;
+                    });
+                }
+                historyContainer.innerHTML = historyHtml;
+            }
         }
         
         // WAKE WINDOW TIMER
@@ -7347,7 +7377,12 @@
         function openModalKms() {
             document.getElementById('modal-kms').classList.remove('hidden');
             document.getElementById('modal-kms').classList.add('flex');
-            document.getElementById('kms-bulan').value = '';
+            
+            const inputBulan = document.getElementById('kms-bulan');
+            inputBulan.value = '';
+            inputBulan.readOnly = false;
+            inputBulan.classList.remove('opacity-50', 'cursor-not-allowed');
+            
             document.getElementById('kms-bb').value = '';
             document.getElementById('kms-tb').value = '';
             document.getElementById('kms-lk').value = '';
@@ -7377,6 +7412,31 @@
             saveToLocalStorage();
             closeModalKms();
             renderMedicalChart();
+        }
+
+        function editKmsData(bulan) {
+            const data = appState.kmsData.find(d => d.bulan === bulan);
+            if (!data) return;
+            
+            document.getElementById('modal-kms').classList.remove('hidden');
+            document.getElementById('modal-kms').classList.add('flex');
+            
+            const inputBulan = document.getElementById('kms-bulan');
+            inputBulan.value = data.bulan;
+            inputBulan.readOnly = true; 
+            inputBulan.classList.add('opacity-50', 'cursor-not-allowed'); // Kunci agar bulan tidak terubah saat edit
+            
+            document.getElementById('kms-bb').value = data.bb || '';
+            document.getElementById('kms-tb').value = data.tb || '';
+            document.getElementById('kms-lk').value = data.lk || '';
+        }
+        
+        function deleteKmsData(bulan) {
+            if(confirm(`Yakin ingin menghapus data bulan ke-${bulan}?`)) {
+                appState.kmsData = appState.kmsData.filter(d => d.bulan !== bulan);
+                saveToLocalStorage();
+                renderMedicalChart();
+            }
         }
     </script>
 </body>
