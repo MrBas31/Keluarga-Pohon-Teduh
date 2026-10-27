@@ -267,7 +267,7 @@
             <button onclick="switchPostnatalTab('post-belanja')" id="tab-post-belanja" class="tab-btn py-2.5 whitespace-nowrap">
                 <i class="fa-solid fa-cart-shopping mr-1"></i> Belanja Bulanan
             </button>
-            <button onclick="switchPostnatalTab('post-rs')" id="tab-post-rs" class="tab-btn py-2.5 whitespace-nowrap">
+            <button onclick="switchPostnatalTab('sec-rs-dsa')" id="tab-rs-dsa" class="tab-btn py-2.5 whitespace-nowrap">
                 <i class="fa-solid fa-hospital-user mr-1"></i> RS & DSA
             </button>
             <button onclick="switchPostnatalTab('post-medis')" id="tab-post-medis" class="tab-btn py-2.5 whitespace-nowrap">
@@ -5879,6 +5879,7 @@
           if (typeof renderDailyLogs === 'function') renderDailyLogs();
           if (typeof updateWakeWindow === 'function') updateWakeWindow();
           if (typeof renderPostShopping === 'function') renderPostShopping();
+          renderRsDsa();
           updateDashboardWidgets();
         }
 
@@ -6829,6 +6830,264 @@
                 sisaVal.className = 'text-lg font-bold text-emerald-700';
                 sisaVal.innerText = `Rp ${sisaAnggaran.toLocaleString('id-ID')}`;
             }
+        }
+
+        // 1. Inisialisasi State (Wajib)
+        if (!appState.rsDsa) {
+            appState.rsDsa = [];
+        }
+        
+        // 2. Fungsi Utama Menampilkan Data
+        function renderRsDsa() {
+            const container = document.getElementById('rs-dsa-list');
+            const filterKota = document.getElementById('filter-kota-rs');
+            if (!container) return; 
+        
+            // Bikin dropdown kota otomatis
+            const semuaKota = [...new Set(appState.rsDsa.map(rs => rs.kota))].filter(Boolean);
+            let opsiKota = '<option value="Semua">Semua Kota</option>';
+            semuaKota.forEach(kota => {
+                opsiKota += `<option value="${kota}" ${filterKota.value === kota ? 'selected' : ''}>${kota}</option>`;
+            });
+            const currentFilter = filterKota.value;
+            filterKota.innerHTML = opsiKota;
+            filterKota.value = currentFilter || 'Semua';
+        
+            // Filter data RS sesuai pilihan dropdown
+            let dataTampil = appState.rsDsa;
+            if (filterKota.value !== 'Semua') {
+                dataTampil = appState.rsDsa.filter(rs => rs.kota === filterKota.value);
+            }
+        
+            if (dataTampil.length === 0) {
+                container.innerHTML = `<div class="text-center p-8 text-slate-500 text-sm">Belum ada data RS/Klinik di area ini.</div>`;
+                return;
+            }
+        
+            let html = '';
+            dataTampil.forEach(rs => {
+                let dsaHtml = '';
+                if (rs.dsa && rs.dsa.length > 0) {
+                    rs.dsa.forEach(dokter => {
+                        let jadwalHtml = '';
+                        if (dokter.jadwal && dokter.jadwal.length > 0) {
+                            dokter.jadwal.forEach(j => {
+                                jadwalHtml += `<div class="flex justify-between text-sm text-slate-600 dark:text-slate-400">
+                                    <span>${j.hari}</span>
+                                    <span class="font-medium">${j.mulai} - ${j.selesai}</span>
+                                </div>`;
+                            });
+                        } else {
+                            jadwalHtml = `<div class="text-sm text-slate-400 italic">Belum ada jadwal</div>`;
+                        }
+        
+                        dsaHtml += `
+                        <div class="border-t border-slate-100 dark:border-slate-700 py-4 mt-2">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h5 class="font-bold text-slate-700 dark:text-slate-200">${dokter.nama}</h5>
+                                    ${dokter.catatan ? `<p class="text-xs text-slate-500 mt-1 italic">"${dokter.catatan}"</p>` : ''}
+                                </div>
+                                <button onclick="toggleFavoriteDsa('${rs.id}', '${dokter.id}')" class="text-xl ${dokter.isFavorite ? 'text-yellow-400 drop-shadow-md' : 'text-slate-300 hover:text-yellow-400'} transition">
+                                    <i class="fa-solid fa-star"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl mb-3">
+                                <h6 class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 border-b border-slate-200 dark:border-slate-700 pb-1">Jadwal Praktik:</h6>
+                                <div class="space-y-1">
+                                    ${jadwalHtml}
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-2">
+                                ${dokter.kontak ? `<a href="https://wa.me/${dokter.kontak.replace(/^0/, '62')}" target="_blank" class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-lg font-bold hover:bg-green-200"><i class="fa-brands fa-whatsapp mr-1"></i> WA</a>` : ''}
+                                <button onclick="openModalDsa('${rs.id}', '${dokter.id}')" class="text-xs bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg font-bold hover:bg-slate-200"><i class="fa-solid fa-pen mr-1"></i> Edit</button>
+                                <button onclick="deleteDsa('${rs.id}', '${dokter.id}')" class="text-xs bg-red-50 text-red-500 dark:bg-red-900/30 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100"><i class="fa-solid fa-trash mr-1"></i> Hapus</button>
+                            </div>
+                        </div>`;
+                    });
+                }
+        
+                html += `
+                <div class="bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-3xl p-5 shadow-sm">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-800 dark:text-white">${rs.nama}</h4>
+                            <span class="inline-block bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-bold px-2.5 py-1 rounded-full mt-1">${rs.kota}</span>
+                        </div>
+                        <div class="flex gap-2">
+                            ${rs.maps ? `<a href="${rs.maps}" target="_blank" class="w-8 h-8 flex items-center justify-center bg-blue-50 text-blue-500 rounded-full hover:bg-blue-100"><i class="fa-solid fa-map-location-dot"></i></a>` : ''}
+                            <button onclick="openModalRs('${rs.id}')" class="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-500 rounded-full hover:bg-slate-200"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteRs('${rs.id}')" class="w-8 h-8 flex items-center justify-center bg-red-50 text-red-400 rounded-full hover:bg-red-100"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2">
+                        ${dsaHtml}
+                    </div>
+                    
+                    <button onclick="openModalDsa('${rs.id}')" class="w-full mt-4 border-2 border-dashed border-slate-200 dark:border-slate-700 text-slate-500 text-sm font-bold py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-plus mr-1"></i> Tambah DSA di sini
+                    </button>
+                </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+        
+        // 3. Sistem Modal & Simpan Data RS
+        function openModalRs(id = null) {
+            document.getElementById('modal-rs').classList.remove('hidden');
+            document.getElementById('modal-rs').classList.add('flex');
+            if (id) {
+                document.getElementById('modal-rs-title').innerText = 'Edit Rumah Sakit';
+                const rs = appState.rsDsa.find(item => item.id === id);
+                document.getElementById('rs-id').value = rs.id;
+                document.getElementById('rs-nama').value = rs.nama;
+                document.getElementById('rs-kota').value = rs.kota;
+                document.getElementById('rs-maps').value = rs.maps || '';
+            } else {
+                document.getElementById('modal-rs-title').innerText = 'Tambah Rumah Sakit';
+                document.getElementById('rs-id').value = '';
+                document.getElementById('rs-nama').value = '';
+                document.getElementById('rs-kota').value = '';
+                document.getElementById('rs-maps').value = '';
+            }
+        }
+        
+        function closeModalRs() {
+            document.getElementById('modal-rs').classList.add('hidden');
+            document.getElementById('modal-rs').classList.remove('flex');
+        }
+        
+        function saveRs() {
+            const id = document.getElementById('rs-id').value;
+            const nama = document.getElementById('rs-nama').value.trim();
+            const kota = document.getElementById('rs-kota').value.trim();
+            const maps = document.getElementById('rs-maps').value.trim();
+            if (!nama || !kota) return alert('Nama RS dan Kota wajib diisi!');
+        
+            if (id) {
+                const index = appState.rsDsa.findIndex(item => item.id === id);
+                appState.rsDsa[index].nama = nama;
+                appState.rsDsa[index].kota = kota;
+                appState.rsDsa[index].maps = maps;
+            } else {
+                appState.rsDsa.push({ id: 'rs-' + Date.now(), nama, kota, maps, dsa: [] });
+            }
+            
+            saveData(); // Panggil fungsi simpan ke LocalStorage andalanmu
+            closeModalRs();
+            renderRsDsa();
+        }
+        
+        function deleteRs(id) {
+            if(confirm('Yakin ingin menghapus RS ini beserta semua data dokternya?')) {
+                appState.rsDsa = appState.rsDsa.filter(item => item.id !== id);
+                saveData();
+                renderRsDsa();
+            }
+        }
+        
+        // 4. Sistem Modal & Simpan Data Jadwal Dokter Dinamis
+        function openModalDsa(rsId, dsaId = null) {
+            document.getElementById('modal-dsa').classList.remove('hidden');
+            document.getElementById('modal-dsa').classList.add('flex');
+            document.getElementById('dsa-parent-rs-id').value = rsId;
+            document.getElementById('dsa-schedule-container').innerHTML = ''; 
+            
+            if (dsaId) {
+                document.getElementById('modal-dsa-title').innerText = 'Edit Dokter';
+                const dsa = appState.rsDsa.find(item => item.id === rsId).dsa.find(item => item.id === dsaId);
+                document.getElementById('dsa-id').value = dsa.id;
+                document.getElementById('dsa-nama').value = dsa.nama;
+                document.getElementById('dsa-kontak').value = dsa.kontak || '';
+                document.getElementById('dsa-catatan').value = dsa.catatan || '';
+                
+                if (dsa.jadwal && dsa.jadwal.length > 0) {
+                    dsa.jadwal.forEach(j => addScheduleRow(j.hari, j.mulai, j.selesai));
+                } else {
+                    addScheduleRow(); // Kosongkan 1 baris
+                }
+            } else {
+                document.getElementById('modal-dsa-title').innerText = 'Tambah Dokter Anak';
+                document.getElementById('dsa-id').value = '';
+                document.getElementById('dsa-nama').value = '';
+                document.getElementById('dsa-kontak').value = '';
+                document.getElementById('dsa-catatan').value = '';
+                addScheduleRow(); 
+            }
+        }
+        
+        function closeModalDsa() {
+            document.getElementById('modal-dsa').classList.add('hidden');
+            document.getElementById('modal-dsa').classList.remove('flex');
+        }
+        
+        function addScheduleRow(hari = 'Senin', mulai = '08:00', selesai = '12:00') {
+            const container = document.getElementById('dsa-schedule-container');
+            const rowId = 'sch-' + Date.now() + Math.floor(Math.random()*1000);
+            const hariOptions = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'].map(h => 
+                `<option value="${h}" ${hari === h ? 'selected' : ''}>${h}</option>`
+            ).join('');
+        
+            const html = `
+            <div id="${rowId}" class="flex gap-2 items-center schedule-row mt-2">
+                <select class="sch-hari flex-1 p-2 border border-slate-200 rounded-lg text-sm">${hariOptions}</select>
+                <input type="time" class="sch-mulai p-2 border border-slate-200 rounded-lg text-sm w-24" value="${mulai}">
+                <span class="text-slate-400">-</span>
+                <input type="time" class="sch-selesai p-2 border border-slate-200 rounded-lg text-sm w-24" value="${selesai}">
+                <button onclick="document.getElementById('${rowId}').remove()" class="text-red-400 hover:text-red-600 p-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+        
+        function saveDsa() {
+            const rsId = document.getElementById('dsa-parent-rs-id').value;
+            const id = document.getElementById('dsa-id').value;
+            const nama = document.getElementById('dsa-nama').value.trim();
+            const kontak = document.getElementById('dsa-kontak').value.trim();
+            const catatan = document.getElementById('dsa-catatan').value.trim();
+            if (!nama) return alert('Nama dokter wajib diisi!');
+        
+            const jadwal = [];
+            document.querySelectorAll('.schedule-row').forEach(row => {
+                jadwal.push({
+                    hari: row.querySelector('.sch-hari').value,
+                    mulai: row.querySelector('.sch-mulai').value,
+                    selesai: row.querySelector('.sch-selesai').value
+                });
+            });
+        
+            const rsIndex = appState.rsDsa.findIndex(item => item.id === rsId);
+            if (id) {
+                const dsaIndex = appState.rsDsa[rsIndex].dsa.findIndex(item => item.id === id);
+                appState.rsDsa[rsIndex].dsa[dsaIndex] = { ...appState.rsDsa[rsIndex].dsa[dsaIndex], nama, kontak, catatan, jadwal };
+            } else {
+                appState.rsDsa[rsIndex].dsa.push({ id: 'dsa-' + Date.now(), nama, kontak, catatan, jadwal, isFavorite: false });
+            }
+            
+            saveData();
+            closeModalDsa();
+            renderRsDsa();
+        }
+        
+        function deleteDsa(rsId, dsaId) {
+            if(confirm('Hapus profil DSA ini?')) {
+                const rsIndex = appState.rsDsa.findIndex(item => item.id === rsId);
+                appState.rsDsa[rsIndex].dsa = appState.rsDsa[rsIndex].dsa.filter(item => item.id !== dsaId);
+                saveData();
+                renderRsDsa();
+            }
+        }
+        
+        function toggleFavoriteDsa(rsId, dsaId) {
+            const rsIndex = appState.rsDsa.findIndex(item => item.id === rsId);
+            const dsaIndex = appState.rsDsa[rsIndex].dsa.findIndex(item => item.id === dsaId);
+            appState.rsDsa[rsIndex].dsa[dsaIndex].isFavorite = !appState.rsDsa[rsIndex].dsa[dsaIndex].isFavorite;
+            saveData();
+            renderRsDsa();
         }
     </script>
 </body>
