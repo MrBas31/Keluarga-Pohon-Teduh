@@ -7280,6 +7280,9 @@
         function renderMedicalChart() {
             const container = document.querySelector("#kms-chart-container");
             if (!container) return;
+
+            // PENGAMAN: Pastikan wadah data KMS tidak kosong
+            if (!appState.kmsData) appState.kmsData = [];
         
             // Siapkan data anak (Miqdad)
             const sortedData = [...appState.kmsData].sort((a, b) => a.bulan - b.bulan);
@@ -7354,6 +7357,9 @@
             document.getElementById('modal-kms').classList.remove('flex');
         }
         function saveKmsData() {
+            // PENGAMAN: Pastikan wadah data KMS tidak kosong
+            if (!appState.kmsData) appState.kmsData = [];
+        
             const bulan = parseInt(document.getElementById('kms-bulan').value);
             if (isNaN(bulan) || bulan < 0 || bulan > 12) return alert('Masukkan bulan antara 0 sampai 12!');
             
