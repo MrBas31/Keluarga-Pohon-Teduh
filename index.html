@@ -2284,7 +2284,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-500 mb-1">Nomor WA (format: 628....)</label>
-                    <input type="tel" id="dsa-kontak" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="08123456789">
+                    <input type="tel" id="dsa-kontak" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="628123456789">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-500 mb-1">Catatan Khusus (Opsional)</label>
@@ -7121,8 +7121,10 @@
             const nama = document.getElementById('dsa-nama').value.trim();
             const kontak = document.getElementById('dsa-kontak').value.trim();
             const catatan = document.getElementById('dsa-catatan').value.trim();
+            
             if (!nama) return alert('Nama dokter wajib diisi!');
         
+            // Kumpulkan data jadwal dari form
             const jadwal = [];
             document.querySelectorAll('.schedule-row').forEach(row => {
                 jadwal.push({
@@ -7132,15 +7134,37 @@
                 });
             });
         
+            // Cari lokasi Rumah Sakitnya di dalam database
             const rsIndex = appState.rsDsa.findIndex(item => item.id === rsId);
+            
+            if (rsIndex === -1) {
+                return alert('Error: Data Rumah Sakit induk tidak ditemukan!');
+            }
+        
+            // PENGAMAN UTAMA: Jika wadah dokter belum ada, buatkan otomatis
+            if (!appState.rsDsa[rsIndex].dsa) {
+                appState.rsDsa[rsIndex].dsa = [];
+            }
+        
+            // Proses Simpan / Update
             if (id) {
                 const dsaIndex = appState.rsDsa[rsIndex].dsa.findIndex(item => item.id === id);
-                appState.rsDsa[rsIndex].dsa[dsaIndex] = { ...appState.rsDsa[rsIndex].dsa[dsaIndex], nama, kontak, catatan, jadwal };
+                if (dsaIndex !== -1) {
+                    appState.rsDsa[rsIndex].dsa[dsaIndex] = { ...appState.rsDsa[rsIndex].dsa[dsaIndex], nama, kontak, catatan, jadwal };
+                }
             } else {
-                appState.rsDsa[rsIndex].dsa.push({ id: 'dsa-' + Date.now(), nama, kontak, catatan, jadwal, isFavorite: false });
+                appState.rsDsa[rsIndex].dsa.push({ 
+                    id: 'dsa-' + Date.now(), 
+                    nama, 
+                    kontak, 
+                    catatan, 
+                    jadwal, 
+                    isFavorite: false 
+                });
             }
             
-            saveToLocalStorage();
+            // Simpan ke LocalStorage
+            saveToLocalStorage(); 
             closeModalDsa();
             renderRsDsa();
         }
