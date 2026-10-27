@@ -267,7 +267,7 @@
             <button onclick="switchPostnatalTab('post-belanja')" id="tab-post-belanja" class="tab-btn py-2.5 whitespace-nowrap">
                 <i class="fa-solid fa-cart-shopping mr-1"></i> Belanja Bulanan
             </button>
-            <button onclick="switchPostnatalTab('sec-rs-dsa')" id="tab-rs-dsa" class="tab-btn py-2.5 whitespace-nowrap">
+            <button onclick="switchPostnatalTab('rs-dsa')" id="tab-rs-dsa" class="tab-btn py-2.5 whitespace-nowrap">
                 <i class="fa-solid fa-hospital-user mr-1"></i> RS & DSA
             </button>
             <button onclick="switchPostnatalTab('post-medis')" id="tab-post-medis" class="tab-btn py-2.5 whitespace-nowrap">
@@ -3128,7 +3128,7 @@
         // SWITCH TAB (UNTUK MENU FASE BAYI LAHIR)
         function switchPostnatalTab(tabId) {
             appState.currentPostnatalTab = tabId;
-            const tabs = ['post-dashboard', 'post-log', 'post-belanja', 'post-rs', 'post-medis', 'post-stimulasi', 'post-pustaka'];
+            const tabs = ['post-dashboard', 'post-log', 'post-belanja', 'rs-dsa', 'post-medis', 'post-stimulasi', 'post-pustaka'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 const sec = document.getElementById(`sec-${t}`);
