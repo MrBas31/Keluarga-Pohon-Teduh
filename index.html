@@ -1214,11 +1214,31 @@
             </section>
 
             <!-- TAB 4: RS & DSA -->
-            <section id="sec-post-rs" class="hidden space-y-6">
-                <div class="p-8 bg-white rounded-3xl border border-slate-100 text-center space-y-3 shadow-sm">
-                    <div class="text-4xl opacity-50">🏥</div>
-                    <h3 class="font-bold text-slate-700">Fasilitas Medis Anak</h3>
-                    <p class="text-xs text-slate-500">Data Rumah Sakit dan Dokter Spesialis Anak (DSA) prioritas akan diadopsi ke sini.</p>
+            <section id="sec-rs-dsa" class="hidden space-y-6">
+                <!-- Header & Filter -->
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-hospital text-blue-500 mr-2"></i>Direktori RS & DSA</h2>
+                        <p class="text-sm text-slate-500">Pantau jadwal dokter anak dan rumah sakit langganan.</p>
+                    </div>
+                    
+                    <!-- Dropdown Filter Kota -->
+                    <div class="w-full sm:w-auto">
+                        <select id="filter-kota-rs" onchange="renderRsDsa()" class="w-full sm:w-auto p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500 text-slate-700">
+                            <option value="Semua">Semua Kota</option>
+                            <!-- Pilihan kota akan di-generate otomatis oleh JS -->
+                        </select>
+                    </div>
+                </div>
+            
+                <!-- Tombol Tambah RS -->
+                <button onclick="openModalRs()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-2xl transition shadow-md shadow-blue-500/30">
+                    <i class="fa-solid fa-plus mr-1"></i> Tambah Rumah Sakit / Klinik
+                </button>
+            
+                <!-- Wadah Daftar Kartu RS -->
+                <div id="rs-dsa-list" class="space-y-4">
+                    <!-- Kartu RS dan daftar DSA akan muncul di sini via JavaScript -->
                 </div>
             </section>
 
@@ -2206,6 +2226,74 @@
             <div class="pt-2 flex justify-end gap-2">
                 <button type="button" onclick="closePullPregnancyModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-xl text-xs">Batal</button>
                 <button onclick="executePullPregnancy()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-sm text-xs">Tarik Terpilih</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TAMBAH/EDIT RUMAH SAKIT -->
+    <div id="modal-rs" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <h3 id="modal-rs-title" class="text-lg font-bold text-slate-800 mb-4">Tambah Rumah Sakit</h3>
+            <input type="hidden" id="rs-id">
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">Nama Rumah Sakit / Klinik <span class="text-red-500">*</span></label>
+                    <input type="text" id="rs-nama" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="Contoh: RS Awal Bros">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">Kota <span class="text-red-500">*</span></label>
+                    <input type="text" id="rs-kota" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="Contoh: Tangerang Selatan">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">Link Google Maps (Opsional)</label>
+                    <input type="url" id="rs-maps" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="https://maps.app.goo.gl/...">
+                </div>
+            </div>
+            
+            <div class="flex gap-3 mt-6">
+                <button onclick="closeModalRs()" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold">Batal</button>
+                <button onclick="saveRs()" class="flex-1 bg-blue-500 text-white py-3 rounded-xl font-bold">Simpan</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL TAMBAH/EDIT DOKTER (DSA) & JADWAL -->
+    <div id="modal-dsa" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <h3 id="modal-dsa-title" class="text-lg font-bold text-slate-800 mb-4">Tambah Dokter Spesialis Anak</h3>
+            <input type="hidden" id="dsa-parent-rs-id">
+            <input type="hidden" id="dsa-id">
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">Nama Dokter <span class="text-red-500">*</span></label>
+                    <input type="text" id="dsa-nama" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="Contoh: dr. Fikri, Sp.A">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">Nomor WA / Pendaftaran (Opsional)</label>
+                    <input type="tel" id="dsa-kontak" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="08123456789">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">Catatan Khusus (Opsional)</label>
+                    <textarea id="dsa-catatan" rows="2" class="w-full p-3 border border-slate-200 rounded-xl text-sm" placeholder="Contoh: Dokternya ramah, daftar harus H-1"></textarea>
+                </div>
+                
+                <!-- Dynamic Schedule Builder Area -->
+                <div class="border-t border-slate-100 pt-4 mt-2">
+                    <label class="block text-xs font-bold text-slate-500 mb-2">Jadwal Praktik</label>
+                    <div id="dsa-schedule-container" class="space-y-3 mb-3">
+                        <!-- Baris form jadwal akan muncul di sini otomatis via JS -->
+                    </div>
+                    <button onclick="addScheduleRow()" class="text-sm font-bold text-blue-500 bg-blue-50 px-3 py-2 rounded-lg w-full text-center border border-blue-100 hover:bg-blue-100">
+                        <i class="fa-solid fa-plus mr-1"></i> Tambah Sesi Jadwal
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex gap-3 mt-6">
+                <button onclick="closeModalDsa()" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold">Batal</button>
+                <button onclick="saveDsa()" class="flex-1 bg-blue-500 text-white py-3 rounded-xl font-bold">Simpan</button>
             </div>
         </div>
     </div>
