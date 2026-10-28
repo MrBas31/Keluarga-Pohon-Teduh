@@ -1250,7 +1250,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-[#1e293b] p-5 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm">
                     <div>
                         <h2 class="text-xl font-bold text-slate-800 dark:text-white"><i class="fa-solid fa-notes-medical text-blue-500 mr-2"></i>Rekam Medis & KMS</h2>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">Pantau Grafik Tumbuh Kembang (KMS) Miqdad</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Pantau Grafik Tumbuh Kembang (KMS)</p>
                     </div>
                     
                     <!-- Toggle Gender KMS -->
@@ -1298,6 +1298,62 @@
                     </div>
                     <!-- Tempat daftar riwayat akan dirender -->
                     <div id="baby-medical-list" class="space-y-4"></div>
+                </div>
+                
+                <!-- MODAL CATAT KONTROL BAYI -->
+                <div id="modal-baby-medical" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-4">
+                    <div class="bg-white dark:bg-[#1e293b] w-full max-w-md rounded-3xl p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4" id="baby-medical-modal-title">Catat Riwayat Kontrol</h3>
+                        <input type="hidden" id="baby-medical-id">
+                        
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Tanggal <span class="text-red-500">*</span></label>
+                                    <input type="date" id="baby-med-date" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Kategori</label>
+                                    <select id="baby-med-category" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm">
+                                        <option value="Rutin">Cek Rutin</option>
+                                        <option value="Imunisasi">Imunisasi / Vaksin</option>
+                                        <option value="Sakit">Sakit / Keluhan</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Usia Bayi (Bulan)</label>
+                                    <input type="number" step="0.1" id="baby-med-age" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Misal: 2">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Dokter / Klinik</label>
+                                    <input type="text" id="baby-med-doctor" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Nama DSA / Faskes">
+                                </div>
+                            </div>
+                
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Tindakan / Diagnosa / Nama Vaksin</label>
+                                <textarea id="baby-med-notes" rows="2" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Detail hasil pemeriksaan..."></textarea>
+                            </div>
+                
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Resep Obat (Opsional)</label>
+                                <textarea id="baby-med-prescription" rows="2" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Contoh: Paracetamol drop 0.8ml..."></textarea>
+                            </div>
+                
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Jadwal Kontrol Berikutnya</label>
+                                <input type="date" id="baby-med-next" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm">
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="closeBabyMedicalModal()" class="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 py-3 rounded-xl font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition">Batal</button>
+                            <button onclick="saveBabyMedicalRecord()" class="flex-1 bg-blue-500 text-white py-3 rounded-xl font-bold hover:bg-blue-600 transition">Simpan Data</button>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- MODAL CATAT KONTROL BAYI -->
@@ -7631,6 +7687,50 @@
                 appState.babyMedicalRecords = appState.babyMedicalRecords.filter(r => r.id !== id);
                 saveToLocalStorage();
                 renderBabyMedicalRecords();
+            }
+        }
+
+        // FUNGSI PENUKAR TAB MEDIS BAYI
+        function switchBabyMedicalTab(tabName) {
+            // 1. Ambil elemen tombol dan konten
+            const btnKms = document.getElementById('tab-btn-kms');
+            const btnRiwayat = document.getElementById('tab-btn-riwayat');
+            const contentKms = document.getElementById('tab-content-kms');
+            const contentRiwayat = document.getElementById('tab-content-riwayat');
+        
+            if (!btnKms || !btnRiwayat || !contentKms || !contentRiwayat) return;
+        
+            // 2. Reset semua styling tombol ke mode tidak aktif
+            const inactiveClass = ['bg-transparent', 'border-slate-200', 'dark:border-slate-700', 'text-slate-500', 'dark:text-slate-400'];
+            const activeClass = ['bg-blue-500', 'text-white', 'shadow-md', 'border-blue-500'];
+        
+            btnKms.classList.remove(...activeClass);
+            btnKms.classList.add(...inactiveClass);
+            btnRiwayat.classList.remove(...activeClass);
+            btnRiwayat.classList.add(...inactiveClass);
+        
+            // 3. Sembunyikan semua konten
+            contentKms.classList.remove('block');
+            contentKms.classList.add('hidden');
+            contentRiwayat.classList.remove('block');
+            contentRiwayat.classList.add('hidden');
+        
+            // 4. Aktifkan tab yang dipilih
+            if (tabName === 'kms') {
+                btnKms.classList.remove(...inactiveClass);
+                btnKms.classList.add(...activeClass);
+                contentKms.classList.remove('hidden');
+                contentKms.classList.add('block');
+                
+                // Render ulang chart agar ukurannya pas setelah div disembunyikan
+                if (typeof renderKmsChart === 'function') renderKmsChart();
+            } else if (tabName === 'riwayat') {
+                btnRiwayat.classList.remove(...inactiveClass);
+                btnRiwayat.classList.add(...activeClass);
+                contentRiwayat.classList.remove('hidden');
+                contentRiwayat.classList.add('block');
+                
+                if (typeof renderBabyMedicalRecords === 'function') renderBabyMedicalRecords();
             }
         }
     </script>
