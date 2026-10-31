@@ -2793,12 +2793,33 @@
         }
 
         function loginWithGoogle() {
+            const button = document.getElementById('btn-google-login');
+            if (button) {
+                button.disabled = true;
+                button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menghubungkan ke Google...';
+            }
             showAuthPanel('auth-loading-state');
-            auth.signInWithRedirect(googleProvider).catch(error => {
+
+            // GitHub Pages adalah hosting non-Firebase. Untuk menghindari masalah
+            // third-party storage pada alur redirect, gunakan popup dari klik pengguna.
+            auth.signInWithPopup(googleProvider).catch(error => {
                 console.error('Google Sign-In Error:', error);
                 const msg = document.getElementById('auth-error-message');
-                if (msg) msg.textContent = error.message || 'Login Google gagal. Silakan coba kembali.';
+                let friendlyMessage = error.message || 'Login Google gagal. Silakan coba kembali.';
+                if (error.code === 'auth/popup-blocked') {
+                    friendlyMessage = 'Popup Google diblokir browser. Izinkan pop-up untuk mrbas31.github.io, lalu coba lagi.';
+                } else if (error.code === 'auth/popup-closed-by-user') {
+                    friendlyMessage = 'Jendela login ditutup sebelum proses selesai. Silakan coba lagi.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    friendlyMessage = 'Domain aplikasi belum diizinkan di Firebase Authentication → Settings → Authorized domains. Pastikan mrbas31.github.io sudah terdaftar.';
+                }
+                if (msg) msg.textContent = friendlyMessage;
                 showAuthPanel('auth-error-state');
+            }).finally(() => {
+                if (button) {
+                    button.disabled = false;
+                    button.innerHTML = '<i class="fa-brands fa-google text-lg"></i> Masuk dengan Google';
+                }
             });
         }
 
@@ -2936,10 +2957,6 @@
         // INIT APPLICATION: jangan membaca LocalStorage/Firebase sebelum izin UID diperiksa.
         window.onload = function() {
             showAuthPanel('auth-loading-state');
-            auth.getRedirectResult().catch(error => {
-                console.error('Google redirect result error:', error);
-                showAuthError(error);
-            });
             auth.onAuthStateChanged(handleAuthStateChanged);
         };
 
