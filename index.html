@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
-    <title>Keluarga Pohon Teduh - Baby & Household Planner</title>
+    <title>Keluarga Pohon Teduh 6.4.2 - Profile Menu</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -225,6 +225,19 @@
         }
         body.dark-mode #auth-gate .auth-muted { color: #94a3b8 !important; }
         #auth-gate button:disabled { opacity: .65; cursor: not-allowed; }
+
+        /* PROFILE MENU */
+        #profile-menu-dropdown { z-index: 60; }
+        #profile-avatar-img, #profile-menu-photo { object-fit: cover; }
+        body.dark-mode #profile-menu-dropdown {
+            background-color: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f8fafc !important;
+        }
+        body.dark-mode #profile-menu-dropdown .profile-menu-muted { color: #94a3b8 !important; }
+        @media (max-width: 1023px) {
+            #profile-menu-dropdown { right: 0; }
+        }
         @media (max-width: 480px) {
             #auth-gate .auth-card { padding: 1.5rem; border-radius: 1.25rem; }
         }
@@ -293,36 +306,32 @@
 
     <!-- HEADER / NAVBAR -->
     <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-slate-100">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
-            <!-- LOGO & ARTISTIC BRANDING -->
-            <div class="flex items-center gap-3">
-                <img src="Keluarga Pohon Teduh.png" alt="Logo Keluarga Pohon Teduh" class="w-12 h-12 object-cover rounded-2xl border border-emerald-100 shadow-sm">
-                <div>
-                    <h1 class="text-xl md:text-2xl font-bold text-slate-800 tracking-tight font-brand">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
+            <!-- LOGO & BRANDING: judul dijaga tetap satu baris -->
+            <div class="flex items-center gap-3 flex-shrink-0 min-w-0">
+                <img src="Keluarga Pohon Teduh.png" alt="Logo Keluarga Pohon Teduh" class="w-11 h-11 md:w-12 md:h-12 object-cover rounded-2xl border border-emerald-100 shadow-sm flex-shrink-0">
+                <div class="min-w-0">
+                    <h1 class="text-lg md:text-xl xl:text-2xl font-bold text-slate-800 tracking-tight font-brand whitespace-nowrap">
                         Keluarga Pohon Teduh
                     </h1>
-                    <p class="text-xs text-slate-500 tracking-wide font-medium">
+                    <p class="text-[11px] md:text-xs text-slate-500 tracking-wide font-medium whitespace-nowrap">
                         Persiapan Kelahiran & Rumah Tangga • <span class="text-sky-700 font-semibold">Fikri & Ollyl</span>
                     </p>
                 </div>
             </div>
 
-            <!-- PHASE SWITCHER -->
-            <div class="flex bg-slate-100 p-1 rounded-xl w-full md:w-auto">
-                <button onclick="switchPhase('prenatal')" id="btn-prenatal" class="phase-btn active flex-1 md:flex-initial px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
+            <!-- PHASE SWITCHER: DIPERTAHANKAN -->
+            <div class="flex bg-slate-100 p-1 rounded-xl w-full lg:w-auto lg:flex-shrink-0">
+                <button onclick="switchPhase('prenatal')" id="btn-prenatal" class="phase-btn active flex-1 lg:flex-initial px-3 xl:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
                     <i class="fa-solid fa-person-pregnant mr-1.5"></i> 🤰 Fase Kehamilan
                 </button>
-                <button onclick="switchPhase('postnatal')" id="btn-postnatal" class="phase-btn flex-1 md:flex-initial px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
+                <button onclick="switchPhase('postnatal')" id="btn-postnatal" class="phase-btn flex-1 lg:flex-initial px-3 xl:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
                     <i class="fa-solid fa-baby mr-1.5"></i> 👶 Bayi Lahir
                 </button>
             </div>
 
-            <!-- LDR SYNC ACTIONS -->
-            <div class="flex flex-wrap justify-center items-center gap-2 text-xs">
-                <span id="auth-user-email" class="hidden text-slate-500 font-medium max-w-[180px] truncate" title="Akun Google yang sedang digunakan"></span>
-                <button onclick="logoutGoogle()" id="btn-google-logout" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold rounded-lg transition" title="Keluar dari akun Google">
-                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Keluar
-                </button>
+            <!-- ACTIONS: profil Google diringkas menjadi satu avatar -->
+            <div class="flex flex-wrap justify-center lg:justify-end items-center gap-2 text-xs w-full lg:w-auto lg:flex-1">
                 <button onclick="manualSaveToFirebase()" id="btn-manual-save" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm" title="Simpan & Paksa Sync ke Firebase Cloud">
                     <i class="fa-solid fa-cloud-arrow-up"></i> <span id="sync-status-text">Simpan Data</span>
                 </button>
@@ -333,11 +342,43 @@
                     <i class="fa-solid fa-upload mr-1"></i> Import JSON
                     <input type="file" id="import-file" onchange="importData(event)" class="hidden" accept=".json">
                 </label>
-                <button onclick="toggleDarkMode()" class="px-3 py-1.5 bg-slate-800 dark:bg-amber-400 hover:bg-slate-700 text-slate-100 font-medium rounded-lg transition ml-2 shadow-sm" title="Ganti Tema Gelap/Terang">
+                <button onclick="toggleDarkMode()" class="px-3 py-1.5 bg-slate-800 dark:bg-amber-400 hover:bg-slate-700 text-slate-100 font-medium rounded-lg transition shadow-sm" title="Ganti Tema Gelap/Terang">
                     <i class="fa-solid fa-moon" id="dark-mode-icon"></i>
                 </button>
+
+                <!-- PROFILE AVATAR & DROPDOWN -->
+                <div class="relative flex-shrink-0" id="profile-menu-wrapper">
+                    <button type="button" id="btn-profile-menu" onclick="toggleProfileMenu(event)" aria-haspopup="true" aria-expanded="false" aria-label="Buka menu profil akun"
+                        class="w-10 h-10 rounded-full border-2 border-slate-200 hover:border-emerald-500 bg-slate-100 text-slate-600 flex items-center justify-center overflow-hidden transition shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                        <img id="profile-avatar-img" src="" alt="Foto profil" class="hidden w-full h-full">
+                        <span id="profile-avatar-fallback" class="flex items-center justify-center w-full h-full"><i class="fa-solid fa-user text-base"></i></span>
+                    </button>
+                    <div id="profile-menu-dropdown" class="hidden absolute right-0 top-full mt-2 w-72 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden text-slate-700">
+                        <div class="p-4 flex items-center gap-3">
+                            <img id="profile-menu-photo" src="" alt="" class="hidden w-11 h-11 rounded-full border border-slate-200">
+                            <span id="profile-menu-fallback" class="w-11 h-11 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-user"></i></span>
+                            <div class="min-w-0 flex-1">
+                                <p id="profile-menu-name" class="font-bold text-sm text-slate-800 truncate">Pengguna</p>
+                                <p id="profile-menu-email" class="profile-menu-muted text-xs text-slate-500 break-all">-</p>
+                            </div>
+                        </div>
+                        <div class="border-t border-slate-100 p-2 space-y-1">
+                            <a href="https://myaccount.google.com/" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation(); closeProfileMenu();"
+                                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-700 hover:bg-slate-50 transition">
+                                <i class="fa-brands fa-google w-5 text-center text-slate-500"></i>
+                                <span><strong class="block font-semibold">Kelola Akun Google</strong><small class="profile-menu-muted text-xs text-slate-500">Edit nama, foto, dan info akun</small></span>
+                                <i class="fa-solid fa-arrow-up-right-from-square ml-auto text-xs text-slate-400"></i>
+                            </a>
+                            <button type="button" onclick="event.stopPropagation(); closeProfileMenu(); logoutGoogle();"
+                                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-rose-600 hover:bg-rose-50 transition text-left">
+                                <i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
+                                <span class="font-semibold">Keluar dari aplikasi</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div> <!-- INI DIA TAG PENUTUP YANG HILANG -->
+        </div>
 
         <!-- MAIN TABS NAV (KHUSUS FASE KEHAMILAN) -->
         <nav id="prenatal-nav-tabs" class="max-w-6xl mx-auto px-4 flex space-x-6 overflow-x-auto text-sm border-t border-slate-100 pt-1">
@@ -2744,6 +2785,7 @@
 
         // CLOSE ALL DROPDOWNS ON OUTSIDE CLICK
         function closeAllDropdowns() {
+            closeProfileMenu();
             const galleryMenuPre = document.getElementById('gallery-menu-dropdown-prenatal');
             if (galleryMenuPre && !galleryMenuPre.classList.contains('hidden')) {
                 galleryMenuPre.classList.add('hidden');
@@ -2756,6 +2798,62 @@
             if (hplMenu && !hplMenu.classList.contains('hidden')) {
                 hplMenu.classList.add('hidden');
             }
+        }
+
+        // ==========================================
+        // GOOGLE ACCOUNT PROFILE MENU
+        // ==========================================
+        function renderProfileMenu(user) {
+            const name = (user && user.displayName) ? user.displayName : 'Pengguna Keluarga Pohon Teduh';
+            const email = (user && user.email) ? user.email : 'Akun Google';
+            const photo = (user && user.photoURL) ? user.photoURL : '';
+
+            const nameEl = document.getElementById('profile-menu-name');
+            const emailEl = document.getElementById('profile-menu-email');
+            const avatarImg = document.getElementById('profile-avatar-img');
+            const avatarFallback = document.getElementById('profile-avatar-fallback');
+            const menuPhoto = document.getElementById('profile-menu-photo');
+            const menuFallback = document.getElementById('profile-menu-fallback');
+
+            if (nameEl) nameEl.textContent = name;
+            if (emailEl) emailEl.textContent = email;
+
+            if (photo) {
+                if (avatarImg) {
+                    avatarImg.onerror = () => { avatarImg.classList.add('hidden'); if (avatarFallback) avatarFallback.classList.remove('hidden'); };
+                    avatarImg.src = photo;
+                    avatarImg.classList.remove('hidden');
+                }
+                if (avatarFallback) avatarFallback.classList.add('hidden');
+                if (menuPhoto) {
+                    menuPhoto.onerror = () => { menuPhoto.classList.add('hidden'); if (menuFallback) menuFallback.classList.remove('hidden'); };
+                    menuPhoto.src = photo;
+                    menuPhoto.classList.remove('hidden');
+                }
+                if (menuFallback) menuFallback.classList.add('hidden');
+            } else {
+                if (avatarImg) { avatarImg.removeAttribute('src'); avatarImg.classList.add('hidden'); }
+                if (avatarFallback) avatarFallback.classList.remove('hidden');
+                if (menuPhoto) { menuPhoto.removeAttribute('src'); menuPhoto.classList.add('hidden'); }
+                if (menuFallback) menuFallback.classList.remove('hidden');
+            }
+        }
+
+        function toggleProfileMenu(event) {
+            if (event) event.stopPropagation();
+            const menu = document.getElementById('profile-menu-dropdown');
+            const button = document.getElementById('btn-profile-menu');
+            if (!menu) return;
+            const willOpen = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !willOpen);
+            if (button) button.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        }
+
+        function closeProfileMenu() {
+            const menu = document.getElementById('profile-menu-dropdown');
+            const button = document.getElementById('btn-profile-menu');
+            if (menu) menu.classList.add('hidden');
+            if (button) button.setAttribute('aria-expanded', 'false');
         }
 
         // ==========================================
@@ -2779,6 +2877,8 @@
                 emailLabel.textContent = '';
                 emailLabel.classList.add('hidden');
             }
+            closeProfileMenu();
+            renderProfileMenu(null);
             isAppAuthorized = false;
             applicationInitialized = false;
             window.hasFetchedCloud = false;
@@ -2892,11 +2992,7 @@
             if (!user || isAppAuthorized && applicationInitialized) return;
             isAppAuthorized = true;
             currentAuthenticatedUser = user;
-            const emailLabel = document.getElementById('auth-user-email');
-            if (emailLabel) {
-                emailLabel.textContent = user.email || 'Akun Google';
-                emailLabel.classList.remove('hidden');
-            }
+            renderProfileMenu(user);
             // Tampilan aplikasi tetap tertutup sampai snapshot awal Firebase diterima.
             if (applicationInitialized) return;
             applicationInitialized = true;
