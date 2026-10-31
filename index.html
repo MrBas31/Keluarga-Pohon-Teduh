@@ -371,6 +371,231 @@
         }
     </style>
 
+
+    <style id="mobile-ux-kms-66">
+        /* ==========================================================
+           6.6 MOBILE-FIRST UX + KMS CONTRAST
+           Layout-only enhancements. Existing modules and data logic stay intact.
+           ========================================================== */
+        #baby-medical-subtabs,
+        #kms-metric-controls,
+        #prenatal-nav-tabs,
+        #postnatal-nav-tabs {
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-x: contain;
+            scrollbar-width: none;
+        }
+        #baby-medical-subtabs::-webkit-scrollbar,
+        #kms-metric-controls::-webkit-scrollbar,
+        #prenatal-nav-tabs::-webkit-scrollbar,
+        #postnatal-nav-tabs::-webkit-scrollbar,
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
+
+        /* More legible reference lines and labels inside the KMS chart. */
+        #kms-chart-container { width: 100%; min-width: 0; }
+        #kms-chart-container .apexcharts-legend-text { font-weight: 600 !important; }
+        #kms-chart-container .apexcharts-tooltip { border-radius: 12px !important; box-shadow: 0 8px 24px rgba(15,23,42,.16) !important; }
+        body:not(.dark-mode) #kms-chart-container .apexcharts-xaxis-title,
+        body:not(.dark-mode) #kms-chart-container .apexcharts-yaxis-title { fill: #334155 !important; }
+        body.dark-mode #kms-chart-container .apexcharts-xaxis-title,
+        body.dark-mode #kms-chart-container .apexcharts-yaxis-title { fill: #e2e8f0 !important; }
+
+        @media (min-width: 768px) and (max-width: 1199px) {
+            #header-main-layout {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1fr) auto;
+                align-items: center;
+                gap: .75rem 1rem;
+                padding-top: .75rem;
+                padding-bottom: .75rem;
+            }
+            #header-main-layout > div:first-child { grid-column: 1; grid-row: 1; min-width: 0; }
+            #header-main-layout > div:nth-child(2) { grid-column: 2; grid-row: 1; width: auto !important; }
+            #header-actions { grid-column: 1 / -1; grid-row: 2; width: 100% !important; justify-content: flex-end !important; }
+        }
+
+        @media (max-width: 767px) {
+            html { -webkit-text-size-adjust: 100%; }
+            body { overflow-x: hidden; padding-bottom: max(1.5rem, env(safe-area-inset-bottom)); }
+
+            /* Header becomes a deliberate four-row mobile composition:
+               brand, phase switch, compact actions, then scrollable section tabs. */
+            #header-main-layout {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1fr);
+                gap: .65rem;
+                padding: .65rem .75rem .7rem !important;
+                min-width: 0;
+            }
+            #header-main-layout > div:first-child {
+                grid-column: 1;
+                width: 100%;
+                min-width: 0;
+                gap: .6rem;
+            }
+            #header-main-layout > div:first-child img { width: 42px; height: 42px; }
+            #header-main-layout h1 {
+                font-size: clamp(1rem, 4.2vw, 1.2rem) !important;
+                line-height: 1.2;
+                letter-spacing: -.02em;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            #header-main-layout > div:first-child p {
+                white-space: normal !important;
+                font-size: 10px !important;
+                line-height: 1.35;
+            }
+            #header-main-layout > div:nth-child(2) {
+                grid-column: 1;
+                width: 100% !important;
+                display: flex;
+                gap: .25rem;
+                padding: .25rem;
+            }
+            #btn-prenatal, #btn-postnatal {
+                flex: 1 1 0;
+                min-width: 0;
+                padding: .62rem .35rem !important;
+                font-size: .72rem !important;
+                line-height: 1.2;
+                white-space: nowrap;
+            }
+            #btn-prenatal i, #btn-postnatal i { margin-right: .2rem !important; }
+
+            #header-actions {
+                grid-column: 1;
+                width: 100% !important;
+                display: grid !important;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                align-items: stretch;
+                justify-content: stretch !important;
+                gap: .35rem;
+                min-width: 0;
+            }
+            #header-actions > button,
+            #header-actions > label {
+                width: 100%;
+                min-width: 0;
+                min-height: 40px;
+                height: auto;
+                padding: .42rem .15rem !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: .12rem;
+                font-size: .62rem !important;
+                line-height: 1.1;
+                text-align: center;
+                white-space: normal;
+                border-radius: .7rem;
+            }
+            #header-actions > button i,
+            #header-actions > label i { margin: 0 !important; font-size: .9rem; }
+            #header-actions #sync-status-text { font-size: .59rem; }
+            #header-actions > button[onclick^="toggleDarkMode"] { margin-left: 0 !important; }
+            #profile-menu-wrapper { display: flex; justify-content: center; align-items: center; min-width: 0; }
+            #btn-profile-menu { width: 38px; height: 38px; }
+            #profile-menu-dropdown { right: 0; left: auto; width: min(18rem, calc(100vw - 1.5rem)); }
+
+            #prenatal-nav-tabs,
+            #postnatal-nav-tabs {
+                gap: .15rem;
+                padding: .15rem .75rem 0;
+                margin: 0;
+                overflow-x: auto;
+                overscroll-behavior-x: contain;
+                scroll-snap-type: x proximity;
+                touch-action: pan-x;
+            }
+            #prenatal-nav-tabs button,
+            #postnatal-nav-tabs button {
+                flex: 0 0 auto;
+                padding: .65rem .58rem;
+                font-size: .72rem;
+                scroll-snap-align: start;
+            }
+
+            main {
+                padding: .9rem .75rem 2rem !important;
+                width: 100%;
+                min-width: 0;
+            }
+            main section { min-width: 0; }
+            main .p-6 { padding: 1rem !important; }
+            main .p-5 { padding: .9rem !important; }
+            main .p-4 { padding: .8rem !important; }
+            main .rounded-3xl { border-radius: 1.2rem; }
+            main .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+            main .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: .8rem; }
+            main .overflow-x-auto {
+                max-width: 100%;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior-x: contain;
+            }
+            main table { min-width: 650px; }
+            main input, main select, main textarea { max-width: 100%; font-size: 16px; }
+            main button { touch-action: manipulation; }
+            main .flex.flex-wrap { row-gap: .5rem; }
+            main .flex.justify-between { min-width: 0; }
+            main .grid { min-width: 0; }
+
+            /* Keep dashboard summary cards compact and readable on common phone widths. */
+            #sec-dashboard > div:nth-child(2) {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: .65rem;
+            }
+            #sec-dashboard > div:nth-child(2) > div { padding: .85rem !important; min-width: 0; }
+            #sec-dashboard > div:nth-child(2) h4 { font-size: .78rem; }
+            #sec-dashboard > div:nth-child(2) .text-xl { font-size: 1.05rem; }
+
+            /* KMS controls adapt to narrow screens; chart gets room for its labels and legend. */
+            #sec-post-medis > div:first-child { align-items: stretch; gap: .8rem; }
+            #sec-post-medis > div:first-child > div:last-child { width: 100%; }
+            #sec-post-medis #btn-gender-boy,
+            #sec-post-medis #btn-gender-girl { flex: 1 1 0; }
+            #baby-medical-subtabs { width: 100%; gap: .4rem; padding-bottom: .45rem; }
+            #baby-medical-subtabs button { flex: 0 0 auto; padding: .58rem .75rem; font-size: .73rem; }
+            #sec-post-medis #tab-content-kms > div,
+            #sec-post-medis #tab-content-riwayat > div { padding: .85rem !important; }
+            #kms-metric-controls {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: auto;
+                margin-bottom: .9rem;
+                gap: .25rem;
+            }
+            #kms-metric-controls button {
+                flex: 0 0 auto;
+                padding: .52rem .65rem;
+                font-size: .68rem;
+            }
+            #kms-chart-container { height: 330px !important; min-height: 330px; }
+            #kms-history-list { max-height: 300px !important; }
+            #kms-history-list > div { gap: .5rem; align-items: flex-start; }
+            #kms-history-list > div > div:first-child { min-width: 0; }
+
+            /* Improve modal usability on phones without changing their desktop layout. */
+            main ~ .fixed.inset-0,
+            body > .fixed.inset-0 { padding: .75rem; }
+            .fixed.inset-0 > .max-h-\[90vh\],
+            .fixed.inset-0 > .max-h-\[85vh\] { max-height: calc(100vh - 1.5rem); overflow-y: auto; }
+        }
+
+        @media (max-width: 380px) {
+            #header-actions { gap: .22rem; }
+            #header-actions > button, #header-actions > label { font-size: .57rem !important; padding-left: .08rem !important; padding-right: .08rem !important; }
+            #header-actions #sync-status-text { font-size: .54rem; }
+            #header-main-layout > div:first-child p { font-size: 9px !important; }
+            #btn-prenatal, #btn-postnatal { font-size: .66rem !important; }
+            #kms-chart-container { height: 315px !important; min-height: 315px; }
+        }
+    </style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -1537,7 +1762,7 @@
                 </div>
             
                 <!-- TOMBOL NAVIGASI TAB MEDIS BAYI -->
-                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                <div id="baby-medical-subtabs" class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                     <button id="tab-btn-kms" onclick="switchBabyMedicalTab('kms')" class="px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition bg-blue-50 dark:bg-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/50">Grafik KMS</button>
                     <button id="tab-btn-riwayat" onclick="switchBabyMedicalTab('riwayat')" class="px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:text-slate-700 dark:hover:text-white">Riwayat Kontrol</button>
                     <button class="bg-slate-50 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap opacity-50 cursor-not-allowed">Q&A Dokter (Segera)</button>
@@ -1548,7 +1773,7 @@
                     <!-- Area Grafik KMS -->
                     <div class="bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-3xl p-5 shadow-lg">
                         <!-- Tipe Grafik (BB/TB/LK) -->
-                        <div class="flex gap-2 mb-6 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-xl w-max border border-slate-200 dark:border-slate-700">
+                        <div id="kms-metric-controls" class="flex gap-2 mb-6 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-xl w-max border border-slate-200 dark:border-slate-700">
                             <button onclick="setKmsMetric('BB')" id="btn-metric-bb" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-white transition">Berat (BB)</button>
                             <button onclick="setKmsMetric('TB')" id="btn-metric-tb" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">Tinggi (TB)</button>
                             <button onclick="setKmsMetric('LK')" id="btn-metric-lk" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">Lingkar Kepala</button>
@@ -8299,30 +8524,90 @@
         
             // Ambil batas WHO sesuai gender & metrik saat ini
             const std = standarWHO[currentKmsGender][currentKmsMetric];
-            const warnaTema = currentKmsGender === 'boy' ? '#3b82f6' : '#ec4899';
+            const warnaTema = currentKmsGender === 'boy' ? '#2563eb' : '#db2777';
+            const warnaBatasAtas = '#059669';
+            const warnaBatasBawah = '#ea580c';
             const isDarkMode = document.body.classList.contains('dark-mode');
-            const chartTextColor = isDarkMode ? '#94a3b8' : '#64748b';
-            const chartGridColor = isDarkMode ? '#334155' : '#e2e8f0';
+            const isMobileChart = window.matchMedia('(max-width: 640px)').matches;
+            const chartTextColor = isDarkMode ? '#e2e8f0' : '#334155';
+            const chartMutedColor = isDarkMode ? '#cbd5e1' : '#475569';
+            const chartGridColor = isDarkMode ? '#475569' : '#cbd5e1';
             const namaMetrik = currentKmsMetric === 'BB' ? 'Berat (kg)' : currentKmsMetric === 'TB' ? 'Tinggi (cm)' : 'Lingkar Kepala (cm)';
-        
+
             const options = {
+                // Garis data anak dibuat tegas; standar WHO ditampilkan sebagai garis referensi putus-putus.
                 series: [
                     { name: "Anak Saya", data: dataAnak, type: 'line' },
-                    { name: "Batas Atas WHO", data: std.max, type: 'area' },
-                    { name: "Batas Bawah WHO", data: std.min, type: 'area' }
+                    { name: "Batas Atas WHO", data: std.max, type: 'line' },
+                    { name: "Batas Bawah WHO", data: std.min, type: 'line' }
                 ],
-                chart: { type: 'line', height: 350, toolbar: { show: false }, fontFamily: 'inherit', background: 'transparent', foreColor: chartTextColor },
-                colors: [warnaTema, 'rgba(167, 243, 208, 0.4)', 'rgba(254, 202, 202, 0.4)'],
-                stroke: { width: [4, 2, 2], curve: 'smooth' },
-                fill: { type: ['solid', 'solid', 'solid'], opacity: [1, 0.2, 0.2] },
-                markers: { size: [6, 0, 0] },
-                xaxis: { categories: ['Bulan 0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], labels: { style: { colors: chartTextColor } } },
-                yaxis: { title: { text: namaMetrik, style: { color: chartTextColor } }, labels: { style: { colors: chartTextColor } } },
-                grid: { borderColor: chartGridColor, strokeDashArray: 4 },
+                chart: {
+                    type: 'line',
+                    height: isMobileChart ? 300 : 360,
+                    toolbar: { show: false },
+                    zoom: { enabled: false },
+                    fontFamily: 'Plus Jakarta Sans, sans-serif',
+                    background: 'transparent',
+                    foreColor: chartTextColor,
+                    parentHeightOffset: 0,
+                    animations: { enabled: true, easing: 'easeinout', speed: 250, dynamicAnimation: { enabled: true, speed: 250 } }
+                },
+                colors: [warnaTema, warnaBatasAtas, warnaBatasBawah],
+                stroke: { width: [4, 2.5, 2.5], curve: 'smooth', dashArray: [0, 7, 7], lineCap: 'round' },
+                fill: { type: 'solid', opacity: [1, 1, 1] },
+                markers: {
+                    size: [6, 0, 0],
+                    strokeWidth: 2,
+                    strokeColors: isDarkMode ? '#0f172a' : '#ffffff',
+                    hover: { sizeOffset: 2 }
+                },
+                dataLabels: { enabled: false },
+                xaxis: {
+                    categories: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                    title: { text: 'Usia (bulan)', style: { color: chartMutedColor, fontSize: isMobileChart ? '10px' : '12px', fontWeight: 600 } },
+                    labels: { style: { colors: chartMutedColor, fontSize: isMobileChart ? '10px' : '11px' }, rotate: 0, hideOverlappingLabels: true },
+                    axisBorder: { color: chartGridColor },
+                    axisTicks: { color: chartGridColor },
+                    tooltip: { enabled: false }
+                },
+                yaxis: {
+                    title: { text: namaMetrik, style: { color: chartMutedColor, fontSize: isMobileChart ? '10px' : '12px', fontWeight: 600 } },
+                    labels: { style: { colors: chartMutedColor, fontSize: isMobileChart ? '10px' : '11px' }, minWidth: 34, maxWidth: 48 }
+                },
+                grid: {
+                    borderColor: chartGridColor,
+                    strokeDashArray: 4,
+                    padding: { left: 4, right: isMobileChart ? 8 : 16, top: 4, bottom: 0 },
+                    xaxis: { lines: { show: false } }
+                },
+                tooltip: {
+                    theme: isDarkMode ? 'dark' : 'light',
+                    shared: true,
+                    intersect: false,
+                    y: { formatter: value => value == null ? '-' : `${value} ${currentKmsMetric === 'BB' ? 'kg' : 'cm'}` }
+                },
                 theme: { mode: isDarkMode ? 'dark' : 'light' },
-                legend: { show: true, position: 'top' }
+                legend: {
+                    show: true,
+                    position: isMobileChart ? 'bottom' : 'top',
+                    horizontalAlign: 'center',
+                    fontSize: isMobileChart ? '10px' : '12px',
+                    labels: { colors: chartTextColor },
+                    markers: { width: 9, height: 9, radius: 8 },
+                    itemMargin: { horizontal: isMobileChart ? 7 : 12, vertical: 3 }
+                },
+                noData: {
+                    text: 'Belum ada data pertumbuhan',
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    style: { color: chartMutedColor, fontSize: '13px' }
+                },
+                states: {
+                    hover: { filter: { type: 'lighten', value: 0.08 } },
+                    active: { filter: { type: 'none' } }
+                }
             };
-        
+
             if (kmsChart) {
                 // Update existing SVG chart in place; no destroy/render cycle.
                 kmsChart.updateOptions(options, false, false, false);
