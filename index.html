@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
-    <title>Keluarga Pohon Teduh - Baby & Household Planner</title>
+    <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -2634,6 +2634,16 @@
         let realtimeListenerAttached = false;
         let hasCompletedCloudBootstrap = false;
 
+        // Conflict-aware synchronization state (Stage 2).
+        const LOCAL_STATE_KEY = 'pohonTeduhState';
+        const LOCAL_BASELINE_KEY = 'pohonTeduhLastSyncedState';
+        let lastSyncedState = null;
+        let cloudSyncTimer = null;
+        let cloudSyncPromise = null;
+        let cloudSyncInProgress = false;
+        let latestRemoteDuringSync = null;
+        let cloudSyncSession = 0;
+
         // Default state sengaja dikosongkan. Data keluarga hanya dimuat dari Firebase
         // setelah akun terautentikasi dan UID-nya memperoleh izin.
         function createEmptyAppState() {
@@ -2930,7 +2940,10 @@
             currentAuthenticatedUser = null;
             appState = createEmptyAppState();
             // Data keluarga tidak ditinggalkan dalam cache browser setelah logout.
-            try { localStorage.removeItem('pohonTeduhState'); } catch (e) {}
+            try {
+                localStorage.removeItem(LOCAL_STATE_KEY);
+                localStorage.removeItem(LOCAL_BASELINE_KEY);
+            } catch (e) {}
             auth.signOut().catch(error => console.error('Gagal logout:', error));
         }
 
@@ -2949,7 +2962,10 @@
             stopRealtimeSync();
             lockApplicationUI();
             appState = createEmptyAppState();
-            try { localStorage.removeItem('pohonTeduhState'); } catch (e) {}
+            try {
+                localStorage.removeItem(LOCAL_STATE_KEY);
+                localStorage.removeItem(LOCAL_BASELINE_KEY);
+            } catch (e) {}
             const email = document.getElementById('auth-denied-email');
             const uid = document.getElementById('auth-denied-uid');
             if (email) email.textContent = user.email || '(email tidak tersedia)';
@@ -6230,20 +6246,222 @@
         }
 
         // ==========================================
-        // SYSTEM SYNC REALTIME FIREBASE (FIREBASE-FIRST)
+        // SYSTEM SYNC REALTIME FIREBASE (CONFLICT-AWARE)
         // ==========================================
 
-        window.hasFetchedCloud = false; // FLAG: data cloud harus diterima sebelum autosave ke cloud
+        window.hasFetchedCloud = false;
         let realtimeValueHandler = null;
         let realtimeErrorHandler = null;
+
+        // JSON clone is sufficient because appState only contains JSON-compatible data.
+        const SYNC_MISSING = Symbol('SYNC_MISSING');
+
+        function cloneSyncValue(value) {
+          if (value === SYNC_MISSING) return SYNC_MISSING;
+          if (value === undefined) return undefined;
+          return JSON.parse(JSON.stringify(value));
+        }
+
+        function isSyncPlainObject(value) {
+          return value !== null && typeof value === 'object' && !Array.isArray(value);
+        }
+
+        function syncDeepEqual(a, b) {
+          if (a === b) return true;
+          if (a === SYNC_MISSING || b === SYNC_MISSING) return false;
+          if (Array.isArray(a) || Array.isArray(b)) {
+            if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
+            return a.every((item, index) => syncDeepEqual(item, b[index]));
+          }
+          if (isSyncPlainObject(a) || isSyncPlainObject(b)) {
+            if (!isSyncPlainObject(a) || !isSyncPlainObject(b)) return false;
+            const aKeys = Object.keys(a).sort();
+            const bKeys = Object.keys(b).sort();
+            if (aKeys.length !== bKeys.length || aKeys.some((key, index) => key !== bKeys[index])) return false;
+            return aKeys.every(key => syncDeepEqual(a[key], b[key]));
+          }
+          return false;
+        }
+
+        function syncArrayHasStableIds(value) {
+          return Array.isArray(value) && value.every(item =>
+            isSyncPlainObject(item) && item.id !== undefined && item.id !== null
+          );
+        }
+
+        function syncArrayHasPrimitiveValues(value) {
+          return Array.isArray(value) && value.every(item =>
+            item === null || ['string', 'number', 'boolean'].includes(typeof item)
+          );
+        }
+
+        function mergeSyncArrayByValue(base, local, remote) {
+          const baseArray = base === SYNC_MISSING ? [] : base;
+          const baseKeys = new Set(baseArray.map(item => JSON.stringify(item)));
+          const localKeys = new Set(local.map(item => JSON.stringify(item)));
+          const remoteKeys = new Set(remote.map(item => JSON.stringify(item)));
+          const valuesByKey = new Map();
+          [...baseArray, ...remote, ...local].forEach(item => valuesByKey.set(JSON.stringify(item), item));
+
+          const baseOrder = baseArray.map(item => JSON.stringify(item));
+          const localOrder = local.map(item => JSON.stringify(item));
+          const remoteOrder = remote.map(item => JSON.stringify(item));
+          const localChangedOrder = !syncSameOrder(localOrder, baseOrder);
+          const preferredOrder = localChangedOrder ? localOrder : remoteOrder;
+          const secondaryOrder = localChangedOrder ? remoteOrder : localOrder;
+          const allOrder = [...preferredOrder];
+          secondaryOrder.forEach(key => { if (!allOrder.includes(key)) allOrder.push(key); });
+          baseOrder.forEach(key => { if (!allOrder.includes(key)) allOrder.push(key); });
+
+          return allOrder.filter(key => {
+            const baseHas = baseKeys.has(key);
+            const localHas = localKeys.has(key);
+            const remoteHas = remoteKeys.has(key);
+            if (localHas === baseHas) return remoteHas;
+            if (remoteHas === baseHas) return localHas;
+            return localHas; // Both sides made the same membership change.
+          }).map(key => valuesByKey.get(key));
+        }
+
+        function syncIds(value) {
+          return value.map(item => String(item.id));
+        }
+
+        function syncSameOrder(a, b) {
+          return a.length === b.length && a.every((id, index) => id === b[index]);
+        }
+
+        function syncMapById(value) {
+          const map = new Map();
+          value.forEach(item => map.set(String(item.id), item));
+          return map;
+        }
+
+        function mergeSyncArrayById(base, local, remote) {
+          const baseArray = base === SYNC_MISSING ? [] : base;
+          const baseMap = syncMapById(baseArray);
+          const localMap = syncMapById(local);
+          const remoteMap = syncMapById(remote);
+          const baseOrder = syncIds(baseArray);
+          const localOrder = syncIds(local);
+          const remoteOrder = syncIds(remote);
+
+          // Keep the order from the side that changed the list; append independent additions.
+          const localChangedOrder = !syncSameOrder(localOrder, baseOrder);
+          const preferredOrder = localChangedOrder ? localOrder : remoteOrder;
+          const secondaryOrder = localChangedOrder ? remoteOrder : localOrder;
+          const allOrder = [...preferredOrder];
+          secondaryOrder.forEach(id => { if (!allOrder.includes(id)) allOrder.push(id); });
+          baseOrder.forEach(id => { if (!allOrder.includes(id)) allOrder.push(id); });
+
+          const merged = [];
+          for (const id of allOrder) {
+            const b = baseMap.has(id) ? baseMap.get(id) : SYNC_MISSING;
+            const l = localMap.has(id) ? localMap.get(id) : SYNC_MISSING;
+            const r = remoteMap.has(id) ? remoteMap.get(id) : SYNC_MISSING;
+            const item = mergeSyncValue(b, l, r);
+            if (item !== SYNC_MISSING) merged.push(item);
+          }
+          return merged;
+        }
+
+        function mergeSyncObject(base, local, remote) {
+          const baseObject = base === SYNC_MISSING ? {} : base;
+          const keys = new Set([
+            ...Object.keys(baseObject || {}),
+            ...Object.keys(local || {}),
+            ...Object.keys(remote || {})
+          ]);
+          const output = {};
+
+          for (const key of keys) {
+            const b = Object.prototype.hasOwnProperty.call(baseObject, key) ? baseObject[key] : SYNC_MISSING;
+            const l = Object.prototype.hasOwnProperty.call(local, key) ? local[key] : SYNC_MISSING;
+            const r = Object.prototype.hasOwnProperty.call(remote, key) ? remote[key] : SYNC_MISSING;
+            const value = mergeSyncValue(b, l, r);
+            if (value !== SYNC_MISSING && value !== undefined) output[key] = value;
+          }
+          return output;
+        }
+
+        // Three-way merge: preserve independent local/cloud edits using the last shared baseline.
+        // Arrays of records are merged by their stable `id`; same-field conflicts use last commit wins.
+        function mergeSyncValue(base, local, remote) {
+          if (syncDeepEqual(local, base)) return cloneSyncValue(remote);
+          if (syncDeepEqual(remote, base)) return cloneSyncValue(local);
+          if (syncDeepEqual(local, remote)) return cloneSyncValue(local);
+
+          // Local deletion wins if the same item/property was concurrently edited remotely.
+          if (local === SYNC_MISSING) return SYNC_MISSING;
+          // A local edit wins over a concurrent remote deletion.
+          if (remote === SYNC_MISSING) return cloneSyncValue(local);
+
+          if (isSyncPlainObject(local) && isSyncPlainObject(remote) &&
+              (base === SYNC_MISSING || isSyncPlainObject(base))) {
+            return mergeSyncObject(base, local, remote);
+          }
+
+          if (syncArrayHasStableIds(local) && syncArrayHasStableIds(remote) &&
+              (base === SYNC_MISSING || syncArrayHasStableIds(base))) {
+            return mergeSyncArrayById(base, local, remote);
+          }
+
+          if (syncArrayHasPrimitiveValues(local) && syncArrayHasPrimitiveValues(remote) &&
+              (base === SYNC_MISSING || syncArrayHasPrimitiveValues(base))) {
+            return mergeSyncArrayByValue(base, local, remote);
+          }
+
+          // Same scalar field, or an array without record IDs, changed on both sides.
+          // The value from the transaction being committed wins for that exact conflict.
+          return cloneSyncValue(local);
+        }
+
+        function mergeConcurrentState(base, local, remote) {
+          const safeBase = isSyncPlainObject(base) ? base : {};
+          const safeLocal = isSyncPlainObject(local) ? local : {};
+          const safeRemote = isSyncPlainObject(remote) ? remote : {};
+          return mergeSyncObject(safeBase, safeLocal, safeRemote);
+        }
+
+        function persistLocalSyncState() {
+          try {
+            localStorage.setItem(LOCAL_STATE_KEY, JSON.stringify(appState));
+            if (lastSyncedState !== null) {
+              localStorage.setItem(LOCAL_BASELINE_KEY, JSON.stringify(lastSyncedState));
+            }
+          } catch (error) {
+            console.warn('Gagal menyimpan cache sinkronisasi lokal:', error);
+          }
+        }
+
+        function isFirebaseStateDirty() {
+          return lastSyncedState !== null && !syncDeepEqual(appState, lastSyncedState);
+        }
+
+        function scheduleFirebaseSync(delay = 350) {
+          if (!isAppAuthorized || !currentAuthenticatedUser || !window.hasFetchedCloud || lastSyncedState === null) return;
+          if (cloudSyncTimer) clearTimeout(cloudSyncTimer);
+          cloudSyncTimer = setTimeout(() => {
+            cloudSyncTimer = null;
+            flushFirebaseSync();
+          }, delay);
+        }
 
         function stopRealtimeSync() {
           if (realtimeListenerAttached && realtimeValueHandler) {
             dbRef.off('value', realtimeValueHandler);
           }
+          if (cloudSyncTimer) {
+            clearTimeout(cloudSyncTimer);
+            cloudSyncTimer = null;
+          }
+          cloudSyncSession++;
           realtimeListenerAttached = false;
           realtimeValueHandler = null;
           realtimeErrorHandler = null;
+          latestRemoteDuringSync = null;
+          cloudSyncInProgress = false;
+          lastSyncedState = null;
           window.hasFetchedCloud = false;
           hasCompletedCloudBootstrap = false;
         }
@@ -6259,46 +6477,81 @@
           if (!isAppAuthorized || !currentAuthenticatedUser) return;
           stopRealtimeSync();
 
-          // Local cache baru boleh dibaca setelah UID dinyatakan diizinkan.
-          const localData = localStorage.getItem('pohonTeduhState');
-          if (localData) {
-            try {
-              const parsed = JSON.parse(localData);
-              appState = { ...appState, ...parsed };
-              refreshAllViews();
-            } catch (e) {
-              console.error("Error parsing local state:", e);
-            }
+          let cachedLocalState = null;
+          let cachedBaselineState = null;
+          try {
+            const localRaw = localStorage.getItem(LOCAL_STATE_KEY);
+            const baselineRaw = localStorage.getItem(LOCAL_BASELINE_KEY);
+            if (localRaw) cachedLocalState = JSON.parse(localRaw);
+            if (baselineRaw) cachedBaselineState = JSON.parse(baselineRaw);
+          } catch (error) {
+            console.warn('Cache lokal tidak dapat dibaca; data cloud akan digunakan.', error);
+            cachedLocalState = null;
+            cachedBaselineState = null;
+          }
+
+          // A legacy cache without a saved cloud baseline cannot be safely merged.
+          // The cloud remains authoritative for the first bootstrap after this upgrade.
+          if (cachedLocalState && cachedBaselineState && isSyncPlainObject(cachedLocalState) && isSyncPlainObject(cachedBaselineState)) {
+            appState = { ...createEmptyAppState(), ...cachedLocalState };
+            refreshAllViews();
           }
 
           realtimeValueHandler = (snapshot) => {
             if (!isAppAuthorized) return;
-            const remoteData = snapshot.val();
+            const value = snapshot.val();
+            const remoteData = isSyncPlainObject(value) ? value : {};
             window.hasFetchedCloud = true;
 
-            if (remoteData && typeof remoteData === 'object') {
+            // First snapshot: reconcile a cache only when its previous cloud baseline exists.
+            if (!hasCompletedCloudBootstrap) {
+              let initialState = remoteData;
+              if (cachedLocalState && cachedBaselineState &&
+                  isSyncPlainObject(cachedLocalState) && isSyncPlainObject(cachedBaselineState)) {
+                initialState = mergeConcurrentState(cachedBaselineState, cachedLocalState, remoteData);
+              }
+
+              lastSyncedState = cloneSyncValue(remoteData);
+              appState = { ...createEmptyAppState(), ...initialState };
+              hasCompletedCloudBootstrap = true;
+              persistLocalSyncState();
               isRemoteUpdate = true;
-              appState = { ...createEmptyAppState(), ...remoteData };
-              try {
-                localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
-              } catch(e) {}
               refreshAllViews();
               isRemoteUpdate = false;
-            }
-            if (!hasCompletedCloudBootstrap) {
-              hasCompletedCloudBootstrap = true;
               unlockApplicationAfterCloudReady();
+
+              if (!syncDeepEqual(appState, lastSyncedState)) scheduleFirebaseSync(150);
+              return;
             }
+
+            // While a transaction is committing, let its retry/commit result reconcile the update.
+            if (cloudSyncInProgress) {
+              latestRemoteDuringSync = cloneSyncValue(remoteData);
+              return;
+            }
+
+            const mergedState = mergeConcurrentState(lastSyncedState || {}, appState, remoteData);
+            lastSyncedState = cloneSyncValue(remoteData);
+            appState = { ...createEmptyAppState(), ...mergedState };
+            persistLocalSyncState();
+            isRemoteUpdate = true;
+            refreshAllViews();
+            isRemoteUpdate = false;
+
+            // If this device had an unsynced local edit, re-apply it transactionally.
+            if (!syncDeepEqual(appState, lastSyncedState)) scheduleFirebaseSync(150);
           };
+
           realtimeErrorHandler = error => {
-            console.error("Firebase Sync Error:", error);
+            console.error('Firebase Sync Error:', error);
             window.hasFetchedCloud = false;
           };
+
           dbRef.on('value', realtimeValueHandler, realtimeErrorHandler);
           realtimeListenerAttached = true;
         }
 
-        // FUNGSI UNTUK MEMPERBARUI SELURUH TAMPILAN UI DI LAYAR
+        // Refresh all modules after a remote snapshot or a committed local transaction.
         function refreshAllViews() {
           if (typeof calculatePregnancyData === 'function') calculatePregnancyData();
           if (typeof renderGallery === 'function') renderGallery();
@@ -6316,7 +6569,7 @@
           if (typeof renderHospitals === 'function') renderHospitals();
           if (typeof renderContractionLogs === 'function') renderContractionLogs();
           if (typeof renderMedicalRecords === 'function') renderMedicalRecords();
-          if (typeof renderMedicalChart === 'function') renderMedicalChart(); // <-- Grafik Medis ditambahkan di sini
+          if (typeof renderMedicalChart === 'function') renderMedicalChart();
           if (typeof renderReferences === 'function') renderReferences();
           if (typeof renderBabyProfile === 'function') renderBabyProfile();
           if (typeof renderDailyLogs === 'function') renderDailyLogs();
@@ -6324,74 +6577,164 @@
           if (typeof renderPostShopping === 'function') renderPostShopping();
           renderRsDsa();
           updateDashboardWidgets();
-          if (typeof renderKmsChart === 'function') renderKmsChart(); // (Ini tambahan baru untuk grafik KMS anak)
+          if (typeof renderKmsChart === 'function') renderKmsChart();
           if (typeof renderBabyMedicalRecords === 'function') renderBabyMedicalRecords();
         }
 
-        // FUNGSI PENYIMPANAN KE FIREBASE
+        // Debounced local save + conflict-aware cloud synchronization.
         function saveToLocalStorage() {
           if (isRemoteUpdate || !isAppAuthorized || !currentAuthenticatedUser) return;
-
           try {
-            const cleanState = JSON.parse(JSON.stringify(appState));
-            // 1. Selalu simpan ke memori lokal HP/Laptop
-            localStorage.setItem('pohonTeduhState', JSON.stringify(cleanState));
-
-            // 2. CEGAH PENIMPAAN: Jika aplikasi belum mendownload data terbaru dari Firebase, larang push ke Cloud!
-            if (!window.hasFetchedCloud) {
-              return; 
-            }
-
-            // 3. Kirim ke Firebase Cloud jika sudah aman
-            dbRef.set(cleanState)
-              .then(() => {
-                console.log("Data berhasil tersinkronisasi ke Firebase Cloud!");
-              })
-              .catch(err => {
-                console.error("Gagal sync ke Firebase:", err);
-                alert("Gagal menyimpan ke cloud. Periksa koneksi, status login, dan Firebase Security Rules.");
-              });
-          } catch (e) {
-            console.error("Error formatting state:", e);
+            persistLocalSyncState();
+            if (window.hasFetchedCloud && lastSyncedState !== null) scheduleFirebaseSync(350);
+          } catch (error) {
+            console.error('Error menyimpan state:', error);
           }
         }
-        
-        // FUNGSI SIMPAN MANUAL DENGAN INDIKATOR VISUAL
-        function manualSaveToFirebase() {
+
+        // A transaction merges local changes with the latest cloud snapshot before committing.
+        async function runFirebaseSyncLoop(sessionId) {
+          let cycle = 0;
+          while (cycle < 10) {
+            if (!isAppAuthorized || !currentAuthenticatedUser || sessionId !== cloudSyncSession) return false;
+            if (!window.hasFetchedCloud || lastSyncedState === null) return false;
+
+            const baseSnapshot = cloneSyncValue(lastSyncedState);
+            const localSnapshot = cloneSyncValue(appState);
+            if (syncDeepEqual(baseSnapshot, localSnapshot)) return true;
+
+            cloudSyncInProgress = true;
+            latestRemoteDuringSync = null;
+            let transactionResult;
+            let latestServerData = null;
+            try {
+              transactionResult = await dbRef.transaction(currentData => {
+                const currentRemote = isSyncPlainObject(currentData) ? currentData : {};
+                return mergeConcurrentState(baseSnapshot, localSnapshot, currentRemote);
+              }, null, false);
+
+              if (transactionResult && transactionResult.committed) {
+                const committedData = isSyncPlainObject(transactionResult.snapshot.val())
+                  ? transactionResult.snapshot.val()
+                  : {};
+                latestServerData = committedData;
+
+                // A value event may have arrived during the transaction. If it differs from
+                // the transaction result, read the current server value instead of trusting
+                // a potentially older queued event snapshot.
+                for (let check = 0; check < 3; check++) {
+                  const queuedEvent = latestRemoteDuringSync;
+                  if (!queuedEvent || syncDeepEqual(queuedEvent, latestServerData)) break;
+                  const currentSnapshot = await dbRef.once('value');
+                  const currentValue = currentSnapshot.val();
+                  latestServerData = isSyncPlainObject(currentValue) ? currentValue : {};
+                  if (latestRemoteDuringSync && syncDeepEqual(latestRemoteDuringSync, latestServerData)) break;
+                }
+              }
+            } catch (error) {
+              console.error('Gagal melakukan transaksi sinkronisasi Firebase:', error);
+              cloudSyncInProgress = false;
+              const queuedRemote = latestRemoteDuringSync;
+              latestRemoteDuringSync = null;
+              if (queuedRemote && isAppAuthorized && sessionId === cloudSyncSession) {
+                const recovered = mergeConcurrentState(lastSyncedState || {}, appState, queuedRemote);
+                lastSyncedState = cloneSyncValue(queuedRemote);
+                appState = { ...createEmptyAppState(), ...recovered };
+                persistLocalSyncState();
+                isRemoteUpdate = true;
+                refreshAllViews();
+                isRemoteUpdate = false;
+                if (!syncDeepEqual(appState, lastSyncedState)) scheduleFirebaseSync(750);
+              }
+              return false;
+            }
+            cloudSyncInProgress = false;
+
+            if (!isAppAuthorized || sessionId !== cloudSyncSession) return false;
+            if (!transactionResult || !transactionResult.committed || latestServerData === null) {
+              console.warn('Transaksi sinkronisasi tidak berhasil di-commit.');
+              latestRemoteDuringSync = null;
+              return false;
+            }
+
+            const reconciledState = mergeConcurrentState(localSnapshot, appState, latestServerData);
+            latestRemoteDuringSync = null;
+
+            lastSyncedState = cloneSyncValue(latestServerData);
+            appState = { ...createEmptyAppState(), ...reconciledState };
+            persistLocalSyncState();
+            isRemoteUpdate = true;
+            refreshAllViews();
+            isRemoteUpdate = false;
+
+            if (!isFirebaseStateDirty()) return true;
+            cycle++;
+          }
+
+          console.warn('Sinkronisasi masih memiliki perubahan lokal; akan dicoba kembali.');
+          if (isFirebaseStateDirty()) scheduleFirebaseSync(1000);
+          return false;
+        }
+
+        function flushFirebaseSync() {
+          if (cloudSyncTimer) {
+            clearTimeout(cloudSyncTimer);
+            cloudSyncTimer = null;
+          }
+          if (!isAppAuthorized || !currentAuthenticatedUser || !window.hasFetchedCloud || lastSyncedState === null) {
+            return Promise.resolve(false);
+          }
+
+          if (cloudSyncPromise) {
+            return cloudSyncPromise.then(success => {
+              if (success && isFirebaseStateDirty()) return flushFirebaseSync();
+              return success;
+            });
+          }
+
+          const sessionId = cloudSyncSession;
+          const currentPromise = runFirebaseSyncLoop(sessionId);
+          cloudSyncPromise = currentPromise;
+          currentPromise.then(success => {
+            if (cloudSyncPromise === currentPromise) cloudSyncPromise = null;
+            if (success && isAppAuthorized && isFirebaseStateDirty()) scheduleFirebaseSync(500);
+          }, () => {
+            if (cloudSyncPromise === currentPromise) cloudSyncPromise = null;
+          });
+          return currentPromise;
+        }
+
+        // Manual save uses the same transaction path; it never bypasses conflict handling.
+        async function manualSaveToFirebase() {
           if (!isAppAuthorized || !currentAuthenticatedUser) return;
           const btn = document.getElementById('btn-manual-save');
           const statusText = document.getElementById('sync-status-text');
 
           if (btn && statusText) {
-            btn.className = "px-3 py-1.5 bg-amber-500 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm animate-pulse";
-            statusText.innerText = "Menyimpan...";
+            btn.className = 'px-3 py-1.5 bg-amber-500 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm animate-pulse';
+            statusText.innerText = 'Menyimpan...';
           }
 
           try {
-            const cleanState = JSON.parse(JSON.stringify(appState));
-            localStorage.setItem('pohonTeduhState', JSON.stringify(cleanState));
-
-            dbRef.set(cleanState)
-              .then(() => {
-                if (btn && statusText) {
-                  btn.className = "px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm";
-                  statusText.innerText = "Tersimpan! ✓";
-                  
-                  setTimeout(() => {
-                    statusText.innerText = "Simpan Data";
-                  }, 3000);
-                }
-              })
-              .catch(err => {
-                console.error("Gagal sync ke Firebase:", err);
-                if (btn && statusText) {
-                  btn.className = "px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm";
-                  statusText.innerText = "Gagal Sync ✖";
-                }
-                alert("Gagal menyimpan ke cloud. Cek koneksi internetmu!");
-              });
-          } catch (e) {
-            console.error("Error formatting state:", e);
+            persistLocalSyncState();
+            const success = await flushFirebaseSync();
+            if (success) {
+              if (btn && statusText) {
+                btn.className = 'px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm';
+                statusText.innerText = 'Tersimpan! ✓';
+                setTimeout(() => { statusText.innerText = 'Simpan Data'; }, 3000);
+              }
+            } else {
+              if (btn && statusText) {
+                btn.className = 'px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm';
+                statusText.innerText = 'Gagal Sync ✖';
+              }
+              alert('Data belum berhasil tersinkronisasi. Periksa koneksi dan Firebase Security Rules, lalu coba Simpan Data kembali.');
+            }
+          } catch (error) {
+            console.error('Manual Firebase save error:', error);
+            if (btn && statusText) statusText.innerText = 'Gagal Sync ✖';
+            alert('Gagal menyimpan ke cloud. Periksa koneksi internetmu.');
           }
         }
 
@@ -6411,16 +6754,27 @@
             const file = event.target.files && event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
-                    appState = JSON.parse(e.target.result);
+                    const importedState = JSON.parse(e.target.result);
+                    if (!isSyncPlainObject(importedState)) throw new Error('Format data harus berupa objek JSON.');
+                    if (!confirm('Impor akan menerapkan data dari file JSON ke aplikasi. Lanjutkan?')) return;
+                    appState = { ...createEmptyAppState(), ...importedState };
                     saveToLocalStorage();
+                    const success = await flushFirebaseSync();
+                    if (!success) {
+                        alert('Impor belum tersinkronisasi ke Firebase. Data lokal tetap dipertahankan; coba Simpan Data sebelum memuat ulang.');
+                        return;
+                    }
                     location.reload();
                 } catch(err) {
-                    alert("Format file JSON tidak valid.");
+                    console.error('Import JSON error:', err);
+                    alert(err.message || 'Format file JSON tidak valid.');
+                } finally {
+                    if (event.target) event.target.value = '';
                 }
             };
-            reader.readAsText(event.target.files[0]);
+            reader.readAsText(file);
         }
 
         // ==========================================
