@@ -7387,7 +7387,7 @@
                 xaxis: { categories: ['Bulan 0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], labels: { style: { colors: '#94a3b8' } } },
                 yaxis: { title: { text: namaMetrik, style: { color: '#94a3b8' } }, labels: { style: { colors: '#94a3b8' } } },
                 grid: { borderColor: '#334155', strokeDashArray: 4 },
-                theme: { mode: 'dark' },
+                theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' },
                 legend: { show: true, position: 'top' }
             };
         
