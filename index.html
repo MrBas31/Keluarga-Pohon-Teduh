@@ -2700,25 +2700,33 @@
         // NIGHT MODE (DARK THEME) LOGIC
         // ==========================================
         function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
+            // 1. Suntikkan class 'dark' ke <html> agar Tailwind merespons
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
             
-            // Simpan preferensi ke HP/Laptop
+            // 2. Simpan preferensi ke HP/Laptop (menggunakan key aslimu)
             localStorage.setItem('pohonTeduhTheme', isDark ? 'dark' : 'light');
             
-            // Ganti icon Bulan / Matahari
+            // 3. Ganti icon Bulan / Matahari (menggunakan styling aslimu)
             const icon = document.getElementById('dark-mode-icon');
             if (icon) {
                 icon.className = isDark ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon';
             }
+        
+            // 4. Render ulang grafik KMS agar warnanya menyesuaikan tema
+            if (typeof renderKmsChart === 'function') {
+                renderKmsChart();
+            }
         }
-
+        
         function loadThemePreference() {
             const savedTheme = localStorage.getItem('pohonTeduhTheme');
             if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
+                document.documentElement.classList.add('dark');
                 const icon = document.getElementById('dark-mode-icon');
                 if (icon) icon.className = 'fa-solid fa-sun text-amber-400';
+            } else {
+                document.documentElement.classList.remove('dark');
             }
         }
 
