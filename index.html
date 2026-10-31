@@ -3534,6 +3534,7 @@
 
                 containerPrenatal.classList.add('hidden');
                 containerPostnatal.classList.remove('hidden');
+                switchPostnatalTab(appState.currentPostnatalTab || 'post-dashboard');
             }
             saveToLocalStorage();
         }
@@ -3548,8 +3549,29 @@
                 if (btn) btn.classList.toggle('active', t === tabId);
                 if (sec) sec.classList.toggle('hidden', t !== tabId);
             });
-            if (tabId === 'budget') {
+            if (tabId === 'dashboard') {
+                renderDashboardWidgets();
+            } else if (tabId === 'budget') {
+                renderBudgetSubTabs();
+                renderShoppingItems();
                 renderBudgetPieChart(appState.activePieSubMenu || 'ALL');
+            } else if (tabId === 'hospital') {
+                renderHospitals();
+            } else if (tabId === 'medis') {
+                renderContractionLogs();
+                renderMedicalRecords();
+                renderMedicalChart();
+            } else if (tabId === 'siaga') {
+                renderEmergencyContacts();
+                renderHospitalBagTable();
+                renderDepartureChecklist();
+                renderHusbandRoles();
+                renderBirthPlan();
+                renderAffirmations();
+            } else if (tabId === 'names') {
+                renderBabyNames();
+            } else if (tabId === 'referensi') {
+                renderReferences();
             }
         }
 
@@ -3563,6 +3585,22 @@
                 if (btn) btn.classList.toggle('active', t === tabId);
                 if (sec) sec.classList.toggle('hidden', t !== tabId);
             });
+
+            if (tabId === 'post-dashboard') {
+                renderBabyProfile();
+                renderGallery();
+                updateDashboardWidgets();
+            } else if (tabId === 'post-log') {
+                renderDailyLogs();
+                updateWakeWindow();
+            } else if (tabId === 'post-belanja') {
+                renderPostShopping();
+            } else if (tabId === 'rs-dsa') {
+                renderRsDsa();
+            } else if (tabId === 'post-medis') {
+                renderKmsChart();
+                renderBabyMedicalRecords();
+            }
             saveToLocalStorage();
         }
 
@@ -3831,9 +3869,22 @@
             }
         }
 
+        // True only when an element and all of its parent containers are visible.
+        // Avoid creating/resizing charts while their tab or phase is hidden.
+        function isUiSectionVisible(sectionId) {
+            let node = document.getElementById(sectionId);
+            if (!node) return false;
+            while (node && node !== document.body) {
+                if (node.classList && node.classList.contains('hidden')) return false;
+                node = node.parentElement;
+            }
+            return true;
+        }
+
         // RENDER BUDGET PIE CHART IN BUDGET TAB
         function renderBudgetPieChart(selectedSub = 'ALL') {
             appState.activePieSubMenu = selectedSub;
+            if (!isUiSectionVisible('sec-budget')) return;
             const filterContainer = document.getElementById('pie-chart-subtabs');
             if (!filterContainer) return;
             
@@ -3911,11 +3962,15 @@
                 }).join('');
             }
 
+            const ctx = chartCanvas.getContext('2d');
             if (budgetPieChartInstance) {
-                budgetPieChartInstance.destroy();
+                budgetPieChartInstance.data.labels = labels;
+                budgetPieChartInstance.data.datasets[0].data = data;
+                budgetPieChartInstance.data.datasets[0].backgroundColor = bgColors;
+                budgetPieChartInstance.update('none');
+                return;
             }
 
-            const ctx = chartCanvas.getContext('2d');
             budgetPieChartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -4301,6 +4356,7 @@
 
         // FUNGSI RENDER GRAFIK PERTUMBUHAN JANIN
         function renderMedicalChart() {
+            if (!isUiSectionVisible('sec-medis')) return;
             const canvas = document.getElementById('medicalGrowthChart');
             const emptyState = document.getElementById('medical-chart-empty');
             if (!canvas) return;
@@ -4345,11 +4401,16 @@
                 dataFL.push(flNum);
             });
 
+            const ctx = canvas.getContext('2d');
             if (medicalGrowthChartInstance) {
-                medicalGrowthChartInstance.destroy();
+                medicalGrowthChartInstance.data.labels = labels;
+                medicalGrowthChartInstance.data.datasets[0].data = dataBBJ;
+                medicalGrowthChartInstance.data.datasets[1].data = dataCRL;
+                medicalGrowthChartInstance.data.datasets[2].data = dataFL;
+                medicalGrowthChartInstance.update('none');
+                return;
             }
 
-            const ctx = canvas.getContext('2d');
             medicalGrowthChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -6516,6 +6577,8 @@
               hasCompletedCloudBootstrap = true;
               persistLocalSyncState();
               isRemoteUpdate = true;
+              // Restore the cloud-saved phase and tab after the authoritative snapshot arrives.
+              switchPhase(appState.phase || 'prenatal');
               refreshAllViews();
               isRemoteUpdate = false;
               unlockApplicationAfterCloudReady();
@@ -6530,12 +6593,13 @@
               return;
             }
 
+            const previousState = cloneSyncValue(appState);
             const mergedState = mergeConcurrentState(lastSyncedState || {}, appState, remoteData);
             lastSyncedState = cloneSyncValue(remoteData);
             appState = { ...createEmptyAppState(), ...mergedState };
             persistLocalSyncState();
             isRemoteUpdate = true;
-            refreshAllViews();
+            refreshAllViews(getChangedStateKeys(previousState, appState));
             isRemoteUpdate = false;
 
             // If this device had an unsynced local edit, re-apply it transactionally.
@@ -6551,34 +6615,84 @@
           realtimeListenerAttached = true;
         }
 
-        // Refresh all modules after a remote snapshot or a committed local transaction.
-        function refreshAllViews() {
-          if (typeof calculatePregnancyData === 'function') calculatePregnancyData();
-          if (typeof renderGallery === 'function') renderGallery();
-          if (typeof renderDashboardWidgets === 'function') renderDashboardWidgets();
-          if (typeof renderBudgetPieChart === 'function') renderBudgetPieChart(appState.activePieSubMenu || 'ALL');
-          if (typeof renderBudgetSubTabs === 'function') renderBudgetSubTabs();
-          if (typeof renderShoppingItems === 'function') renderShoppingItems();
-          if (typeof renderEmergencyContacts === 'function') renderEmergencyContacts();
-          if (typeof renderHospitalBagTable === 'function') renderHospitalBagTable();
-          if (typeof renderDepartureChecklist === 'function') renderDepartureChecklist();
-          if (typeof renderHusbandRoles === 'function') renderHusbandRoles();
-          if (typeof renderBirthPlan === 'function') renderBirthPlan();
-          if (typeof renderAffirmations === 'function') renderAffirmations();
-          if (typeof renderBabyNames === 'function') renderBabyNames();
-          if (typeof renderHospitals === 'function') renderHospitals();
-          if (typeof renderContractionLogs === 'function') renderContractionLogs();
-          if (typeof renderMedicalRecords === 'function') renderMedicalRecords();
-          if (typeof renderMedicalChart === 'function') renderMedicalChart();
-          if (typeof renderReferences === 'function') renderReferences();
-          if (typeof renderBabyProfile === 'function') renderBabyProfile();
-          if (typeof renderDailyLogs === 'function') renderDailyLogs();
-          if (typeof updateWakeWindow === 'function') updateWakeWindow();
-          if (typeof renderPostShopping === 'function') renderPostShopping();
-          renderRsDsa();
-          updateDashboardWidgets();
-          if (typeof renderKmsChart === 'function') renderKmsChart();
-          if (typeof renderBabyMedicalRecords === 'function') renderBabyMedicalRecords();
+        function getChangedStateKeys(previousState, nextState) {
+          const previous = isSyncPlainObject(previousState) ? previousState : {};
+          const next = isSyncPlainObject(nextState) ? nextState : {};
+          const allKeys = new Set([...Object.keys(previous), ...Object.keys(next)]);
+          const changed = new Set();
+          allKeys.forEach(key => {
+            const before = Object.prototype.hasOwnProperty.call(previous, key) ? previous[key] : SYNC_MISSING;
+            const after = Object.prototype.hasOwnProperty.call(next, key) ? next[key] : SYNC_MISSING;
+            if (!syncDeepEqual(before, after)) changed.add(key);
+          });
+          return changed;
+        }
+
+        // Refresh every module once at startup. For later sync events, refresh only
+        // the visible module whose underlying data actually changed.
+        function refreshAllViews(changedKeys = null) {
+          const isFullRefresh = !(changedKeys instanceof Set);
+          const changed = changedKeys instanceof Set ? changedKeys : new Set();
+          if (!isFullRefresh && changed.size === 0) return;
+          const has = (...keys) => isFullRefresh || keys.some(key => changed.has(key));
+
+          if (has('hpht', 'hpl')) calculatePregnancyData();
+          if (has('gallery', 'postnatalGallery')) renderGallery();
+
+          const prenatalDashboardVisible = isUiSectionVisible('sec-dashboard');
+          const budgetVisible = isUiSectionVisible('sec-budget');
+          const hospitalVisible = isUiSectionVisible('sec-hospital');
+          const medicalVisible = isUiSectionVisible('sec-medis');
+          const siagaVisible = isUiSectionVisible('sec-siaga');
+          const namesVisible = isUiSectionVisible('sec-names');
+          const referencesVisible = isUiSectionVisible('sec-referensi');
+          const postDashboardVisible = isUiSectionVisible('sec-post-dashboard');
+          const postLogVisible = isUiSectionVisible('sec-post-log');
+          const postShoppingVisible = isUiSectionVisible('sec-post-belanja');
+          const rsDsaVisible = isUiSectionVisible('sec-rs-dsa');
+          const postMedicalVisible = isUiSectionVisible('sec-post-medis');
+
+          if (budgetVisible) {
+            if (has('budgetCategories')) renderBudgetSubTabs();
+            if (has('shoppingItems', 'activeBudgetSubCategory', 'budgetCategories')) renderShoppingItems();
+            if (has('shoppingItems', 'budgetCategories')) renderBudgetPieChart(appState.activePieSubMenu || 'ALL');
+          }
+          if (hospitalVisible && has('hospitals', 'priorityRSId', 'priorityMethod', 'priorityClass', 'priorityDoctor')) renderHospitals();
+          if (medicalVisible) {
+            if (has('contractions')) renderContractionLogs();
+            if (has('medicalRecords')) renderMedicalRecords();
+          }
+          if (siagaVisible) {
+            if (has('emergencyContacts')) renderEmergencyContacts();
+            if (has('hospitalBag')) renderHospitalBagTable();
+            if (has('departureChecklist')) renderDepartureChecklist();
+            if (has('husbandRoles')) renderHusbandRoles();
+            if (has('birthPlan')) renderBirthPlan();
+            if (has('affirmations')) renderAffirmations();
+          }
+          if (namesVisible && has('babyNames')) renderBabyNames();
+          if (referencesVisible && has('references')) renderReferences();
+
+          if (postDashboardVisible && has('babyName', 'babyGender', 'babyBirthDate', 'babyBorn')) renderBabyProfile();
+          if (postLogVisible && has('dailyLogs')) {
+            renderDailyLogs();
+            updateWakeWindow();
+          }
+          if (postShoppingVisible && has('postnatalBudgets', 'postnatalShopping')) renderPostShopping();
+          if (rsDsaVisible && has('rsDsa')) renderRsDsa();
+          if (postMedicalVisible) {
+            if (has('kmsData')) renderKmsChart();
+            if (has('babyMedicalRecords')) renderBabyMedicalRecords();
+          }
+
+          const prenatalDashboardKeys = [
+            'shoppingItems', 'hospitals', 'priorityRSId', 'priorityMethod',
+            'priorityClass', 'priorityDoctor', 'hospitalBag', 'babyNames'
+          ];
+          if (prenatalDashboardVisible && has(...prenatalDashboardKeys)) renderDashboardWidgets();
+
+          const postDashboardKeys = ['dailyLogs', 'postnatalBudgets', 'postnatalShopping'];
+          if (postDashboardVisible && has(...postDashboardKeys)) updateDashboardWidgets();
         }
 
         // Debounced local save + conflict-aware cloud synchronization.
@@ -6637,12 +6751,13 @@
               const queuedRemote = latestRemoteDuringSync;
               latestRemoteDuringSync = null;
               if (queuedRemote && isAppAuthorized && sessionId === cloudSyncSession) {
+                const previousState = cloneSyncValue(appState);
                 const recovered = mergeConcurrentState(lastSyncedState || {}, appState, queuedRemote);
                 lastSyncedState = cloneSyncValue(queuedRemote);
                 appState = { ...createEmptyAppState(), ...recovered };
                 persistLocalSyncState();
                 isRemoteUpdate = true;
-                refreshAllViews();
+                refreshAllViews(getChangedStateKeys(previousState, appState));
                 isRemoteUpdate = false;
                 if (!syncDeepEqual(appState, lastSyncedState)) scheduleFirebaseSync(750);
               }
@@ -6657,6 +6772,7 @@
               return false;
             }
 
+            const previousState = cloneSyncValue(appState);
             const reconciledState = mergeConcurrentState(localSnapshot, appState, latestServerData);
             latestRemoteDuringSync = null;
 
@@ -6664,7 +6780,7 @@
             appState = { ...createEmptyAppState(), ...reconciledState };
             persistLocalSyncState();
             isRemoteUpdate = true;
-            refreshAllViews();
+            refreshAllViews(getChangedStateKeys(previousState, appState));
             isRemoteUpdate = false;
 
             if (!isFirebaseStateDirty()) return true;
@@ -7384,6 +7500,7 @@
 
         // --- 5. RENDER UTAMA ---
         function renderPostShopping() {
+            if (!isUiSectionVisible('sec-post-belanja')) return;
             if (!appState.postnatalBudgets) appState.postnatalBudgets = {};
             if (!appState.postnatalShopping) appState.postnatalShopping = [];
 
@@ -7520,31 +7637,56 @@
         }
 
         function renderPostChart(catData, totalActual) {
-            const ctx = document.getElementById('postShoppingChart');
+            const canvas = document.getElementById('postShoppingChart');
             const legendCont = document.getElementById('post-chart-legend');
-            if (!ctx || !legendCont) return;
+            if (!canvas || !legendCont) return;
 
             const labels = Object.keys(catData);
             const data = Object.values(catData);
-            
-            if (postShoppingChartInstance) postShoppingChartInstance.destroy();
+            const hasData = labels.length > 0 && totalActual > 0;
+            const displayLabels = hasData ? labels : ['Belum ada pengeluaran'];
+            const displayData = hasData ? data : [1];
+            const colors = ['#38bdf8', '#fb7185', '#34d399', '#fbbf24', '#c084fc', '#818cf8', '#f87171', '#4ade80'];
+            const displayColors = hasData ? colors : ['#cbd5e1'];
 
-            if (labels.length === 0 || totalActual === 0) {
-                 postShoppingChartInstance = new Chart(ctx, {
+            if (postShoppingChartInstance) {
+                postShoppingChartInstance.data.labels = displayLabels;
+                postShoppingChartInstance.data.datasets[0].data = displayData;
+                postShoppingChartInstance.data.datasets[0].backgroundColor = displayColors;
+                postShoppingChartInstance.data.datasets[0].borderColor = hasData ? 'transparent' : '#cbd5e1';
+                postShoppingChartInstance.data.datasets[0].borderWidth = hasData ? 2 : 0;
+                postShoppingChartInstance.options.plugins.tooltip.enabled = hasData;
+                postShoppingChartInstance.options.cutout = hasData ? '70%' : '75%';
+                postShoppingChartInstance.update('none');
+            } else {
+                postShoppingChartInstance = new Chart(canvas.getContext('2d'), {
                     type: 'doughnut',
-                    data: { labels: ['Belum ada pengeluaran'], datasets: [{ data: [1], backgroundColor: ['#cbd5e1'], borderWidth: 0 }] },
-                    options: { responsive: true, cutout: '75%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+                    data: {
+                        labels: displayLabels,
+                        datasets: [{
+                            data: displayData,
+                            backgroundColor: displayColors,
+                            borderColor: hasData ? 'transparent' : '#cbd5e1',
+                            borderWidth: hasData ? 2 : 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: hasData ? '70%' : '75%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: hasData
+                                ? { callbacks: { label: c => ' Rp ' + c.parsed.toLocaleString('id-ID') } }
+                                : { enabled: false }
+                        }
+                    }
                 });
+            }
+
+            if (!hasData) {
                 legendCont.innerHTML = `<div class="text-sm text-slate-400 italic text-center">Belum ada realisasi untuk divisualisasikan.</div>`;
                 return;
             }
-
-            const colors = ['#38bdf8', '#fb7185', '#34d399', '#fbbf24', '#c084fc', '#818cf8', '#f87171', '#4ade80'];
-            postShoppingChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderColor: 'transparent', borderWidth: 2 }] },
-                options: { responsive: true, cutout: '70%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' Rp ' + c.parsed.toLocaleString('id-ID') } } } }
-            });
 
             legendCont.innerHTML = labels.map((label, idx) => {
                 const val = data[idx];
@@ -7999,6 +8141,7 @@
         };
         
         function renderKmsChart() {
+            if (!isUiSectionVisible('sec-post-medis')) return;
             const container = document.querySelector("#kms-chart-container");
             if (!container) return;
         
@@ -8035,9 +8178,13 @@
                 legend: { show: true, position: 'top' }
             };
         
-            if (kmsChart) kmsChart.destroy();
-            kmsChart = new ApexCharts(container, options);
-            kmsChart.render();
+            if (kmsChart) {
+                // Update existing SVG chart in place; no destroy/render cycle.
+                kmsChart.updateOptions(options, false, false, false);
+            } else {
+                kmsChart = new ApexCharts(container, options);
+                kmsChart.render();
+            }
             updateKmsUi();
         
             // RENDER RIWAYAT KE DALAM HTML (Sekarang menyatu dengan aman di sini)
