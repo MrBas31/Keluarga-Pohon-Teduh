@@ -7041,26 +7041,26 @@
                         }
         
                         dsaDetailHtml += `
-                        <div class="border-t border-slate-700 py-4 mt-2">
+                        <div class="border-t border-slate-200 dark:border-slate-700 py-4 mt-2">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
-                                    <h5 class="font-bold text-white">${dokter.nama}</h5>
-                                    ${dokter.catatan ? `<p class="text-xs text-slate-400 mt-1 italic">"${dokter.catatan}"</p>` : ''}
+                                    <h5 class="font-bold text-slate-800 dark:text-white">${dokter.nama}</h5>
+                                    ${dokter.catatan ? `<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 italic">"${dokter.catatan}"</p>` : ''}
                                 </div>
-                                <button onclick="toggleFavoriteDsa('${rs.id}', '${dokter.id}')" class="text-xl ${dokter.isFavorite ? 'text-yellow-400' : 'text-slate-600 hover:text-yellow-400'} transition">
+                                <button onclick="toggleFavoriteDsa('${rs.id}', '${dokter.id}')" class="text-xl ${dokter.isFavorite ? 'text-yellow-400' : 'text-slate-300 dark:text-slate-600 hover:text-yellow-400'} transition">
                                     <i class="fa-solid fa-star"></i>
                                 </button>
                             </div>
                             
-                            <div class="bg-slate-800 p-3 rounded-xl mb-3 border border-slate-700">
-                                <h6 class="text-xs font-bold text-slate-400 mb-2 border-b border-slate-700 pb-1">Jadwal Praktik:</h6>
-                                <div class="space-y-1">${jadwalHtml}</div>
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl mb-3 border border-slate-200 dark:border-slate-700">
+                                <h6 class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 border-b border-slate-200 dark:border-slate-700 pb-1">Jadwal Praktik:</h6>
+                                <div class="space-y-1">${jadwalHtml.replace(/text-slate-400/g, 'text-slate-600 dark:text-slate-400')}</div>
                             </div>
                             
                             <div class="flex flex-wrap gap-2">
-                                ${dokter.kontak ? `<a href="https://wa.me/${dokter.kontak.replace(/^0/, '62')}" target="_blank" class="text-xs bg-green-900/30 text-green-400 px-3 py-1.5 rounded-lg font-bold hover:bg-green-900/50"><i class="fa-brands fa-whatsapp mr-1"></i> WA</a>` : ''}
-                                <button onclick="openModalDsa('${rs.id}', '${dokter.id}')" class="text-xs bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg font-bold hover:bg-slate-600"><i class="fa-solid fa-pen mr-1"></i> Edit</button>
-                                <button onclick="deleteDsa('${rs.id}', '${dokter.id}')" class="text-xs bg-red-900/30 text-red-400 px-3 py-1.5 rounded-lg font-bold hover:bg-red-900/50"><i class="fa-solid fa-trash mr-1"></i> Hapus</button>
+                                ${dokter.kontak ? `<a href="https://wa.me/${dokter.kontak.replace(/^0/, '62')}" target="_blank" class="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1.5 rounded-lg font-bold hover:bg-green-200 dark:hover:bg-green-900/50"><i class="fa-brands fa-whatsapp mr-1"></i> WA</a>` : ''}
+                                <button onclick="openModalDsa('${rs.id}', '${dokter.id}')" class="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-lg font-bold hover:bg-slate-200 dark:hover:bg-slate-600"><i class="fa-solid fa-pen mr-1"></i> Edit</button>
+                                <button onclick="deleteDsa('${rs.id}', '${dokter.id}')" class="text-xs bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-3 py-1.5 rounded-lg font-bold hover:bg-red-200 dark:hover:bg-red-900/50"><i class="fa-solid fa-trash mr-1"></i> Hapus</button>
                             </div>
                         </div>`;
                     });
@@ -7077,35 +7077,35 @@
                 const fotoUrl = rs.foto || 'https://via.placeholder.com/400x200?text=Foto+Rumah+Sakit';
         
                 html += `
-                <div class="bg-[#1e293b] border border-slate-700 rounded-3xl overflow-hidden shadow-lg flex flex-col">
-                    <div class="relative h-48 bg-slate-800">
-                        <img src="${fotoUrl}" class="w-full h-full object-cover opacity-80" alt="Foto RS">
+                <div class="bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden shadow-lg flex flex-col">
+                    <div class="relative h-48 bg-slate-100 dark:bg-slate-800">
+                        <img src="${fotoUrl}" class="w-full h-full object-cover opacity-90 dark:opacity-80" alt="Foto RS">
                         <button onclick="setUtamaRs('${rs.id}')" class="absolute top-3 right-3 bg-black/50 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full hover:bg-black/70 border border-white/20 transition">
                             <i class="fa-solid fa-star ${rs.isUtama ? 'text-yellow-400' : 'text-white'} mr-1"></i> ${rs.isUtama ? 'RS Utama' : 'Pilih Utama'}
                         </button>
                     </div>
                     
                     <div class="p-5 flex-1 flex flex-col">
-                        <h4 class="font-bold text-xl text-white mb-1">${rs.nama}</h4>
-                        <p class="text-xs text-slate-400 mb-4"><i class="fa-solid fa-location-dot mr-1"></i>${rs.alamat || rs.kota}</p>
+                        <h4 class="font-bold text-xl text-slate-800 dark:text-white mb-1">${rs.nama}</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4"><i class="fa-solid fa-location-dot mr-1"></i>${rs.alamat || rs.kota}</p>
                         ${linksHtml}
                         
                         <div class="mt-4 flex-1">
-                            <p class="text-sm font-bold text-blue-400 mb-1"><i class="fa-solid fa-user-doctor mr-1"></i> Dokter Anak:</p>
-                            <ul class="space-y-1">${dsaListHtml}</ul>
+                            <p class="text-sm font-bold text-blue-600 dark:text-blue-400 mb-1"><i class="fa-solid fa-user-doctor mr-1"></i> Dokter Anak:</p>
+                            <ul class="space-y-1">${dsaListHtml.replace(/text-slate-400/g, 'text-slate-600 dark:text-slate-400')}</ul>
                         </div>
                         
                         <div class="flex gap-2 mt-5">
-                            <button onclick="openModalRs('${rs.id}')" class="bg-slate-700 text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-600"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteRs('${rs.id}')" class="bg-red-900/30 text-red-400 w-10 h-10 rounded-xl flex items-center justify-center hover:bg-red-900/50"><i class="fa-solid fa-trash"></i></button>
-                            <button onclick="toggleDetailRs('${rs.id}')" class="flex-1 bg-blue-600/20 text-blue-400 border border-blue-600/30 py-2 rounded-xl text-sm font-bold hover:bg-blue-600/40 transition">Lihat Detail & Jadwal ➔</button>
+                            <button onclick="openModalRs('${rs.id}')" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteRs('${rs.id}')" class="bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400 w-10 h-10 rounded-xl flex items-center justify-center hover:bg-red-100 dark:hover:bg-red-900/50"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="toggleDetailRs('${rs.id}')" class="flex-1 bg-blue-50 dark:bg-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-600/30 py-2 rounded-xl text-sm font-bold hover:bg-blue-100 dark:hover:bg-blue-600/40 transition">Lihat Detail & Jadwal ➔</button>
                         </div>
         
                         <!-- AREA DETAIL DAN JADWAL (TERSEMBUNYI DEFAULT) -->
-                        <div id="detail-rs-${rs.id}" class="hidden mt-4 border-t border-slate-700 pt-4 transition-all">
-                            <h5 class="text-sm font-bold text-slate-300 mb-2">Detail Jadwal Dokter:</h5>
+                        <div id="detail-rs-${rs.id}" class="hidden mt-4 border-t border-slate-200 dark:border-slate-700 pt-4 transition-all">
+                            <h5 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Detail Jadwal Dokter:</h5>
                             ${dsaDetailHtml}
-                            <button onclick="openModalDsa('${rs.id}')" class="w-full mt-4 border-2 border-dashed border-slate-600 text-slate-400 text-sm font-bold py-3 rounded-xl hover:bg-slate-800 transition">
+                            <button onclick="openModalDsa('${rs.id}')" class="w-full mt-4 border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 text-sm font-bold py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition">
                                 <i class="fa-solid fa-plus mr-1"></i> Tambah Dokter (DSA)
                             </button>
                         </div>
