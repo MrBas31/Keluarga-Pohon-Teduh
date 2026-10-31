@@ -246,6 +246,131 @@
             #auth-gate .auth-card { padding: 1.5rem; border-radius: 1.25rem; }
         }
     </style>
+
+    <style id="theme-and-header-653-fixes">
+        /* ==========================================================
+           6.5.3 THEME FALLBACKS
+           Explicit light-mode styles for dynamically-rendered RS/DSA
+           cards and the postnatal medical sub-tabs/content.
+           These avoid dependence on CDN dark-variant generation.
+           ========================================================== */
+        body:not(.dark-mode) #rs-dsa-list > div,
+        body:not(.dark-mode) #sec-post-medis [class~="dark:bg-[#1e293b]"] {
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+            border-color: #e2e8f0 !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:bg-slate-800"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-800"] {
+            background-color: #f8fafc !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:bg-slate-700"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-700"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-600"] {
+            background-color: #e2e8f0 !important;
+        }
+        body:not(.dark-mode) #sec-post-medis [class~="dark:bg-blue-600/20"] {
+            background-color: #eff6ff !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:bg-green-900/30"] {
+            background-color: #f0fdf4 !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:bg-red-900/30"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:bg-red-900/30"] {
+            background-color: #fef2f2 !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:text-white"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:text-white"] {
+            color: #1e293b !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:text-slate-300"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:text-slate-300"] {
+            color: #475569 !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:text-slate-400"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:text-slate-400"] {
+            color: #64748b !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:text-slate-200"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:text-slate-200"] {
+            color: #334155 !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:text-blue-400"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:text-blue-400"] {
+            color: #2563eb !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:border-slate-700"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:border-slate-700"] {
+            border-color: #e2e8f0 !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:border-slate-600"],
+        body:not(.dark-mode) #sec-post-medis [class~="dark:border-slate-600"] {
+            border-color: #cbd5e1 !important;
+        }
+        body:not(.dark-mode) #sec-post-medis [class~="dark:border-blue-500/50"] {
+            border-color: #bfdbfe !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:hover:bg-slate-700"]:hover,
+        body:not(.dark-mode) #sec-post-medis [class~="dark:hover:bg-slate-700"]:hover {
+            background-color: #e2e8f0 !important;
+        }
+        body:not(.dark-mode) #rs-dsa-list [class~="dark:hover:bg-slate-600"]:hover,
+        body:not(.dark-mode) #sec-post-medis [class~="dark:hover:bg-slate-600"]:hover {
+            background-color: #cbd5e1 !important;
+        }
+
+        /* Ensure the RS/DSA card base remains light even if a dark utility
+           from an old cached Tailwind stylesheet wins the cascade. */
+        body:not(.dark-mode) #rs-dsa-list > div h4,
+        body:not(.dark-mode) #rs-dsa-list > div h5,
+        body:not(.dark-mode) #rs-dsa-list > div h6 {
+            color: #1e293b;
+        }
+
+        /* ==========================================================
+           6.5.3 DESKTOP HEADER BALANCE
+           Three clear zones: brand | centered phase switch | actions.
+           At smaller widths the existing stacked responsive layout stays.
+           ========================================================== */
+        @media (min-width: 1200px) {
+            #header-main-layout {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+                column-gap: 1.25rem;
+                row-gap: 0;
+                min-height: 84px;
+                align-items: center;
+            }
+            #header-main-layout > div:nth-child(2) { width: auto !important; }
+            #header-actions { width: auto !important; flex-wrap: nowrap !important; flex: none !important; }
+            #header-main-layout > div:first-child {
+                justify-self: start;
+                min-width: 0;
+            }
+            #header-main-layout > div:nth-child(2) {
+                justify-self: center;
+                white-space: nowrap;
+            }
+            #header-actions {
+                justify-self: end;
+                min-width: 0;
+                gap: 0.45rem;
+            }
+            #header-actions > button,
+            #header-actions > label {
+                white-space: nowrap;
+            }
+            #header-main-layout h1 {
+                letter-spacing: -0.025em;
+            }
+        }
+        @media (min-width: 1200px) and (max-width: 1399px) {
+            #header-main-layout h1 { font-size: 1.25rem; }
+            #header-actions > button,
+            #header-actions > label { padding-left: 0.55rem; padding-right: 0.55rem; }
+        }
+    </style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -310,9 +435,9 @@
 
     <!-- HEADER / NAVBAR -->
     <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-slate-100">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
+        <div id="header-main-layout" class="header-main-layout max-w-7xl mx-auto px-4 py-3 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] xl:items-center xl:gap-5">
             <!-- LOGO & BRANDING: judul dijaga tetap satu baris -->
-            <div class="flex items-center gap-3 flex-shrink-0 min-w-0">
+            <div class="flex items-center gap-3 flex-shrink-0 min-w-0 xl:justify-self-start">
                 <img src="Keluarga Pohon Teduh.png" alt="Logo Keluarga Pohon Teduh" class="w-11 h-11 md:w-12 md:h-12 object-cover rounded-2xl border border-emerald-100 shadow-sm flex-shrink-0">
                 <div class="min-w-0">
                     <h1 class="text-lg md:text-xl xl:text-2xl font-bold text-slate-800 tracking-tight font-brand whitespace-nowrap">
@@ -325,7 +450,7 @@
             </div>
 
             <!-- PHASE SWITCHER: DIPERTAHANKAN -->
-            <div class="flex bg-slate-100 p-1 rounded-xl w-full lg:w-auto lg:flex-shrink-0">
+            <div class="flex bg-slate-100 p-1 rounded-xl w-full lg:w-auto lg:flex-shrink-0 xl:justify-self-center">
                 <button onclick="switchPhase('prenatal')" id="btn-prenatal" class="phase-btn active flex-1 lg:flex-initial px-3 xl:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
                     <i class="fa-solid fa-person-pregnant mr-1.5"></i> 🤰 Fase Kehamilan
                 </button>
@@ -335,7 +460,7 @@
             </div>
 
             <!-- ACTIONS: profil Google diringkas menjadi satu avatar -->
-            <div class="flex flex-wrap justify-center lg:justify-end items-center gap-2 text-xs w-full lg:w-auto lg:flex-1">
+            <div id="header-actions" class="flex flex-wrap justify-center lg:justify-end items-center gap-2 text-xs w-full lg:w-auto lg:flex-1 xl:flex-nowrap xl:flex-none xl:justify-self-end">
                 <button onclick="manualSaveToFirebase()" id="btn-manual-save" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm" title="Simpan & Paksa Sync ke Firebase Cloud">
                     <i class="fa-solid fa-cloud-arrow-up"></i> <span id="sync-status-text">Simpan Data</span>
                 </button>
@@ -385,7 +510,7 @@
         </div>
 
         <!-- MAIN TABS NAV (KHUSUS FASE KEHAMILAN) -->
-        <nav id="prenatal-nav-tabs" class="max-w-6xl mx-auto px-4 flex space-x-6 overflow-x-auto text-sm border-t border-slate-100 pt-1">
+        <nav id="prenatal-nav-tabs" class="max-w-7xl mx-auto px-4 flex space-x-6 overflow-x-auto text-sm border-t border-slate-100 pt-1">
             <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active py-2.5 whitespace-nowrap">
                 <i class="fa-solid fa-chart-pie mr-1"></i> Dashboard
             </button>
@@ -410,7 +535,7 @@
         </nav>
 
         <!-- MAIN TABS NAV (KHUSUS FASE BAYI LAHIR) -->
-        <nav id="postnatal-nav-tabs" class="max-w-6xl mx-auto px-4 flex space-x-6 overflow-x-auto text-sm border-t border-slate-100 pt-1 hidden no-scrollbar">
+        <nav id="postnatal-nav-tabs" class="max-w-7xl mx-auto px-4 flex space-x-6 overflow-x-auto text-sm border-t border-slate-100 pt-1 hidden no-scrollbar">
             <button onclick="switchPostnatalTab('post-dashboard')" id="tab-post-dashboard" class="tab-btn active py-2.5 whitespace-nowrap">
                 <i class="fa-solid fa-baby-carriage mr-1"></i> Beranda Si Kecil
             </button>
@@ -2746,9 +2871,11 @@
         // ==========================================
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
-            // Tailwind dark:* utilities must follow the app toggle, not OS appearance.
-            document.body.classList.toggle('dark', document.body.classList.contains('dark-mode'));
             const isDark = document.body.classList.contains('dark-mode');
+            // Apply the class on both root and body so Tailwind's class strategy
+            // and the app's legacy body.dark-mode overrides stay synchronized.
+            document.documentElement.classList.toggle('dark', isDark);
+            document.body.classList.toggle('dark', isDark);
             
             // Simpan preferensi ke HP/Laptop
             localStorage.setItem('pohonTeduhTheme', isDark ? 'dark' : 'light');
@@ -2769,6 +2896,7 @@
 
             // Sinkronkan custom CSS theme dan Tailwind dark:* utilities.
             document.body.classList.toggle('dark-mode', isDark);
+            document.documentElement.classList.toggle('dark', isDark);
             document.body.classList.toggle('dark', isDark);
 
             const icon = document.getElementById('dark-mode-icon');
