@@ -4,10 +4,11 @@
     <!-- Firebase App (Core) & Realtime Database SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
-    <title>Keluarga Pohon Teduh - Baby & Household Planner</title>
+    <title>Keluarga Pohon Teduh 6.4 - Google Login</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -185,9 +186,110 @@
             padding: 0 !important;
             white-space: normal !important;
         }
+
+        /* =======================================
+           AUTHENTICATION GATE (GOOGLE SIGN-IN)
+           ======================================= */
+        body.auth-locked > header,
+        body.auth-locked > main {
+            display: none !important;
+        }
+        #auth-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            background: radial-gradient(circle at top left, #e0f2fe 0, #f8fafc 48%, #ecfdf5 100%);
+        }
+        #auth-gate.hidden { display: none !important; }
+        #auth-gate .auth-card {
+            width: 100%;
+            max-width: 440px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
+        }
+        body.dark-mode #auth-gate {
+            background: radial-gradient(circle at top left, #0c2638 0, #0f172a 52%, #052e27 100%);
+        }
+        body.dark-mode #auth-gate .auth-card {
+            background: #1e293b;
+            border-color: #334155;
+            color: #f8fafc;
+        }
+        body.dark-mode #auth-gate .auth-muted { color: #94a3b8 !important; }
+        #auth-gate button:disabled { opacity: .65; cursor: not-allowed; }
+        @media (max-width: 480px) {
+            #auth-gate .auth-card { padding: 1.5rem; border-radius: 1.25rem; }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen pb-12" onclick="closeAllDropdowns()">
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
+
+    <!-- AUTHENTICATION GATE: aplikasi dan data ditahan sampai UID diizinkan -->
+    <section id="auth-gate" aria-live="polite">
+        <div class="auth-card text-center">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-3xl">
+                <i class="fa-solid fa-tree"></i>
+            </div>
+            <h1 class="font-brand text-2xl font-bold text-slate-800 mb-1" id="auth-brand-title">Keluarga Pohon Teduh</h1>
+            <p class="auth-muted text-sm text-slate-500 mb-6">Ruang privat untuk perjalanan keluarga kita.</p>
+
+            <div id="auth-loading-state" class="space-y-3">
+                <i class="fa-solid fa-circle-notch fa-spin text-2xl text-sky-600"></i>
+                <p class="text-sm text-slate-600">Memeriksa sesi dan hak akses...</p>
+            </div>
+
+            <div id="auth-login-state" class="hidden space-y-4">
+                <p class="text-sm text-slate-600">Silakan masuk menggunakan akun Google yang telah mendapat izin.</p>
+                <button type="button" onclick="event.stopPropagation(); loginWithGoogle();" id="btn-google-login"
+                    class="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50 transition shadow-sm">
+                    <i class="fa-brands fa-google text-lg"></i> Masuk dengan Google
+                </button>
+                <p class="auth-muted text-xs text-slate-400">Akses hanya diberikan kepada akun yang terdaftar.</p>
+            </div>
+
+            <div id="auth-denied-state" class="hidden text-left space-y-3">
+                <div class="text-center">
+                    <i class="fa-solid fa-lock text-3xl text-amber-500 mb-2"></i>
+                    <h2 class="font-bold text-slate-800">Akun belum mendapat akses</h2>
+                    <p class="auth-muted text-sm text-slate-500 mt-1">Login berhasil, tetapi akun Google ini belum dimasukkan ke daftar pengguna yang diizinkan.</p>
+                </div>
+                <div class="rounded-xl bg-slate-50 border border-slate-200 p-3 space-y-2">
+                    <div>
+                        <p class="text-xs text-slate-500">Akun Google</p>
+                        <p id="auth-denied-email" class="text-sm font-semibold text-slate-800 break-all">-</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500">Firebase UID (kirim kepada pengelola aplikasi)</p>
+                        <p id="auth-denied-uid" class="text-xs font-mono text-slate-700 break-all select-all">-</p>
+                    </div>
+                    <button type="button" onclick="event.stopPropagation(); copyAuthUid();" class="w-full text-sm font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100 rounded-lg py-2 transition">
+                        <i class="fa-solid fa-copy mr-1"></i> Salin UID
+                    </button>
+                </div>
+                <p id="auth-denied-help" class="auth-muted text-xs text-slate-500">Tambahkan UID ini pada Realtime Database di node authorizedUsers dengan nilai true. Setelah itu tekan Periksa Akses Lagi.</p>
+                <button type="button" onclick="event.stopPropagation(); recheckAccess();" class="w-full px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition">
+                    <i class="fa-solid fa-rotate mr-1"></i> Periksa Akses Lagi
+                </button>
+                <button type="button" onclick="event.stopPropagation(); logoutGoogle();" class="w-full px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 text-sm font-medium transition">Ganti akun / Keluar</button>
+            </div>
+
+            <div id="auth-error-state" class="hidden space-y-3">
+                <i class="fa-solid fa-triangle-exclamation text-3xl text-rose-500"></i>
+                <h2 class="font-bold text-slate-800">Tidak dapat memeriksa akses</h2>
+                <p id="auth-error-message" class="auth-muted text-sm text-slate-500">Periksa koneksi internet dan konfigurasi Firebase.</p>
+                <button type="button" onclick="event.stopPropagation(); retryAuthCheck();" class="w-full px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold transition">Coba Lagi</button>
+                <button type="button" onclick="event.stopPropagation(); logoutGoogle();" class="w-full px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 text-sm font-medium transition">Keluar</button>
+            </div>
+        </div>
+    </section>
 
     <!-- HEADER / NAVBAR -->
     <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-slate-100">
@@ -216,7 +318,11 @@
             </div>
 
             <!-- LDR SYNC ACTIONS -->
-            <div class="flex flex-wrap justify-center gap-2 text-xs">
+            <div class="flex flex-wrap justify-center items-center gap-2 text-xs">
+                <span id="auth-user-email" class="hidden text-slate-500 font-medium max-w-[180px] truncate" title="Akun Google yang sedang digunakan"></span>
+                <button onclick="logoutGoogle()" id="btn-google-logout" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold rounded-lg transition" title="Keluar dari akun Google">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Keluar
+                </button>
                 <button onclick="manualSaveToFirebase()" id="btn-manual-save" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm" title="Simpan & Paksa Sync ke Firebase Cloud">
                     <i class="fa-solid fa-cloud-arrow-up"></i> <span id="sync-status-text">Simpan Data</span>
                 </button>
@@ -325,7 +431,7 @@
                                 </button>
                             </div>
 
-                            <p class="text-sky-100 text-xs md:text-sm">HPHT: 21 Maret 2026 • Menanti Kehadiran Buah Hati Tercinta</p>
+                            <p class="text-sky-100 text-xs md:text-sm">Pantau perjalanan kehamilan dan persiapan menyambut buah hati.</p>
                             
                             <div class="pt-4 grid grid-cols-3 gap-3">
                                 <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
@@ -2471,188 +2577,72 @@
 
         // Inisialisasi koneksi ke Firebase
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.database();
         const dbRef = db.ref('appState');
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+        googleProvider.setCustomParameters({ prompt: 'select_account' });
+        auth.useDeviceLanguage();
 
         let isRemoteUpdate = false;
-        
-        // DEFAULT STATE DATA
-        let appState = {
-            phase: 'prenatal',
-            currentTab: 'dashboard',
-            hpht: '2026-03-21',
-            hpl: '2026-12-16',
-            priorityRSId: null,       // Dynamic Priority RS ID
-            priorityMethod: null,     // Dynamic Selected Delivery Method
-            priorityClass: null,      // Dynamic Selected Room Class
-            priorityDoctor: null,     // Dynamic Selected Doctor
-            activePieSubMenu: 'ALL',
-            wakeLimitMinutes: 60,
-            contractions: [],
-            medicalRecords: [
-                {
-                    id: 1,
-                    date: "2026-08-18",
-                    title: "Kontrol Rutin & USG Trimester 3",
-                    doctor: "dr. Susanti Mintarsih, Sp.OG (RSIA Al Hasanah)",
-                    gestation: "32 Minggu",
-                    bbj: "1850 gram",
-                    pbj: "40 cm",
-                    notes: "Kondisi janin aktif dan sehat. Ketuban cukup, posisi kepala sudah di bawah. Diberikan tambahan vitamin kalsium dan penambah darah.",
-                    images: [
-                        "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=600&q=80"
-                    ]
-                }
-            ],
-            gallery: [
-                { id: 1, title: "Maternity Photoshoot", caption: "Candi Borobudur - Fikri & Ollyl", url: "WhatsApp Image 2026-08-29 at 15.28.04 (1).jpeg" },
-                { id: 2, title: "USG 3D/4D Si Kecil", caption: "Klinik Barokah - Wajah Mungil Si Kecil (18/08/2026)", url: "WhatsApp Image 2026-08-29 at 16.13.18 (1).jpeg" }
-            ],
-            budgetCategories: ['Keperluan Baby', 'Keperluan Ibu'],
-            activeBudgetSubCategory: 'Keperluan Baby',
-            shoppingItems: [
-                { id: 1, mainCategory: 'Keperluan Baby', category: 'Pakaian', name: 'Baju Kurung Newborn', qty: '3 set', brand: 'Velvet Junior', link: 'https://shopee.co.id\nhttps://tokopedia.com', budget: 150000, actual: 145000, done: true },
-                { id: 2, mainCategory: 'Keperluan Baby', category: 'Pakaian', name: 'Bedong Instan Spandex', qty: '2 pcs', brand: 'Mooimom', link: 'https://shopee.co.id', budget: 120000, actual: 0, done: false },
-                { id: 3, mainCategory: 'Keperluan Baby', category: 'Alat Mandi', name: 'Handuk Bayi Lembut', qty: '2 pcs', brand: 'Terry Palmer', link: 'Toko Ibu & Anak (Jl. Pahlawan Madiun)\nhttps://shopee.co.id', budget: 120000, actual: 115000, done: true },
-                { id: 4, mainCategory: 'Keperluan Baby', category: 'Perawatan', name: 'Minyak Telon & Care Set', qty: '1 paket', brand: 'Cussons / My Baby', link: '', budget: 80000, actual: 0, done: false },
-                { id: 5, mainCategory: 'Keperluan Ibu', category: 'Pasca Melahirkan', name: 'Korset Pasca Melahirkan', qty: '1 pcs', brand: 'Mamaway', link: 'https://tokopedia.com', budget: 350000, actual: 0, done: false },
-                { id: 6, mainCategory: 'Keperluan Ibu', category: 'Menyusui', name: 'Pompa ASI Elektrik', qty: '1 unit', brand: 'Spectra Dual Compact', link: 'https://shopee.co.id\nhttps://tokopedia.com', budget: 1500000, actual: 1450000, done: true },
-                { id: 7, mainCategory: 'Keperluan Ibu', category: 'Perawatan', name: 'Nipple Cream / Salep ASI', qty: '1 tube', brand: 'Lansinoh', link: 'Apotek K-24 Madiun', budget: 120000, actual: 120000, done: true }
-            ],
-            emergencyContacts: [
-                { id: 1, name: "IGD RSIA Al Hasanah Madiun", role: "Rumah Sakit Utama", phone: "081234567890", mapsUrl: "https://maps.google.com" },
-                { id: 2, name: "dr. Susanti, Sp.OG (Dokter Utama Ollyl)", role: "Dokter Utama Ollyl", phone: "081122334455", mapsUrl: "" },
-                { id: 3, name: "Driver / Taksi Siaga Madiun", role: "Transportasi Darurat", phone: "081355667788", mapsUrl: "" }
-            ],
-            departureChecklist: [
-                { id: 1, text: "Matikan kompor & lepas selang gas", done: false },
-                { id: 2, text: "Cabut steker elektronik/AC yang tidak perlu", done: false },
-                { id: 3, text: "Kunci semua pintu & jendela rumah", done: false },
-                { id: 4, text: "Bawa dompet (KTP, SIM, ATM) & HP + Charger/Powerbank", done: false },
-                { id: 5, text: "Bawa Tas Melahirkan (Hospital Bag)", done: false },
-                { id: 6, text: "Kirim kabar cepat ke Orang Tua / Mertua", done: false }
-            ],
-            hospitalBag: [
-                { id: 1, category: 'Dokumen', name: 'KTP, Buku KIA, Kartu BPJS & KK', qty: '1 map khusus', done: true },
-                { id: 2, category: 'Istri', name: 'Baju Kancing Depan / Daster Bersalin', qty: '3 set', done: false },
-                { id: 3, category: 'Istri', name: 'Diapers Dewasa / Pembalut Bersalin', qty: '1 pak', done: false },
-                { id: 4, category: 'Suami', name: 'Baju Ganti & Peralatan Mandi', qty: '2 set', done: false },
-                { id: 5, category: 'Suami', name: 'Charger HP & Powerbank', qty: '1 set', done: false },
-                { id: 6, category: 'Bayi', name: 'Baju + Celana Newborn', qty: '3 set', done: false },
-                { id: 7, category: 'Bayi', name: 'Kain Bedong & Sarung Tangan/Kaki', qty: '3 pasang', done: false }
-            ],
-            husbandRoles: [
-                { id: 1, phase: 'Pembukaan Awal (1 - 4)', notes: 'Suapin makanan ringan kaya energi (telur rebus, kurma). Beri minum menggunakan sedotan. Ajak jalan santai.' },
-                { id: 2, phase: 'Pembukaan Aktif (5 - 8)', notes: 'Jadi metronome pernapasan istri. Genggam tangannya, tatap matanya, dan ikuti irama tarik/hembus napas bersama.' },
-                { id: 3, phase: 'Pembukaan Lengkap & Saat Lahir', notes: 'Bantu dorong pelan belakang kepala istri (dagu ke arah dada) saat mengejan. Berikan afirmasi positif dan azani pelan di telinga si kecil.' }
-            ],
-            birthPlan: [
-                { id: 1, title: "Metode Persalinan", detail: "Prioritas Spontan/Normal. Jika ada pertimbangan medis darurat, siap opsi ERACS/SC." },
-                { id: 2, title: "Inisiasi Menyusu Dini (IMD)", detail: "Permohonan IMD minimal 1 jam pertama setelah lahir jika kondisi bayi & Ollyl stabil." },
-                { id: 3, title: "Delayed Cord Clamping", detail: "Penundaan pemotongan tali pusat 1-3 menit hingga denyut tali pusat melambat/berhenti." },
-                { id: 4, title: "Pendampingan Utama", detail: "Fikri mendampingi penuh di dalam ruang persalinan dari pembukaan hingga lahir." }
-            ],
-            affirmations: [
-                { id: 1, text: "Setiap gelombang kontraksi membawa si kecil makin dekat ke dekapan kita." },
-                { id: 2, text: "Tubuh Ollyl sangat kuat, rileks, dan dirancang alami untuk melahirkan." },
-                { id: 3, text: "Tarik napas panjang... hembuskan perlahan... lepaskan semua ketegangan." },
-                { id: 4, text: "Kita lakukan ini bersama-sama, Fikri ada di sini dampingi kamu terus." }
-            ],
-            babyNames: [
-                { id: 1, gender: 'boy', name: 'Miqdad', meaning: 'Pemberantas kejahatan, penjaga perbuatan baik', position: ['Depan', 'Tengah'], fav: true },
-                { id: 2, gender: 'boy', name: 'Akkaf / Akafa', meaning: 'Anak tercinta Fikri & Ollyl; tekun beribadah', position: ['Depan', 'Tengah', 'Belakang'], fav: true },
-                { id: 3, gender: 'boy', name: 'Zayan', meaning: 'Tampan, ramah, dan anggun', position: ['Tengah', 'Belakang'], fav: false },
-                { id: 4, gender: 'girl', name: 'Rafiya', meaning: 'Mulia, tinggi derajatnya; Ollyl - Fikri - Ollyl', position: ['Depan', 'Tengah'], fav: true }
-            ],
-            hospitals: [
-                {
-                    id: 1,
-                    name: "RSIA Al Hasanah",
-                    type: "RSIA Swasta",
-                    address: "Jl. Sri Rejeki No. 91B, Madiun",
-                    phone: "0812-3456-7890",
-                    images: [
-                        "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&w=600&q=80",
-                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=600&q=80"
-                    ],
-                    husbandFacilities: "• VIP/VVIP: Sofa Bed empuk & luas untuk suami\n• Parkir: Gratis stiker parkir inap 1 mobil penunggu\n• Akses Makan: Makan 3x sehari disediakan untuk 1 penunggu (VIP/VVIP)",
-                    obgynFemale: ["dr. Susanti Mintarsih, Sp.OG (Senin - Jumat: 08.00 - 12.00)"],
-                    obgynMale: ["dr. Tauhid Islamy, Sp.OG (K) (Senin & Rabu: 16.00 - 19.00)", "dr. Bagus Mukti W, Sp.OG (Selasa & Kamis: 14.00 - 17.00)"],
-                    pediatricians: ["dr. Budi Raharjo, Sp.A (Senin - Sabtu: 09.00 - 11.30)"],
-                    facilities: ["Kamar VIP/VVIP nyaman", "Klinik Laktasi", "Ruang Perawatan BBL", "USG 4D Live"],
-                    methods: ["Spontan Normal (Dokter)", "Spontan Normal (Bidan)", "SC ERACS"],
-                    classes: ["VVIP", "VIP", "Kelas 1"],
-                    matrixPrices: {
-                        "VVIP_Spontan Normal (Dokter)": "Rp 11.000.000",
-                        "VVIP_Spontan Normal (Bidan)": "Rp 9.500.000",
-                        "VVIP_SC ERACS": "Rp 21.000.000",
-                        "VIP_Spontan Normal (Dokter)": "Rp 9.000.000",
-                        "VIP_Spontan Normal (Bidan)": "Rp 8.000.000",
-                        "VIP_SC ERACS": "Rp 18.000.000",
-                        "Kelas 1_Spontan Normal (Dokter)": "Rp 7.000.000",
-                        "Kelas 1_Spontan Normal (Bidan)": "Rp 6.000.000",
-                        "Kelas 1_SC ERACS": "Rp 15.000.000"
-                    },
-                    workflow: "1. Kontrol rutin ke dokter pilihan di Poliklinik RSIA\n2. Konfirmasi pemesanan kamar saat mendekati HPL (H-2 minggu)\n3. Saat mulas/kontraksi rutin langsung masuk via IGD / VK Kebidanan",
-                    notes: "Fokus khusus ibu dan anak. Lingkungan sangat mendukung IMD (Inisiasi Menyusu Dini) dan Rawat Gabung."
-                },
-                {
-                    id: 2,
-                    name: "RS Hermina Madiun",
-                    type: "RS Swasta Utama",
-                    address: "Jl. Sido Makmur, Ring Road Barat, Madiun",
-                    phone: "0811-2233-4455",
-                    images: [
-                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=600&q=80"
-                    ],
-                    husbandFacilities: "• Deluxe & VIP: Sofa Bed Lipat Premium\n• Parkir Inap: Tarif flat khusus penunggu inap RS\n• Kantin 24 Jam & Minimarket di area ground floor",
-                    obgynFemale: ["dr. Dyah Nurvita, Sp.OG (Senin, Rabu, Jumat: 10.00 - 13.00)", "dr. Maya Purwaningtyas, Sp.OG (Selasa & Kamis: 15.00 - 18.00)"],
-                    obgynMale: [],
-                    pediatricians: ["dr. Ahmad, Sp.A (Senin - Jumat: 11.00 - 14.00)"],
-                    facilities: ["Fasilitas NICU / PICU Lengkap", "Metode ERACS Pemulihan Cepat", "Fisioterapi Ibu Hamil"],
-                    methods: ["Spontan Normal (ILA)", "SC ERACS", "Normal / SC BPJS"],
-                    classes: ["Executive", "Deluxe", "Kelas 1"],
-                    matrixPrices: {
-                        "Executive_Spontan Normal (ILA)": "Rp 14.000.000",
-                        "Executive_SC ERACS": "Rp 26.000.000",
-                        "Deluxe_Spontan Normal (ILA)": "Rp 12.000.000",
-                        "Deluxe_SC ERACS": "Rp 22.000.000",
-                        "Kelas 1_Spontan Normal (ILA)": "Rp 10.000.000",
-                        "Kelas 1_SC ERACS": "Rp 18.000.000",
-                        "Kelas 1_Normal / SC BPJS": "Mendukung"
-                    },
-                    workflow: "1. Pendaftaran online via Mobile Hermina / WhatsApp\n2. Membawa rujukan Faskes 1 jika menggunakan BPJS\n3. UGD Kebidanan siaga 24 Jam",
-                    notes: "Pilihan ideal jika membutuhkan dukungan medis darurat bayi (NICU) serta opsi naik kelas rujukan BPJS."
-                },
-                {
-                    id: 3,
-                    name: "RSI Madiun (Aisyah)",
-                    type: "RS Islam",
-                    address: "Jl. Sulawesi No. 16, Madiun",
-                    phone: "0811-3503-366",
-                    images: [
-                        "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=600&q=80"
-                    ],
-                    husbandFacilities: "• VIP: Kursi Bed Penunggu / Extra Bed\n• Parkir: Area parkir luas & aman 24 jam\n• Fasilitas Musholla & Kantin Halal di area dalam RS",
-                    obgynFemale: ["dr. Fitria Khusnul, Sp.OG (Senin - Kamis: 09.00 - 12.00)"],
-                    obgynMale: ["dr. Suwardi, Sp.OG (Senin, Rabu, Jumat: 16.00 - 19.00)"],
-                    pediatricians: ["dr. Rina, Sp.A (Senin - Sabtu: 08.00 - 11.00)"],
-                    facilities: ["Termasuk Paket BBL (Akta + Foto)", "Kamar VIP Suasana Islami", "Bimbingan Doa Persalinan"],
-                    methods: ["Spontan Normal (Dokter)", "SC ERACS"],
-                    classes: ["VIP", "Kelas 1", "Kelas 2"],
-                    matrixPrices: {
-                        "VIP_Spontan Normal (Dokter)": "Rp 8.000.000",
-                        "VIP_SC ERACS": "Rp 19.000.000",
-                        "Kelas 1_Spontan Normal (Dokter)": "Rp 6.500.000",
-                        "Kelas 1_SC ERACS": "Rp 14.500.000",
-                        "Kelas 2_Spontan Normal (Dokter)": "Rp 5.000.000",
-                        "Kelas 2_SC ERACS": "Rp 12.000.000"
-                    },
-                    workflow: "1. Booking via WhatsApp Admin RSI H-2 minggu\n2. Persiapkan dokumen identitas dan buku KIA\n3. Masuk VK melalui Pintu UGD RSI Madiun",
-                    notes: "Paket kelahiran sudah memfasilitasi pembuatan Akta Kelahiran Bayi dan foto kenangan kelahiran."
-                }
-            ]
-        };
+        let currentAuthenticatedUser = null;
+        let isAppAuthorized = false;
+        let applicationInitialized = false;
+        let accessListenerRef = null;
+        let accessListenerCallback = null;
+        let realtimeListenerAttached = false;
+        let hasCompletedCloudBootstrap = false;
+
+        // Default state sengaja dikosongkan. Data keluarga hanya dimuat dari Firebase
+        // setelah akun terautentikasi dan UID-nya memperoleh izin.
+        function createEmptyAppState() {
+            return {
+                phase: 'prenatal',
+                currentTab: 'dashboard',
+                currentPostnatalTab: 'post-dashboard',
+                hpht: '',
+                hpl: '',
+                priorityRSId: null,
+                priorityMethod: null,
+                priorityClass: null,
+                priorityDoctor: null,
+                activePieSubMenu: 'ALL',
+                activeBudgetSubCategory: '',
+                wakeLimitMinutes: 60,
+                contractions: [],
+                medicalRecords: [],
+                gallery: [],
+                budgetCategories: [],
+                shoppingItems: [],
+                emergencyContacts: [],
+                departureChecklist: [],
+                hospitalBag: [],
+                husbandRoles: [],
+                birthPlan: [],
+                affirmations: [],
+                babyNames: [],
+                hospitals: [],
+                references: [],
+                babyBorn: false,
+                babyBirthDate: '',
+                babyGender: '',
+                babyName: '',
+                babyProfile: {},
+                birthDate: '',
+                profile: {},
+                postnatalProfile: {},
+                dailyLogs: [],
+                postnatalBudgets: {},
+                postnatalGallery: [],
+                postnatalShopping: [],
+                prenatalTodos: [],
+                kmsData: [],
+                rsDsa: [],
+                babyMedicalRecords: []
+            };
+        }
+
+        let appState = createEmptyAppState();
 
         // TEMP MATRIX STATE FOR EDITING FORM
         let tempEditMatrix = {
@@ -2768,12 +2758,131 @@
             }
         }
 
-        // INIT APPLICATION
-        window.onload = function() {
-            loadThemePreference(); // <-- TAMBAHKAN BARIS INI
+        // ==========================================
+        // GOOGLE AUTHENTICATION & ACCESS WHITELIST
+        // ==========================================
+        function showAuthPanel(panelId) {
+            ['auth-loading-state', 'auth-login-state', 'auth-denied-state', 'auth-error-state'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('hidden', id !== panelId);
+            });
+            const gate = document.getElementById('auth-gate');
+            if (gate) gate.classList.remove('hidden');
+        }
+
+        function lockApplicationUI() {
+            document.body.classList.add('auth-locked');
+            const gate = document.getElementById('auth-gate');
+            if (gate) gate.classList.remove('hidden');
+            const emailLabel = document.getElementById('auth-user-email');
+            if (emailLabel) {
+                emailLabel.textContent = '';
+                emailLabel.classList.add('hidden');
+            }
+            isAppAuthorized = false;
+            applicationInitialized = false;
+            window.hasFetchedCloud = false;
+        }
+
+        function stopAccessListener() {
+            if (accessListenerRef && accessListenerCallback) {
+                accessListenerRef.off('value', accessListenerCallback);
+            }
+            accessListenerRef = null;
+            accessListenerCallback = null;
+        }
+
+        function loginWithGoogle() {
+            showAuthPanel('auth-loading-state');
+            auth.signInWithRedirect(googleProvider).catch(error => {
+                console.error('Google Sign-In Error:', error);
+                const msg = document.getElementById('auth-error-message');
+                if (msg) msg.textContent = error.message || 'Login Google gagal. Silakan coba kembali.';
+                showAuthPanel('auth-error-state');
+            });
+        }
+
+        function logoutGoogle() {
+            stopAccessListener();
+            stopRealtimeSync();
+            lockApplicationUI();
+            currentAuthenticatedUser = null;
+            appState = createEmptyAppState();
+            // Data keluarga tidak ditinggalkan dalam cache browser setelah logout.
+            try { localStorage.removeItem('pohonTeduhState'); } catch (e) {}
+            auth.signOut().catch(error => console.error('Gagal logout:', error));
+        }
+
+        function copyAuthUid() {
+            const uid = currentAuthenticatedUser && currentAuthenticatedUser.uid;
+            if (!uid) return;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(uid).then(() => alert('UID berhasil disalin.'))
+                    .catch(() => window.prompt('Salin UID berikut:', uid));
+            } else {
+                window.prompt('Salin UID berikut:', uid);
+            }
+        }
+
+        function showUnauthorized(user) {
+            stopRealtimeSync();
+            lockApplicationUI();
+            appState = createEmptyAppState();
+            try { localStorage.removeItem('pohonTeduhState'); } catch (e) {}
+            const email = document.getElementById('auth-denied-email');
+            const uid = document.getElementById('auth-denied-uid');
+            if (email) email.textContent = user.email || '(email tidak tersedia)';
+            if (uid) uid.textContent = user.uid;
+            showAuthPanel('auth-denied-state');
+        }
+
+        function showAuthError(error) {
+            console.error('Access Check Error:', error);
+            stopRealtimeSync();
+            lockApplicationUI();
+            const msg = document.getElementById('auth-error-message');
+            if (msg) msg.textContent = (error && error.message) ? error.message : 'Tidak dapat memeriksa izin. Periksa koneksi dan Firebase Rules.';
+            showAuthPanel('auth-error-state');
+        }
+
+        function recheckAccess() {
+            const user = currentAuthenticatedUser;
+            if (!user) return;
+            showAuthPanel('auth-loading-state');
+            const ref = db.ref('authorizedUsers/' + user.uid);
+            ref.once('value').then(snapshot => {
+                if (snapshot.val() === true) {
+                    startAuthorizedApplication(user);
+                } else {
+                    showUnauthorized(user);
+                }
+            }).catch(showAuthError);
+        }
+
+        function retryAuthCheck() {
+            if (currentAuthenticatedUser) {
+                recheckAccess();
+            } else {
+                showAuthPanel('auth-login-state');
+            }
+        }
+
+        function startAuthorizedApplication(user) {
+            if (!user || isAppAuthorized && applicationInitialized) return;
+            isAppAuthorized = true;
+            currentAuthenticatedUser = user;
+            const emailLabel = document.getElementById('auth-user-email');
+            if (emailLabel) {
+                emailLabel.textContent = user.email || 'Akun Google';
+                emailLabel.classList.remove('hidden');
+            }
+            // Tampilan aplikasi tetap tertutup sampai snapshot awal Firebase diterima.
+            if (applicationInitialized) return;
+            applicationInitialized = true;
+            loadThemePreference();
             initRealtimeSync();
-            
-            appState.currentTab = 'dashboard';
+
+            appState.currentTab = appState.currentTab || 'dashboard';
             switchPhase(appState.phase || 'prenatal');
             calculatePregnancyData();
             renderGallery();
@@ -2793,13 +2902,45 @@
             renderContractionLogs();
             renderMedicalRecords();
             renderBabyProfile();
-            if (typeof renderMedicalChart === 'function') renderMedicalChart(); // <-- Grafik Medis ditambahkan di sini
-            if (typeof renderReferences === 'function') renderReferences(); // <-- Referensi ditambahkan di sini
+            if (typeof renderMedicalChart === 'function') renderMedicalChart();
+            if (typeof renderReferences === 'function') renderReferences();
             if (typeof renderDailyLogs === 'function') renderDailyLogs();
             if (typeof updateWakeWindow === 'function') updateWakeWindow();
             if (typeof renderPostShopping === 'function') renderPostShopping();
-            // <-- UPDATE WIDGET DASHBOARD BARU DIPANGGIL DI SINI -->
             updateDashboardWidgets();
+        }
+
+        function handleAuthStateChanged(user) {
+            stopAccessListener();
+            if (!user) {
+                stopRealtimeSync();
+                currentAuthenticatedUser = null;
+                lockApplicationUI();
+                showAuthPanel('auth-login-state');
+                return;
+            }
+
+            currentAuthenticatedUser = user;
+            showAuthPanel('auth-loading-state');
+            accessListenerRef = db.ref('authorizedUsers/' + user.uid);
+            accessListenerCallback = snapshot => {
+                if (snapshot.val() === true) {
+                    startAuthorizedApplication(user);
+                } else {
+                    showUnauthorized(user);
+                }
+            };
+            accessListenerRef.on('value', accessListenerCallback, showAuthError);
+        }
+
+        // INIT APPLICATION: jangan membaca LocalStorage/Firebase sebelum izin UID diperiksa.
+        window.onload = function() {
+            showAuthPanel('auth-loading-state');
+            auth.getRedirectResult().catch(error => {
+                console.error('Google redirect result error:', error);
+                showAuthError(error);
+            });
+            auth.onAuthStateChanged(handleAuthStateChanged);
         };
 
         // HELPER: GDRIVE LINK CONVERTER
@@ -3443,17 +3584,25 @@
         
         // PREGNANCY CALCULATOR
         function calculatePregnancyData() {
-            if (!appState.hpl) appState.hpl = '2026-12-16';
+            const hplTextEl = document.getElementById('hpl-display-text');
+            const daysRemEl = document.getElementById('days-remaining');
+            const gestAgeEl = document.getElementById('gestational-age');
+            const triEl = document.getElementById('current-trimester');
+            if (!appState.hpl || !appState.hpht) {
+                if (hplTextEl) hplTextEl.innerText = 'HPL: --';
+                if (daysRemEl) daysRemEl.innerText = '--';
+                if (gestAgeEl) gestAgeEl.innerText = '--';
+                if (triEl) triEl.innerText = '--';
+                return;
+            }
             const hplDate = new Date(appState.hpl);
             const today = new Date();
             
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            const hplTextEl = document.getElementById('hpl-display-text');
             if (hplTextEl) hplTextEl.innerText = `HPL: ${hplDate.toLocaleDateString('id-ID', options)}`;
 
             const diffTime = hplDate - today;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            const daysRemEl = document.getElementById('days-remaining');
             if (daysRemEl) daysRemEl.innerText = diffDays > 0 ? diffDays : 0;
 
             const hphtDate = new Date(appState.hpht);
@@ -3461,7 +3610,6 @@
             const weeks = Math.floor(ageDays / 7);
             const days = ageDays % 7;
             
-            const gestAgeEl = document.getElementById('gestational-age');
             if (gestAgeEl) gestAgeEl.innerText = `${weeks}w ${days}d`;
 
             let trimesterText = "Trimester 1";
@@ -3470,7 +3618,6 @@
             } else if (weeks >= 13) {
                 trimesterText = "Trimester 2";
             }
-            const triEl = document.getElementById('current-trimester');
             if (triEl) triEl.innerText = trimesterText;
         }
 
@@ -5973,10 +6120,33 @@
         // SYSTEM SYNC REALTIME FIREBASE (FIREBASE-FIRST)
         // ==========================================
 
-        window.hasFetchedCloud = false; // FLAG GEMBOK: Mencegah penimpaan data saat awal loading
+        window.hasFetchedCloud = false; // FLAG: data cloud harus diterima sebelum autosave ke cloud
+        let realtimeValueHandler = null;
+        let realtimeErrorHandler = null;
+
+        function stopRealtimeSync() {
+          if (realtimeListenerAttached && realtimeValueHandler) {
+            dbRef.off('value', realtimeValueHandler);
+          }
+          realtimeListenerAttached = false;
+          realtimeValueHandler = null;
+          realtimeErrorHandler = null;
+          window.hasFetchedCloud = false;
+          hasCompletedCloudBootstrap = false;
+        }
+
+        function unlockApplicationAfterCloudReady() {
+          if (!isAppAuthorized) return;
+          document.body.classList.remove('auth-locked');
+          const gate = document.getElementById('auth-gate');
+          if (gate) gate.classList.add('hidden');
+        }
 
         function initRealtimeSync() {
-          // 1. Ambil cadangan cepat dari LocalStorage agar UI langsung muncul tanpa blank
+          if (!isAppAuthorized || !currentAuthenticatedUser) return;
+          stopRealtimeSync();
+
+          // Local cache baru boleh dibaca setelah UID dinyatakan diizinkan.
           const localData = localStorage.getItem('pohonTeduhState');
           if (localData) {
             try {
@@ -5988,29 +6158,31 @@
             }
           }
 
-          // 2. KONEKSI UTAMA: Dengarkan perubahan Firebase secara Realtime (Cloud First)
-          dbRef.on('value', (snapshot) => {
+          realtimeValueHandler = (snapshot) => {
+            if (!isAppAuthorized) return;
             const remoteData = snapshot.val();
-            window.hasFetchedCloud = true; // Buka gembok karena data cloud terbaru sudah berhasil didownload
-            
+            window.hasFetchedCloud = true;
+
             if (remoteData && typeof remoteData === 'object') {
-              isRemoteUpdate = true; // Kunci sementara agar tidak memicu simpan berulang (loop)
-              
-              appState = remoteData;
-              
-              // Simpan data terbaru dari cloud ke memori lokal HP/PC
+              isRemoteUpdate = true;
+              appState = { ...createEmptyAppState(), ...remoteData };
               try {
                 localStorage.setItem('pohonTeduhState', JSON.stringify(appState));
               } catch(e) {}
-              
-              // Paksa render ulang seluruh komponen layar
               refreshAllViews();
-              
               isRemoteUpdate = false;
             }
-          }, (error) => {
+            if (!hasCompletedCloudBootstrap) {
+              hasCompletedCloudBootstrap = true;
+              unlockApplicationAfterCloudReady();
+            }
+          };
+          realtimeErrorHandler = error => {
             console.error("Firebase Sync Error:", error);
-          });
+            window.hasFetchedCloud = false;
+          };
+          dbRef.on('value', realtimeValueHandler, realtimeErrorHandler);
+          realtimeListenerAttached = true;
         }
 
         // FUNGSI UNTUK MEMPERBARUI SELURUH TAMPILAN UI DI LAYAR
@@ -6045,7 +6217,7 @@
 
         // FUNGSI PENYIMPANAN KE FIREBASE
         function saveToLocalStorage() {
-          if (isRemoteUpdate) return;
+          if (isRemoteUpdate || !isAppAuthorized || !currentAuthenticatedUser) return;
 
           try {
             const cleanState = JSON.parse(JSON.stringify(appState));
@@ -6064,7 +6236,7 @@
               })
               .catch(err => {
                 console.error("Gagal sync ke Firebase:", err);
-                alert("Gagal menyimpan ke cloud. Pastikan aturan 'Rules' Firebase sudah set read & write = true.");
+                alert("Gagal menyimpan ke cloud. Periksa koneksi, status login, dan Firebase Security Rules.");
               });
           } catch (e) {
             console.error("Error formatting state:", e);
@@ -6073,6 +6245,7 @@
         
         // FUNGSI SIMPAN MANUAL DENGAN INDIKATOR VISUAL
         function manualSaveToFirebase() {
+          if (!isAppAuthorized || !currentAuthenticatedUser) return;
           const btn = document.getElementById('btn-manual-save');
           const statusText = document.getElementById('sync-status-text');
 
@@ -6110,6 +6283,7 @@
         }
 
         function exportData() {
+            if (!isAppAuthorized || !currentAuthenticatedUser) return;
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
             const dlAnchor = document.createElement('a');
             dlAnchor.setAttribute("href", dataStr);
@@ -6120,6 +6294,9 @@
         }
 
         function importData(event) {
+            if (!isAppAuthorized || !currentAuthenticatedUser) return;
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
