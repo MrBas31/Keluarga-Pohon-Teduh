@@ -245,6 +245,67 @@
         @media (max-width: 480px) {
             #auth-gate .auth-card { padding: 1.5rem; border-radius: 1.25rem; }
         }
+
+
+        /* 6.6.1 MOBILE TYPOGRAPHY REFINEMENT
+           Scale fixed desktop Tailwind type sizes down on narrow screens so cards,
+           summaries and table labels do not wrap excessively. */
+        @media (max-width: 767px) {
+            main h1, main h2 { font-size: 1.08rem !important; line-height: 1.28 !important; }
+            main h3 { font-size: 1rem !important; line-height: 1.3 !important; }
+            main h4 { font-size: .86rem !important; line-height: 1.3 !important; }
+            main .text-3xl { font-size: 1.55rem !important; line-height: 1.18 !important; }
+            main .text-2xl { font-size: 1.28rem !important; line-height: 1.22 !important; }
+            main .text-xl { font-size: 1.06rem !important; line-height: 1.25 !important; }
+            main .text-lg { font-size: .94rem !important; line-height: 1.3 !important; }
+            main .text-base { font-size: .84rem !important; line-height: 1.35 !important; }
+            main .text-sm { font-size: .76rem !important; line-height: 1.4 !important; }
+            main .text-xs { font-size: .68rem !important; line-height: 1.42 !important; }
+
+            /* Pregnancy dashboard hero and its three compact statistic cards. */
+            #sec-dashboard #hpl-display-text { font-size: clamp(1.18rem, 5vw, 1.48rem) !important; line-height: 1.2 !important; }
+            #sec-dashboard .grid.grid-cols-3 { gap: .42rem !important; }
+            #sec-dashboard .grid.grid-cols-3 > div { min-width: 0; padding: .62rem .28rem !important; }
+            #sec-dashboard .grid.grid-cols-3 > div .text-2xl,
+            #sec-dashboard .grid.grid-cols-3 > div [id="days-remaining"],
+            #sec-dashboard .grid.grid-cols-3 > div [id="gestational-age"] {
+                font-size: clamp(.98rem, 4vw, 1.22rem) !important;
+                line-height: 1.15 !important;
+                overflow-wrap: normal;
+            }
+            #sec-dashboard #current-trimester { font-size: clamp(.82rem, 3.4vw, 1rem) !important; line-height: 1.15 !important; }
+            #sec-dashboard .grid.grid-cols-3 > div .text-2xs { font-size: .62rem !important; line-height: 1.25 !important; }
+            #sec-dashboard > div:nth-child(2) { gap: .55rem !important; }
+            #sec-dashboard > div:nth-child(2) > div { padding: .72rem !important; }
+
+            /* Budget tables: retain horizontal scrolling but make labels and cells compact. */
+            #sec-budget table { font-size: .68rem !important; }
+            #sec-budget th, #sec-budget td { padding: .42rem .36rem !important; line-height: 1.35 !important; }
+            #sec-budget th { white-space: nowrap; }
+            #sec-budget .text-sm { font-size: .72rem !important; }
+            #sec-budget .text-xs { font-size: .65rem !important; }
+
+            /* Reference library has a wide, intentionally scrollable comparison table. */
+            #sec-referensi table { font-size: .68rem !important; }
+            #sec-referensi th, #sec-referensi td { padding: .42rem .36rem !important; line-height: 1.4 !important; }
+            #sec-referensi .rich-text-content { font-size: .74rem !important; line-height: 1.48 !important; overflow-wrap: anywhere; }
+            #sec-referensi .rich-text-content h3,
+            #sec-referensi .rich-text-content h4 { font-size: .88rem !important; }
+
+            /* Avoid long labels forcing a card or flex row wider than the phone. */
+            main .min-w-\[140px\], main .min-w-\[160px\] { min-width: 0 !important; }
+            main .flex.items-center { min-width: 0; }
+            main .flex.items-center > * { min-width: 0; }
+            main .break-words, main .whitespace-normal { overflow-wrap: anywhere; }
+        }
+
+        @media (max-width: 380px) {
+            #sec-dashboard .grid.grid-cols-3 { gap: .3rem !important; }
+            #sec-dashboard .grid.grid-cols-3 > div { padding: .52rem .2rem !important; }
+            #sec-dashboard #current-trimester { font-size: .78rem !important; }
+            #sec-budget th, #sec-budget td,
+            #sec-referensi th, #sec-referensi td { padding: .34rem .28rem !important; }
+        }
     </style>
 
     <style id="theme-and-header-653-fixes">
@@ -2997,6 +3058,7 @@
         let cloudSyncInProgress = false;
         let latestRemoteDuringSync = null;
         let cloudSyncSession = 0;
+        let lastSyncDiagnostic = 'Belum ada percobaan sinkronisasi.';
 
         // Default state sengaja dikosongkan. Data keluarga hanya dimuat dari Firebase
         // setelah akun terautentikasi dan UID-nya memperoleh izin.
@@ -6862,6 +6924,13 @@
           }
         }
 
+        function describeFirebaseError(error) {
+          if (!error) return 'Firebase tidak memberikan detail error.';
+          const code = error.code || error.name || 'UNKNOWN_ERROR';
+          const message = error.message || String(error);
+          return `${code}: ${message}`;
+        }
+
         function isFirebaseStateDirty() {
           return lastSyncedState !== null && !syncDeepEqual(appState, lastSyncedState);
         }
@@ -6975,6 +7044,7 @@
 
           realtimeErrorHandler = error => {
             console.error('Firebase Sync Error:', error);
+            lastSyncDiagnostic = 'Listener Firebase: ' + describeFirebaseError(error);
             window.hasFetchedCloud = false;
           };
 
@@ -7077,12 +7147,21 @@
         async function runFirebaseSyncLoop(sessionId) {
           let cycle = 0;
           while (cycle < 10) {
-            if (!isAppAuthorized || !currentAuthenticatedUser || sessionId !== cloudSyncSession) return false;
-            if (!window.hasFetchedCloud || lastSyncedState === null) return false;
+            if (!isAppAuthorized || !currentAuthenticatedUser || sessionId !== cloudSyncSession) {
+              lastSyncDiagnostic = 'Sesi login atau izin akses tidak lagi aktif. Login kembali lalu coba lagi.';
+              return false;
+            }
+            if (!window.hasFetchedCloud || lastSyncedState === null) {
+              lastSyncDiagnostic = 'Data cloud belum selesai dimuat. Tunggu indikator sinkronisasi siap, lalu coba lagi.';
+              return false;
+            }
 
             const baseSnapshot = cloneSyncValue(lastSyncedState);
             const localSnapshot = cloneSyncValue(appState);
-            if (syncDeepEqual(baseSnapshot, localSnapshot)) return true;
+            if (syncDeepEqual(baseSnapshot, localSnapshot)) {
+              lastSyncDiagnostic = 'Tidak ada perubahan baru. Data lokal sudah sama dengan data cloud terakhir.';
+              return true;
+            }
 
             cloudSyncInProgress = true;
             latestRemoteDuringSync = null;
@@ -7100,9 +7179,8 @@
                   : {};
                 latestServerData = committedData;
 
-                // A value event may have arrived during the transaction. If it differs from
-                // the transaction result, read the current server value instead of trusting
-                // a potentially older queued event snapshot.
+                // A value event may have arrived during the transaction. Read the latest
+                // server value instead of trusting a possibly older queued listener event.
                 for (let check = 0; check < 3; check++) {
                   const queuedEvent = latestRemoteDuringSync;
                   if (!queuedEvent || syncDeepEqual(queuedEvent, latestServerData)) break;
@@ -7114,6 +7192,7 @@
               }
             } catch (error) {
               console.error('Gagal melakukan transaksi sinkronisasi Firebase:', error);
+              lastSyncDiagnostic = describeFirebaseError(error);
               cloudSyncInProgress = false;
               const queuedRemote = latestRemoteDuringSync;
               latestRemoteDuringSync = null;
@@ -7132,11 +7211,39 @@
             }
             cloudSyncInProgress = false;
 
-            if (!isAppAuthorized || sessionId !== cloudSyncSession) return false;
-            if (!transactionResult || !transactionResult.committed || latestServerData === null) {
-              console.warn('Transaksi sinkronisasi tidak berhasil di-commit.');
-              latestRemoteDuringSync = null;
+            if (!isAppAuthorized || sessionId !== cloudSyncSession) {
+              lastSyncDiagnostic = 'Sesi sinkronisasi berubah karena akun keluar atau berganti.';
               return false;
+            }
+
+            // Some transaction attempts can finish without a commit. Verify the current
+            // cloud value before reporting failure: it may already contain the desired data.
+            if (!transactionResult || !transactionResult.committed || latestServerData === null) {
+              try {
+                const currentSnapshot = await dbRef.once('value');
+                const currentValue = currentSnapshot.val();
+                const currentRemote = isSyncPlainObject(currentValue) ? currentValue : {};
+                const desiredAfterMerge = mergeConcurrentState(baseSnapshot, localSnapshot, currentRemote);
+
+                if (syncDeepEqual(desiredAfterMerge, currentRemote)) {
+                  latestServerData = currentRemote;
+                } else {
+                  lastSyncedState = cloneSyncValue(currentRemote);
+                  const previousState = cloneSyncValue(appState);
+                  appState = { ...createEmptyAppState(), ...mergeConcurrentState(baseSnapshot, appState, currentRemote) };
+                  persistLocalSyncState();
+                  isRemoteUpdate = true;
+                  refreshAllViews(getChangedStateKeys(previousState, appState));
+                  isRemoteUpdate = false;
+                  latestRemoteDuringSync = null;
+                  cycle++;
+                  continue;
+                }
+              } catch (readError) {
+                lastSyncDiagnostic = `Transaksi tidak ter-commit dan pembacaan ulang gagal: ${describeFirebaseError(readError)}`;
+                latestRemoteDuringSync = null;
+                return false;
+              }
             }
 
             const previousState = cloneSyncValue(appState);
@@ -7150,11 +7257,15 @@
             refreshAllViews(getChangedStateKeys(previousState, appState));
             isRemoteUpdate = false;
 
-            if (!isFirebaseStateDirty()) return true;
+            if (!isFirebaseStateDirty()) {
+              lastSyncDiagnostic = 'Data berhasil tersinkronisasi ke Firebase.';
+              return true;
+            }
             cycle++;
           }
 
-          console.warn('Sinkronisasi masih memiliki perubahan lokal; akan dicoba kembali.');
+          lastSyncDiagnostic = 'Sinkronisasi belum stabil setelah 10 percobaan. Perubahan lokal tetap disimpan; coba lagi setelah koneksi stabil.';
+          console.warn(lastSyncDiagnostic);
           if (isFirebaseStateDirty()) scheduleFirebaseSync(1000);
           return false;
         }
@@ -7164,7 +7275,12 @@
             clearTimeout(cloudSyncTimer);
             cloudSyncTimer = null;
           }
-          if (!isAppAuthorized || !currentAuthenticatedUser || !window.hasFetchedCloud || lastSyncedState === null) {
+          if (!isAppAuthorized || !currentAuthenticatedUser) {
+            lastSyncDiagnostic = 'Akun belum terautentikasi atau tidak memiliki izin aplikasi.';
+            return Promise.resolve(false);
+          }
+          if (!window.hasFetchedCloud || lastSyncedState === null) {
+            lastSyncDiagnostic = 'Koneksi awal ke Firebase belum siap. Tunggu sampai data cloud selesai dimuat.';
             return Promise.resolve(false);
           }
 
@@ -7172,6 +7288,10 @@
             return cloudSyncPromise.then(success => {
               if (success && isFirebaseStateDirty()) return flushFirebaseSync();
               return success;
+            }).catch(error => {
+              lastSyncDiagnostic = describeFirebaseError(error);
+              console.error('Firebase sync promise failed:', error);
+              return false;
             });
           }
 
@@ -7181,13 +7301,14 @@
           currentPromise.then(success => {
             if (cloudSyncPromise === currentPromise) cloudSyncPromise = null;
             if (success && isAppAuthorized && isFirebaseStateDirty()) scheduleFirebaseSync(500);
-          }, () => {
+          }, error => {
+            lastSyncDiagnostic = describeFirebaseError(error);
+            console.error('Firebase sync loop failed:', error);
             if (cloudSyncPromise === currentPromise) cloudSyncPromise = null;
           });
           return currentPromise;
         }
 
-        // Manual save uses the same transaction path; it never bypasses conflict handling.
         async function manualSaveToFirebase() {
           if (!isAppAuthorized || !currentAuthenticatedUser) return;
           const btn = document.getElementById('btn-manual-save');
@@ -7199,25 +7320,33 @@
           }
 
           try {
+            lastSyncDiagnostic = 'Menyimpan perubahan ke Firebase...';
             persistLocalSyncState();
             const success = await flushFirebaseSync();
             if (success) {
               if (btn && statusText) {
                 btn.className = 'px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm';
                 statusText.innerText = 'Tersimpan! ✓';
+                btn.title = lastSyncDiagnostic;
                 setTimeout(() => { statusText.innerText = 'Simpan Data'; }, 3000);
               }
             } else {
               if (btn && statusText) {
                 btn.className = 'px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm';
                 statusText.innerText = 'Gagal Sync ✖';
+                btn.title = lastSyncDiagnostic;
               }
-              alert('Data belum berhasil tersinkronisasi. Periksa koneksi dan Firebase Security Rules, lalu coba Simpan Data kembali.');
+              alert(['Data belum berhasil tersinkronisasi.', '', 'Detail pemeriksaan Firebase:', lastSyncDiagnostic || 'Detail error belum tersedia.', '', 'Data lokal tidak dihapus. Simpan/export backup sebelum memuat ulang aplikasi.'].join('\n'));
             }
           } catch (error) {
             console.error('Manual Firebase save error:', error);
-            if (btn && statusText) statusText.innerText = 'Gagal Sync ✖';
-            alert('Gagal menyimpan ke cloud. Periksa koneksi internetmu.');
+            lastSyncDiagnostic = describeFirebaseError(error);
+            if (btn && statusText) {
+              btn.className = 'px-3 py-1.5 bg-rose-600 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm';
+              statusText.innerText = 'Gagal Sync ✖';
+              btn.title = lastSyncDiagnostic;
+            }
+            alert(['Gagal menyimpan ke cloud.', '', 'Detail: ' + lastSyncDiagnostic, '', 'Data lokal tetap dipertahankan.'].join('\n'));
           }
         }
 
