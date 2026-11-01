@@ -812,6 +812,185 @@
         @keyframes mobileSheetIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 
+<style id="mobile-deep-ux-671">
+/* ================================================================
+   6.7.1 DEEP MOBILE UX
+   Visual-only responsive presentation. No Firebase, auth, appState,
+   rendering data or business-logic functions are replaced.
+   ================================================================ */
+@media (max-width: 767px) {
+    :root { --kpt-mobile-gutter: 14px; --kpt-mobile-radius: 19px; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    body { overflow-x: hidden; font-size: 14px; line-height: 1.5; }
+    main { width: 100%; max-width: 100vw; padding: 14px var(--kpt-mobile-gutter) 24px !important; }
+    main, main * { min-width: 0; }
+    main section { width: 100%; max-width: 100%; scroll-margin-top: 120px; }
+    main section > * { max-width: 100%; }
+    main .text-2xs { font-size: .68rem !important; line-height: 1.35 !important; }
+    main .text-xs { font-size: .76rem !important; line-height: 1.45 !important; }
+    main .text-sm { font-size: .84rem !important; line-height: 1.5 !important; }
+    main .text-base { font-size: .94rem !important; line-height: 1.4 !important; }
+    main h1 { font-size: 1.28rem !important; line-height: 1.2 !important; letter-spacing: -.025em; }
+    main h2 { font-size: 1.12rem !important; line-height: 1.28 !important; letter-spacing: -.02em; }
+    main h3 { font-size: .98rem !important; line-height: 1.32 !important; }
+    main h4 { font-size: .86rem !important; line-height: 1.35 !important; }
+    main p { line-height: 1.55; overflow-wrap: anywhere; }
+    main label { line-height: 1.35; }
+    main button { line-height: 1.25; }
+    main input, main select, main textarea { max-width: 100%; min-width: 0; font-size: 16px !important; }
+    main textarea { line-height: 1.45; }
+
+    /* Card rhythm: fewer oversized desktop paddings, consistent surfaces. */
+    main .p-8 { padding: 1rem !important; }
+    main .p-6 { padding: 1rem !important; }
+    main .p-5 { padding: .9rem !important; }
+    main .p-4 { padding: .85rem !important; }
+    main .rounded-3xl { border-radius: 21px !important; }
+    main .rounded-2xl { border-radius: 17px !important; }
+    main .rounded-xl { border-radius: 13px !important; }
+    main .grid > *, main .flex > * { min-width: 0; }
+    main .grid.grid-cols-3, main .grid.grid-cols-4,
+    main .grid[class*="grid-cols-3"], main .grid[class*="grid-cols-4"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    main .grid.grid-cols-1, main .grid[class*="grid-cols-1"] { min-width: 0; }
+    main .overflow-x-auto:not(.mobile-table-host) { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    main .overflow-x-auto:not(.mobile-table-host)::-webkit-scrollbar { display: none; }
+
+    /* Forms: predictable full-width controls; paired fields remain paired only when useful. */
+    main form .grid, main .modal-content .grid { min-width: 0; }
+    main .space-y-2 > *, main .space-y-3 > *, main .space-y-4 > * { min-width: 0; }
+    main input:not([type="checkbox"]):not([type="radio"]),
+    main select, main textarea {
+        border-radius: 11px; max-width: 100%;
+    }
+    main button:not(.mobile-nav-item) { max-width: 100%; }
+    main .flex.flex-col.sm\:flex-row > * { min-width: 0; }
+
+    /* All ordinary tables become self-contained, readable cards on mobile. */
+    .mobile-table-host { width: 100% !important; max-width: 100% !important; overflow: visible !important; padding-bottom: 0 !important; }
+    table.mobile-card-table {
+        display: block !important; width: 100% !important; min-width: 0 !important; max-width: 100% !important;
+        table-layout: auto !important; border-collapse: separate !important; border-spacing: 0 !important;
+        font-size: .78rem !important;
+    }
+    table.mobile-card-table thead {
+        position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important;
+        margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important;
+        white-space: nowrap !important; border: 0 !important;
+    }
+    table.mobile-card-table tbody { display: grid !important; gap: 11px !important; width: 100% !important; }
+    table.mobile-card-table tbody tr:not(.mobile-table-group-row):not(.mobile-table-empty-row) {
+        display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px;
+        width: 100% !important; padding: 9px !important; box-sizing: border-box;
+        background: #fff !important; border: 1px solid #e8eef5 !important; border-radius: 16px !important;
+        box-shadow: 0 4px 14px rgba(15,23,42,.035);
+    }
+    table.mobile-card-table tbody td {
+        display: flex !important; flex-direction: column; justify-content: center; align-items: stretch;
+        gap: 4px; min-width: 0 !important; width: auto !important; padding: 8px 9px !important;
+        border: 0 !important; border-radius: 10px; background: #f8fafc !important;
+        color: #334155; text-align: left !important; font-size: .78rem !important;
+        line-height: 1.4 !important; overflow-wrap: anywhere; vertical-align: top;
+    }
+    table.mobile-card-table tbody td::before {
+        content: attr(data-label); display: block; color: #8795a8; font-size: .58rem;
+        line-height: 1.2; font-weight: 800; letter-spacing: .065em; text-transform: uppercase;
+    }
+    table.mobile-card-table tbody td[colspan]::before { content: none !important; }
+    table.mobile-card-table tbody td button { min-height: 34px; min-width: 34px; }
+    table.mobile-card-table tbody td select { width: 100%; min-height: 38px; font-size: .75rem !important; }
+    table.mobile-card-table tbody tr.mobile-table-group-row {
+        display: grid !important; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 4px;
+        width: 100%; padding: 9px 10px; border-radius: 13px; background: #eff6ff !important;
+        border: 1px solid #dbeafe !important; color: #1e40af !important;
+    }
+    table.mobile-card-table tbody tr.mobile-table-group-row td {
+        display: flex !important; justify-content: center; background: transparent !important;
+        padding: 5px 4px !important; border: 0 !important; color: inherit !important;
+        font-size: .7rem !important; line-height: 1.35 !important;
+    }
+    table.mobile-card-table tbody tr.mobile-table-group-row td:first-child { grid-column: 1 / -1; align-items: flex-start; }
+    table.mobile-card-table tbody tr.mobile-table-group-row td::before { display: none !important; }
+    table.mobile-card-table tbody tr.mobile-table-empty-row { display: block !important; width: 100%; padding: 0 !important; border: 0 !important; background: transparent !important; box-shadow: none !important; }
+    table.mobile-card-table tbody tr.mobile-table-empty-row td {
+        display: block !important; width: 100% !important; padding: 18px 12px !important; text-align: center !important;
+        color: #94a3b8 !important; background: #f8fafc !important; border: 1px dashed #cbd5e1 !important;
+    }
+
+    /* Budget & shopping: item name leads; money and quantity sit in compact sub-panels. */
+    table.mobile-card-table--shopping tbody tr:not(.mobile-table-group-row):not(.mobile-table-empty-row) { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    table.mobile-card-table--shopping tbody td:nth-child(1) { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; background: #eff6ff !important; }
+    table.mobile-card-table--shopping tbody td:nth-child(2) { grid-column: 1 / -1; background: #fff !important; padding: 5px 2px 8px !important; }
+    table.mobile-card-table--shopping tbody td:nth-child(2)::before { margin-bottom: 2px; }
+    table.mobile-card-table--shopping tbody td:nth-child(3),
+    table.mobile-card-table--shopping tbody td:nth-child(5),
+    table.mobile-card-table--shopping tbody td:nth-child(6) { grid-column: span 1; }
+    table.mobile-card-table--shopping tbody td:nth-child(4),
+    table.mobile-card-table--shopping tbody td:nth-child(7) { grid-column: 1 / -1; }
+    table.mobile-card-table--shopping tbody td:nth-child(7) { flex-direction: row; justify-content: flex-end; align-items: center; background: transparent !important; }
+
+    /* Hospital bag checklist: checkbox and name are prominent, quantity and actions secondary. */
+    table.mobile-card-table--hospital-bag tbody tr:not(.mobile-table-group-row):not(.mobile-table-empty-row) { grid-template-columns: minmax(0,1fr) minmax(84px,.55fr); }
+    table.mobile-card-table--hospital-bag tbody td:nth-child(1) { flex-direction: row; justify-content: flex-start; align-items: center; gap: 10px; }
+    table.mobile-card-table--hospital-bag tbody td:nth-child(2) { background: #fff !important; font-weight: 700; }
+    table.mobile-card-table--hospital-bag tbody td:nth-child(3) { grid-column: 1; }
+    table.mobile-card-table--hospital-bag tbody td:nth-child(4) { grid-column: 2; flex-direction: row; align-items: center; justify-content: flex-end; }
+
+    /* Baby names: favorite, name, meaning and name position have a clear hierarchy. */
+    table.mobile-card-table--baby-names tbody tr:not(.mobile-table-empty-row) { grid-template-columns: 42px minmax(0,1fr); }
+    table.mobile-card-table--baby-names tbody td:nth-child(1) { grid-column: 1; grid-row: 1; align-items: center; justify-content: center; background: #fffbeb !important; }
+    table.mobile-card-table--baby-names tbody td:nth-child(2) { grid-column: 2; grid-row: 1; justify-content: center; background: #fff !important; font-weight: 800; font-size: .92rem !important; }
+    table.mobile-card-table--baby-names tbody td:nth-child(3),
+    table.mobile-card-table--baby-names tbody td:nth-child(4),
+    table.mobile-card-table--baby-names tbody td:nth-child(5) { grid-column: 1 / -1; }
+    table.mobile-card-table--baby-names tbody td:nth-child(5) { flex-direction: row; justify-content: flex-end; background: transparent !important; }
+
+    /* Reference library: a saved source reads like an article bookmark, not a spreadsheet row. */
+    table.mobile-card-table--references tbody tr:not(.mobile-table-empty-row) { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    table.mobile-card-table--references tbody td:nth-child(1) { grid-column: 1 / -1; background: transparent !important; padding: 2px 2px 0 !important; }
+    table.mobile-card-table--references tbody td:nth-child(2) { grid-column: 1 / -1; background: #fff !important; font-size: .92rem !important; font-weight: 800; padding: 2px !important; }
+    table.mobile-card-table--references tbody td:nth-child(3) { grid-column: 1 / -1; }
+    table.mobile-card-table--references tbody td:nth-child(4) { grid-column: 1; }
+    table.mobile-card-table--references tbody td:nth-child(5) { grid-column: 2; flex-direction: row; justify-content: flex-end; align-items: center; }
+    table.mobile-card-table--references .ql-editor { padding: 0 !important; min-height: 0 !important; font-size: .78rem !important; line-height: 1.5 !important; }
+    table.mobile-card-table--references .ql-editor p { margin: 0 0 .3rem !important; }
+
+    /* Matrix comparison becomes a vertical comparison card per room/class. */
+    table.mobile-card-table--matrix tbody tr:not(.mobile-table-empty-row) { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    table.mobile-card-table--matrix tbody td:first-child { grid-column: 1 / -1; background: #eff6ff !important; font-weight: 800; }
+    table.mobile-card-table--matrix tbody td:first-child::before { color: #3b82f6; }
+    table.mobile-card-table--matrix tbody td input { width: 100%; min-width: 0; font-size: .75rem !important; }
+
+    /* More balanced spacing between content groups and interactive subtabs. */
+    main section.space-y-6 { gap: 1rem !important; }
+    main section .border-b.pb-3, main section .border-b.pb-4 { padding-bottom: .7rem !important; }
+    main section .flex.items-center.gap-2 { flex-wrap: wrap; }
+    main section canvas { max-width: 100% !important; }
+
+    /* Dark mode counterparts for the mobile card views. */
+    body.dark-mode table.mobile-card-table tbody tr:not(.mobile-table-group-row):not(.mobile-table-empty-row) {
+        background: #172337 !important; border-color: #334155 !important; box-shadow: 0 5px 15px rgba(0,0,0,.14);
+    }
+    body.dark-mode table.mobile-card-table tbody td { color: #e2e8f0 !important; background: #1e293b !important; }
+    body.dark-mode table.mobile-card-table tbody td::before { color: #94a3b8; }
+    body.dark-mode table.mobile-card-table tbody tr.mobile-table-group-row { background: #082f49 !important; border-color: #164e63 !important; color: #bae6fd !important; }
+    body.dark-mode table.mobile-card-table tbody tr.mobile-table-empty-row td { background: #172337 !important; border-color: #475569 !important; color: #94a3b8 !important; }
+    body.dark-mode table.mobile-card-table--shopping tbody td:nth-child(1),
+    body.dark-mode table.mobile-card-table--matrix tbody td:first-child { background: #082f49 !important; }
+    body.dark-mode table.mobile-card-table--shopping tbody td:nth-child(2),
+    body.dark-mode table.mobile-card-table--baby-names tbody td:nth-child(2),
+    body.dark-mode table.mobile-card-table--references tbody td:nth-child(2) { background: transparent !important; }
+    body.dark-mode table.mobile-card-table--baby-names tbody td:nth-child(1) { background: #422006 !important; }
+}
+
+@media (max-width: 390px) {
+    main { padding-left: 11px !important; padding-right: 11px !important; }
+    table.mobile-card-table--shopping tbody tr:not(.mobile-table-group-row):not(.mobile-table-empty-row) { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    table.mobile-card-table--shopping tbody td:nth-child(3) { grid-column: 1; }
+    table.mobile-card-table--shopping tbody td:nth-child(5), table.mobile-card-table--shopping tbody td:nth-child(6) { grid-column: 1 / -1; }
+}
+</style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -9387,5 +9566,111 @@
             }
         }
     </script>
+<script id="mobile-deep-ux-logic-671">
+/* 6.7.1: Add accessible column labels to legacy tables. The source rows,
+   input names, onclick handlers and stored data are left untouched. */
+(function () {
+    'use strict';
+    const roleByBodyId = {
+        'baby-shopping-tbody': 'shopping',
+        'hospital-bag-tbody': 'hospital-bag',
+        'boy-names-tbody': 'baby-names',
+        'girl-names-tbody': 'baby-names',
+        'reference-tbody': 'references'
+    };
+
+    function cleanHeaderLabel(th) {
+        if (!th) return '';
+        const input = th.querySelector('input');
+        if (input && String(input.value || '').trim()) return String(input.value).trim();
+        const clone = th.cloneNode(true);
+        clone.querySelectorAll('button, i, svg, .sr-only').forEach(node => node.remove());
+        return (clone.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function enhanceOneTable(table) {
+        if (!(table instanceof HTMLTableElement)) return;
+        const body = table.tBodies && table.tBodies[0];
+        if (!body) return;
+
+        const bodyId = body.id || '';
+        const role = roleByBodyId[bodyId];
+        const matrixHost = table.closest('#detail-rs-matrix-container, #matrix-editor-table-container');
+        if (!role && !matrixHost) return;
+
+        table.classList.add('mobile-card-table');
+        if (role) table.classList.add('mobile-card-table--' + role);
+        if (matrixHost) table.classList.add('mobile-card-table--matrix');
+        const host = table.closest('.overflow-x-auto');
+        if (host) host.classList.add('mobile-table-host');
+
+        const headerRow = table.tHead ? table.tHead.rows[table.tHead.rows.length - 1] : null;
+        const headers = headerRow ? Array.from(headerRow.cells).map(cleanHeaderLabel) : [];
+        Array.from(body.rows).forEach(row => {
+            const cells = Array.from(row.cells);
+            const spans = cells.some(cell => cell.colSpan > 1);
+            if (spans) {
+                row.classList.add('mobile-table-group-row');
+                if (cells.length === 1 && cells[0].colSpan > 1) row.classList.add('mobile-table-empty-row');
+                cells.forEach(cell => {
+                    if (cell.colSpan <= 1 && !cell.dataset.label) {
+                        const label = headers[cells.indexOf(cell)] || '';
+                        if (label) cell.dataset.label = label;
+                    }
+                });
+                return;
+            }
+            row.classList.remove('mobile-table-group-row', 'mobile-table-empty-row');
+            cells.forEach((cell, index) => {
+                if (!cell.dataset.label) {
+                    const label = headers[index] || '';
+                    if (label) cell.dataset.label = label;
+                }
+            });
+        });
+    }
+
+    function enhanceAllTables() {
+        document.querySelectorAll('main table, #detail-rs-matrix-container table, #matrix-editor-table-container table')
+            .forEach(enhanceOneTable);
+    }
+
+    let scheduled = false;
+    function scheduleEnhancement() {
+        if (scheduled) return;
+        scheduled = true;
+        requestAnimationFrame(() => {
+            scheduled = false;
+            enhanceAllTables();
+        });
+    }
+
+    // Run immediately for static tables and observe future JS-rendered rows.
+    enhanceAllTables();
+    const root = document.querySelector('main') || document.body;
+    if (root && window.MutationObserver) {
+        const observer = new MutationObserver(scheduleEnhancement);
+        observer.observe(root, { childList: true, subtree: true });
+        const rsMatrix = document.getElementById('detail-rs-matrix-container');
+        const matrixEditor = document.getElementById('matrix-editor-table-container');
+        if (rsMatrix) observer.observe(rsMatrix, { childList: true, subtree: true });
+        if (matrixEditor) observer.observe(matrixEditor, { childList: true, subtree: true });
+        window.__kptMobileUX671Observer = observer;
+    }
+    document.addEventListener('input', event => {
+        if (event.target && event.target.closest('#matrix-editor-table-container thead')) {
+            const table = event.target.closest('table');
+            if (table) {
+                const body = table.tBodies && table.tBodies[0];
+                if (body) Array.from(body.rows).forEach(row => Array.from(row.cells).forEach((cell, index) => {
+                    const th = table.tHead && table.tHead.rows[table.tHead.rows.length - 1].cells[index];
+                    const label = cleanHeaderLabel(th);
+                    if (label) cell.dataset.label = label;
+                }));
+            }
+        }
+    }, true);
+})();
+</script>
 </body>
 </html>
