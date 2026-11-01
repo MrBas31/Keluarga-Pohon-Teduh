@@ -6737,6 +6737,7 @@
 
         // ==========================================
         // SYSTEM SYNC REALTIME FIREBASE (CONFLICT-AWARE)
+        // v6.6.2: normalize null-valued fields to match Realtime Database semantics.
         // ==========================================
 
         window.hasFetchedCloud = false;
@@ -6756,8 +6757,31 @@
           return value !== null && typeof value === 'object' && !Array.isArray(value);
         }
 
+        // Realtime Database treats a null child as a deletion (the child is absent
+        // in the resulting snapshot). Compare null/undefined/missing object fields as
+        // equivalent so default null fields do not keep a transaction permanently dirty.
+        function normalizeFirebaseValue(value) {
+          if (Array.isArray(value)) {
+            // Preserve array positions; null entries in arrays must not shift indexes.
+            return value.map(item => item === undefined ? null : normalizeFirebaseValue(item));
+          }
+          if (isSyncPlainObject(value)) {
+            const normalized = {};
+            Object.keys(value).forEach(key => {
+              const item = value[key];
+              if (item === null || item === undefined) return;
+              normalized[key] = normalizeFirebaseValue(item);
+            });
+            return normalized;
+          }
+          return value;
+        }
+
         function syncDeepEqual(a, b) {
           if (a === b) return true;
+          // Firebase snapshots omit null-valued object children. Treat those as absent.
+          if ((a === SYNC_MISSING || a === null || a === undefined) &&
+              (b === SYNC_MISSING || b === null || b === undefined)) return true;
           if (a === SYNC_MISSING || b === SYNC_MISSING) return false;
           if (Array.isArray(a) || Array.isArray(b)) {
             if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
@@ -6765,8 +6789,8 @@
           }
           if (isSyncPlainObject(a) || isSyncPlainObject(b)) {
             if (!isSyncPlainObject(a) || !isSyncPlainObject(b)) return false;
-            const aKeys = Object.keys(a).sort();
-            const bKeys = Object.keys(b).sort();
+            const aKeys = Object.keys(a).filter(key => a[key] !== null && a[key] !== undefined).sort();
+            const bKeys = Object.keys(b).filter(key => b[key] !== null && b[key] !== undefined).sort();
             if (aKeys.length !== bKeys.length || aKeys.some((key, index) => key !== bKeys[index])) return false;
             return aKeys.every(key => syncDeepEqual(a[key], b[key]));
           }
@@ -6932,7 +6956,11 @@
         }
 
         function isFirebaseStateDirty() {
-          return lastSyncedState !== null && !syncDeepEqual(appState, lastSyncedState);
+          if (lastSyncedState === null) return false;
+          return !syncDeepEqual(
+            normalizeFirebaseValue(appState),
+            normalizeFirebaseValue(lastSyncedState)
+          );
         }
 
         function scheduleFirebaseSync(delay = 350) {
@@ -7156,8 +7184,9 @@
               return false;
             }
 
-            const baseSnapshot = cloneSyncValue(lastSyncedState);
-            const localSnapshot = cloneSyncValue(appState);
+            // Compare/write only values that Realtime Database can actually retain.
+            const baseSnapshot = normalizeFirebaseValue(cloneSyncValue(lastSyncedState));
+            const localSnapshot = normalizeFirebaseValue(cloneSyncValue(appState));
             if (syncDeepEqual(baseSnapshot, localSnapshot)) {
               lastSyncDiagnostic = 'Tidak ada perubahan baru. Data lokal sudah sama dengan data cloud terakhir.';
               return true;
@@ -7170,7 +7199,9 @@
             try {
               transactionResult = await dbRef.transaction(currentData => {
                 const currentRemote = isSyncPlainObject(currentData) ? currentData : {};
-                return mergeConcurrentState(baseSnapshot, localSnapshot, currentRemote);
+                return normalizeFirebaseValue(
+                  mergeConcurrentState(baseSnapshot, localSnapshot, currentRemote)
+                );
               }, null, false);
 
               if (transactionResult && transactionResult.committed) {
@@ -7223,9 +7254,11 @@
                 const currentSnapshot = await dbRef.once('value');
                 const currentValue = currentSnapshot.val();
                 const currentRemote = isSyncPlainObject(currentValue) ? currentValue : {};
-                const desiredAfterMerge = mergeConcurrentState(baseSnapshot, localSnapshot, currentRemote);
+                const desiredAfterMerge = normalizeFirebaseValue(
+                  mergeConcurrentState(baseSnapshot, localSnapshot, currentRemote)
+                );
 
-                if (syncDeepEqual(desiredAfterMerge, currentRemote)) {
+                if (syncDeepEqual(desiredAfterMerge, normalizeFirebaseValue(currentRemote))) {
                   latestServerData = currentRemote;
                 } else {
                   lastSyncedState = cloneSyncValue(currentRemote);
@@ -7247,7 +7280,11 @@
             }
 
             const previousState = cloneSyncValue(appState);
-            const reconciledState = mergeConcurrentState(localSnapshot, appState, latestServerData);
+            const reconciledState = mergeConcurrentState(
+              localSnapshot,
+              normalizeFirebaseValue(cloneSyncValue(appState)),
+              normalizeFirebaseValue(latestServerData)
+            );
             latestRemoteDuringSync = null;
 
             lastSyncedState = cloneSyncValue(latestServerData);
@@ -7264,7 +7301,7 @@
             cycle++;
           }
 
-          lastSyncDiagnostic = 'Sinkronisasi belum stabil setelah 10 percobaan. Perubahan lokal tetap disimpan; coba lagi setelah koneksi stabil.';
+          lastSyncDiagnostic = 'Sinkronisasi belum mencapai kondisi stabil setelah 10 putaran rekonsiliasi. Ini bukan bukti koneksi internet bermasalah. Periksa perubahan bersamaan atau struktur data, lalu simpan backup sebelum mencoba lagi.';
           console.warn(lastSyncDiagnostic);
           if (isFirebaseStateDirty()) scheduleFirebaseSync(1000);
           return false;
