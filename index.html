@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.8.0: Stability & Reliability (local calendar date handling) -->
+    <!-- Keluarga Pohon Teduh 6.9.0: Backup & Recovery Center (validated local backup and safe restore) -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -1358,13 +1358,9 @@
                 <button onclick="manualSaveToFirebase()" id="btn-manual-save" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm" title="Simpan & Paksa Sync ke Firebase Cloud">
                     <i class="fa-solid fa-cloud-arrow-up"></i> <span id="sync-status-text">Simpan Data</span>
                 </button>
-                <button onclick="exportData()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-lg transition" title="Unduh data untuk dikirim ke pasangan">
-                    <i class="fa-solid fa-download mr-1"></i> Export JSON
+                <button type="button" onclick="openBackupCenter()" class="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 font-semibold rounded-lg transition" title="Buka pusat backup dan pemulihan data">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> Backup &amp; Recovery
                 </button>
-                <label class="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 font-medium rounded-lg cursor-pointer transition">
-                    <i class="fa-solid fa-upload mr-1"></i> Import JSON
-                    <input type="file" id="import-file" onchange="importData(event)" class="hidden" accept=".json">
-                </label>
                 <button onclick="toggleDarkMode()" class="px-3 py-1.5 bg-slate-800 dark:bg-amber-400 hover:bg-slate-700 text-slate-100 font-medium rounded-lg transition shadow-sm" title="Ganti Tema Gelap/Terang">
                     <i class="fa-solid fa-moon" id="dark-mode-icon"></i>
                 </button>
@@ -2631,9 +2627,8 @@
 
         <div class="mobile-more-tools">
             <p class="mobile-more-eyebrow mb-2">PENGELOLAAN DATA</p>
-            <div class="grid grid-cols-2 gap-2">
-                <button type="button" onclick="event.stopPropagation(); exportData(); closeMobileMoreMenu();" class="mobile-tool-button"><i class="fa-solid fa-file-arrow-down"></i><span>Export JSON</span></button>
-                <button type="button" onclick="event.stopPropagation(); closeMobileMoreMenu(); document.getElementById('import-file').click();" class="mobile-tool-button"><i class="fa-solid fa-file-arrow-up"></i><span>Import JSON</span></button>
+            <div class="grid grid-cols-1 gap-2">
+                <button type="button" onclick="event.stopPropagation(); closeMobileMoreMenu(); openBackupCenter();" class="mobile-tool-button"><i class="fa-solid fa-shield-halved"></i><span>Backup &amp; Recovery Center</span></button>
             </div>
         </div>
     </section>
@@ -8215,44 +8210,401 @@
           }
         }
 
-        function exportData() {
-            if (!isAppAuthorized || !currentAuthenticatedUser) return;
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", `Pohon_Teduh_Data_${getLocalDateKey()}.json`);
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            dlAnchor.remove();
+        // ============================================================
+        // 6.9.0 BACKUP & RECOVERY CENTER
+        // Local backups are versioned; legacy appState-only JSON remains supported.
+        // Restores are previewed, validated, and synchronized transactionally.
+        // ============================================================
+        const KPT_BACKUP_FORMAT = 'KeluargaPohonTeduhBackup';
+        const KPT_BACKUP_FORMAT_VERSION = 1;
+        const KPT_BACKUP_MAX_BYTES = 30 * 1024 * 1024;
+        let pendingBackupRestore = null;
+        let backupFileReadToken = 0;
+
+        function backupEscapeHtml(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[ch]);
         }
 
-        function importData(event) {
-            if (!isAppAuthorized || !currentAuthenticatedUser) return;
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                try {
-                    const importedState = JSON.parse(e.target.result);
-                    if (!isSyncPlainObject(importedState)) throw new Error('Format data harus berupa objek JSON.');
-                    if (!confirm('Impor akan menerapkan data dari file JSON ke aplikasi. Lanjutkan?')) return;
-                    appState = { ...createEmptyAppState(), ...importedState };
-                    saveToLocalStorage();
-                    const success = await flushFirebaseSync();
-                    if (!success) {
-                        alert('Impor belum tersinkronisasi ke Firebase. Data lokal tetap dipertahankan; coba Simpan Data sebelum memuat ulang.');
-                        return;
-                    }
-                    location.reload();
-                } catch(err) {
-                    console.error('Import JSON error:', err);
-                    alert(err.message || 'Format file JSON tidak valid.');
-                } finally {
-                    if (event.target) event.target.value = '';
-                }
-            };
-            reader.readAsText(file);
+        function getBackupSyncStatus() {
+            if (!isAppAuthorized || !currentAuthenticatedUser) return 'Akun belum terautentikasi';
+            if (!window.hasFetchedCloud || lastSyncedState === null) return 'Status cloud belum tersedia';
+            return isFirebaseStateDirty() ? 'Ada perubahan lokal yang belum dikonfirmasi cloud' : 'Sama dengan cloud terakhir';
         }
+
+        function updateBackupCenterStatus(message, tone = 'info') {
+            const status = document.getElementById('backup-center-status');
+            if (!status) return;
+            const styles = {
+                info: 'border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-900 dark:bg-sky-950/50 dark:text-sky-200',
+                success: 'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200',
+                warning: 'border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200',
+                danger: 'border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-200'
+            };
+            status.className = 'rounded-xl border px-3 py-2 text-xs leading-relaxed ' + (styles[tone] || styles.info);
+            status.textContent = message;
+        }
+
+        function openBackupCenter() {
+            if (!isAppAuthorized || !currentAuthenticatedUser) {
+                alert('Silakan login menggunakan akun yang telah diizinkan sebelum membuka Backup & Recovery Center.');
+                return;
+            }
+            closeMobileMoreMenu();
+            const modal = document.getElementById('backup-center-modal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            document.body.classList.add('backup-center-open');
+            const syncStatus = getBackupSyncStatus();
+            updateBackupCenterStatus('Status sinkronisasi saat ini: ' + syncStatus + '. Backup lokal akan mengunduh salinan dari data yang sedang terbuka di perangkat ini.',
+                syncStatus === 'Sama dengan cloud terakhir' ? 'success' : 'warning');
+            const account = document.getElementById('backup-center-account');
+            if (account) account.textContent = currentAuthenticatedUser.email || 'Akun Google terotorisasi';
+            const fileInput = document.getElementById('backup-file-input');
+            if (fileInput) fileInput.value = '';
+        }
+
+        function closeBackupCenter() {
+            const modal = document.getElementById('backup-center-modal');
+            if (modal) modal.classList.add('hidden');
+            document.body.classList.remove('backup-center-open');
+        }
+
+        function makeKptBackupPackage(state, source, syncStatus) {
+            const createdAt = new Date();
+            return {
+                _kptBackup: {
+                    format: KPT_BACKUP_FORMAT,
+                    formatVersion: KPT_BACKUP_FORMAT_VERSION,
+                    appVersion: '6.9.0',
+                    createdAt: createdAt.toISOString(),
+                    createdAtLocal: createdAt.toLocaleString('id-ID'),
+                    localDate: getLocalDateKey(createdAt),
+                    createdBy: currentAuthenticatedUser && currentAuthenticatedUser.email ? currentAuthenticatedUser.email : null,
+                    source: source || 'manual-local-backup',
+                    syncStatus: syncStatus || 'Tidak diketahui',
+                    note: 'File ini berisi data keluarga. Simpan di lokasi pribadi yang aman.'
+                },
+                appState: cloneSyncValue(state)
+            };
+        }
+
+        function downloadKptBackup(state, filePrefix, source, syncStatus) {
+            const backupPackage = makeKptBackupPackage(state, source, syncStatus);
+            const json = JSON.stringify(backupPackage, null, 2);
+            const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const now = new Date();
+            const timePart = String(now.getHours()).padStart(2, '0') + '-' +
+                String(now.getMinutes()).padStart(2, '0') + '-' + String(now.getSeconds()).padStart(2, '0');
+            const filename = (filePrefix || 'Pohon_Teduh_Backup') + '_' + getLocalDateKey(now) + '_' + timePart + '.json';
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.setTimeout(() => URL.revokeObjectURL(url), 30000);
+            return { filename, bytes: blob.size };
+        }
+
+        function createManualBackup() {
+            if (!isAppAuthorized || !currentAuthenticatedUser) return;
+            try {
+                if (!isSyncPlainObject(appState)) throw new Error('Data aplikasi yang sedang terbuka tidak valid.');
+                const stateSnapshot = cloneSyncValue(appState);
+                const syncStatus = getBackupSyncStatus();
+                const result = downloadKptBackup(stateSnapshot, 'Pohon_Teduh_Backup', 'manual-local-backup', syncStatus);
+                const isSynced = syncStatus === 'Sama dengan cloud terakhir';
+                updateBackupCenterStatus(
+                    'Backup berhasil dibuat: ' + result.filename + '. ' +
+                    (isSynced
+                        ? 'Data lokal sama dengan cloud terakhir saat backup dibuat.'
+                        : 'Perhatian: status cloud belum terkonfirmasi sama. File ini tetap menyimpan salinan data yang sedang terbuka di perangkat ini.'),
+                    isSynced ? 'success' : 'warning'
+                );
+            } catch (error) {
+                console.error('Gagal membuat backup lokal:', error);
+                updateBackupCenterStatus('Backup gagal dibuat: ' + (error.message || String(error)), 'danger');
+            }
+        }
+
+        function validateBackupJsonSafety(value, depth = 0, counter = { nodes: 0 }) {
+            if (depth > 45) throw new Error('Struktur backup terlalu dalam dan tidak dapat diproses dengan aman.');
+            counter.nodes += 1;
+            if (counter.nodes > 500000) throw new Error('Backup berisi terlalu banyak elemen untuk divalidasi.');
+            if (value === null || typeof value === 'string' || typeof value === 'boolean') return;
+            if (typeof value === 'number') {
+                if (!Number.isFinite(value)) throw new Error('Backup mengandung angka yang tidak valid.');
+                return;
+            }
+            if (Array.isArray(value)) {
+                if (value.length > 100000) throw new Error('Salah satu daftar dalam backup terlalu besar.');
+                value.forEach(item => validateBackupJsonSafety(item, depth + 1, counter));
+                return;
+            }
+            if (isSyncPlainObject(value)) {
+                const keys = Object.keys(value);
+                if (keys.length > 50000) throw new Error('Salah satu objek dalam backup terlalu besar.');
+                keys.forEach(key => {
+                    if (/[.#$\[\]/]/.test(key) || key === '__proto__' || key === 'prototype' || key === 'constructor') {
+                        throw new Error('Backup memuat nama properti yang tidak aman: ' + key);
+                    }
+                    validateBackupJsonSafety(value[key], depth + 1, counter);
+                });
+                return;
+            }
+            throw new Error('Backup memuat tipe data yang tidak didukung.');
+        }
+
+        function validateBackupStateShape(state) {
+            if (!isSyncPlainObject(state)) throw new Error('Isi backup harus berupa objek data aplikasi.');
+            validateBackupJsonSafety(state);
+            const defaults = createEmptyAppState();
+            const knownKeys = Object.keys(defaults);
+            const presentKnown = knownKeys.filter(key => Object.prototype.hasOwnProperty.call(state, key));
+            const signatureKeys = ['phase', 'hpht', 'hpl', 'budgetCategories', 'shoppingItems', 'medicalRecords', 'hospitals', 'dailyLogs', 'babyName', 'babyProfile'];
+            if (presentKnown.length < 3 || !signatureKeys.some(key => Object.prototype.hasOwnProperty.call(state, key))) {
+                throw new Error('File ini tidak dikenali sebagai backup Keluarga Pohon Teduh. Tidak ada data yang diubah.');
+            }
+            for (const key of presentKnown) {
+                const value = state[key];
+                const expected = defaults[key];
+                if (Array.isArray(expected) && !Array.isArray(value)) {
+                    throw new Error('Struktur field "' + key + '" tidak sesuai. Backup ditolak agar data tidak rusak.');
+                }
+                if (isSyncPlainObject(expected) && !isSyncPlainObject(value)) {
+                    throw new Error('Struktur field "' + key + '" tidak sesuai. Backup ditolak agar data tidak rusak.');
+                }
+                if (typeof expected === 'string' && typeof value !== 'string') {
+                    throw new Error('Field "' + key + '" harus berupa teks. Backup ditolak.');
+                }
+                if (typeof expected === 'number' && (typeof value !== 'number' || !Number.isFinite(value))) {
+                    throw new Error('Field "' + key + '" harus berupa angka yang valid. Backup ditolak.');
+                }
+                if (typeof expected === 'boolean' && typeof value !== 'boolean') {
+                    throw new Error('Field "' + key + '" harus berupa nilai benar/salah. Backup ditolak.');
+                }
+                if (expected === null && value !== null && !['string', 'number'].includes(typeof value)) {
+                    throw new Error('Field "' + key + '" memiliki tipe data yang tidak sesuai. Backup ditolak.');
+                }
+            }
+            if (state.phase !== undefined && !['prenatal', 'postnatal'].includes(state.phase)) {
+                throw new Error('Nilai fase aplikasi pada backup tidak dikenali.');
+            }
+            const unknownKeys = Object.keys(state).filter(key => !knownKeys.includes(key));
+            return { knownCount: presentKnown.length, unknownKeys };
+        }
+
+        function getBackupPreviewCounts(state) {
+            const len = key => Array.isArray(state[key]) ? state[key].length : 0;
+            return [
+                ['Kategori & item belanja', len('budgetCategories') + len('shoppingItems') + len('postnatalShopping')],
+                ['Rumah sakit & dokter', len('hospitals') + len('rsDsa')],
+                ['Catatan medis & kontraksi', len('medicalRecords') + len('babyMedicalRecords') + len('contractions')],
+                ['Log harian bayi', len('dailyLogs')],
+                ['Checklist & persiapan', len('hospitalBag') + len('departureChecklist') + len('husbandRoles') + len('birthPlan')],
+                ['Nama & referensi', len('babyNames') + len('references')],
+                ['Galeri keluarga', len('gallery') + len('postnatalGallery')],
+                ['Data tumbuh kembang', len('kmsData')]
+            ];
+        }
+
+        function formatBackupDate(metadata) {
+            if (!metadata || !metadata.createdAt) return 'Tanggal backup tidak tercatat (file JSON versi lama).';
+            const date = new Date(metadata.createdAt);
+            return Number.isNaN(date.getTime()) ? 'Tanggal backup tidak dikenali.' : date.toLocaleString('id-ID');
+        }
+
+        function showBackupPreview(parsed, file) {
+            let state = parsed;
+            let metadata = null;
+            let legacy = true;
+            if (isSyncPlainObject(parsed) && Object.prototype.hasOwnProperty.call(parsed, '_kptBackup')) {
+                metadata = parsed._kptBackup;
+                if (!isSyncPlainObject(metadata) || metadata.format !== KPT_BACKUP_FORMAT) {
+                    throw new Error('Identitas format backup tidak dikenali. File tidak dapat dipulihkan.');
+                }
+                if (metadata.formatVersion !== KPT_BACKUP_FORMAT_VERSION) {
+                    throw new Error('Versi format backup (' + metadata.formatVersion + ') belum didukung oleh aplikasi ini.');
+                }
+                state = parsed.appState;
+                legacy = false;
+            }
+            const shape = validateBackupStateShape(state);
+            pendingBackupRestore = {
+                state: cloneSyncValue(state),
+                metadata,
+                legacy,
+                fileName: file.name,
+                fileBytes: file.size,
+                shape
+            };
+
+            const preview = document.getElementById('backup-restore-preview');
+            const list = document.getElementById('backup-preview-counts');
+            const meta = document.getElementById('backup-preview-meta');
+            const warning = document.getElementById('backup-preview-warning');
+            const restoreButton = document.getElementById('backup-restore-button');
+            if (!preview || !list || !meta || !warning || !restoreButton) return;
+
+            const counts = getBackupPreviewCounts(state);
+            list.innerHTML = counts.map(([label, count]) =>
+                '<div class="flex items-center justify-between gap-3 py-1.5 border-b border-slate-100 dark:border-slate-700 last:border-0">' +
+                '<span class="text-slate-600 dark:text-slate-300">' + backupEscapeHtml(label) + '</span>' +
+                '<strong class="text-slate-800 dark:text-slate-100 tabular-nums">' + count.toLocaleString('id-ID') + '</strong></div>'
+            ).join('');
+            const createdBy = metadata && metadata.createdBy ? ' · Dibuat oleh ' + metadata.createdBy : '';
+            const appVersion = metadata && metadata.appVersion ? ' · Aplikasi ' + metadata.appVersion : '';
+            meta.textContent = (legacy ? 'Backup JSON lama · ' : 'Backup terversi · ') + formatBackupDate(metadata) + createdBy + appVersion + ' · ' + (file.size / 1024).toFixed(1) + ' KB';
+            const missing = shape.unknownKeys.length
+                ? 'File memuat ' + shape.unknownKeys.length + ' field tambahan dari versi lain. Field tersebut akan dipertahankan selama pemulihan.'
+                : 'Struktur data dikenali. Tidak ada field tambahan yang perlu ditangani.';
+            warning.textContent = missing + ' Pemulihan akan mengganti data bersama dengan isi backup ini. Sebelum itu aplikasi akan mengunduh backup pengaman dari kondisi cloud terkini.';
+            preview.classList.remove('hidden');
+            restoreButton.disabled = false;
+            restoreButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            updateBackupCenterStatus('File berhasil divalidasi. Belum ada data aplikasi atau Firebase yang diubah.', 'success');
+        }
+
+        async function handleBackupFileSelected(event) {
+            if (!isAppAuthorized || !currentAuthenticatedUser) return;
+            const file = event && event.target && event.target.files ? event.target.files[0] : null;
+            if (!file) return;
+            const readToken = ++backupFileReadToken;
+            pendingBackupRestore = null;
+            const preview = document.getElementById('backup-restore-preview');
+            if (preview) preview.classList.add('hidden');
+            updateBackupCenterStatus('Memeriksa file backup: ' + file.name, 'info');
+            try {
+                if (!/\.json$/i.test(file.name) && file.type !== 'application/json') {
+                    throw new Error('Pilih file backup berformat .json.');
+                }
+                if (file.size <= 0 || file.size > KPT_BACKUP_MAX_BYTES) {
+                    throw new Error('Ukuran file harus lebih dari 0 byte dan tidak melebihi 30 MB.');
+                }
+                const text = typeof file.text === 'function'
+                    ? await file.text()
+                    : await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(String(reader.result || ''));
+                        reader.onerror = () => reject(reader.error || new Error('File tidak dapat dibaca.'));
+                        reader.readAsText(file);
+                    });
+                if (readToken !== backupFileReadToken) return;
+                const parsed = JSON.parse(text);
+                showBackupPreview(parsed, file);
+            } catch (error) {
+                console.error('Validasi backup gagal:', error);
+                pendingBackupRestore = null;
+                updateBackupCenterStatus(error.message || 'File backup tidak dapat dibaca.', 'danger');
+            } finally {
+                if (event && event.target) event.target.value = '';
+            }
+        }
+
+        async function restoreFromBackup() {
+            if (!isAppAuthorized || !currentAuthenticatedUser || !pendingBackupRestore) return;
+            const selected = pendingBackupRestore;
+            const confirmation = confirm(
+                'PERHATIAN — PEMULIHAN DATA KELUARGA\n\n' +
+                'Data bersama yang sekarang tersimpan di Firebase akan diganti dengan isi backup:\n' + selected.fileName + '\n\n' +
+                'Sebelum pemulihan, aplikasi akan mengunduh backup pengaman dari cloud saat ini.\n\n' +
+                'Pastikan kamu dan pasangan tidak sedang mengedit data di perangkat lain. Lanjutkan pemulihan?'
+            );
+            if (!confirmation) return;
+
+            const restoreButton = document.getElementById('backup-restore-button');
+            if (restoreButton) {
+                restoreButton.disabled = true;
+                restoreButton.textContent = 'Menyiapkan pemulihan...';
+            }
+            updateBackupCenterStatus('Memastikan data saat ini tersimpan dan membaca kondisi terbaru dari Firebase...', 'warning');
+
+            const sessionUid = currentAuthenticatedUser.uid;
+            // Capture and download the exact device snapshot in this user gesture, before
+            // any awaited network operation can cause a browser download restriction.
+            // The restore proceeds only if this exact snapshot still matches Firebase.
+            const preRestoreDeviceSnapshot = cloneSyncValue(appState);
+            let emergency = null;
+            try {
+                emergency = downloadKptBackup(
+                    preRestoreDeviceSnapshot,
+                    'Pohon_Teduh_AUTO_BACKUP_SEBELUM_RESTORE',
+                    'pre-restore-last-synced-local-snapshot',
+                    getBackupSyncStatus()
+                );
+                if (!window.hasFetchedCloud || lastSyncedState === null) {
+                    throw new Error('Koneksi awal ke cloud belum siap. Tunggu sampai sinkronisasi selesai, lalu coba lagi.');
+                }
+                if (cloudSyncTimer) {
+                    clearTimeout(cloudSyncTimer);
+                    cloudSyncTimer = null;
+                }
+                const syncBeforeRestore = await flushFirebaseSync();
+                if (!syncBeforeRestore || isFirebaseStateDirty()) {
+                    throw new Error('Data saat ini belum berhasil dipastikan tersimpan ke cloud. Pemulihan dibatalkan agar perubahan terbaru tidak tertimpa.');
+                }
+                if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== sessionUid) {
+                    throw new Error('Sesi akun berubah. Login kembali sebelum melakukan pemulihan.');
+                }
+
+                const currentSnapshot = await dbRef.once('value');
+                const currentCloud = isSyncPlainObject(currentSnapshot.val()) ? currentSnapshot.val() : {};
+                if (!syncDeepEqual(normalizeFirebaseValue(preRestoreDeviceSnapshot), normalizeFirebaseValue(currentCloud)) ||
+                    !syncDeepEqual(normalizeFirebaseValue(appState), normalizeFirebaseValue(currentCloud))) {
+                    throw new Error('Data perangkat dan cloud berubah saat pemeriksaan. Tidak ada restore yang dilakukan. Tunggu sinkronisasi selesai, lalu ulangi.');
+                }
+
+                // The downloaded safety snapshot is now confirmed to match cloud.
+                updateBackupCenterStatus('Backup pengaman berhasil dibuat dan cocok dengan kondisi cloud: ' + emergency.filename + '. Sekarang menerapkan data backup pilihan...', 'success');
+
+                lastSyncedState = cloneSyncValue(currentCloud);
+                appState = { ...createEmptyAppState(), ...cloneSyncValue(selected.state) };
+                persistLocalSyncState();
+                refreshAllViews();
+
+                let restoreSuccess = await flushFirebaseSync();
+                for (let attempt = 0; restoreSuccess && isFirebaseStateDirty() && attempt < 3; attempt++) {
+                    restoreSuccess = await flushFirebaseSync();
+                }
+
+                if (!restoreSuccess || isFirebaseStateDirty()) {
+                    // Read the authoritative cloud state and roll this browser back to it.
+                    // The pre-restore backup has already been downloaded for manual recovery.
+                    const latestSnapshot = await dbRef.once('value');
+                    const latestCloud = isSyncPlainObject(latestSnapshot.val()) ? latestSnapshot.val() : {};
+                    lastSyncedState = cloneSyncValue(latestCloud);
+                    appState = { ...createEmptyAppState(), ...cloneSyncValue(latestCloud) };
+                    persistLocalSyncState();
+                    refreshAllViews();
+                    throw new Error('Firebase belum mengonfirmasi pemulihan. Aplikasi dikembalikan ke kondisi cloud terakhir yang terbaca. Backup pengaman sebelum restore sudah diunduh: ' + emergency.filename);
+                }
+
+                updateBackupCenterStatus('Pemulihan berhasil dikonfirmasi Firebase. Aplikasi akan dimuat ulang dengan data dari backup.', 'success');
+                alert('Pemulihan data berhasil. Backup pengaman kondisi sebelumnya juga sudah diunduh:\n\n' + emergency.filename);
+                closeBackupCenter();
+                location.reload();
+            } catch (error) {
+                console.error('Pemulihan backup gagal:', error);
+                const safetyNote = emergency && emergency.filename ? ' Backup pengaman perangkat telah diunduh: ' + emergency.filename + '.' : '';
+                updateBackupCenterStatus((error.message || 'Pemulihan gagal. Data yang ada tidak dihapus.') + safetyNote, 'danger');
+                if (restoreButton) {
+                    restoreButton.disabled = false;
+                    restoreButton.textContent = 'Pulihkan data dari backup';
+                }
+            }
+        }
+
+        // Compatibility wrappers for any existing controls or bookmarks.
+        function exportData() { createManualBackup(); }
+        function importData(event) { handleBackupFileSelected(event); }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') closeBackupCenter();
+        });
 
         // ==========================================
         // LOG HARIAN & WAKE WINDOW LOGIC
@@ -10238,6 +10590,98 @@
     }
 })();
 </script>
+
+
+    <!-- 6.9.0 BACKUP & RECOVERY CENTER -->
+    <div id="backup-center-modal" class="fixed inset-0 z-[120] hidden items-center justify-center bg-slate-950/60 backdrop-blur-sm p-3 sm:p-5" role="dialog" aria-modal="true" aria-labelledby="backup-center-title" onclick="if(event.target===this) closeBackupCenter();">
+        <div class="backup-center-shell w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-[1.75rem] bg-white shadow-2xl dark:bg-slate-900" onclick="event.stopPropagation();">
+            <div class="relative overflow-hidden rounded-t-[1.75rem] bg-gradient-to-br from-sky-600 via-cyan-600 to-emerald-600 px-5 py-5 text-white sm:px-7 sm:py-6">
+                <div class="absolute -right-8 -top-12 h-44 w-44 rounded-full border-[22px] border-white/10"></div>
+                <div class="relative flex items-start justify-between gap-3">
+                    <div>
+                        <div class="mb-2 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold tracking-wide text-white/95"><i class="fa-solid fa-shield-heart"></i> FAMILY DATA PROTECTION</div>
+                        <h2 id="backup-center-title" class="font-brand text-2xl font-extrabold tracking-tight sm:text-3xl">Backup &amp; Recovery</h2>
+                        <p class="mt-1 max-w-lg text-xs leading-relaxed text-white/85 sm:text-sm">Lindungi catatan, rencana, dan kenangan keluarga dalam satu tempat.</p>
+                    </div>
+                    <button type="button" onclick="closeBackupCenter()" class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/15 text-xl text-white transition hover:bg-white/25" aria-label="Tutup Backup Center"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <div class="space-y-4 p-4 sm:space-y-5 sm:p-6">
+                <div class="flex flex-col gap-1 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/70 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-slate-100"><i class="fa-solid fa-user-shield text-emerald-600"></i><span id="backup-center-account">Akun terotorisasi</span></div>
+                    <span class="text-[11px] text-slate-500 dark:text-slate-400">Data keluarga hanya untuk pengguna yang diizinkan</span>
+                </div>
+
+                <div id="backup-center-status" class="rounded-xl border border-sky-200 bg-sky-50 px-3 py-2 text-xs leading-relaxed text-sky-800 dark:border-sky-900 dark:bg-sky-950/50 dark:text-sky-200" role="status" aria-live="polite">Memeriksa status data...</div>
+
+                <div class="grid gap-3 sm:grid-cols-2">
+                    <section class="backup-action-card rounded-2xl border border-sky-100 bg-sky-50/80 p-4 dark:border-sky-900/70 dark:bg-sky-950/30">
+                        <div class="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-xl text-sky-600 shadow-sm dark:bg-slate-800 dark:text-sky-300"><i class="fa-solid fa-file-arrow-down"></i></div>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100">Buat backup lokal</h3>
+                        <p class="mt-1 min-h-[42px] text-xs leading-relaxed text-slate-600 dark:text-slate-300">Unduh salinan JSON dari data yang sedang terbuka di perangkat ini.</p>
+                        <button type="button" onclick="createManualBackup()" class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-sky-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-sky-700"><i class="fa-solid fa-download"></i> Unduh backup</button>
+                    </section>
+                    <section class="backup-action-card rounded-2xl border border-emerald-100 bg-emerald-50/80 p-4 dark:border-emerald-900/70 dark:bg-emerald-950/25">
+                        <div class="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-xl text-emerald-600 shadow-sm dark:bg-slate-800 dark:text-emerald-300"><i class="fa-solid fa-file-shield"></i></div>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100">Pulihkan dari backup</h3>
+                        <p class="mt-1 min-h-[42px] text-xs leading-relaxed text-slate-600 dark:text-slate-300">Pilih JSON untuk memeriksa isi dan kelayakannya sebelum pemulihan.</p>
+                        <button type="button" onclick="document.getElementById('backup-file-input').click()" class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-300 bg-white px-4 py-3 text-sm font-bold text-emerald-700 shadow-sm transition hover:bg-emerald-100 dark:border-emerald-800 dark:bg-slate-800 dark:text-emerald-300 dark:hover:bg-slate-700"><i class="fa-solid fa-folder-open"></i> Pilih file backup</button>
+                    </section>
+                </div>
+
+                <section id="backup-restore-preview" class="hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700">
+                    <div class="flex items-center gap-3 bg-slate-50 px-4 py-3 dark:bg-slate-800">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"><i class="fa-solid fa-circle-check text-lg"></i></div>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="font-bold text-slate-800 dark:text-slate-100">Pratinjau backup tervalidasi</h3>
+                            <p id="backup-preview-meta" class="break-words text-[11px] leading-relaxed text-slate-500 dark:text-slate-400"></p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div id="backup-preview-counts" class="text-xs"></div>
+                        <p id="backup-preview-warning" class="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-relaxed text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200"></p>
+                        <div class="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                            <button type="button" onclick="pendingBackupRestore=null; document.getElementById('backup-restore-preview').classList.add('hidden'); updateBackupCenterStatus('Pratinjau ditutup. Tidak ada data yang diubah.', 'info');" class="rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">Batal</button>
+                            <button type="button" id="backup-restore-button" onclick="restoreFromBackup()" disabled class="rounded-xl bg-rose-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50"><i class="fa-solid fa-arrow-rotate-left mr-1"></i> Pulihkan data dari backup</button>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="rounded-2xl border border-amber-200/80 bg-amber-50/70 p-3 dark:border-amber-900/70 dark:bg-amber-950/25">
+                    <div class="flex items-start gap-2.5">
+                        <i class="fa-solid fa-lock mt-0.5 text-amber-700 dark:text-amber-300"></i>
+                        <div>
+                            <p class="text-xs font-bold text-amber-900 dark:text-amber-200">Jaga file backup dengan baik</p>
+                            <p class="mt-1 text-[11px] leading-relaxed text-amber-900/85 dark:text-amber-200/85">File JSON berisi data pribadi keluarga dan saat ini tidak dienkripsi. Jangan mengirimkannya ke grup publik atau menyimpan di perangkat bersama. Saat restore, aplikasi akan lebih dulu mengunduh backup pengaman dari kondisi cloud terkini.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="rounded-2xl border border-dashed border-slate-300 px-4 py-3 dark:border-slate-700">
+                    <div class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-200"><i class="fa-brands fa-google-drive text-sky-600"></i> Google Drive backup</div>
+                    <p class="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">Integrasi Drive bersama untuk akun kamu dan istri disiapkan pada tahap berikutnya. Versi ini belum menghubungkan atau mengunggah file ke Google Drive.</p>
+                    <span class="mt-2 inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300"><i class="fa-solid fa-clock"></i> Tahap 6.9.x berikutnya</span>
+                </section>
+                <input type="file" id="backup-file-input" class="hidden" accept=".json,application/json" onchange="handleBackupFileSelected(event)">
+            </div>
+        </div>
+    </div>
+
+
+<style id="backup-center-690-styles">
+  body.backup-center-open { overflow: hidden; }
+  #backup-center-modal:not(.hidden) { display: flex; }
+  .backup-center-shell { overscroll-behavior: contain; scrollbar-width: thin; }
+  .backup-action-card { min-width: 0; }
+  #backup-center-modal button:focus-visible { outline: 3px solid rgba(14,165,233,.45); outline-offset: 2px; }
+  body.dark-mode #backup-center-modal .backup-action-card { color: #e2e8f0; }
+  @media (max-width: 480px) {
+    #backup-center-modal { align-items: flex-end; padding: 0; }
+    #backup-center-modal .backup-center-shell { max-height: 94dvh; border-radius: 1.5rem 1.5rem 0 0; }
+    #backup-center-modal .backup-action-card p { min-height: 0; }
+  }
+</style>
 
 </body>
 </html>
