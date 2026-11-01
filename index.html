@@ -6737,7 +6737,7 @@
 
         // ==========================================
         // SYSTEM SYNC REALTIME FIREBASE (CONFLICT-AWARE)
-        // v6.6.2: normalize null-valued fields to match Realtime Database semantics.
+        // v6.6.3: treat TransactionResult.committed as the server acknowledgement; queue follow-up edits.
         // ==========================================
 
         window.hasFetchedCloud = false;
@@ -7172,120 +7172,108 @@
         }
 
         // A transaction merges local changes with the latest cloud snapshot before committing.
+        // IMPORTANT: a successful TransactionResult.committed is the server acknowledgement.
+        // Do not keep reporting failure merely because the UI creates follow-up local changes
+        // during refresh/reconciliation. Those follow-up changes are queued for another sync.
         async function runFirebaseSyncLoop(sessionId) {
-          let cycle = 0;
-          while (cycle < 10) {
-            if (!isAppAuthorized || !currentAuthenticatedUser || sessionId !== cloudSyncSession) {
-              lastSyncDiagnostic = 'Sesi login atau izin akses tidak lagi aktif. Login kembali lalu coba lagi.';
-              return false;
+          if (!isAppAuthorized || !currentAuthenticatedUser || sessionId !== cloudSyncSession) {
+            lastSyncDiagnostic = 'Sesi login atau izin akses tidak lagi aktif. Login kembali lalu coba lagi.';
+            return false;
+          }
+          if (!window.hasFetchedCloud || lastSyncedState === null) {
+            lastSyncDiagnostic = 'Data cloud belum selesai dimuat. Tunggu sampai data cloud selesai dimuat, lalu coba lagi.';
+            return false;
+          }
+
+          const baseSnapshot = normalizeFirebaseValue(cloneSyncValue(lastSyncedState));
+          const localSnapshot = normalizeFirebaseValue(cloneSyncValue(appState));
+          if (syncDeepEqual(baseSnapshot, localSnapshot)) {
+            lastSyncDiagnostic = 'Tidak ada perubahan baru. Data lokal sudah sama dengan data cloud terakhir.';
+            return true;
+          }
+
+          cloudSyncInProgress = true;
+          latestRemoteDuringSync = null;
+          let transactionResult = null;
+          let transactionError = null;
+          try {
+            transactionResult = await dbRef.transaction(currentData => {
+              // If the user logs out while a transaction is pending, abort safely.
+              if (!isAppAuthorized || !currentAuthenticatedUser || sessionId !== cloudSyncSession) return;
+              const currentRemote = normalizeFirebaseValue(
+                isSyncPlainObject(currentData) ? currentData : {}
+              );
+              return normalizeFirebaseValue(
+                mergeConcurrentState(baseSnapshot, localSnapshot, currentRemote)
+              );
+            }, null, false);
+          } catch (error) {
+            transactionError = error;
+          } finally {
+            cloudSyncInProgress = false;
+          }
+
+          if (!isAppAuthorized || !currentAuthenticatedUser || sessionId !== cloudSyncSession) {
+            latestRemoteDuringSync = null;
+            lastSyncDiagnostic = 'Sesi sinkronisasi berubah karena akun keluar atau berganti.';
+            return false;
+          }
+
+          if (transactionError) {
+            const queuedRemote = latestRemoteDuringSync;
+            latestRemoteDuringSync = null;
+            lastSyncDiagnostic = 'Transaksi Firebase ditolak atau gagal: ' + describeFirebaseError(transactionError);
+            console.error('Gagal melakukan transaksi sinkronisasi Firebase:', transactionError);
+
+            // If a remote event arrived while the transaction was pending, reconcile it
+            // locally without claiming that this device's pending write was committed.
+            if (queuedRemote && isSyncPlainObject(queuedRemote)) {
+              const previousState = cloneSyncValue(appState);
+              const reconciled = mergeConcurrentState(lastSyncedState || {}, appState, queuedRemote);
+              lastSyncedState = cloneSyncValue(queuedRemote);
+              appState = { ...createEmptyAppState(), ...reconciled };
+              persistLocalSyncState();
+              isRemoteUpdate = true;
+              refreshAllViews(getChangedStateKeys(previousState, appState));
+              isRemoteUpdate = false;
+              if (isFirebaseStateDirty()) scheduleFirebaseSync(1000);
             }
-            if (!window.hasFetchedCloud || lastSyncedState === null) {
-              lastSyncDiagnostic = 'Data cloud belum selesai dimuat. Tunggu indikator sinkronisasi siap, lalu coba lagi.';
-              return false;
+            return false;
+          }
+
+          // Firebase's committed flag is the authoritative acknowledgement that this
+          // transaction reached the server. The snapshot is the value committed there.
+          if (transactionResult && transactionResult.committed) {
+            const committedValue = transactionResult.snapshot ? transactionResult.snapshot.val() : null;
+            let latestServerData = isSyncPlainObject(committedValue) ? committedValue : {};
+            const queuedRemote = latestRemoteDuringSync;
+            latestRemoteDuringSync = null;
+
+            // If another device changed the shared node during this transaction, read
+            // the latest server snapshot for reconciliation. A verification-read failure
+            // must not reverse an already-confirmed transaction into a false save failure.
+            if (queuedRemote && !syncDeepEqual(queuedRemote, latestServerData)) {
+              try {
+                const latestSnapshot = await dbRef.once('value');
+                const latestValue = latestSnapshot.val();
+                if (isSyncPlainObject(latestValue)) latestServerData = latestValue;
+              } catch (verifyError) {
+                console.warn('Transaksi sudah dikonfirmasi Firebase; pembacaan terbaru ditunda:', verifyError);
+              }
             }
 
-            // Compare/write only values that Realtime Database can actually retain.
-            const baseSnapshot = normalizeFirebaseValue(cloneSyncValue(lastSyncedState));
-            const localSnapshot = normalizeFirebaseValue(cloneSyncValue(appState));
-            if (syncDeepEqual(baseSnapshot, localSnapshot)) {
-              lastSyncDiagnostic = 'Tidak ada perubahan baru. Data lokal sudah sama dengan data cloud terakhir.';
+            if (!isAppAuthorized || !currentAuthenticatedUser || sessionId !== cloudSyncSession) {
+              lastSyncDiagnostic = 'Transaksi sudah dikonfirmasi Firebase, tetapi sesi akun berubah saat proses selesai.';
               return true;
             }
 
-            cloudSyncInProgress = true;
-            latestRemoteDuringSync = null;
-            let transactionResult;
-            let latestServerData = null;
-            try {
-              transactionResult = await dbRef.transaction(currentData => {
-                const currentRemote = isSyncPlainObject(currentData) ? currentData : {};
-                return normalizeFirebaseValue(
-                  mergeConcurrentState(baseSnapshot, localSnapshot, currentRemote)
-                );
-              }, null, false);
-
-              if (transactionResult && transactionResult.committed) {
-                const committedData = isSyncPlainObject(transactionResult.snapshot.val())
-                  ? transactionResult.snapshot.val()
-                  : {};
-                latestServerData = committedData;
-
-                // A value event may have arrived during the transaction. Read the latest
-                // server value instead of trusting a possibly older queued listener event.
-                for (let check = 0; check < 3; check++) {
-                  const queuedEvent = latestRemoteDuringSync;
-                  if (!queuedEvent || syncDeepEqual(queuedEvent, latestServerData)) break;
-                  const currentSnapshot = await dbRef.once('value');
-                  const currentValue = currentSnapshot.val();
-                  latestServerData = isSyncPlainObject(currentValue) ? currentValue : {};
-                  if (latestRemoteDuringSync && syncDeepEqual(latestRemoteDuringSync, latestServerData)) break;
-                }
-              }
-            } catch (error) {
-              console.error('Gagal melakukan transaksi sinkronisasi Firebase:', error);
-              lastSyncDiagnostic = describeFirebaseError(error);
-              cloudSyncInProgress = false;
-              const queuedRemote = latestRemoteDuringSync;
-              latestRemoteDuringSync = null;
-              if (queuedRemote && isAppAuthorized && sessionId === cloudSyncSession) {
-                const previousState = cloneSyncValue(appState);
-                const recovered = mergeConcurrentState(lastSyncedState || {}, appState, queuedRemote);
-                lastSyncedState = cloneSyncValue(queuedRemote);
-                appState = { ...createEmptyAppState(), ...recovered };
-                persistLocalSyncState();
-                isRemoteUpdate = true;
-                refreshAllViews(getChangedStateKeys(previousState, appState));
-                isRemoteUpdate = false;
-                if (!syncDeepEqual(appState, lastSyncedState)) scheduleFirebaseSync(750);
-              }
-              return false;
-            }
-            cloudSyncInProgress = false;
-
-            if (!isAppAuthorized || sessionId !== cloudSyncSession) {
-              lastSyncDiagnostic = 'Sesi sinkronisasi berubah karena akun keluar atau berganti.';
-              return false;
-            }
-
-            // Some transaction attempts can finish without a commit. Verify the current
-            // cloud value before reporting failure: it may already contain the desired data.
-            if (!transactionResult || !transactionResult.committed || latestServerData === null) {
-              try {
-                const currentSnapshot = await dbRef.once('value');
-                const currentValue = currentSnapshot.val();
-                const currentRemote = isSyncPlainObject(currentValue) ? currentValue : {};
-                const desiredAfterMerge = normalizeFirebaseValue(
-                  mergeConcurrentState(baseSnapshot, localSnapshot, currentRemote)
-                );
-
-                if (syncDeepEqual(desiredAfterMerge, normalizeFirebaseValue(currentRemote))) {
-                  latestServerData = currentRemote;
-                } else {
-                  lastSyncedState = cloneSyncValue(currentRemote);
-                  const previousState = cloneSyncValue(appState);
-                  appState = { ...createEmptyAppState(), ...mergeConcurrentState(baseSnapshot, appState, currentRemote) };
-                  persistLocalSyncState();
-                  isRemoteUpdate = true;
-                  refreshAllViews(getChangedStateKeys(previousState, appState));
-                  isRemoteUpdate = false;
-                  latestRemoteDuringSync = null;
-                  cycle++;
-                  continue;
-                }
-              } catch (readError) {
-                lastSyncDiagnostic = `Transaksi tidak ter-commit dan pembacaan ulang gagal: ${describeFirebaseError(readError)}`;
-                latestRemoteDuringSync = null;
-                return false;
-              }
-            }
-
             const previousState = cloneSyncValue(appState);
+            const currentLocalState = normalizeFirebaseValue(cloneSyncValue(appState));
             const reconciledState = mergeConcurrentState(
               localSnapshot,
-              normalizeFirebaseValue(cloneSyncValue(appState)),
+              currentLocalState,
               normalizeFirebaseValue(latestServerData)
             );
-            latestRemoteDuringSync = null;
 
             lastSyncedState = cloneSyncValue(latestServerData);
             appState = { ...createEmptyAppState(), ...reconciledState };
@@ -7294,17 +7282,63 @@
             refreshAllViews(getChangedStateKeys(previousState, appState));
             isRemoteUpdate = false;
 
-            if (!isFirebaseStateDirty()) {
-              lastSyncDiagnostic = 'Data berhasil tersinkronisasi ke Firebase.';
-              return true;
+            if (isFirebaseStateDirty()) {
+              lastSyncDiagnostic = 'Firebase sudah mengonfirmasi penyimpanan perubahan saat tombol ditekan. Ada perubahan lanjutan yang muncul selama proses sinkronisasi; perubahan tersebut sudah masuk antrean sinkronisasi berikutnya.';
+              scheduleFirebaseSync(650);
+            } else {
+              lastSyncDiagnostic = 'Firebase mengonfirmasi bahwa data berhasil tersimpan di cloud.';
             }
-            cycle++;
+            return true;
           }
 
-          lastSyncDiagnostic = 'Sinkronisasi belum mencapai kondisi stabil setelah 10 putaran rekonsiliasi. Ini bukan bukti koneksi internet bermasalah. Periksa perubahan bersamaan atau struktur data, lalu simpan backup sebelum mencoba lagi.';
-          console.warn(lastSyncDiagnostic);
-          if (isFirebaseStateDirty()) scheduleFirebaseSync(1000);
-          return false;
+          // A non-committed transaction is not automatically an error: verify whether
+          // the latest cloud value already contains the requested changes (for example,
+          // another device may have committed the same change first).
+          latestRemoteDuringSync = null;
+          try {
+            const latestSnapshot = await dbRef.once('value');
+            const latestValue = latestSnapshot.val();
+            const currentRemote = isSyncPlainObject(latestValue) ? latestValue : {};
+            const desiredState = normalizeFirebaseValue(
+              mergeConcurrentState(baseSnapshot, localSnapshot, currentRemote)
+            );
+            const normalizedRemote = normalizeFirebaseValue(currentRemote);
+
+            if (syncDeepEqual(desiredState, normalizedRemote)) {
+              const previousState = cloneSyncValue(appState);
+              const reconciled = mergeConcurrentState(
+                localSnapshot,
+                normalizeFirebaseValue(cloneSyncValue(appState)),
+                normalizedRemote
+              );
+              lastSyncedState = cloneSyncValue(currentRemote);
+              appState = { ...createEmptyAppState(), ...reconciled };
+              persistLocalSyncState();
+              isRemoteUpdate = true;
+              refreshAllViews(getChangedStateKeys(previousState, appState));
+              isRemoteUpdate = false;
+
+              if (isFirebaseStateDirty()) scheduleFirebaseSync(650);
+              lastSyncDiagnostic = 'Data sudah tercatat di Firebase. Transaksi tidak perlu menulis ulang karena kondisi cloud sudah sesuai.';
+              return true;
+            }
+
+            lastSyncedState = cloneSyncValue(currentRemote);
+            const previousState = cloneSyncValue(appState);
+            const reconciled = mergeConcurrentState(baseSnapshot, appState, currentRemote);
+            appState = { ...createEmptyAppState(), ...reconciled };
+            persistLocalSyncState();
+            isRemoteUpdate = true;
+            refreshAllViews(getChangedStateKeys(previousState, appState));
+            isRemoteUpdate = false;
+            lastSyncDiagnostic = 'Firebase belum mengonfirmasi penyimpanan perubahan. Status transaksi: committed=false. Perubahan lokal tetap dipertahankan dan akan dicoba kembali.';
+            if (isFirebaseStateDirty()) scheduleFirebaseSync(1200);
+            return false;
+          } catch (readError) {
+            lastSyncDiagnostic = 'Transaksi tidak ter-commit dan verifikasi cloud gagal: ' + describeFirebaseError(readError);
+            console.error('Verifikasi setelah transaksi Firebase gagal:', readError);
+            return false;
+          }
         }
 
         function flushFirebaseSync() {
