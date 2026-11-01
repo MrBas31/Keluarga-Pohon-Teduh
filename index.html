@@ -657,6 +657,161 @@
         }
     </style>
 
+
+    <style id="mobile-first-redesign-670">
+        /* ==========================================================
+           6.7 MOBILE-FIRST REDESIGN
+           Presentation and navigation only. Existing data modules,
+           Firebase/authentication and appState structure are untouched.
+           ========================================================== */
+        .mobile-bottom-nav, .mobile-more-backdrop, .mobile-more-panel { display: none; }
+
+        @media (max-width: 767px) {
+            body { padding-bottom: calc(5.9rem + env(safe-area-inset-bottom)) !important; background: #f5f8fc; }
+            body.dark-mode { background: #0f172a !important; }
+
+            /* Compact, calm header: identity + phase switch + essential actions. */
+            header { box-shadow: 0 5px 22px rgba(15, 23, 42, .055) !important; border-bottom-color: rgba(226,232,240,.85) !important; }
+            #header-main-layout {
+                display: grid !important;
+                grid-template-columns: minmax(0,1fr) auto;
+                grid-template-areas: "brand actions" "phase phase";
+                align-items: center; gap: .65rem .4rem;
+                padding: .7rem .8rem .75rem !important;
+            }
+            #header-main-layout > div:first-child { grid-area: brand; width: auto !important; gap: .55rem !important; }
+            #header-main-layout > div:first-child img { width: 38px !important; height: 38px !important; border-radius: 13px !important; }
+            #header-main-layout h1 { font-size: 1.02rem !important; line-height: 1.12 !important; letter-spacing: -.035em !important; }
+            #header-main-layout > div:first-child p { font-size: 9px !important; line-height: 1.25 !important; color: #64748b !important; letter-spacing: .01em; }
+            #header-main-layout > div:nth-child(2) { grid-area: phase; width: 100% !important; padding: .22rem !important; border-radius: 13px !important; background: #eef3f8 !important; gap: .22rem !important; }
+            #btn-prenatal, #btn-postnatal { min-height: 38px; padding: .58rem .3rem !important; font-size: .7rem !important; font-weight: 700 !important; border-radius: 10px !important; }
+            #header-actions {
+                grid-area: actions; display: flex !important; flex-wrap: nowrap !important;
+                width: auto !important; min-width: 0; justify-content: flex-end !important; align-items: center; gap: .28rem !important;
+            }
+            #header-actions > button:nth-child(2), #header-actions > label { display: none !important; }
+            #btn-manual-save, #header-actions > button[onclick^="toggleDarkMode"] {
+                width: 35px !important; min-width: 35px !important; height: 35px !important; min-height: 35px !important;
+                padding: 0 !important; border-radius: 11px !important; display: inline-flex !important;
+                align-items: center; justify-content: center; gap: 0 !important; font-size: 0 !important;
+            }
+            #btn-manual-save i, #header-actions > button[onclick^="toggleDarkMode"] i { margin: 0 !important; font-size: .92rem !important; }
+            #btn-manual-save #sync-status-text { display: none !important; }
+            #profile-menu-wrapper { display: flex !important; width: 35px; min-width: 35px; justify-content: center; }
+            #btn-profile-menu { width: 35px !important; height: 35px !important; border-radius: 12px !important; }
+            #profile-menu-dropdown { right: 0 !important; width: min(18rem, calc(100vw - 1.5rem)) !important; }
+
+            /* The former horizontal tabs are replaced by the bottom navigation. */
+            #prenatal-nav-tabs, #postnatal-nav-tabs { display: none !important; }
+            main { padding: 1rem .8rem 1.4rem !important; }
+            main > div { min-width: 0; }
+            main section { scroll-margin-top: 8rem; }
+
+            /* Refined cards, spacing and typography for the balanced dashboards. */
+            #sec-dashboard, #sec-post-dashboard { gap: 1rem !important; }
+            #sec-dashboard > div:first-child, #sec-post-dashboard > div:first-child { gap: .85rem !important; }
+            #sec-dashboard > div:first-child > div:first-child,
+            #sec-post-dashboard > div:first-child > div:first-child {
+                min-height: 255px !important; padding: 1.15rem !important; border-radius: 25px !important;
+                box-shadow: 0 16px 34px rgba(14, 116, 144, .14) !important;
+            }
+            #sec-dashboard > div:first-child > div:first-child h2,
+            #sec-post-dashboard > div:first-child > div:first-child h2 { line-height: 1.18 !important; }
+            #dashboard-gallery-container, #postnatal-gallery-container { min-height: 210px; border-radius: 23px; overflow: hidden; }
+            #sec-dashboard > div:nth-child(2) { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: .65rem !important; }
+            #sec-dashboard > div:nth-child(2) > div {
+                min-width: 0; padding: .85rem !important; border-radius: 19px !important;
+                box-shadow: 0 5px 16px rgba(15,23,42,.035);
+            }
+            #sec-dashboard > div:nth-child(2) > div h4 { font-size: .76rem !important; line-height: 1.35 !important; }
+            #sec-dashboard > div:nth-child(2) > div p { overflow-wrap: anywhere; }
+            #sec-post-dashboard > div:nth-child(2) { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: .65rem !important; }
+            #sec-post-dashboard > div:nth-child(2) > div { min-width: 0; padding: .85rem !important; border-radius: 19px !important; }
+            #sec-post-dashboard .grid.grid-cols-2 > div { min-width: 0; }
+            main .bg-white.rounded-3xl, main .bg-white.rounded-2xl { box-shadow: 0 5px 18px rgba(15,23,42,.035); }
+
+            /* Fixed bottom navigation with thumb-friendly targets and safe-area support. */
+            .mobile-bottom-nav {
+                display: flex; position: fixed; z-index: 80; left: 0; right: 0; bottom: 0;
+                align-items: stretch; justify-content: space-around; gap: .15rem;
+                padding: .48rem .55rem calc(.48rem + env(safe-area-inset-bottom));
+                background: rgba(255,255,255,.93); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+                border-top: 1px solid rgba(226,232,240,.9); box-shadow: 0 -8px 28px rgba(15,23,42,.07);
+            }
+            .mobile-bottom-nav.hidden { display: none !important; }
+            .mobile-nav-item {
+                appearance: none; border: 0; background: transparent; color: #94a3b8;
+                flex: 1 1 0; min-width: 0; min-height: 48px; padding: .28rem .12rem;
+                display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .22rem;
+                border-radius: 14px; font: inherit; transition: color .18s ease, background .18s ease, transform .18s ease;
+            }
+            .mobile-nav-item i { font-size: 1.08rem; line-height: 1; }
+            .mobile-nav-item span { font-size: .62rem; line-height: 1.1; font-weight: 700; letter-spacing: .005em; white-space: nowrap; }
+            .mobile-nav-item.active { color: #0284c7; background: #eff8ff; }
+            .mobile-nav-item.active i { transform: translateY(-1px); }
+            #mobile-nav-postnatal .mobile-nav-item.active { color: #059669; background: #ecfdf5; }
+
+            /* Elegant, scrollable More sheet; all secondary features remain reachable. */
+            .mobile-more-backdrop {
+                display: block; position: fixed; inset: 0; z-index: 65;
+                background: rgba(15,23,42,.38); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+            }
+            .mobile-more-backdrop.hidden { display: none !important; }
+            .mobile-more-panel {
+                display: block; position: fixed; z-index: 75; left: 0; right: 0;
+                bottom: calc(4.65rem + env(safe-area-inset-bottom)); max-height: min(72vh, 620px); overflow-y: auto;
+                padding: .75rem 1rem 1rem; background: #fff; color: #1e293b;
+                border-radius: 25px 25px 0 0; border: 1px solid #e2e8f0; border-bottom: 0;
+                box-shadow: 0 -16px 50px rgba(15,23,42,.15); animation: mobileSheetIn .2s ease-out;
+            }
+            .mobile-more-panel.hidden { display: none !important; }
+            .mobile-more-handle { width: 38px; height: 4px; border-radius: 99px; background: #cbd5e1; margin: 0 auto 1rem; }
+            .mobile-more-eyebrow { color: #0d9488; font-size: .62rem; font-weight: 800; letter-spacing: .12em; }
+            .mobile-more-close { width: 34px; height: 34px; flex: 0 0 auto; border: 0; border-radius: 11px; background: #f1f5f9; color: #64748b; }
+            .mobile-more-grid { display: grid; grid-template-columns: 1fr; gap: .5rem; }
+            .mobile-more-grid.hidden { display: none !important; }
+            .mobile-more-link {
+                display: flex; width: 100%; align-items: center; gap: .75rem; padding: .7rem;
+                border: 1px solid #edf2f7; background: #fbfdff; border-radius: 16px; text-align: left; color: #334155;
+            }
+            .mobile-more-link > span:nth-child(2) { display: flex; flex-direction: column; gap: .14rem; flex: 1; min-width: 0; }
+            .mobile-more-link strong { font-size: .79rem; font-weight: 800; }
+            .mobile-more-link small { font-size: .65rem; color: #94a3b8; }
+            .mobile-more-link > i:last-child { color: #cbd5e1; font-size: .7rem; }
+            .mobile-more-icon { display: flex; width: 39px; height: 39px; flex: 0 0 39px; align-items: center; justify-content: center; border-radius: 13px; font-size: 1rem; }
+            .tone-emerald { color: #059669; background: #ecfdf5; } .tone-amber { color: #d97706; background: #fffbeb; }
+            .tone-sky { color: #0284c7; background: #eff8ff; } .tone-rose { color: #e11d48; background: #fff1f2; }
+            .mobile-more-tools { border-top: 1px solid #edf2f7; margin-top: 1rem; padding-top: .85rem; }
+            .mobile-tool-button { display: flex; align-items: center; justify-content: center; gap: .5rem; padding: .75rem .5rem; border-radius: 13px; background: #f1f5f9; color: #475569; font-size: .72rem; font-weight: 800; }
+            .mobile-tool-button i { color: #0284c7; }
+
+            body.dark-mode header { background: #172337 !important; border-color: #334155 !important; }
+            body.dark-mode #header-main-layout > div:first-child p { color: #94a3b8 !important; }
+            body.dark-mode #header-main-layout > div:nth-child(2) { background: #26364d !important; }
+            body.dark-mode .mobile-bottom-nav { background: rgba(23,35,55,.94); border-color: #334155; box-shadow: 0 -8px 28px rgba(0,0,0,.22); }
+            body.dark-mode .mobile-nav-item { color: #94a3b8; }
+            body.dark-mode .mobile-nav-item.active { color: #7dd3fc; background: #082f49; }
+            body.dark-mode #mobile-nav-postnatal .mobile-nav-item.active { color: #6ee7b7; background: #022c22; }
+            body.dark-mode .mobile-more-panel { background: #1e293b; color: #f8fafc; border-color: #334155; }
+            body.dark-mode .mobile-more-panel h2 { color: #f8fafc !important; }
+            body.dark-mode .mobile-more-panel p.text-slate-500 { color: #94a3b8 !important; }
+            body.dark-mode .mobile-more-close, body.dark-mode .mobile-tool-button { background: #334155; color: #e2e8f0; }
+            body.dark-mode .mobile-more-link { background: #172337; border-color: #334155; color: #e2e8f0; }
+            body.dark-mode .mobile-more-link small { color: #94a3b8; }
+            body.dark-mode .mobile-more-tools { border-color: #334155; }
+            body.auth-locked .mobile-bottom-nav, body.auth-locked .mobile-more-panel, body.auth-locked .mobile-more-backdrop { display: none !important; }
+        }
+
+        @media (max-width: 390px) {
+            #header-main-layout { padding-left: .65rem !important; padding-right: .65rem !important; }
+            #header-main-layout h1 { font-size: .94rem !important; }
+            #header-main-layout > div:first-child p { font-size: 8px !important; }
+            #btn-manual-save, #header-actions > button[onclick^="toggleDarkMode"], #btn-profile-menu { width: 33px !important; min-width: 33px !important; height: 33px !important; min-height: 33px !important; }
+            .mobile-nav-item span { font-size: .59rem; }
+        }
+        @keyframes mobileSheetIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -1957,6 +2112,78 @@
         </div>
 
     </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION: menu utama yang nyaman dijangkau ibu jari -->
+    <nav id="mobile-nav-prenatal" class="mobile-bottom-nav hidden" aria-label="Navigasi fase kehamilan">
+        <button type="button" class="mobile-nav-item" data-nav-key="home" onclick="event.stopPropagation(); mobileNavigate('dashboard');" aria-label="Beranda">
+            <i class="fa-solid fa-house"></i><span>Beranda</span>
+        </button>
+        <button type="button" class="mobile-nav-item" data-nav-key="budget" onclick="event.stopPropagation(); mobileNavigate('budget');" aria-label="Belanja">
+            <i class="fa-solid fa-bag-shopping"></i><span>Belanja</span>
+        </button>
+        <button type="button" class="mobile-nav-item" data-nav-key="hospital" onclick="event.stopPropagation(); mobileNavigate('hospital');" aria-label="Rumah sakit">
+            <i class="fa-solid fa-hospital"></i><span>RS</span>
+        </button>
+        <button type="button" class="mobile-nav-item" data-nav-key="medical" onclick="event.stopPropagation(); mobileNavigate('medis');" aria-label="Medis">
+            <i class="fa-solid fa-heart-pulse"></i><span>Medis</span>
+        </button>
+        <button type="button" class="mobile-nav-item" data-nav-key="more" onclick="event.stopPropagation(); toggleMobileMoreMenu();" aria-label="Menu lainnya" aria-expanded="false">
+            <i class="fa-solid fa-grid-2"></i><span>Lainnya</span>
+        </button>
+    </nav>
+
+    <nav id="mobile-nav-postnatal" class="mobile-bottom-nav hidden" aria-label="Navigasi fase bayi lahir">
+        <button type="button" class="mobile-nav-item" data-nav-key="home" onclick="event.stopPropagation(); mobileNavigate('post-dashboard');" aria-label="Beranda">
+            <i class="fa-solid fa-house"></i><span>Beranda</span>
+        </button>
+        <button type="button" class="mobile-nav-item" data-nav-key="log" onclick="event.stopPropagation(); mobileNavigate('post-log');" aria-label="Log harian">
+            <i class="fa-solid fa-clipboard-list"></i><span>Log</span>
+        </button>
+        <button type="button" class="mobile-nav-item" data-nav-key="medical" onclick="event.stopPropagation(); mobileNavigate('post-medis');" aria-label="Medis">
+            <i class="fa-solid fa-heart-pulse"></i><span>Medis</span>
+        </button>
+        <button type="button" class="mobile-nav-item" data-nav-key="growth" onclick="event.stopPropagation(); mobileNavigate('post-stimulasi');" aria-label="Tumbuh kembang">
+            <i class="fa-solid fa-seedling"></i><span>Tumbuh</span>
+        </button>
+        <button type="button" class="mobile-nav-item" data-nav-key="more" onclick="event.stopPropagation(); toggleMobileMoreMenu();" aria-label="Menu lainnya" aria-expanded="false">
+            <i class="fa-solid fa-grid-2"></i><span>Lainnya</span>
+        </button>
+    </nav>
+
+    <div id="mobile-more-backdrop" class="mobile-more-backdrop hidden" onclick="closeMobileMoreMenu()" aria-hidden="true"></div>
+    <section id="mobile-more-panel" class="mobile-more-panel hidden" role="dialog" aria-modal="true" aria-labelledby="mobile-more-title">
+        <div class="mobile-more-handle"></div>
+        <div class="flex items-start justify-between gap-3 mb-4">
+            <div>
+                <p class="mobile-more-eyebrow" id="mobile-more-phase-label">FASE KEHAMILAN</p>
+                <h2 class="font-brand text-xl font-bold text-slate-800" id="mobile-more-title">Jelajahi menu</h2>
+                <p class="text-xs text-slate-500 mt-1">Semua kebutuhan keluarga, tetap dalam satu tempat.</p>
+            </div>
+            <button type="button" class="mobile-more-close" onclick="event.stopPropagation(); closeMobileMoreMenu();" aria-label="Tutup menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div id="mobile-more-prenatal" class="mobile-more-grid">
+            <button type="button" class="mobile-more-link" onclick="event.stopPropagation(); mobileNavigate('siaga');"><span class="mobile-more-icon tone-emerald"><i class="fa-solid fa-shield-heart"></i></span><span><strong>Suami SIAGA</strong><small>Persiapan persalinan</small></span><i class="fa-solid fa-chevron-right"></i></button>
+            <button type="button" class="mobile-more-link" onclick="event.stopPropagation(); mobileNavigate('names');"><span class="mobile-more-icon tone-amber"><i class="fa-solid fa-star"></i></span><span><strong>Nama Bayi</strong><small>Bank nama & favorit</small></span><i class="fa-solid fa-chevron-right"></i></button>
+            <button type="button" class="mobile-more-link" onclick="event.stopPropagation(); mobileNavigate('referensi');"><span class="mobile-more-icon tone-sky"><i class="fa-solid fa-book-open"></i></span><span><strong>Pustaka Edukasi</strong><small>Materi & referensi</small></span><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <div id="mobile-more-postnatal" class="mobile-more-grid hidden">
+            <button type="button" class="mobile-more-link" onclick="event.stopPropagation(); mobileNavigate('post-belanja');"><span class="mobile-more-icon tone-sky"><i class="fa-solid fa-cart-shopping"></i></span><span><strong>Belanja Bulanan</strong><small>Kebutuhan si kecil</small></span><i class="fa-solid fa-chevron-right"></i></button>
+            <button type="button" class="mobile-more-link" onclick="event.stopPropagation(); mobileNavigate('rs-dsa');"><span class="mobile-more-icon tone-rose"><i class="fa-solid fa-hospital-user"></i></span><span><strong>RS & DSA</strong><small>Fasilitas & dokter</small></span><i class="fa-solid fa-chevron-right"></i></button>
+            <button type="button" class="mobile-more-link" onclick="event.stopPropagation(); mobileNavigate('post-pustaka');"><span class="mobile-more-icon tone-amber"><i class="fa-solid fa-book-open"></i></span><span><strong>Pustaka Edukasi</strong><small>Materi & referensi</small></span><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <div class="mobile-more-tools">
+            <p class="mobile-more-eyebrow mb-2">PENGELOLAAN DATA</p>
+            <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="event.stopPropagation(); exportData(); closeMobileMoreMenu();" class="mobile-tool-button"><i class="fa-solid fa-file-arrow-down"></i><span>Export JSON</span></button>
+                <button type="button" onclick="event.stopPropagation(); closeMobileMoreMenu(); document.getElementById('import-file').click();" class="mobile-tool-button"><i class="fa-solid fa-file-arrow-up"></i><span>Import JSON</span></button>
+            </div>
+        </div>
+    </section>
 
     <!-- MODAL: SEMUA LOG KONTRAKSI (UNLIMITED) -->
     <div id="modal-all-contractions" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
@@ -3937,6 +4164,64 @@
             }
         }
 
+        // MOBILE NAVIGATION (6.7): shortcuts follow the active family phase.
+        function updateMobileNavigation() {
+            const phase = appState.phase || 'prenatal';
+            const prenatalNav = document.getElementById('mobile-nav-prenatal');
+            const postnatalNav = document.getElementById('mobile-nav-postnatal');
+            if (prenatalNav) prenatalNav.classList.toggle('hidden', phase !== 'prenatal');
+            if (postnatalNav) postnatalNav.classList.toggle('hidden', phase !== 'postnatal');
+
+            const current = phase === 'prenatal' ? (appState.currentTab || 'dashboard') : (appState.currentPostnatalTab || 'post-dashboard');
+            const activeKey = phase === 'prenatal'
+                ? ({ dashboard: 'home', budget: 'budget', hospital: 'hospital', medis: 'medical' }[current] || 'more')
+                : ({ 'post-dashboard': 'home', 'post-log': 'log', 'post-medis': 'medical', 'post-stimulasi': 'growth' }[current] || 'more');
+            document.querySelectorAll('.mobile-bottom-nav .mobile-nav-item').forEach(btn => {
+                const active = btn.closest('#mobile-nav-prenatal') ? phase === 'prenatal' && btn.dataset.navKey === activeKey
+                    : phase === 'postnatal' && btn.dataset.navKey === activeKey;
+                btn.classList.toggle('active', active);
+                if (active) btn.setAttribute('aria-current', 'page');
+                else btn.removeAttribute('aria-current');
+                if (btn.dataset.navKey === 'more') btn.setAttribute('aria-expanded', String(!document.getElementById('mobile-more-panel')?.classList.contains('hidden')));
+            });
+
+            const preMore = document.getElementById('mobile-more-prenatal');
+            const postMore = document.getElementById('mobile-more-postnatal');
+            if (preMore) preMore.classList.toggle('hidden', phase !== 'prenatal');
+            if (postMore) postMore.classList.toggle('hidden', phase !== 'postnatal');
+            const phaseLabel = document.getElementById('mobile-more-phase-label');
+            if (phaseLabel) phaseLabel.textContent = phase === 'prenatal' ? 'FASE KEHAMILAN' : 'FASE BAYI LAHIR';
+        }
+
+        function toggleMobileMoreMenu(forceOpen) {
+            const panel = document.getElementById('mobile-more-panel');
+            const backdrop = document.getElementById('mobile-more-backdrop');
+            if (!panel || !backdrop) return;
+            const currentlyOpen = !panel.classList.contains('hidden');
+            const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !currentlyOpen;
+            panel.classList.toggle('hidden', !shouldOpen);
+            backdrop.classList.toggle('hidden', !shouldOpen);
+            document.body.classList.toggle('mobile-more-open', shouldOpen);
+            updateMobileNavigation();
+        }
+
+        function closeMobileMoreMenu() { toggleMobileMoreMenu(false); }
+
+        function mobileNavigate(tabId) {
+            closeMobileMoreMenu();
+            if (tabId === 'post-pustaka') {
+                switchPhase('prenatal');
+                switchTab('referensi');
+            } else if (tabId.startsWith('post-') || tabId === 'rs-dsa') {
+                if (appState.phase !== 'postnatal') switchPhase('postnatal');
+                switchPostnatalTab(tabId);
+            } else {
+                if (appState.phase !== 'prenatal') switchPhase('prenatal');
+                switchTab(tabId);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         // SWITCH PHASE (TERISOLASI RAPI ANTARA PRENATAL & POSTNATAL)
         function switchPhase(phase) {
             appState.phase = phase;
@@ -3965,6 +4250,7 @@
                 containerPostnatal.classList.remove('hidden');
                 switchPostnatalTab(appState.currentPostnatalTab || 'post-dashboard');
             }
+            updateMobileNavigation();
             saveToLocalStorage();
         }
 
@@ -4002,6 +4288,7 @@
             } else if (tabId === 'referensi') {
                 renderReferences();
             }
+            updateMobileNavigation();
         }
 
         // SWITCH TAB (UNTUK MENU FASE BAYI LAHIR)
@@ -4030,6 +4317,7 @@
                 renderKmsChart();
                 renderBabyMedicalRecords();
             }
+            updateMobileNavigation();
             saveToLocalStorage();
         }
 
