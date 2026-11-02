@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.9.0: Backup & Recovery Center (validated local backup and safe restore) -->
+    <!-- Keluarga Pohon Teduh 6.9.1: Google Drive Backup (least-privilege Drive integration) -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8277,7 +8277,7 @@
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.9.0',
+                    appVersion: '6.9.1',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -10658,10 +10658,73 @@
                     </div>
                 </div>
 
-                <section class="rounded-2xl border border-dashed border-slate-300 px-4 py-3 dark:border-slate-700">
-                    <div class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-200"><i class="fa-brands fa-google-drive text-sky-600"></i> Google Drive backup</div>
-                    <p class="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">Integrasi Drive bersama untuk akun kamu dan istri disiapkan pada tahap berikutnya. Versi ini belum menghubungkan atau mengunggah file ke Google Drive.</p>
-                    <span class="mt-2 inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300"><i class="fa-solid fa-clock"></i> Tahap 6.9.x berikutnya</span>
+                <section id="kpt-drive-panel" class="overflow-hidden rounded-2xl border border-sky-200 bg-gradient-to-br from-sky-50 to-white p-4 dark:border-sky-900 dark:from-sky-950/40 dark:to-slate-900">
+                    <div class="flex items-start gap-3">
+                        <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-white text-xl text-sky-600 shadow-sm dark:bg-slate-800 dark:text-sky-300"><i class="fa-brands fa-google-drive"></i></div>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="font-bold text-slate-800 dark:text-slate-100">Google Drive keluarga</h3>
+                            <p class="mt-1 text-xs leading-relaxed text-slate-600 dark:text-slate-300">Simpan backup ke folder Drive bersama. Pilih akun Google Drive saat diminta; akun Drive ini terpisah dari login Firebase aplikasi.</p>
+                        </div>
+                        <span class="inline-flex flex-shrink-0 items-center gap-1 rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-bold text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200"><i class="fa-solid fa-shield-halved"></i> Terbatas</span>
+                    </div>
+
+                    <div id="kpt-drive-status" class="mt-3 rounded-xl border border-slate-200 bg-white/90 px-3 py-2 text-xs leading-relaxed text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200" role="status" aria-live="polite">Google Drive belum dikonfigurasi pada perangkat ini.</div>
+                    <div class="mt-2 rounded-xl border border-sky-100 bg-sky-50/80 px-3 py-2 text-[11px] leading-relaxed text-sky-900 dark:border-sky-900/60 dark:bg-sky-950/30 dark:text-sky-200">
+                        <b>Akun dan kuota:</b> Akun Google Drive terpisah dari akun login Keluarga Pohon Teduh. Jika semua backup ingin memakai kuota Drive utama 400 GB, pilih akun Google utama itu saat diminta pada kedua perangkat. File yang diunggah oleh akun istri ke folder My Drive bersama akan memakai kuota akun istri. Untuk restore, pilih file backup melalui Google Picker agar akses ke file tersebut diberikan secara eksplisit.
+                    </div>
+
+                    <div class="mt-3 rounded-xl border border-slate-200 bg-white/80 p-3 dark:border-slate-700 dark:bg-slate-900/60">
+                        <div class="flex items-center justify-between gap-2">
+                            <p class="text-xs font-bold text-slate-700 dark:text-slate-200">Konfigurasi Google Cloud</p>
+                            <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" class="text-[11px] font-semibold text-sky-700 underline dark:text-sky-300">Buka Cloud Console</a>
+                        </div>
+                        <p class="mt-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Masukkan Client ID, API Key, dan Project Number dari project Google Cloud yang sama. Ketiganya bukan password; tetap batasi API Key ke domain aplikasi dan API yang diperlukan.</p>
+                        <div class="mt-3 grid gap-2">
+                            <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300">OAuth Client ID (Web application)
+                                <input id="kpt-drive-client-id" type="text" autocomplete="off" spellcheck="false" placeholder="xxxxx.apps.googleusercontent.com" class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-800 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:ring-sky-900">
+                            </label>
+                            <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300">Google API Key
+                                <input id="kpt-drive-api-key" type="password" autocomplete="new-password" spellcheck="false" placeholder="AIza..." class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-800 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:ring-sky-900">
+                            </label>
+                            <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-300">Google Cloud Project Number <span class="font-normal text-rose-600 dark:text-rose-300">(wajib)</span>
+                                <input id="kpt-drive-project-number" type="text" inputmode="numeric" autocomplete="off" placeholder="Contoh: 123456789012" class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-800 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:ring-sky-900">
+                            </label>
+                            <button type="button" onclick="kptDriveSaveConfig()" class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-sky-200 bg-sky-100 px-3 py-2.5 text-xs font-bold text-sky-800 transition hover:bg-sky-200 dark:border-sky-800 dark:bg-sky-900/50 dark:text-sky-200 dark:hover:bg-sky-900"><i class="fa-solid fa-floppy-disk"></i> Simpan konfigurasi di perangkat ini</button>
+                        </div>
+                        <details class="mt-3 rounded-lg bg-slate-50 px-3 py-2 dark:bg-slate-800/70">
+                            <summary class="cursor-pointer text-[11px] font-bold text-slate-700 dark:text-slate-200">Panduan konfigurasi (perlu dilakukan sekali)</summary>
+                            <ol class="mt-2 list-decimal space-y-1.5 pl-4 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+                                <li>Gunakan satu project Google Cloud khusus untuk Keluarga Pohon Teduh.</li>
+                                <li>Aktifkan <b>Google Drive API</b> dan <b>Google Picker API</b> pada project yang sama.</li>
+                                <li>Di Google Auth Platform, siapkan OAuth consent screen. Pada <b>Data Access</b>, tambahkan scope <code>https://www.googleapis.com/auth/drive.file</code>. Jika status aplikasi masih Testing, tambahkan kedua akun Google pada daftar <b>Test users</b>.</li>
+                                <li>Buat OAuth Client ID bertipe <b>Web application</b>. Pada Authorized JavaScript origins tambahkan <code>https://mrbas31.github.io</code> (tanpa path).</li>
+                                <li>Buat API Key. Batasi Website restrictions ke <code>https://mrbas31.github.io/*</code> dan <code>https://docs.google.com/*</code>. Batasi API ke Google Picker API dan Google Drive API.</li>
+                                <li>Ambil <b>Project Number</b> pada <b>IAM &amp; Admin → Settings</b>. Gunakan nomor angka, bukan Project ID.</li>
+                                <li>Masukkan Client ID, API Key, dan Project Number di atas. Project Number wajib untuk Google Picker. Simpan konfigurasi pada setiap browser/perangkat, lalu pilih folder Drive bersama.</li>
+                            </ol>
+                            <p class="mt-2 text-[10px] leading-relaxed text-amber-700 dark:text-amber-300">Jangan pernah memasukkan Client Secret. Aplikasi browser hanya menggunakan Client ID dan API Key yang dibatasi.</p>
+                        </details>
+                    </div>
+
+                    <div class="mt-3 rounded-xl border border-slate-200 bg-white/80 p-3 dark:border-slate-700 dark:bg-slate-900/60">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="min-w-0">
+                                <p class="text-xs font-bold text-slate-700 dark:text-slate-200">Folder backup bersama</p>
+                                <p id="kpt-drive-folder-name" class="mt-1 break-words text-[11px] text-slate-500 dark:text-slate-400">Belum ada folder yang dipilih untuk akun aplikasi ini.</p>
+                            </div>
+                            <i class="fa-solid fa-folder-open text-amber-500"></i>
+                        </div>
+                        <div class="mt-3 grid gap-2 sm:grid-cols-2">
+                            <button id="kpt-drive-connect-button" type="button" onclick="kptDriveConnectAndChooseFolder()" class="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-3 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-sky-700"><i class="fa-brands fa-google-drive"></i> Hubungkan &amp; pilih folder</button>
+                            <button id="kpt-drive-upload-button" type="button" onclick="kptDriveUploadBackup()" disabled class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-45"><i class="fa-solid fa-cloud-arrow-up"></i> Backup ke Drive</button>
+                            <button id="kpt-drive-restore-button" type="button" onclick="kptDrivePickBackupFile()" disabled class="inline-flex items-center justify-center gap-2 rounded-xl border border-sky-200 bg-white px-3 py-3 text-xs font-bold text-sky-800 transition hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-45 dark:border-slate-600 dark:bg-slate-800 dark:text-sky-200"><i class="fa-solid fa-cloud-arrow-down"></i> Ambil backup dari Drive</button>
+                            <button id="kpt-drive-change-folder-button" type="button" onclick="kptDriveChangeFolder()" disabled class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-3 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-45 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"><i class="fa-solid fa-folder-gear"></i> Ganti folder</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-relaxed text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
+                        <b>Catatan privasi:</b> token Drive hanya disimpan sementara di memori halaman dan tidak dimasukkan ke Firebase atau Local Storage. Aplikasi meminta izin <code>drive.file</code>, bukan akses ke seluruh Drive. Untuk file backup yang dibuat akun pasangan, pilih file tersebut melalui tombol "Ambil backup dari Drive" agar Google memberikan akses ke file itu untuk akun yang sedang dipakai.
+                    </div>
                 </section>
                 <input type="file" id="backup-file-input" class="hidden" accept=".json,application/json" onchange="handleBackupFileSelected(event)">
             </div>
@@ -10682,6 +10745,514 @@
     #backup-center-modal .backup-action-card p { min-height: 0; }
   }
 </style>
+
+<script id="kpt-google-drive-691">
+/* 6.9.1 Google Drive integration.
+   Uses Google Identity Services token model + Google Picker + Drive API v3.
+   Tokens are memory-only. No client secret or refresh token is stored.
+   drive.file is intentionally used instead of broad Drive scopes. */
+(function () {
+    'use strict';
+
+    const CONFIG_KEY = 'kptDrivePublicConfig_v1';
+    const FOLDER_KEY_PREFIX = 'kptDriveFolder_v1_';
+    const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+    const FOLDER_MIME = 'application/vnd.google-apps.folder';
+    const MAX_BACKUP_BYTES = 30 * 1024 * 1024;
+
+    let accessToken = null;
+    let accessTokenExpiresAt = 0;
+    let scriptPromise = null;
+    let pickerPromise = null;
+    let currentPickerResolve = null;
+    let activePickerMode = null;
+    let driveBusy = false;
+
+    function readConfig() {
+        try {
+            const value = JSON.parse(localStorage.getItem(CONFIG_KEY) || 'null');
+            if (!value || typeof value !== 'object') return null;
+            return {
+                clientId: String(value.clientId || '').trim(),
+                apiKey: String(value.apiKey || '').trim(),
+                projectNumber: String(value.projectNumber || '').trim()
+            };
+        } catch (_) { return null; }
+    }
+
+    function currentFolderKey() {
+        const uid = currentAuthenticatedUser && currentAuthenticatedUser.uid;
+        return uid ? FOLDER_KEY_PREFIX + uid : null;
+    }
+
+    function readFolder() {
+        const key = currentFolderKey();
+        if (!key) return null;
+        try {
+            const value = JSON.parse(localStorage.getItem(key) || 'null');
+            if (!value || !value.id) return null;
+            return { id: String(value.id), name: String(value.name || 'Folder backup bersama') };
+        } catch (_) { return null; }
+    }
+
+    function setStatus(message, tone) {
+        const el = document.getElementById('kpt-drive-status');
+        if (!el) return;
+        const palette = {
+            info: 'border-sky-200 bg-white/90 text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200',
+            success: 'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200',
+            warning: 'border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200',
+            danger: 'border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-200'
+        };
+        el.className = 'mt-3 rounded-xl border px-3 py-2 text-xs leading-relaxed ' + (palette[tone || 'info'] || palette.info);
+        el.textContent = message;
+    }
+
+    function setBusy(value) {
+        driveBusy = !!value;
+        const ids = ['kpt-drive-connect-button', 'kpt-drive-upload-button', 'kpt-drive-restore-button', 'kpt-drive-change-folder-button'];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (driveBusy) el.disabled = true;
+        });
+        renderPanel();
+    }
+
+    function renderPanel() {
+        const cfg = readConfig();
+        const folder = readFolder();
+        const clientInput = document.getElementById('kpt-drive-client-id');
+        const apiInput = document.getElementById('kpt-drive-api-key');
+        const projectInput = document.getElementById('kpt-drive-project-number');
+        if (clientInput && document.activeElement !== clientInput && cfg) clientInput.value = cfg.clientId;
+        if (apiInput && document.activeElement !== apiInput && cfg) apiInput.value = cfg.apiKey;
+        if (projectInput && document.activeElement !== projectInput && cfg) projectInput.value = cfg.projectNumber;
+        const folderName = document.getElementById('kpt-drive-folder-name');
+        if (folderName) folderName.textContent = folder ? folder.name + ' · Folder sudah dipilih untuk akun aplikasi ini.' : 'Belum ada folder yang dipilih untuk akun aplikasi ini.';
+        const hasConfig = !!(cfg && cfg.clientId && cfg.apiKey && /^\d{6,}$/.test(cfg.projectNumber || ''));
+        const buttons = {
+            connect: document.getElementById('kpt-drive-connect-button'),
+            upload: document.getElementById('kpt-drive-upload-button'),
+            restore: document.getElementById('kpt-drive-restore-button'),
+            change: document.getElementById('kpt-drive-change-folder-button')
+        };
+        if (buttons.connect) buttons.connect.disabled = driveBusy || !hasConfig || !currentAuthenticatedUser;
+        if (buttons.upload) buttons.upload.disabled = driveBusy || !hasConfig || !folder || !currentAuthenticatedUser;
+        if (buttons.restore) buttons.restore.disabled = driveBusy || !hasConfig || !currentAuthenticatedUser;
+        if (buttons.change) buttons.change.disabled = driveBusy || !hasConfig || !currentAuthenticatedUser;
+    }
+
+    function saveConfig() {
+        const clientId = (document.getElementById('kpt-drive-client-id')?.value || '').trim();
+        const apiKey = (document.getElementById('kpt-drive-api-key')?.value || '').trim();
+        const projectNumber = (document.getElementById('kpt-drive-project-number')?.value || '').trim();
+        if (!/^[^\s@]+\.apps\.googleusercontent\.com$/.test(clientId)) {
+            setStatus('OAuth Client ID belum valid. Gunakan Client ID bertipe Web application dari Google Cloud Console.', 'warning');
+            return false;
+        }
+        if (!/^AIza[\w-]{20,}$/.test(apiKey)) {
+            setStatus('API Key belum valid. Periksa kembali API Key dari Google Cloud Console.', 'warning');
+            return false;
+        }
+        if (!/^\d{6,}$/.test(projectNumber)) {
+            setStatus('Project Number wajib diisi dengan nomor project Google Cloud (minimal 6 digit).', 'warning');
+            return false;
+        }
+        try {
+            const previous = readConfig();
+            localStorage.setItem(CONFIG_KEY, JSON.stringify({ clientId, apiKey, projectNumber }));
+            if (!previous || previous.clientId !== clientId || previous.apiKey !== apiKey || previous.projectNumber !== projectNumber) {
+                accessToken = null;
+                accessTokenExpiresAt = 0;
+                const key = currentFolderKey();
+                if (key) localStorage.removeItem(key); // Folder must be selected again for this OAuth app configuration.
+                // Other Firebase users on this browser must also reselect folders after a project change.
+                for (let i = localStorage.length - 1; i >= 0; i--) {
+                    const storedKey = localStorage.key(i);
+                    if (storedKey && storedKey.startsWith(FOLDER_KEY_PREFIX)) localStorage.removeItem(storedKey);
+                }
+            }
+            renderPanel();
+            setStatus('Konfigurasi tersimpan di perangkat ini. Hubungkan Google Drive dan pilih folder bersama untuk melanjutkan.', 'success');
+            return true;
+        } catch (error) {
+            setStatus('Konfigurasi tidak dapat disimpan di browser: ' + (error.message || String(error)), 'danger');
+            return false;
+        }
+    }
+
+    function loadScript(id, src) {
+        return new Promise((resolve, reject) => {
+            const existing = document.getElementById(id);
+            if (existing && existing.dataset.kptLoaded === 'true') { resolve(); return; }
+            const script = existing || document.createElement('script');
+            const onLoad = () => { script.dataset.kptLoaded = 'true'; resolve(); };
+            const onError = () => reject(new Error('Library Google gagal dimuat: ' + src));
+            script.addEventListener('load', onLoad, { once: true });
+            script.addEventListener('error', onError, { once: true });
+            if (!existing) {
+                script.id = id;
+                script.src = src;
+                script.async = true;
+                script.defer = true;
+                document.head.appendChild(script);
+            } else if (window.google?.accounts?.oauth2 || window.gapi) {
+                // Existing script may have loaded before this module attached listeners.
+                if (id === 'kpt-gis-script' && window.google?.accounts?.oauth2) onLoad();
+                if (id === 'kpt-gapi-script' && window.gapi) onLoad();
+            }
+        });
+    }
+
+    async function ensureGoogleLibraries() {
+        if (!scriptPromise) {
+            scriptPromise = Promise.all([
+                loadScript('kpt-gis-script', 'https://accounts.google.com/gsi/client'),
+                loadScript('kpt-gapi-script', 'https://apis.google.com/js/api.js')
+            ]).then(() => {
+                if (!window.google?.accounts?.oauth2 || !window.gapi) throw new Error('Library Google Identity Services atau Google API belum tersedia. Periksa pemblokir script dan koneksi internet.');
+            }).catch(error => { scriptPromise = null; throw error; });
+        }
+        await scriptPromise;
+        if (!pickerPromise) {
+            pickerPromise = new Promise((resolve, reject) => {
+                const timeout = window.setTimeout(() => reject(new Error('Google Picker tidak merespons. Muat ulang halaman lalu coba lagi.')), 15000);
+                try {
+                    window.gapi.load('picker', {
+                        callback: () => { clearTimeout(timeout); resolve(); },
+                        onerror: () => { clearTimeout(timeout); reject(new Error('Google Picker API gagal dimuat. Pastikan API sudah diaktifkan di Google Cloud.')); },
+                        ontimeout: () => { clearTimeout(timeout); reject(new Error('Waktu tunggu Google Picker habis.')); },
+                        timeout: 12000
+                    });
+                } catch (error) { clearTimeout(timeout); reject(error); }
+            }).catch(error => { pickerPromise = null; throw error; });
+        }
+        await pickerPromise;
+    }
+
+    function requestAccessToken(promptValue) {
+        const cfg = readConfig();
+        if (!cfg) return Promise.reject(new Error('Simpan konfigurasi Google Drive terlebih dahulu.'));
+        return ensureGoogleLibraries().then(() => new Promise((resolve, reject) => {
+            let settled = false;
+            const timer = window.setTimeout(() => {
+                if (!settled) { settled = true; reject(new Error('Permintaan izin Google terlalu lama. Pastikan popup tidak diblokir.')); }
+            }, 90000);
+            const finish = (fn, value) => {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timer);
+                fn(value);
+            };
+            try {
+                const tokenClient = window.google.accounts.oauth2.initTokenClient({
+                    client_id: cfg.clientId,
+                    scope: DRIVE_SCOPE,
+                    include_granted_scopes: true,
+                    callback: response => {
+                        if (!response || response.error || !response.access_token) {
+                            finish(reject, new Error((response && response.error_description) || (response && response.error) || 'Google tidak memberikan izin Google Drive.'));
+                            return;
+                        }
+                        if (response.scope && !response.scope.split(/[ ,]+/).includes(DRIVE_SCOPE)) {
+                            finish(reject, new Error('Izin drive.file belum diberikan. Ulangi otorisasi dan setujui akses file yang dipilih aplikasi.'));
+                            return;
+                        }
+                        accessToken = response.access_token;
+                        accessTokenExpiresAt = Date.now() + Math.max(60, Number(response.expires_in || 3600)) * 1000;
+                        finish(resolve, accessToken);
+                    },
+                    error_callback: error => finish(reject, new Error((error && error.message) || 'Popup otorisasi Google tidak dapat dibuka.'))
+                });
+                tokenClient.requestAccessToken({ prompt: promptValue || '' });
+            } catch (error) { finish(reject, error); }
+        }));
+    }
+
+    async function getAccessToken() {
+        if (accessToken && accessTokenExpiresAt > Date.now() + 60000) return accessToken;
+        // Ask the user to choose the Drive identity again after reload/expiry.
+        // This prevents a shared device from silently uploading to the wrong Google account.
+        return requestAccessToken('select_account');
+    }
+
+    async function driveFetch(url, options) {
+        const token = await getAccessToken();
+        const response = await fetch(url, {
+            ...(options || {}),
+            headers: { ...((options && options.headers) || {}), Authorization: 'Bearer ' + token }
+        });
+        if (response.status === 401) {
+            accessToken = null;
+            accessTokenExpiresAt = 0;
+            throw new Error('Sesi Google Drive kedaluwarsa. Tekan tombol aksi sekali lagi untuk memberi izin baru.');
+        }
+        if (!response.ok) {
+            let detail = '';
+            try { const body = await response.json(); detail = body.error?.message || ''; } catch (_) {}
+            if (response.status === 403) throw new Error('Google menolak akses ke folder/file ini. Pastikan akun Google yang dipilih memiliki izin Editor pada folder bersama dan Google Drive API aktif.' + (detail ? ' Detail: ' + detail : ''));
+            if (response.status === 404) throw new Error('Folder atau file tidak ditemukan atau belum dapat diakses oleh akun Google yang dipilih. Pilih ulang melalui Google Picker.');
+            throw new Error('Google Drive API merespons HTTP ' + response.status + (detail ? ': ' + detail : '.'));
+        }
+        return response;
+    }
+
+    function pickerBuilder(view, token, title, callback) {
+        const cfg = readConfig();
+        let builder = new window.google.picker.PickerBuilder()
+            .addView(view)
+            .setOAuthToken(token)
+            .setDeveloperKey(cfg.apiKey)
+            .setOrigin(window.location.origin)
+            .setTitle(title)
+            .setLocale('id')
+            .setCallback(callback);
+        builder = builder.setAppId(cfg.projectNumber);
+        return builder.build();
+    }
+
+    function openFolderPicker(token) {
+        return new Promise((resolve, reject) => {
+            try {
+                const view = new window.google.picker.DocsView(window.google.picker.ViewId.FOLDERS)
+                    .setIncludeFolders(true)
+                    .setSelectFolderEnabled(true)
+                    .setMimeTypes(FOLDER_MIME);
+                const picker = pickerBuilder(view, token, 'Pilih folder backup keluarga', data => {
+                    const action = data && data[window.google.picker.Response.ACTION];
+                    if (action === window.google.picker.Action.PICKED) {
+                        const docs = data[window.google.picker.Response.DOCUMENTS] || [];
+                        resolve(docs[0] || null);
+                    } else if (action === window.google.picker.Action.CANCEL) resolve(null);
+                });
+                picker.setVisible(true);
+            } catch (error) { reject(error); }
+        });
+    }
+
+    function openBackupFilePicker(token) {
+        return new Promise((resolve, reject) => {
+            try {
+                const view = new window.google.picker.DocsView(window.google.picker.ViewId.DOCS)
+                    .setIncludeFolders(false)
+                    .setMimeTypes('application/json');
+                const picker = pickerBuilder(view, token, 'Pilih file backup Keluarga Pohon Teduh', data => {
+                    const action = data && data[window.google.picker.Response.ACTION];
+                    if (action === window.google.picker.Action.PICKED) {
+                        const docs = data[window.google.picker.Response.DOCUMENTS] || [];
+                        resolve(docs[0] || null);
+                    } else if (action === window.google.picker.Action.CANCEL) resolve(null);
+                });
+                picker.setVisible(true);
+            } catch (error) { reject(error); }
+        });
+    }
+
+    async function connectAndChooseFolder() {
+        if (!isAppAuthorized || !currentAuthenticatedUser) { alert('Login aplikasi terlebih dahulu.'); return; }
+        if (!saveConfig()) return;
+        setBusy(true);
+        setStatus('Membuka izin Google. Pilih akun Google yang memiliki akses Editor ke folder keluarga.', 'info');
+        try {
+            const token = await requestAccessToken('select_account consent');
+            await ensureGoogleLibraries();
+            const picked = await openFolderPicker(token);
+            if (!picked) {
+                setStatus('Pemilihan folder dibatalkan. Belum ada folder yang diubah.', 'info');
+                return;
+            }
+            if (!picked.id) throw new Error('Google Picker tidak mengembalikan ID folder.');
+            const response = await driveFetch('https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(picked.id) + '?fields=id,name,mimeType,trashed,capabilities(canAddChildren)', { method: 'GET' });
+            const folder = await response.json();
+            if (folder.mimeType !== FOLDER_MIME || folder.trashed) throw new Error('Pilihan tersebut bukan folder Drive yang aktif.');
+            if (folder.capabilities && folder.capabilities.canAddChildren === false) throw new Error('Akun Google ini tidak memiliki izin untuk menambahkan backup ke folder tersebut. Minta akses Editor.');
+            const key = currentFolderKey();
+            if (!key) throw new Error('Sesi login aplikasi tidak ditemukan.');
+            localStorage.setItem(key, JSON.stringify({ id: folder.id, name: folder.name || picked.name || 'Folder backup keluarga' }));
+            renderPanel();
+            setStatus('Google Drive terhubung. Folder bersama dipilih: ' + (folder.name || picked.name || 'Folder backup keluarga') + '. Kamu sekarang dapat mengunggah backup cloud.', 'success');
+        } catch (error) {
+            console.error('KPT Drive connect error:', error);
+            setStatus(error.message || String(error), 'danger');
+        } finally { setBusy(false); }
+    }
+
+    function makeDriveBackupFilename(date) {
+        const d = date || new Date();
+        const localDate = typeof getLocalDateKey === 'function' ? getLocalDateKey(d) :
+            [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
+        const time = [d.getHours(), d.getMinutes(), d.getSeconds()].map(v => String(v).padStart(2, '0')).join('-');
+        return 'Pohon_Teduh_Backup_' + localDate + '_' + time + '.json';
+    }
+
+    async function getVerifiedCloudSnapshot() {
+        if (!isAppAuthorized || !currentAuthenticatedUser) throw new Error('Login aplikasi tidak aktif.');
+        if (!window.hasFetchedCloud || lastSyncedState === null) throw new Error('Sinkronisasi awal belum selesai. Tunggu status cloud siap.');
+        const uid = currentAuthenticatedUser.uid;
+        if (cloudSyncTimer) { clearTimeout(cloudSyncTimer); cloudSyncTimer = null; }
+        const flushed = await flushFirebaseSync();
+        if (!flushed || isFirebaseStateDirty()) throw new Error('Data lokal belum berhasil dipastikan tersimpan. Backup Drive dibatalkan agar data tertunda tidak dianggap sebagai backup cloud.');
+        if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid) throw new Error('Akun aplikasi berubah saat proses backup.');
+        const snapshot = await dbRef.once('value');
+        const raw = snapshot.val();
+        const cloud = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+        if (!syncDeepEqual(normalizeFirebaseValue(appState), normalizeFirebaseValue(cloud)) ||
+            !syncDeepEqual(normalizeFirebaseValue(lastSyncedState), normalizeFirebaseValue(cloud))) {
+            throw new Error('Data berubah saat pemeriksaan terakhir. Tunggu sinkronisasi stabil, lalu ulangi backup Drive.');
+        }
+        if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid) throw new Error('Sesi akun berubah. Backup dibatalkan.');
+        return JSON.parse(JSON.stringify(cloud));
+    }
+
+    async function uploadBackupToDrive() {
+        if (!isAppAuthorized || !currentAuthenticatedUser) { alert('Login aplikasi terlebih dahulu.'); return; }
+        const folder = readFolder();
+        if (!folder) { setStatus('Pilih folder Drive bersama terlebih dahulu.', 'warning'); return; }
+        setBusy(true);
+        setStatus('Memeriksa sinkronisasi Firebase dan menyiapkan snapshot cloud terbaru...', 'info');
+        const uid = currentAuthenticatedUser.uid;
+        try {
+            const token = await getAccessToken();
+            const cloudSnapshot = await getVerifiedCloudSnapshot();
+            const syncStatus = 'Sama dengan cloud terakhir';
+            const backupPackage = makeKptBackupPackage(cloudSnapshot, 'manual-google-drive-backup', syncStatus);
+            const json = JSON.stringify(backupPackage, null, 2);
+            const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+            if (blob.size <= 0 || blob.size > MAX_BACKUP_BYTES) throw new Error('Ukuran backup melebihi batas 30 MB. Gunakan backup lokal atau hubungi pengembang untuk evaluasi.');
+            if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid) throw new Error('Sesi aplikasi berubah. Backup dibatalkan.');
+
+            const filename = makeDriveBackupFilename(new Date());
+            const metadata = {
+                name: filename,
+                mimeType: 'application/json',
+                parents: [folder.id],
+                description: 'Backup Keluarga Pohon Teduh 6.9.1. Snapshot cloud Firebase yang telah diverifikasi sebelum upload.'
+            };
+            const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
+            const body = '--' + boundary + '\r\n' +
+                'Content-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + '\r\n' +
+                '--' + boundary + '\r\n' +
+                'Content-Type: application/json; charset=UTF-8\r\n\r\n' + json + '\r\n' +
+                '--' + boundary + '--';
+            const response = await driveFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,mimeType,size,createdTime,webViewLink', {
+                method: 'POST',
+                headers: { 'Content-Type': 'multipart/related; boundary=' + boundary },
+                body
+            });
+            const result = await response.json();
+            if (!result.id) throw new Error('Google Drive tidak mengembalikan ID file. Backup belum dapat dikonfirmasi.');
+            const localKey = 'kptDriveLastUpload_v1_' + uid;
+            try { localStorage.setItem(localKey, JSON.stringify({ id: result.id, name: result.name || filename, createdTime: result.createdTime || new Date().toISOString() })); } catch (_) {}
+            setStatus('Backup berhasil diunggah ke folder bersama: ' + (result.name || filename) + '. Snapshot berasal dari Firebase dan telah cocok dengan data cloud saat diambil.', 'success');
+            if (result.webViewLink) {
+                const status = document.getElementById('kpt-drive-status');
+                if (status) {
+                    const link = document.createElement('a');
+                    link.href = result.webViewLink;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    link.className = 'mt-2 inline-flex items-center gap-1 font-bold underline';
+                    link.textContent = 'Buka backup di Google Drive';
+                    status.appendChild(document.createElement('br'));
+                    status.appendChild(link);
+                }
+            }
+        } catch (error) {
+            console.error('KPT Drive upload error:', error);
+            setStatus(error.message || String(error), 'danger');
+        } finally { setBusy(false); }
+    }
+
+    async function pickBackupFromDrive() {
+        if (!isAppAuthorized || !currentAuthenticatedUser) { alert('Login aplikasi terlebih dahulu.'); return; }
+        setBusy(true);
+        setStatus('Membuka Google Picker. Pilih file JSON backup Keluarga Pohon Teduh dari folder bersama.', 'info');
+        try {
+            const token = await getAccessToken();
+            await ensureGoogleLibraries();
+            const picked = await openBackupFilePicker(token);
+            if (!picked) {
+                setStatus('Pemilihan file backup dibatalkan. Belum ada data yang diubah.', 'info');
+                return;
+            }
+            if (!picked.id) throw new Error('Google Picker tidak mengembalikan ID file.');
+            const response = await driveFetch('https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(picked.id) + '?alt=media', { method: 'GET' });
+            const text = await response.text();
+            const byteLength = new Blob([text]).size;
+            if (byteLength <= 0 || byteLength > MAX_BACKUP_BYTES) throw new Error('File backup kosong atau melebihi batas 30 MB.');
+            const parsed = JSON.parse(text);
+            const safeName = picked.name || 'Keluarga_Pohon_Teduh_Backup_Drive.json';
+            const file = new File([text], safeName, { type: 'application/json' });
+            showBackupPreview(parsed, file);
+            if (pendingBackupRestore) pendingBackupRestore.source = 'Google Drive';
+            setStatus('File Drive berhasil diunduh dan divalidasi. Periksa pratinjau sebelum memutuskan restore. Belum ada data yang diubah.', 'success');
+        } catch (error) {
+            console.error('KPT Drive restore picker error:', error);
+            setStatus('Tidak dapat membuka backup dari Drive: ' + (error.message || String(error)), 'danger');
+        } finally { setBusy(false); }
+    }
+
+    function changeFolder() {
+        const key = currentFolderKey();
+        if (key && confirm('Ganti folder Drive untuk akun aplikasi ini? Pilihan folder lama akan dilupakan di perangkat ini. File yang sudah diunggah tidak dihapus dari Google Drive.')) {
+            localStorage.removeItem(key);
+            renderPanel();
+            setStatus('Folder lokal dilepas. Hubungkan kembali dan pilih folder bersama yang benar.', 'info');
+        }
+    }
+
+    function clearSessionToken() {
+        accessToken = null;
+        accessTokenExpiresAt = 0;
+    }
+
+    function initializePanel() {
+        renderPanel();
+        const cfg = readConfig();
+        if (!cfg || !cfg.clientId || !cfg.apiKey || !cfg.projectNumber) setStatus('Masukkan OAuth Client ID, API Key, dan Project Number Google Cloud, lalu simpan konfigurasi.', 'info');
+        else if (!readFolder()) setStatus('Konfigurasi tersedia. Hubungkan akun Google dan pilih folder backup bersama untuk akun aplikasi yang sedang login.', 'info');
+        else setStatus('Folder backup siap: ' + readFolder().name + '. Token Google diminta kembali saat tindakan Drive dilakukan.', 'success');
+    }
+
+    // Public handlers used by the buttons in Backup & Recovery Center.
+    window.kptDriveSaveConfig = saveConfig;
+    window.kptDriveConnectAndChooseFolder = connectAndChooseFolder;
+    window.kptDriveUploadBackup = uploadBackupToDrive;
+    window.kptDrivePickBackupFile = pickBackupFromDrive;
+    window.kptDriveChangeFolder = changeFolder;
+    window.kptDriveClearSessionToken = clearSessionToken;
+
+    // The existing modal is retained; this wrapper only refreshes Drive settings UI when it opens.
+    const originalOpenBackupCenter = window.openBackupCenter;
+    if (typeof originalOpenBackupCenter === 'function') {
+        window.openBackupCenter = function () {
+            const result = originalOpenBackupCenter.apply(this, arguments);
+            initializePanel();
+            return result;
+        };
+    }
+    const originalLogoutGoogle = window.logoutGoogle;
+    if (typeof originalLogoutGoogle === 'function') {
+        window.logoutGoogle = function () {
+            clearSessionToken();
+            return originalLogoutGoogle.apply(this, arguments);
+        };
+    }
+    const originalHandleAuthStateChanged = window.handleAuthStateChanged;
+    let lastFirebaseUid = currentAuthenticatedUser && currentAuthenticatedUser.uid || null;
+    if (typeof originalHandleAuthStateChanged === 'function') {
+        window.handleAuthStateChanged = function (user) {
+            const nextUid = user && user.uid || null;
+            if (nextUid !== lastFirebaseUid) clearSessionToken();
+            lastFirebaseUid = nextUid;
+            return originalHandleAuthStateChanged.apply(this, arguments);
+        };
+    }
+    window.addEventListener('pagehide', clearSessionToken);
+    document.addEventListener('DOMContentLoaded', initializePanel);
+})();
+</script>
 
 </body>
 </html>
