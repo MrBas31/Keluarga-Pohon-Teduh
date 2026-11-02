@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.9.1: Google Drive Backup (least-privilege Drive integration) -->
+    <!-- Keluarga Pohon Teduh 6.9.3: Safe Google Drive Backup Gate; Firebase sync core retained from 6.9.1 -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8277,7 +8277,7 @@
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.9.1',
+                    appVersion: '6.9.3',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -11086,22 +11086,68 @@
         return 'Pohon_Teduh_Backup_' + localDate + '_' + time + '.json';
     }
 
+    // Backup-only readiness gate. It deliberately does NOT call flushFirebaseSync()
+    // or start Firebase transactions itself. The existing 6.9.1 scheduler remains
+    // the sole owner of writes; this gate only waits for it to become idle, then reads
+    // a fresh server snapshot and verifies local + baseline + cloud equality.
+    async function waitForNormalFirebaseSyncToSettle(uid, sessionId, timeoutMs = 20000) {
+        const startedAt = Date.now();
+        while (Date.now() - startedAt < timeoutMs) {
+            if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid || sessionId !== cloudSyncSession) {
+                throw new Error('Sesi atau akun aplikasi berubah saat menunggu sinkronisasi. Backup dibatalkan.');
+            }
+            if (!window.hasFetchedCloud || lastSyncedState === null) {
+                throw new Error('Status cloud belum siap. Tunggu sampai sinkronisasi awal selesai.');
+            }
+
+            const dirty = isFirebaseStateDirty();
+            const schedulerBusy = !!cloudSyncTimer || !!cloudSyncPromise || !!cloudSyncInProgress;
+            if (!dirty && !schedulerBusy) return true;
+            if (dirty && !schedulerBusy) {
+                throw new Error('Masih ada perubahan lokal yang belum dikonfirmasi Firebase, dan tidak ada proses sinkronisasi normal yang sedang berjalan. Klik Simpan Data satu kali, tunggu indikator stabil, lalu coba backup lagi. ' + (lastSyncDiagnostic || ''));
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 200));
+        }
+
+        const details = lastSyncDiagnostic && lastSyncDiagnostic !== 'Belum ada percobaan sinkronisasi.'
+            ? ' Detail sinkronisasi terakhir: ' + lastSyncDiagnostic
+            : '';
+        throw new Error('Sinkronisasi Firebase belum mencapai kondisi stabil dalam 20 detik. Tidak ada backup yang diunggah.' + details + ' Periksa status Simpan Data, tunggu antrean normal selesai, lalu coba lagi.');
+    }
+
     async function getVerifiedCloudSnapshot() {
         if (!isAppAuthorized || !currentAuthenticatedUser) throw new Error('Login aplikasi tidak aktif.');
         if (!window.hasFetchedCloud || lastSyncedState === null) throw new Error('Sinkronisasi awal belum selesai. Tunggu status cloud siap.');
         const uid = currentAuthenticatedUser.uid;
-        if (cloudSyncTimer) { clearTimeout(cloudSyncTimer); cloudSyncTimer = null; }
-        const flushed = await flushFirebaseSync();
-        if (!flushed || isFirebaseStateDirty()) throw new Error('Data lokal belum berhasil dipastikan tersimpan. Backup Drive dibatalkan agar data tertunda tidak dianggap sebagai backup cloud.');
-        if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid) throw new Error('Akun aplikasi berubah saat proses backup.');
+        const sessionId = cloudSyncSession;
+
+        setStatus('Menunggu sinkronisasi normal selesai. Tidak ada transaksi tambahan yang dipaksakan oleh proses backup...', 'info');
+        await waitForNormalFirebaseSyncToSettle(uid, sessionId, 20000);
+
+        if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid || sessionId !== cloudSyncSession) {
+            throw new Error('Akun aplikasi berubah saat proses backup.');
+        }
+
+        // A fresh server read is the authority for the backup snapshot.
         const snapshot = await dbRef.once('value');
         const raw = snapshot.val();
         const cloud = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
-        if (!syncDeepEqual(normalizeFirebaseValue(appState), normalizeFirebaseValue(cloud)) ||
-            !syncDeepEqual(normalizeFirebaseValue(lastSyncedState), normalizeFirebaseValue(cloud))) {
-            throw new Error('Data berubah saat pemeriksaan terakhir. Tunggu sinkronisasi stabil, lalu ulangi backup Drive.');
+        const localAtVerification = normalizeFirebaseValue(cloneSyncValue(appState));
+        const baselineAtVerification = normalizeFirebaseValue(cloneSyncValue(lastSyncedState));
+        const cloudAtVerification = normalizeFirebaseValue(cloneSyncValue(cloud));
+
+        if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid || sessionId !== cloudSyncSession) {
+            throw new Error('Sesi akun berubah selama pembacaan cloud. Backup dibatalkan.');
         }
-        if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid) throw new Error('Sesi akun berubah. Backup dibatalkan.');
+        if (cloudSyncTimer || cloudSyncPromise || cloudSyncInProgress || isFirebaseStateDirty()) {
+            throw new Error('Ada perubahan atau proses sinkronisasi baru saat pemeriksaan cloud berlangsung. Tidak ada backup yang diunggah. Tunggu sebentar, lalu coba lagi.');
+        }
+        if (!syncDeepEqual(localAtVerification, cloudAtVerification) ||
+            !syncDeepEqual(baselineAtVerification, cloudAtVerification)) {
+            throw new Error('Data lokal, baseline sinkronisasi, dan Firebase belum identik. Tidak ada backup yang diunggah. Klik Simpan Data jika masih ada perubahan, tunggu status stabil, lalu coba lagi.');
+        }
+
         return JSON.parse(JSON.stringify(cloud));
     }
 
@@ -11127,7 +11173,7 @@
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.9.1. Snapshot cloud Firebase yang telah diverifikasi sebelum upload.'
+                description: 'Backup Keluarga Pohon Teduh 6.9.3. Snapshot cloud Firebase yang telah diverifikasi sebelum upload.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
