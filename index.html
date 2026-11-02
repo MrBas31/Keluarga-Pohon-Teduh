@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.9.2: Google Drive Backup (least-privilege Drive integration) -->
+    <!-- Keluarga Pohon Teduh 6.9.1: Google Drive Backup (least-privilege Drive integration) -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8169,34 +8169,6 @@
           return currentPromise;
         }
 
-
-        // Drain any follow-up writes before operations that require a fully confirmed
-        // cloud snapshot (manual save and Drive backup). A committed transaction can
-        // still leave a newer local edit queued; never report that state as fully saved.
-        async function flushFirebaseSyncUntilClean(maxAttempts = 5) {
-          const attempts = Math.max(1, Math.min(8, Number(maxAttempts) || 5));
-          for (let attempt = 1; attempt <= attempts; attempt++) {
-            if (!isAppAuthorized || !currentAuthenticatedUser || !window.hasFetchedCloud || lastSyncedState === null) {
-              lastSyncDiagnostic = 'Firebase belum siap untuk memastikan seluruh perubahan tersimpan.';
-              return false;
-            }
-            if (cloudSyncTimer) {
-              clearTimeout(cloudSyncTimer);
-              cloudSyncTimer = null;
-            }
-            const success = await flushFirebaseSync();
-            if (!success) return false;
-            if (!isFirebaseStateDirty()) return true;
-            lastSyncDiagnostic = 'Firebase mengonfirmasi satu tahap penyimpanan, tetapi masih ada perubahan lanjutan yang menunggu sinkronisasi (percobaan ' + attempt + '/' + attempts + ').';
-            if (attempt < attempts) await new Promise(resolve => setTimeout(resolve, 250));
-          }
-          if (isFirebaseStateDirty()) {
-            lastSyncDiagnostic = 'Sinkronisasi belum stabil setelah ' + attempts + ' percobaan. Perubahan lokal tetap dipertahankan; tunggu sebentar hingga perangkat-perangkat selesai menyinkronkan, lalu coba lagi.';
-            return false;
-          }
-          return true;
-        }
-
         async function manualSaveToFirebase() {
           if (!isAppAuthorized || !currentAuthenticatedUser) return;
           const btn = document.getElementById('btn-manual-save');
@@ -8210,8 +8182,8 @@
           try {
             lastSyncDiagnostic = 'Menyimpan perubahan ke Firebase...';
             persistLocalSyncState();
-            const success = await flushFirebaseSyncUntilClean(5);
-            if (success && !isFirebaseStateDirty()) {
+            const success = await flushFirebaseSync();
+            if (success) {
               if (btn && statusText) {
                 btn.className = 'px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm';
                 statusText.innerText = 'Tersimpan! ✓';
@@ -8305,7 +8277,7 @@
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.9.2',
+                    appVersion: '6.9.1',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -10774,8 +10746,8 @@
   }
 </style>
 
-<script id="kpt-google-drive-692">
-/* 6.9.2 Google Drive integration and sync preflight fix.
+<script id="kpt-google-drive-691">
+/* 6.9.1 Google Drive integration.
    Uses Google Identity Services token model + Google Picker + Drive API v3.
    Tokens are memory-only. No client secret or refresh token is stored.
    drive.file is intentionally used instead of broad Drive scopes. */
@@ -11118,35 +11090,19 @@
         if (!isAppAuthorized || !currentAuthenticatedUser) throw new Error('Login aplikasi tidak aktif.');
         if (!window.hasFetchedCloud || lastSyncedState === null) throw new Error('Sinkronisasi awal belum selesai. Tunggu status cloud siap.');
         const uid = currentAuthenticatedUser.uid;
-
-        // First drain any local/follow-up writes. A green single transaction is not
-        // enough if a newer edit arrived while that transaction was committing.
-        const flushed = await flushFirebaseSyncUntilClean(5);
-        if (!flushed || isFirebaseStateDirty()) {
-            const detail = lastSyncDiagnostic ? ' Detail: ' + lastSyncDiagnostic : '';
-            throw new Error('Data Firebase belum benar-benar stabil. Backup Drive dibatalkan untuk mencegah snapshot yang tertinggal.' + detail);
-        }
+        if (cloudSyncTimer) { clearTimeout(cloudSyncTimer); cloudSyncTimer = null; }
+        const flushed = await flushFirebaseSync();
+        if (!flushed || isFirebaseStateDirty()) throw new Error('Data lokal belum berhasil dipastikan tersimpan. Backup Drive dibatalkan agar data tertunda tidak dianggap sebagai backup cloud.');
         if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid) throw new Error('Akun aplikasi berubah saat proses backup.');
-
-        // Re-read the authoritative cloud value. Allow a short bounded retry for a
-        // realtime event from the other family device to be reconciled locally.
-        for (let attempt = 1; attempt <= 3; attempt++) {
-            const snapshot = await dbRef.once('value');
-            const raw = snapshot.val();
-            const cloud = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
-            const localMatches = syncDeepEqual(normalizeFirebaseValue(appState), normalizeFirebaseValue(cloud));
-            const baselineMatches = syncDeepEqual(normalizeFirebaseValue(lastSyncedState), normalizeFirebaseValue(cloud));
-            if (localMatches && baselineMatches && !isFirebaseStateDirty()) {
-                if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid) throw new Error('Sesi akun berubah. Backup dibatalkan.');
-                return JSON.parse(JSON.stringify(cloud));
-            }
-            if (attempt < 3) {
-                await new Promise(resolve => setTimeout(resolve, 300));
-                const retryFlush = await flushFirebaseSyncUntilClean(3);
-                if (!retryFlush || isFirebaseStateDirty()) break;
-            }
+        const snapshot = await dbRef.once('value');
+        const raw = snapshot.val();
+        const cloud = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+        if (!syncDeepEqual(normalizeFirebaseValue(appState), normalizeFirebaseValue(cloud)) ||
+            !syncDeepEqual(normalizeFirebaseValue(lastSyncedState), normalizeFirebaseValue(cloud))) {
+            throw new Error('Data berubah saat pemeriksaan terakhir. Tunggu sinkronisasi stabil, lalu ulangi backup Drive.');
         }
-        throw new Error('Data cloud berubah saat pemeriksaan terakhir atau ada perangkat lain yang masih menyinkronkan. Backup belum dibuat. Tunggu hingga status stabil, lalu coba lagi.');
+        if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid) throw new Error('Sesi akun berubah. Backup dibatalkan.');
+        return JSON.parse(JSON.stringify(cloud));
     }
 
     async function uploadBackupToDrive() {
@@ -11171,7 +11127,7 @@
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.9.2. Snapshot cloud Firebase yang telah diverifikasi sebelum upload.'
+                description: 'Backup Keluarga Pohon Teduh 6.9.1. Snapshot cloud Firebase yang telah diverifikasi sebelum upload.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
