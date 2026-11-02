@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.9.3: Safe Google Drive Backup Gate; Firebase sync core retained from 6.9.1 -->
+    <!-- Keluarga Pohon Teduh 6.9.4: Point-in-Time Firebase Cloud Snapshot Backup; Firebase sync core retained from 6.9.1 -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8277,7 +8277,7 @@
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.9.3',
+                    appVersion: '6.9.4',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -11090,65 +11090,58 @@
     // or start Firebase transactions itself. The existing 6.9.1 scheduler remains
     // the sole owner of writes; this gate only waits for it to become idle, then reads
     // a fresh server snapshot and verifies local + baseline + cloud equality.
-    async function waitForNormalFirebaseSyncToSettle(uid, sessionId, timeoutMs = 20000) {
-        const startedAt = Date.now();
-        while (Date.now() - startedAt < timeoutMs) {
-            if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid || sessionId !== cloudSyncSession) {
-                throw new Error('Sesi atau akun aplikasi berubah saat menunggu sinkronisasi. Backup dibatalkan.');
-            }
-            if (!window.hasFetchedCloud || lastSyncedState === null) {
-                throw new Error('Status cloud belum siap. Tunggu sampai sinkronisasi awal selesai.');
-            }
-
-            const dirty = isFirebaseStateDirty();
-            const schedulerBusy = !!cloudSyncTimer || !!cloudSyncPromise || !!cloudSyncInProgress;
-            if (!dirty && !schedulerBusy) return true;
-            if (dirty && !schedulerBusy) {
-                throw new Error('Masih ada perubahan lokal yang belum dikonfirmasi Firebase, dan tidak ada proses sinkronisasi normal yang sedang berjalan. Klik Simpan Data satu kali, tunggu indikator stabil, lalu coba backup lagi. ' + (lastSyncDiagnostic || ''));
-            }
-
-            await new Promise(resolve => setTimeout(resolve, 200));
-        }
-
-        const details = lastSyncDiagnostic && lastSyncDiagnostic !== 'Belum ada percobaan sinkronisasi.'
-            ? ' Detail sinkronisasi terakhir: ' + lastSyncDiagnostic
-            : '';
-        throw new Error('Sinkronisasi Firebase belum mencapai kondisi stabil dalam 20 detik. Tidak ada backup yang diunggah.' + details + ' Periksa status Simpan Data, tunggu antrean normal selesai, lalu coba lagi.');
+    function getTopLevelSyncDifferenceKeys(leftValue, rightValue) {
+        const left = normalizeFirebaseValue(cloneSyncValue(leftValue || {}));
+        const right = normalizeFirebaseValue(cloneSyncValue(rightValue || {}));
+        const keys = new Set([...Object.keys(left), ...Object.keys(right)]);
+        return [...keys].filter(key => {
+            const a = Object.prototype.hasOwnProperty.call(left, key) ? left[key] : SYNC_MISSING;
+            const b = Object.prototype.hasOwnProperty.call(right, key) ? right[key] : SYNC_MISSING;
+            return !syncDeepEqual(a, b);
+        }).sort();
     }
 
     async function getVerifiedCloudSnapshot() {
         if (!isAppAuthorized || !currentAuthenticatedUser) throw new Error('Login aplikasi tidak aktif.');
         if (!window.hasFetchedCloud || lastSyncedState === null) throw new Error('Sinkronisasi awal belum selesai. Tunggu status cloud siap.');
+
         const uid = currentAuthenticatedUser.uid;
         const sessionId = cloudSyncSession;
+        setStatus('Membaca snapshot langsung dari Firebase. Backup akan berisi data yang sudah tercatat di cloud pada satu titik waktu...', 'info');
 
-        setStatus('Menunggu sinkronisasi normal selesai. Tidak ada transaksi tambahan yang dipaksakan oleh proses backup...', 'info');
-        await waitForNormalFirebaseSyncToSettle(uid, sessionId, 20000);
-
-        if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid || sessionId !== cloudSyncSession) {
-            throw new Error('Akun aplikasi berubah saat proses backup.');
+        // A real RTDB connection is required. Do not silently create a backup from a
+        // disconnected local cache.
+        const connectionSnapshot = await db.ref('.info/connected').once('value');
+        if (connectionSnapshot.val() !== true) {
+            throw new Error('Perangkat belum terhubung ke Firebase. Hubungkan internet dan tunggu status sinkronisasi aktif sebelum membuat backup cloud.');
         }
 
-        // A fresh server read is the authority for the backup snapshot.
+        // This read is the backup's point-in-time source of truth. It is deliberately
+        // independent of the normal sync queue: a queued follow-up render/update must
+        // not prevent a truthful snapshot of data already stored in Firebase.
         const snapshot = await dbRef.once('value');
         const raw = snapshot.val();
-        const cloud = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
-        const localAtVerification = normalizeFirebaseValue(cloneSyncValue(appState));
-        const baselineAtVerification = normalizeFirebaseValue(cloneSyncValue(lastSyncedState));
-        const cloudAtVerification = normalizeFirebaseValue(cloneSyncValue(cloud));
+        if (!snapshot.exists() || !raw || typeof raw !== 'object' || Array.isArray(raw)) {
+            throw new Error('Snapshot Firebase kosong atau tidak berbentuk objek. Backup dibatalkan untuk menghindari file backup kosong.');
+        }
 
         if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid || sessionId !== cloudSyncSession) {
-            throw new Error('Sesi akun berubah selama pembacaan cloud. Backup dibatalkan.');
-        }
-        if (cloudSyncTimer || cloudSyncPromise || cloudSyncInProgress || isFirebaseStateDirty()) {
-            throw new Error('Ada perubahan atau proses sinkronisasi baru saat pemeriksaan cloud berlangsung. Tidak ada backup yang diunggah. Tunggu sebentar, lalu coba lagi.');
-        }
-        if (!syncDeepEqual(localAtVerification, cloudAtVerification) ||
-            !syncDeepEqual(baselineAtVerification, cloudAtVerification)) {
-            throw new Error('Data lokal, baseline sinkronisasi, dan Firebase belum identik. Tidak ada backup yang diunggah. Klik Simpan Data jika masih ada perubahan, tunggu status stabil, lalu coba lagi.');
+            throw new Error('Sesi atau akun aplikasi berubah saat membaca snapshot cloud. Backup dibatalkan.');
         }
 
-        return JSON.parse(JSON.stringify(cloud));
+        const cloud = normalizeFirebaseValue(cloneSyncValue(raw));
+        const local = normalizeFirebaseValue(cloneSyncValue(appState));
+        const localDifferenceKeys = getTopLevelSyncDifferenceKeys(local, cloud);
+        const baselineDifferenceKeys = getTopLevelSyncDifferenceKeys(lastSyncedState, cloud);
+        const readAt = new Date().toISOString();
+
+        return {
+            state: JSON.parse(JSON.stringify(cloud)),
+            readAt,
+            localDifferenceKeys,
+            cloudAdvancedSinceBaseline: baselineDifferenceKeys.length > 0,
+            baselineDifferenceCount: baselineDifferenceKeys.length
+        };
     }
 
     async function uploadBackupToDrive() {
@@ -11160,9 +11153,30 @@
         const uid = currentAuthenticatedUser.uid;
         try {
             const token = await getAccessToken();
-            const cloudSnapshot = await getVerifiedCloudSnapshot();
-            const syncStatus = 'Sama dengan cloud terakhir';
-            const backupPackage = makeKptBackupPackage(cloudSnapshot, 'manual-google-drive-backup', syncStatus);
+            const cloudSnapshotInfo = await getVerifiedCloudSnapshot();
+
+            if (cloudSnapshotInfo.localDifferenceKeys.length > 0) {
+                const changedNames = cloudSnapshotInfo.localDifferenceKeys.slice(0, 8).join(', ');
+                const moreCount = Math.max(0, cloudSnapshotInfo.localDifferenceKeys.length - 8);
+                const details = changedNames + (moreCount ? `, dan ${moreCount} bagian lainnya` : '');
+                const proceed = window.confirm(
+                    'Ada ' + cloudSnapshotInfo.localDifferenceKeys.length + ' bagian data pada perangkat ini yang berbeda dari data Firebase saat ini.\n\n' +
+                    'Backup yang akan diunggah berisi SNAPSHOT FIREBASE saat ini, bukan perubahan lokal yang belum tercermin di cloud.\n\n' +
+                    'Bagian yang berbeda: ' + details + '\n\n' +
+                    'Jika ingin memasukkan perubahan lokal tersebut, batalkan dulu, gunakan Simpan Data, lalu periksa kembali.\n\n' +
+                    'Tetap unggah snapshot cloud yang sudah tersimpan di Firebase?'
+                );
+                if (!proceed) throw new Error('Backup dibatalkan. Tidak ada file yang diunggah; data aplikasi tidak diubah.');
+            }
+
+            const syncStatus = cloudSnapshotInfo.localDifferenceKeys.length === 0
+                ? 'Snapshot langsung dari Firebase; cocok dengan data lokal saat dibaca'
+                : 'Snapshot langsung dari Firebase; ada perubahan lokal yang tidak disertakan';
+            const backupPackage = makeKptBackupPackage(cloudSnapshotInfo.state, 'manual-google-drive-backup', syncStatus);
+            backupPackage._kptBackup.snapshotSource = 'Firebase Realtime Database server read';
+            backupPackage._kptBackup.snapshotReadAt = cloudSnapshotInfo.readAt;
+            backupPackage._kptBackup.localDifferenceCount = cloudSnapshotInfo.localDifferenceKeys.length;
+            backupPackage._kptBackup.cloudAdvancedSinceLocalBaseline = cloudSnapshotInfo.cloudAdvancedSinceBaseline;
             const json = JSON.stringify(backupPackage, null, 2);
             const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
             if (blob.size <= 0 || blob.size > MAX_BACKUP_BYTES) throw new Error('Ukuran backup melebihi batas 30 MB. Gunakan backup lokal atau hubungi pengembang untuk evaluasi.');
@@ -11173,7 +11187,7 @@
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.9.3. Snapshot cloud Firebase yang telah diverifikasi sebelum upload.'
+                description: 'Backup Keluarga Pohon Teduh 6.9.4. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
@@ -11190,7 +11204,10 @@
             if (!result.id) throw new Error('Google Drive tidak mengembalikan ID file. Backup belum dapat dikonfirmasi.');
             const localKey = 'kptDriveLastUpload_v1_' + uid;
             try { localStorage.setItem(localKey, JSON.stringify({ id: result.id, name: result.name || filename, createdTime: result.createdTime || new Date().toISOString() })); } catch (_) {}
-            setStatus('Backup berhasil diunggah ke folder bersama: ' + (result.name || filename) + '. Snapshot berasal dari Firebase dan telah cocok dengan data cloud saat diambil.', 'success');
+            const snapshotNote = cloudSnapshotInfo.localDifferenceKeys.length > 0
+                ? ' Catatan: ' + cloudSnapshotInfo.localDifferenceKeys.length + ' bagian lokal yang berbeda tidak disertakan; file ini berisi snapshot Firebase yang sudah tersimpan.'
+                : ' Snapshot Firebase cocok dengan data lokal saat dibaca.';
+            setStatus('Backup berhasil diunggah ke folder bersama: ' + (result.name || filename) + '.' + snapshotNote, 'success');
             if (result.webViewLink) {
                 const status = document.getElementById('kpt-drive-status');
                 if (status) {
