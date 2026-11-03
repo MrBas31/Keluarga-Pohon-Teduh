@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.11: Editable Stimulation Library, Milestone History & Journal CRUD; Firebase sync and Drive backup core retained from 6.9.4 -->
+    <!-- Keluarga Pohon Teduh 6.12: Balanced & Elegant Prenatal Dashboard Upgrade; existing data IDs, Firebase sync and Drive backup core preserved -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,6 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="application-version" content="6.12">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -307,6 +308,118 @@
             #sec-budget th, #sec-budget td,
             #sec-referensi th, #sec-referensi td { padding: .34rem .28rem !important; }
         }
+    
+        /* =====================================================
+           KPT 6.12 — PRENATAL DASHBOARD: BALANCED & ELEGANT
+           Scoped styling only; no shared module or data styles changed.
+           ===================================================== */
+        #sec-dashboard .kpt-dashboard-eyebrow { letter-spacing: .18em; }
+        #sec-dashboard .kpt-dashboard-welcome { box-shadow: 0 4px 16px rgba(15, 23, 42, .045); }
+        #sec-dashboard .kpt-dash-hero {
+            background: linear-gradient(132deg, #0284c7 0%, #2563eb 48%, #312e81 100%);
+            box-shadow: 0 18px 42px rgba(37, 99, 235, .16);
+            isolation: isolate;
+        }
+        #sec-dashboard .kpt-dash-hero-orb {
+            position: absolute; border-radius: 9999px; pointer-events: none; z-index: -1;
+            background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.11);
+        }
+        #sec-dashboard .kpt-dash-hero-orb-one { width: 300px; height: 300px; right: -105px; top: -145px; }
+        #sec-dashboard .kpt-dash-hero-orb-two { width: 220px; height: 220px; right: 65px; bottom: -165px; background: rgba(125,211,252,.08); }
+        #sec-dashboard .kpt-dash-metric {
+            background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.19);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.07); backdrop-filter: blur(10px);
+        }
+        #sec-dashboard .kpt-dash-card {
+            background: #fff; border: 1px solid #e8eef5;
+            box-shadow: 0 5px 18px rgba(15,23,42,.045);
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+            min-width: 0;
+        }
+        #sec-dashboard .kpt-dash-card:hover {
+            transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15,23,42,.075); border-color: #d6e5f2;
+        }
+        #sec-dashboard .kpt-dash-tag {
+            display: inline-flex; align-items: center; border-radius: 9999px; padding: .35rem .65rem;
+            font-size: 9px; line-height: 1.1; font-weight: 800; letter-spacing: .09em; text-transform: uppercase;
+        }
+        #sec-dashboard .kpt-dash-tag-sky { color: #0369a1; background: #e0f2fe; }
+        #sec-dashboard .kpt-dash-tag-rose { color: #be123c; background: #ffe4e6; }
+        #sec-dashboard .kpt-dash-tag-emerald { color: #047857; background: #d1fae5; }
+        #sec-dashboard .kpt-dash-tag-amber { color: #b45309; background: #fef3c7; }
+        #sec-dashboard .kpt-dash-icon {
+            display: inline-flex; align-items: center; justify-content: center; width: 2.35rem; height: 2.35rem;
+            border-radius: .9rem; font-size: .95rem; flex: 0 0 auto;
+        }
+        #sec-dashboard .kpt-dash-icon-sky { color: #0284c7; background: #e0f2fe; }
+        #sec-dashboard .kpt-dash-icon-rose { color: #e11d48; background: #ffe4e6; }
+        #sec-dashboard .kpt-dash-icon-emerald { color: #059669; background: #d1fae5; }
+        #sec-dashboard .kpt-dash-icon-amber { color: #d97706; background: #fef3c7; }
+        #sec-dashboard .kpt-dash-progress-track { height: .48rem; width: 100%; overflow: hidden; border-radius: 9999px; background: #edf2f7; }
+        #sec-dashboard .kpt-dash-progress-fill { height: 100%; border-radius: inherit; transition: width .45s ease; }
+        #sec-dashboard .kpt-dash-link {
+            display: inline-flex; width: 100%; align-items: center; justify-content: space-between; gap: .5rem;
+            font-size: 11px; line-height: 1.35; font-weight: 800; text-align: left; transition: gap .18s ease;
+        }
+        #sec-dashboard .kpt-dash-link:hover { gap: .75rem; }
+        #sec-dashboard .kpt-dash-quick-panel {
+            background: linear-gradient(135deg, #f8fbff 0%, #f8fafc 54%, #f0fdfa 100%);
+            border: 1px solid #e6edf5; box-shadow: 0 5px 18px rgba(15,23,42,.035);
+        }
+        #sec-dashboard .kpt-dash-shortcut {
+            display: flex; align-items: center; gap: .75rem; width: 100%; min-width: 0; padding: .85rem;
+            background: rgba(255,255,255,.88); border: 1px solid #e7edf4; border-radius: 1rem;
+            transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+        }
+        #sec-dashboard .kpt-dash-shortcut:hover { transform: translateY(-1px); border-color: #bfdbfe; box-shadow: 0 7px 18px rgba(15,23,42,.06); }
+        #sec-dashboard .kpt-dash-shortcut:focus-visible { outline: 3px solid rgba(14,165,233,.35); outline-offset: 2px; }
+        #sec-dashboard .kpt-dash-shortcut-icon {
+            display: inline-flex; align-items: center; justify-content: center; width: 2.55rem; height: 2.55rem;
+            border-radius: .9rem; flex: 0 0 auto; font-size: 1rem;
+        }
+        #sec-dashboard .kpt-dash-shortcut strong { display: block; color: #1e293b; font-size: 11px; line-height: 1.35; }
+        #sec-dashboard .kpt-dash-shortcut small { display: block; color: #64748b; font-size: 10px; line-height: 1.4; margin-top: .2rem; }
+        #sec-dashboard button:focus-visible { outline: 3px solid rgba(14,165,233,.35); outline-offset: 2px; }
+        body.dark-mode #sec-dashboard .kpt-dashboard-welcome,
+        body.dark-mode #sec-dashboard .kpt-dash-card {
+            background: #1e293b !important; border-color: #334155 !important; color: #f8fafc;
+        }
+        body.dark-mode #sec-dashboard .kpt-dash-card:hover { border-color: #475569 !important; }
+        body.dark-mode #sec-dashboard .kpt-dash-quick-panel {
+            background: linear-gradient(135deg, #172b42 0%, #1e293b 58%, #12332f 100%) !important;
+            border-color: #334155 !important;
+        }
+        body.dark-mode #sec-dashboard .kpt-dash-shortcut { background: #263449 !important; border-color: #3b4a60 !important; }
+        body.dark-mode #sec-dashboard .kpt-dash-shortcut:hover { border-color: #64748b !important; }
+        body.dark-mode #sec-dashboard .kpt-dash-shortcut strong { color: #f1f5f9 !important; }
+        body.dark-mode #sec-dashboard .kpt-dash-shortcut small { color: #a8b5c7 !important; }
+        body.dark-mode #sec-dashboard .kpt-dash-progress-track { background: #334155 !important; }
+        body.dark-mode #sec-dashboard .kpt-dash-tag-sky { color: #bae6fd; background: #0c4a6e; }
+        body.dark-mode #sec-dashboard .kpt-dash-tag-rose { color: #fecdd3; background: #881337; }
+        body.dark-mode #sec-dashboard .kpt-dash-tag-emerald { color: #a7f3d0; background: #065f46; }
+        body.dark-mode #sec-dashboard .kpt-dash-tag-amber { color: #fde68a; background: #78350f; }
+        body.dark-mode #sec-dashboard .kpt-dash-icon-sky { color: #bae6fd; background: #0c4a6e; }
+        body.dark-mode #sec-dashboard .kpt-dash-icon-rose { color: #fecdd3; background: #881337; }
+        body.dark-mode #sec-dashboard .kpt-dash-icon-emerald { color: #a7f3d0; background: #065f46; }
+        body.dark-mode #sec-dashboard .kpt-dash-icon-amber { color: #fde68a; background: #78350f; }
+        body.dark-mode #sec-dashboard .kpt-dash-shortcut-icon.bg-rose-50 { color: #fecdd3 !important; background: #881337 !important; }
+        body.dark-mode #sec-dashboard .kpt-dash-shortcut-icon.bg-emerald-50 { color: #a7f3d0 !important; background: #065f46 !important; }
+        body.dark-mode #sec-dashboard .kpt-dash-shortcut-icon.bg-violet-50 { color: #ddd6fe !important; background: #4c1d95 !important; }
+        body.dark-mode #sec-dashboard .text-emerald-700 { color: #6ee7b7 !important; }
+        body.dark-mode #sec-dashboard .text-rose-700 { color: #fda4af !important; }
+        body.dark-mode #sec-dashboard .text-amber-700 { color: #fcd34d !important; }
+        @media (max-width: 639px) {
+            #sec-dashboard .kpt-dash-hero { min-height: 0; padding: 1.25rem; }
+            #sec-dashboard .kpt-dash-hero-orb-one { right: -190px; }
+            #sec-dashboard .kpt-dash-card { padding: 1.1rem; }
+            #sec-dashboard .kpt-dash-shortcut { padding: .75rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #sec-dashboard .kpt-dash-card, #sec-dashboard .kpt-dash-shortcut,
+            #sec-dashboard .kpt-dash-progress-fill { transition: none !important; }
+            #sec-dashboard .kpt-dash-card:hover, #sec-dashboard .kpt-dash-shortcut:hover { transform: none; }
+        }
+
     </style>
 
     <style id="theme-and-header-653-fixes">
@@ -1591,157 +1704,204 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         <div id="container-prenatal-phase" class="space-y-6">
 
             <!-- TAB 1: DASHBOARD -->
-            <section id="sec-dashboard" class="space-y-6">
-                <!-- ARTISTIC HERO BANNER -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-                    <!-- HPL & COUNTER CARD -->
-                    <div class="lg:col-span-7 bg-gradient-to-r from-sky-600 via-indigo-600 to-slate-800 rounded-3xl p-6 md:p-8 text-white shadow-xl shadow-sky-100 relative overflow-hidden flex flex-col justify-between h-full min-h-[300px]">
-                        <div class="absolute -right-12 -bottom-12 opacity-10 text-9xl">👶</div>
-                        <div class="space-y-3 z-10">
-                            <div class="flex justify-between items-center gap-2">
-                                <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-2xs font-semibold uppercase tracking-wider">
-                                    🤰 Monitoring Kehamilan Fikri & Ollyl
-                                </span>
+            <section id="sec-dashboard" class="kpt-dashboard space-y-7">
+                <!-- DASHBOARD INTRO: FAMILY JOURNEY -->
+                <div class="kpt-dashboard-intro flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                    <div class="space-y-1.5">
+                        <div class="kpt-dashboard-eyebrow inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-sky-700">
+                            <span class="inline-block w-7 h-px bg-sky-500"></span>
+                            Family Journey
+                        </div>
+                        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-800">Ruang Persiapan Keluarga</h1>
+                        <p class="text-sm text-slate-500 max-w-2xl">Semua hal penting dalam perjalanan menyambut si kecil, tersaji dalam satu tempat.</p>
+                    </div>
+                    <div class="kpt-dashboard-welcome inline-flex items-center gap-2 self-start sm:self-auto rounded-full px-3.5 py-2 text-xs font-semibold text-slate-600 border border-slate-200 bg-white">
+                        <i class="fa-solid fa-heart text-rose-400"></i>
+                        <span>Disiapkan dengan cinta</span>
+                    </div>
+                </div>
 
-                                <div class="relative">
-                                    <button onclick="toggleHplMenu(event)" class="w-8 h-8 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-white transition shadow-sm" title="Opsi Kehamilan">
+                <!-- HERO + PHOTO GALLERY: DATA BAWAAN DIPERTAHANKAN -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-stretch">
+                    <div class="kpt-dash-hero lg:col-span-7 rounded-[1.75rem] p-6 md:p-8 text-white relative overflow-hidden flex flex-col justify-between min-h-[330px]">
+                        <div class="kpt-dash-hero-orb kpt-dash-hero-orb-one" aria-hidden="true"></div>
+                        <div class="kpt-dash-hero-orb kpt-dash-hero-orb-two" aria-hidden="true"></div>
+                        <div class="relative z-10 space-y-5">
+                            <div class="flex justify-between items-start gap-3">
+                                <div class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-white/15 border border-white/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-[0.13em] text-sky-50">
+                                    <span aria-hidden="true">🤰</span>
+                                    Perjalanan Kehamilan
+                                </div>
+                                <div class="relative shrink-0">
+                                    <button type="button" onclick="toggleHplMenu(event)" class="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 border border-white/20 backdrop-blur-md flex items-center justify-center text-white transition" title="Opsi Kehamilan" aria-label="Opsi kehamilan">
                                         <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
                                     </button>
-
-                                    <div id="hpl-menu-dropdown" class="hidden absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-30 text-xs text-slate-700">
-                                        <button onclick="openConfirmBabyBorn(); toggleHplMenu(event);" class="w-full text-left px-4 py-2.5 hover:bg-emerald-50 hover:text-emerald-700 font-bold flex items-center gap-2 transition">
+                                    <div id="hpl-menu-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-30 text-xs text-slate-700">
+                                        <button type="button" onclick="openConfirmBabyBorn(); toggleHplMenu(event);" class="w-full text-left px-4 py-3 hover:bg-emerald-50 hover:text-emerald-700 font-bold flex items-center gap-2 transition">
                                             <span>👶</span> Si Kecil Sudah Lahir!
                                         </button>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-3">
-                                <h2 class="text-2xl md:text-3xl font-extrabold font-brand tracking-tight" id="hpl-display-text">
-                                    HPL: --
-                                </h2>
-                                <button onclick="editHPL()" class="p-1.5 bg-white/20 hover:bg-white/30 rounded-lg text-xs text-white transition" title="Edit Tanggal HPL">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
+                            <div class="space-y-2">
+                                <p class="text-xs md:text-sm text-sky-100 font-medium">Satu perjalanan, begitu banyak momen berharga.</p>
+                                <div class="flex flex-wrap items-center gap-3">
+                                    <h2 class="text-2xl md:text-3xl lg:text-[2.05rem] font-extrabold font-brand tracking-tight leading-tight" id="hpl-display-text">HPL: --</h2>
+                                    <button type="button" onclick="editHPL()" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-xs font-semibold text-white transition" title="Edit tanggal HPL">
+                                        <i class="fa-solid fa-pen-to-square"></i><span>Ubah HPL</span>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-sky-100/90">Pantau waktu, usia kehamilan, dan persiapan menyambut buah hati.</p>
                             </div>
 
-                            <p class="text-sky-100 text-xs md:text-sm">Pantau perjalanan kehamilan dan persiapan menyambut buah hati.</p>
-                            
-                            <div class="pt-4 grid grid-cols-3 gap-3">
-                                <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
-                                    <div class="text-2xl font-bold" id="days-remaining">--</div>
-                                    <div class="text-2xs text-sky-100">Hari ke HPL</div>
+                            <div class="grid grid-cols-3 gap-2.5 md:gap-3 pt-1">
+                                <div class="kpt-dash-metric rounded-2xl p-3 md:p-4 text-center">
+                                    <div class="text-2xl md:text-3xl font-extrabold tracking-tight tabular-nums" id="days-remaining">--</div>
+                                    <div class="text-[10px] md:text-xs text-sky-100 mt-1 leading-tight">Hari menuju HPL</div>
                                 </div>
-                                <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
-                                    <div class="text-2xl font-bold" id="gestational-age">--</div>
-                                    <div class="text-2xs text-sky-100">Usia Kandungan</div>
+                                <div class="kpt-dash-metric rounded-2xl p-3 md:p-4 text-center">
+                                    <div class="text-xl md:text-2xl font-extrabold tracking-tight tabular-nums" id="gestational-age">--</div>
+                                    <div class="text-[10px] md:text-xs text-sky-100 mt-1 leading-tight">Usia kandungan</div>
                                 </div>
-                                <div class="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/15 text-center">
-                                    <div class="text-2xl font-bold" id="current-trimester">--</div>
-                                    <div class="text-2xs text-sky-100">Periode Saat Ini</div>
+                                <div class="kpt-dash-metric rounded-2xl p-3 md:p-4 text-center">
+                                    <div class="text-base md:text-lg font-extrabold tracking-tight leading-tight" id="current-trimester">--</div>
+                                    <div class="text-[10px] md:text-xs text-sky-100 mt-1 leading-tight">Periode saat ini</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="pt-6 flex items-center gap-3 z-10">
-                            <div class="text-xs text-sky-100 italic font-brand">
-                                "Menanti setiap detak dan momen berharga tumbuh bersama."
+                        <div class="relative z-10 flex items-center gap-3 pt-5 mt-4 border-t border-white/15">
+                            <div class="w-9 h-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-seedling text-sky-100"></i>
                             </div>
+                            <p class="text-xs md:text-sm text-sky-100 italic font-brand leading-relaxed">“Menanti setiap detak dan momen berharga tumbuh bersama.”</p>
                         </div>
                     </div>
 
-                    <!-- UNIFIED PHOTO GALLERY SLIDER CARD -->
-                    <div class="lg:col-span-5 h-full" id="dashboard-gallery-container">
+                    <!-- Galeri tetap memakai fungsi, data, dan pengelolaan lama -->
+                    <div class="lg:col-span-5 min-h-[300px] lg:min-h-full" id="dashboard-gallery-container">
                         <!-- Rendered dynamically via JavaScript Slider -->
                     </div>
                 </div>
 
-                <!-- RINGKASAN WIDGETS DARI SETIAP MENU -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- WIDGET 1: RINGKASAN BELANJA & BUDGET -->
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between">
+                <!-- RINGKASAN PERSIAPAN: SEMUA ID DATA LAMA DIPERTAHANKAN -->
+                <div class="space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1.5">
                         <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-2xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md">Budgeting</span>
-                                <i class="fa-solid fa-cart-shopping text-sky-600 text-sm"></i>
-                            </div>
-                            <h4 class="font-bold text-slate-800 text-sm">Progress Belanja</h4>
-                            <div class="mt-2 text-xl font-extrabold text-slate-800" id="dash-budget-spend">Rp 0</div>
-                            <p class="text-2xs text-slate-400 mt-0.5">Total Pengeluaran Realisasi</p>
+                            <div class="kpt-dashboard-eyebrow text-[10px] font-extrabold uppercase tracking-[0.18em] text-sky-700">Your Preparation</div>
+                            <h2 class="text-lg md:text-xl font-extrabold text-slate-800 tracking-tight">Ringkasan Persiapan</h2>
                         </div>
-
-                        <div class="space-y-1.5 pt-2 border-t border-slate-100">
-                            <div class="flex justify-between text-2xs font-semibold text-slate-600">
-                                <span>Item Terbeli:</span>
-                                <span id="dash-budget-count">0/0 Item</span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                <div id="dash-budget-progress-bar" class="bg-sky-600 h-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                        </div>
+                        <p class="text-xs text-slate-500">Pantau hal-hal penting tanpa membuka setiap menu.</p>
                     </div>
 
-                    <!-- WIDGET 2: RS & OBGYN PRIORITAS -->
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-2xs font-bold uppercase tracking-wider text-pink-700 bg-pink-50 px-2 py-0.5 rounded-md">RS & Obgyn</span>
-                                <i class="fa-solid fa-hospital text-pink-600 text-sm"></i>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
+                        <!-- WIDGET 1: BUDGET & BELANJA -->
+                        <article class="kpt-dash-card rounded-3xl p-5 flex flex-col justify-between gap-5">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="kpt-dash-tag kpt-dash-tag-sky">Budgeting</span>
+                                    <span class="kpt-dash-icon kpt-dash-icon-sky"><i class="fa-solid fa-cart-shopping"></i></span>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-800">Progress Belanja</h3>
+                                    <div class="mt-2 text-2xl font-extrabold tracking-tight text-slate-800 tabular-nums" id="dash-budget-spend">Rp 0</div>
+                                    <p class="text-[11px] text-slate-500 mt-1">Total pengeluaran realisasi</p>
+                                </div>
                             </div>
-                            <h4 class="font-bold text-slate-800 text-sm flex items-center gap-1">
-                                <span>RS Prioritas Utama</span> <span class="text-amber-500">⭐</span>
-                            </h4>
-                            <div class="mt-1.5 text-sm font-bold text-slate-800 leading-tight" id="dash-rs-name">--</div>
-                            <p class="text-2xs text-sky-800 font-semibold mt-1" id="dash-rs-package">Rencana: --</p>
-                            <p class="text-2xs text-slate-500 mt-0.5" id="dash-rs-doctor">Dokter: --</p>
-                        </div>
+                            <div class="space-y-2 pt-3 border-t border-slate-100">
+                                <div class="flex justify-between items-center gap-2 text-[11px] font-semibold text-slate-600">
+                                    <span>Item terbeli</span><span id="dash-budget-count" class="text-slate-800 tabular-nums">0/0 Item</span>
+                                </div>
+                                <div class="kpt-dash-progress-track"><div id="dash-budget-progress-bar" class="kpt-dash-progress-fill bg-sky-500" style="width:0%"></div></div>
+                                <button type="button" onclick="switchTab('budget')" class="kpt-dash-link text-sky-700">Buka Budget & Belanja <i class="fa-solid fa-arrow-right"></i></button>
+                            </div>
+                        </article>
 
-                        <div class="pt-2 border-t border-slate-100">
-                            <a href="#sec-hospital" onclick="switchTab('hospital')" class="text-2xs text-sky-600 font-semibold hover:underline flex items-center justify-between">
-                                <span id="dash-rs-action-text">Kelola Prioritas RS</span>
-                                <i class="fa-solid fa-arrow-right text-3xs"></i>
-                            </a>
-                        </div>
+                        <!-- WIDGET 2: RS & OBGYN PRIORITAS -->
+                        <article class="kpt-dash-card rounded-3xl p-5 flex flex-col justify-between gap-5">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="kpt-dash-tag kpt-dash-tag-rose">RS & Obgyn</span>
+                                    <span class="kpt-dash-icon kpt-dash-icon-rose"><i class="fa-solid fa-hospital"></i></span>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">RS Prioritas Utama <i class="fa-solid fa-star text-amber-400 text-xs"></i></h3>
+                                    <div class="mt-2 text-sm font-extrabold text-slate-800 leading-snug" id="dash-rs-name">--</div>
+                                    <p class="text-[11px] text-sky-700 font-semibold mt-2 leading-relaxed" id="dash-rs-package">Rencana: --</p>
+                                    <p class="text-[11px] text-slate-500 mt-1" id="dash-rs-doctor">Dokter: --</p>
+                                </div>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100">
+                                <button type="button" onclick="switchTab('hospital')" class="kpt-dash-link text-rose-700"><span id="dash-rs-action-text">Kelola Prioritas RS & Obgyn</span><i class="fa-solid fa-arrow-right"></i></button>
+                            </div>
+                        </article>
+
+                        <!-- WIDGET 3: HOSPITAL BAG / SUAMI SIAGA -->
+                        <article class="kpt-dash-card rounded-3xl p-5 flex flex-col justify-between gap-5">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="kpt-dash-tag kpt-dash-tag-emerald">Suami SIAGA</span>
+                                    <span class="kpt-dash-icon kpt-dash-icon-emerald"><i class="fa-solid fa-suitcase-medical"></i></span>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-800">Tas Melahirkan</h3>
+                                    <div class="mt-2 text-2xl font-extrabold tracking-tight text-emerald-700 tabular-nums" id="dash-bag-status">0% Siap</div>
+                                    <p class="text-[11px] text-slate-500 mt-1">Kelengkapan hospital bag</p>
+                                </div>
+                            </div>
+                            <div class="space-y-2 pt-3 border-t border-slate-100">
+                                <div class="kpt-dash-progress-track"><div id="dash-bag-progress-bar" class="kpt-dash-progress-fill bg-emerald-500" style="width:0%"></div></div>
+                                <button type="button" onclick="switchTab('siaga')" class="kpt-dash-link text-emerald-700">Buka Suami SIAGA <i class="fa-solid fa-arrow-right"></i></button>
+                            </div>
+                        </article>
+
+                        <!-- WIDGET 4: NAMA BAYI FAVORIT -->
+                        <article class="kpt-dash-card rounded-3xl p-5 flex flex-col justify-between gap-5">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="kpt-dash-tag kpt-dash-tag-amber">Nama Bayi</span>
+                                    <span class="kpt-dash-icon kpt-dash-icon-amber"><i class="fa-solid fa-star"></i></span>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-800">Kandidat Terfavorit</h3>
+                                    <div class="mt-3 space-y-1.5 text-xs text-slate-700 font-semibold" id="dash-fav-names">
+                                        <!-- Populated via JS -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100">
+                                <button type="button" onclick="switchTab('names')" class="kpt-dash-link text-amber-700">Kelola Bank Nama <i class="fa-solid fa-arrow-right"></i></button>
+                            </div>
+                        </article>
                     </div>
+                </div>
 
-                    <!-- WIDGET 3: TAS MELAHIRKAN & SUAMI SIAGA -->
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between">
+                <!-- QUICK ACCESS: NAVIGASI KE MENU PENTING LAIN -->
+                <div class="kpt-dash-quick-panel rounded-3xl p-5 md:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1.5 mb-4">
                         <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-2xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">Suami SIAGA</span>
-                                <i class="fa-solid fa-suitcase text-emerald-600 text-sm"></i>
-                            </div>
-                            <h4 class="font-bold text-slate-800 text-sm">Tas Melahirkan (RS)</h4>
-                            <div class="mt-2 text-xl font-extrabold text-emerald-700" id="dash-bag-status">0% Siap</div>
-                            <p class="text-2xs text-slate-400 mt-0.5">Kelengkapan Hospital Bag</p>
+                            <div class="kpt-dashboard-eyebrow text-[10px] font-extrabold uppercase tracking-[0.18em] text-sky-700">Quick Access</div>
+                            <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">Lanjutkan dari Sini</h2>
                         </div>
-
-                        <div class="space-y-1.5 pt-2 border-t border-slate-100">
-                            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                <div id="dash-bag-progress-bar" class="bg-emerald-600 h-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                        </div>
+                        <p class="text-xs text-slate-500">Pilih bagian yang ingin kamu kelola.</p>
                     </div>
-
-                    <!-- WIDGET 4: NAMA BAYI FAVORIT -->
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-2xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">Nama Bayi</span>
-                                <i class="fa-solid fa-star text-amber-500 text-sm"></i>
-                            </div>
-                            <h4 class="font-bold text-slate-800 text-sm">Kandidat Terfavorit ⭐</h4>
-                            <div class="mt-2 text-xs space-y-1 text-slate-700 font-semibold" id="dash-fav-names">
-                                <!-- Populated via JS -->
-                            </div>
-                        </div>
-
-                        <div class="pt-2 border-t border-slate-100">
-                            <a href="#sec-names" onclick="switchTab('names')" class="text-2xs text-amber-600 font-semibold hover:underline flex items-center justify-between">
-                                <span>Kelola Bank Nama</span>
-                                <i class="fa-solid fa-arrow-right text-3xs"></i>
-                            </a>
-                        </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <button type="button" onclick="switchTab('medis')" class="kpt-dash-shortcut text-left">
+                            <span class="kpt-dash-shortcut-icon text-rose-600 bg-rose-50"><i class="fa-solid fa-notes-medical"></i></span>
+                            <span class="min-w-0 flex-1"><strong>Catatan Medis</strong><small>Riwayat dan pemantauan</small></span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
+                        </button>
+                        <button type="button" onclick="switchTab('siaga')" class="kpt-dash-shortcut text-left">
+                            <span class="kpt-dash-shortcut-icon text-emerald-700 bg-emerald-50"><i class="fa-solid fa-shield-heart"></i></span>
+                            <span class="min-w-0 flex-1"><strong>Persiapan Persalinan</strong><small>Checklist dan kesiapan</small></span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
+                        </button>
+                        <button type="button" onclick="switchTab('referensi')" class="kpt-dash-shortcut text-left">
+                            <span class="kpt-dash-shortcut-icon text-violet-700 bg-violet-50"><i class="fa-solid fa-book-open"></i></span>
+                            <span class="min-w-0 flex-1"><strong>Pustaka Edukasi</strong><small>Pelajari informasi kehamilan</small></span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
+                        </button>
                     </div>
                 </div>
             </section>
