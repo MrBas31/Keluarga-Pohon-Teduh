@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.12: Balanced & Elegant Prenatal Dashboard Upgrade; existing data IDs, Firebase sync and Drive backup core preserved -->
+    <!-- Keluarga Pohon Teduh 6.12.1: Mobile Dashboard Layout & Navigation Fix; existing data IDs, Firebase sync and Drive backup core preserved -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -1512,6 +1512,9 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 
 </style>
 
+
+    
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -1722,7 +1725,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 </div>
 
                 <!-- HERO + PHOTO GALLERY: DATA BAWAAN DIPERTAHANKAN -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-stretch">
+                <div class="kpt-dash-hero-gallery grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-stretch">
                     <div class="kpt-dash-hero lg:col-span-7 rounded-[1.75rem] p-6 md:p-8 text-white relative overflow-hidden flex flex-col justify-between min-h-[330px]">
                         <div class="kpt-dash-hero-orb kpt-dash-hero-orb-one" aria-hidden="true"></div>
                         <div class="kpt-dash-hero-orb kpt-dash-hero-orb-two" aria-hidden="true"></div>
@@ -1795,7 +1798,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                         <p class="text-xs text-slate-500">Pantau hal-hal penting tanpa membuka setiap menu.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
+                    <div class="kpt-dash-summary-grid grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
                         <!-- WIDGET 1: BUDGET & BELANJA -->
                         <article class="kpt-dash-card rounded-3xl p-5 flex flex-col justify-between gap-5">
                             <div class="space-y-3">
@@ -1814,7 +1817,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                                     <span>Item terbeli</span><span id="dash-budget-count" class="text-slate-800 tabular-nums">0/0 Item</span>
                                 </div>
                                 <div class="kpt-dash-progress-track"><div id="dash-budget-progress-bar" class="kpt-dash-progress-fill bg-sky-500" style="width:0%"></div></div>
-                                <button type="button" onclick="switchTab('budget')" class="kpt-dash-link text-sky-700">Buka Budget & Belanja <i class="fa-solid fa-arrow-right"></i></button>
+                                <button type="button" onclick="mobileNavigate('budget')" class="kpt-dash-link text-sky-700">Buka Budget & Belanja <i class="fa-solid fa-arrow-right"></i></button>
                             </div>
                         </article>
 
@@ -1833,7 +1836,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                                 </div>
                             </div>
                             <div class="pt-3 border-t border-slate-100">
-                                <button type="button" onclick="switchTab('hospital')" class="kpt-dash-link text-rose-700"><span id="dash-rs-action-text">Kelola Prioritas RS & Obgyn</span><i class="fa-solid fa-arrow-right"></i></button>
+                                <button type="button" onclick="mobileNavigate('hospital')" class="kpt-dash-link text-rose-700"><span id="dash-rs-action-text">Kelola Prioritas RS & Obgyn</span><i class="fa-solid fa-arrow-right"></i></button>
                             </div>
                         </article>
 
@@ -1852,7 +1855,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                             </div>
                             <div class="space-y-2 pt-3 border-t border-slate-100">
                                 <div class="kpt-dash-progress-track"><div id="dash-bag-progress-bar" class="kpt-dash-progress-fill bg-emerald-500" style="width:0%"></div></div>
-                                <button type="button" onclick="switchTab('siaga')" class="kpt-dash-link text-emerald-700">Buka Suami SIAGA <i class="fa-solid fa-arrow-right"></i></button>
+                                <button type="button" onclick="mobileNavigate('siaga')" class="kpt-dash-link text-emerald-700">Buka Suami SIAGA <i class="fa-solid fa-arrow-right"></i></button>
                             </div>
                         </article>
 
@@ -1871,7 +1874,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                                 </div>
                             </div>
                             <div class="pt-3 border-t border-slate-100">
-                                <button type="button" onclick="switchTab('names')" class="kpt-dash-link text-amber-700">Kelola Bank Nama <i class="fa-solid fa-arrow-right"></i></button>
+                                <button type="button" onclick="mobileNavigate('names')" class="kpt-dash-link text-amber-700">Kelola Bank Nama <i class="fa-solid fa-arrow-right"></i></button>
                             </div>
                         </article>
                     </div>
@@ -1887,17 +1890,17 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                         <p class="text-xs text-slate-500">Pilih bagian yang ingin kamu kelola.</p>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                        <button type="button" onclick="switchTab('medis')" class="kpt-dash-shortcut text-left">
+                        <button type="button" onclick="mobileNavigate('medis')" class="kpt-dash-shortcut text-left">
                             <span class="kpt-dash-shortcut-icon text-rose-600 bg-rose-50"><i class="fa-solid fa-notes-medical"></i></span>
                             <span class="min-w-0 flex-1"><strong>Catatan Medis</strong><small>Riwayat dan pemantauan</small></span>
                             <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
                         </button>
-                        <button type="button" onclick="switchTab('siaga')" class="kpt-dash-shortcut text-left">
+                        <button type="button" onclick="mobileNavigate('siaga')" class="kpt-dash-shortcut text-left">
                             <span class="kpt-dash-shortcut-icon text-emerald-700 bg-emerald-50"><i class="fa-solid fa-shield-heart"></i></span>
                             <span class="min-w-0 flex-1"><strong>Persiapan Persalinan</strong><small>Checklist dan kesiapan</small></span>
                             <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
                         </button>
-                        <button type="button" onclick="switchTab('referensi')" class="kpt-dash-shortcut text-left">
+                        <button type="button" onclick="mobileNavigate('referensi')" class="kpt-dash-shortcut text-left">
                             <span class="kpt-dash-shortcut-icon text-violet-700 bg-violet-50"><i class="fa-solid fa-book-open"></i></span>
                             <span class="min-w-0 flex-1"><strong>Pustaka Edukasi</strong><small>Pelajari informasi kehamilan</small></span>
                             <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
@@ -5015,7 +5018,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 if (appState.phase !== 'prenatal') switchPhase('prenatal');
                 switchTab(tabId);
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
         }
 
         // SWITCH PHASE (TERISOLASI RAPI ANTARA PRENATAL & POSTNATAL)
@@ -12174,5 +12177,108 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
   </div>
 </footer>
 
+
+<style id="kpt-6121-mobile-dashboard-navigation-fix">
+        /* 6.12.1: Correct the Dashboard's mobile layout after the 6.12 markup
+           added the intro block. Use semantic classes, not brittle nth-child
+           selectors inherited from the older Dashboard structure. */
+        @media (max-width: 767px) {
+            #sec-dashboard .kpt-dashboard-intro {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                justify-content: flex-start !important;
+                gap: .75rem !important;
+                min-height: 0 !important;
+                padding: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+            }
+            #sec-dashboard > div.kpt-dashboard-intro > div:first-child {
+                display: block !important;
+                width: 100% !important;
+                min-height: 0 !important;
+                padding: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+            }
+            #sec-dashboard .kpt-dashboard-intro .kpt-dashboard-welcome {
+                align-self: flex-start !important;
+                margin: 0 !important;
+            }
+
+            /* Hero and gallery must stack vertically on phones. */
+            #sec-dashboard > div.kpt-dash-hero-gallery {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1fr) !important;
+                align-items: stretch !important;
+                gap: 1rem !important;
+            }
+            #sec-dashboard > div.kpt-dash-hero-gallery > div.kpt-dash-hero {
+                grid-column: 1 / -1 !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                min-height: 0 !important;
+                padding: 1.2rem !important;
+                border-radius: 1.45rem !important;
+            }
+            #sec-dashboard > div.kpt-dash-hero-gallery > div#dashboard-gallery-container {
+                grid-column: 1 / -1 !important;
+                display: block !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                min-height: 320px !important;
+                height: 320px !important;
+                padding: 0 !important;
+                border-radius: 1.35rem !important;
+                overflow: hidden !important;
+            }
+            #sec-dashboard #dashboard-gallery-container > div {
+                width: 100% !important;
+                min-height: 320px !important;
+                height: 320px !important;
+                border-radius: 1.35rem !important;
+            }
+
+            /* Two readable summary cards per row on common phone widths. */
+            #sec-dashboard .kpt-dash-summary-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: .7rem !important;
+            }
+            #sec-dashboard .kpt-dash-summary-grid > article {
+                min-width: 0 !important;
+                padding: .95rem !important;
+                border-radius: 1.15rem !important;
+            }
+            #sec-dashboard .kpt-dash-summary-grid .kpt-dash-tag {
+                font-size: 8px !important;
+                letter-spacing: .055em !important;
+                padding: .32rem .48rem !important;
+            }
+            #sec-dashboard .kpt-dash-summary-grid .text-2xl {
+                font-size: 1.05rem !important;
+                line-height: 1.25 !important;
+                overflow-wrap: anywhere;
+            }
+            #sec-dashboard .kpt-dash-quick-panel {
+                padding: 1rem !important;
+            }
+            #sec-dashboard .kpt-dash-quick-panel > div.grid {
+                grid-template-columns: minmax(0, 1fr) !important;
+            }
+        }
+
+        /* Keep the intro legible against the dark page background. */
+        body.dark-mode #sec-dashboard .kpt-dashboard-eyebrow { color: #7dd3fc !important; }
+        body.dark-mode #sec-dashboard .kpt-dashboard-intro h1 { color: #f1f5f9 !important; }
+        body.dark-mode #sec-dashboard .kpt-dashboard-intro p { color: #a8b5c7 !important; }
+
+        @media (max-width: 380px) {
+            #sec-dashboard .kpt-dash-summary-grid { gap: .55rem !important; }
+            #sec-dashboard .kpt-dash-summary-grid > article { padding: .78rem !important; }
+            #sec-dashboard .kpt-dash-summary-grid .kpt-dash-tag { font-size: 7px !important; }
+        }
+    </style>
 </body>
 </html>
