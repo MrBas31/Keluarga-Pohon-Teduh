@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.12.1: Mobile Dashboard Layout & Navigation Fix; existing data IDs, Firebase sync and Drive backup core preserved -->
+    <!-- Keluarga Pohon Teduh 6.12.2: Mobile Dashboard Layout & Navigation Fix; existing data IDs, Firebase sync and Drive backup core preserved -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -1716,11 +1716,6 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                             Family Journey
                         </div>
                         <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-800">Ruang Persiapan Keluarga</h1>
-                        <p class="text-sm text-slate-500 max-w-2xl">Semua hal penting dalam perjalanan menyambut si kecil, tersaji dalam satu tempat.</p>
-                    </div>
-                    <div class="kpt-dashboard-welcome inline-flex items-center gap-2 self-start sm:self-auto rounded-full px-3.5 py-2 text-xs font-semibold text-slate-600 border border-slate-200 bg-white">
-                        <i class="fa-solid fa-heart text-rose-400"></i>
-                        <span>Disiapkan dengan cinta</span>
                     </div>
                 </div>
 
@@ -1880,33 +1875,6 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                     </div>
                 </div>
 
-                <!-- QUICK ACCESS: NAVIGASI KE MENU PENTING LAIN -->
-                <div class="kpt-dash-quick-panel rounded-3xl p-5 md:p-6">
-                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1.5 mb-4">
-                        <div>
-                            <div class="kpt-dashboard-eyebrow text-[10px] font-extrabold uppercase tracking-[0.18em] text-sky-700">Quick Access</div>
-                            <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">Lanjutkan dari Sini</h2>
-                        </div>
-                        <p class="text-xs text-slate-500">Pilih bagian yang ingin kamu kelola.</p>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                        <button type="button" onclick="mobileNavigate('medis')" class="kpt-dash-shortcut text-left">
-                            <span class="kpt-dash-shortcut-icon text-rose-600 bg-rose-50"><i class="fa-solid fa-notes-medical"></i></span>
-                            <span class="min-w-0 flex-1"><strong>Catatan Medis</strong><small>Riwayat dan pemantauan</small></span>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
-                        </button>
-                        <button type="button" onclick="mobileNavigate('siaga')" class="kpt-dash-shortcut text-left">
-                            <span class="kpt-dash-shortcut-icon text-emerald-700 bg-emerald-50"><i class="fa-solid fa-shield-heart"></i></span>
-                            <span class="min-w-0 flex-1"><strong>Persiapan Persalinan</strong><small>Checklist dan kesiapan</small></span>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
-                        </button>
-                        <button type="button" onclick="mobileNavigate('referensi')" class="kpt-dash-shortcut text-left">
-                            <span class="kpt-dash-shortcut-icon text-violet-700 bg-violet-50"><i class="fa-solid fa-book-open"></i></span>
-                            <span class="min-w-0 flex-1"><strong>Pustaka Edukasi</strong><small>Pelajari informasi kehamilan</small></span>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
-                        </button>
-                    </div>
-                </div>
             </section>
 
             <!-- TAB 2: BUDGET & BELANJA -->
@@ -5018,7 +4986,6 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 if (appState.phase !== 'prenatal') switchPhase('prenatal');
                 switchTab(tabId);
             }
-            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
         }
 
         // SWITCH PHASE (TERISOLASI RAPI ANTARA PRENATAL & POSTNATAL)
@@ -5051,6 +5018,27 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             }
             updateMobileNavigation();
             saveToLocalStorage();
+        }
+
+        // KEMBALI KE POSISI PALING ATAS SETIAP KALI BERPINDAH MENU.
+        // Menangani window/document agar konsisten pada browser desktop dan mobile.
+        function resetMainPageScroll() {
+            const resetScrollPosition = () => {
+                try {
+                    if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
+                    document.documentElement.scrollTop = 0;
+                    document.body.scrollTop = 0;
+                    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+                } catch (error) {
+                    console.warn('Tidak dapat mereset posisi scroll halaman:', error);
+                }
+            };
+
+            resetScrollPosition();
+            // Jalankan sekali lagi setelah browser menerapkan perubahan tab/visibility.
+            if (typeof requestAnimationFrame === 'function') {
+                requestAnimationFrame(resetScrollPosition);
+            }
         }
 
         // SWITCH TAB (UNTUK MENU FASE KEHAMILAN)
@@ -5088,6 +5076,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 renderReferences();
             }
             updateMobileNavigation();
+            resetMainPageScroll();
         }
 
         // SWITCH TAB (UNTUK MENU FASE BAYI LAHIR)
@@ -5120,6 +5109,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             }
             updateMobileNavigation();
             saveToLocalStorage();
+            resetMainPageScroll();
         }
 
         // EDIT HPL
@@ -12179,7 +12169,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 
 
 <style id="kpt-6121-mobile-dashboard-navigation-fix">
-        /* 6.12.1: Correct the Dashboard's mobile layout after the 6.12 markup
+        /* 6.12.2: Correct the Dashboard's mobile layout after the 6.12 markup
            added the intro block. Use semantic classes, not brittle nth-child
            selectors inherited from the older Dashboard structure. */
         @media (max-width: 767px) {
