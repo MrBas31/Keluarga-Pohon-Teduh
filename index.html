@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.9.4: Point-in-Time Firebase Cloud Snapshot Backup; Firebase sync core retained from 6.9.1 -->
+    <!-- Keluarga Pohon Teduh 6.10.0: Stimulasi & Milestone module; Firebase sync and Drive backup core retained from 6.9.4 -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -1265,6 +1265,81 @@
 }
 </style>
 
+
+<style id="kpt-development-module-styles">
+#sec-post-stimulasi { color: #26384a; }
+.dev-hero { position:relative; isolation:isolate; overflow:hidden; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:clamp(1.2rem,3vw,2rem); border-radius:28px; color:#fff; background:linear-gradient(115deg,#0f7490 0%,#168b83 48%,#347d70 100%); box-shadow:0 14px 34px rgba(15,116,144,.16); }
+.dev-eyebrow { display:inline-flex; align-items:center; border:1px solid rgba(255,255,255,.23); background:rgba(255,255,255,.14); border-radius:999px; padding:.38rem .7rem; font-size:.62rem; letter-spacing:.11em; font-weight:800; }
+.dev-hero-title { margin:.7rem 0 .35rem; font:800 clamp(1.5rem,3vw,2.2rem)/1.12 'Plus Jakarta Sans',sans-serif; letter-spacing:-.045em; }
+.dev-hero-copy { color:rgba(255,255,255,.88); font-size:.83rem; line-height:1.55; max-width:36rem; }
+.dev-age-pill { display:inline-flex; align-items:center; gap:.45rem; margin-top:1rem; border-radius:999px; padding:.48rem .78rem; font-size:.72rem; font-weight:750; color:#f0fdfa; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.16); }
+.dev-hero-art { position:relative; flex:0 0 auto; width:120px; height:120px; display:grid; place-items:center; color:rgba(255,255,255,.2); font-size:5rem; }
+.dev-hero-art span { position:absolute; top:5px; right:13px; font-size:2rem; color:#d9f99d; }
+.dev-hero-art b { position:absolute; left:10px; bottom:7px; font-size:1.8rem; color:#fbcfe8; }
+.dev-stats-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.7rem; }
+.dev-stat { display:flex; align-items:center; gap:.7rem; min-width:0; padding:.9rem 1rem; background:var(--dev-card,#fff); border:1px solid var(--dev-border,#e5edf0); border-radius:19px; box-shadow:0 5px 16px rgba(20,45,55,.035); }
+.dev-stat-icon { width:40px;height:40px;flex:0 0 40px;border-radius:14px;display:grid;place-items:center;font-size:1rem; }
+.dev-stat strong { display:block;font-size:1.2rem;line-height:1.1;font-weight:850;color:var(--dev-ink,#26384a); }
+.dev-stat small { display:block;margin-top:.22rem;font-size:.65rem;color:var(--dev-muted,#6b7e8a);font-weight:650;line-height:1.3; }
+.dev-tabs { display:flex; gap:.35rem; overflow-x:auto; padding:.34rem; border-radius:18px; background:var(--dev-soft,#f1f7f6); border:1px solid var(--dev-border,#e5edf0); scrollbar-width:none; }
+.dev-tabs::-webkit-scrollbar {display:none}
+.dev-tab { flex:1 0 auto; display:flex; align-items:center; justify-content:center; gap:.45rem; padding:.72rem .9rem; border-radius:13px; color:var(--dev-muted,#6b7e8a); font-size:.76rem; font-weight:750; transition:.18s; }
+.dev-tab.active { color:#0f766e; background:#fff; box-shadow:0 3px 12px rgba(16,80,75,.09); }
+.dev-panel { background:var(--dev-card,#fff); border:1px solid var(--dev-border,#e5edf0); border-radius:22px; padding:clamp(1rem,2.5vw,1.35rem); box-shadow:0 7px 22px rgba(20,45,55,.035); }
+.dev-panel-title { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:1rem; }
+.dev-panel-title h3 {font-size:1rem;font-weight:850;color:var(--dev-ink,#26384a);letter-spacing:-.02em}
+.dev-panel-title p {font-size:.72rem;color:var(--dev-muted,#6b7e8a);line-height:1.5;margin-top:.2rem}
+.dev-age-select,.dev-filter-select,.dev-search { width:100%; min-width:0; border:1px solid var(--dev-border,#dbe6e8); border-radius:12px; padding:.68rem .8rem; background:var(--dev-card,#fff); color:var(--dev-ink,#26384a); font-size:.75rem; outline:none; }
+.dev-age-select:focus,.dev-filter-select:focus,.dev-search:focus {border-color:#0d9488;box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+.dev-filter-row { display:flex; flex-wrap:wrap; gap:.55rem; align-items:center; margin-bottom:1rem; }
+.dev-filter-row > * { flex:1 1 170px; }
+.dev-activity-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.8rem; }
+.dev-activity-card { min-width:0; display:flex; flex-direction:column; padding:1rem; border:1px solid var(--dev-border,#e5edf0); border-radius:19px; background:var(--dev-card,#fff); transition:transform .18s,box-shadow .18s,border-color .18s; }
+.dev-activity-card:hover { transform:translateY(-2px);box-shadow:0 10px 22px rgba(20,45,55,.07);border-color:#a7d9d2; }
+.dev-activity-card h4 { font-size:.88rem; line-height:1.35; font-weight:850; color:var(--dev-ink,#26384a); margin:.5rem 0 .35rem; }
+.dev-activity-card p {font-size:.7rem;line-height:1.55;color:var(--dev-muted,#6b7e8a);}
+.dev-chip {display:inline-flex;align-items:center;gap:.25rem;padding:.28rem .52rem;border-radius:999px;font-size:.61rem;font-weight:750;line-height:1.25;white-space:nowrap;}
+.dev-chip.teal {background:#dff7f2;color:#0f766e}.dev-chip.blue {background:#e2f2ff;color:#0369a1}.dev-chip.amber {background:#fff2d8;color:#a16207}.dev-chip.pink {background:#fce7f3;color:#be185d}.dev-chip.slate {background:#edf2f5;color:#526475}.dev-chip.green {background:#e0f4e6;color:#15803d}
+.dev-card-meta { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:auto; padding-top:.8rem; }
+.dev-card-actions {display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--dev-border,#e5edf0)}
+.dev-btn {display:inline-flex;align-items:center;justify-content:center;gap:.42rem;padding:.65rem .9rem;border-radius:12px;font-size:.72rem;font-weight:800;transition:.18s;}
+.dev-btn.primary {background:#0f8b83;color:#fff}.dev-btn.primary:hover {background:#0d766f}.dev-btn.soft {background:var(--dev-soft,#eff7f5);color:#0f766e}.dev-btn.ghost {background:transparent;color:var(--dev-muted,#687c87);border:1px solid var(--dev-border,#dfe8ea)}
+.dev-btn:disabled {opacity:.5;cursor:not-allowed}
+.dev-milestone-list {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}
+.dev-milestone-card {display:flex;flex-direction:column;min-width:0;padding:.95rem;border:1px solid var(--dev-border,#e5edf0);border-radius:17px;background:var(--dev-card,#fff)}
+.dev-milestone-card h4 {font-size:.79rem;line-height:1.4;font-weight:800;color:var(--dev-ink,#26384a);margin:.45rem 0}
+.dev-milestone-status {margin-top:auto;padding-top:.75rem;display:flex;align-items:center;justify-content:space-between;gap:.4rem}
+.dev-status-pill {font-size:.61rem;font-weight:800;border-radius:999px;padding:.3rem .5rem;background:#edf2f5;color:#64748b}
+.dev-status-pill.emerging {background:#fff3d8;color:#a16207}.dev-status-pill.observed {background:#dcfce7;color:#15803d}.dev-status-pill.discuss {background:#ffe4e6;color:#be123c}
+.dev-journal-list {display:grid;gap:.75rem}
+.dev-journal-card {display:grid;grid-template-columns:48px minmax(0,1fr);gap:.8rem;padding:1rem;border:1px solid var(--dev-border,#e5edf0);border-radius:18px;background:var(--dev-card,#fff)}
+.dev-journal-date {width:48px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:14px;background:#e6f6f2;color:#0f766e;line-height:1}
+.dev-journal-date strong {font-size:1.05rem;font-weight:900}.dev-journal-date small {font-size:.58rem;margin-top:.3rem;font-weight:750;text-transform:uppercase}
+.dev-journal-card h4 {font-size:.84rem;font-weight:850;color:var(--dev-ink,#26384a);line-height:1.35}
+.dev-journal-card p {font-size:.7rem;line-height:1.55;color:var(--dev-muted,#6b7e8a);white-space:pre-wrap;margin-top:.28rem}
+.dev-media-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:.45rem;margin-top:.65rem}
+.dev-media-item {position:relative;display:block;overflow:hidden;aspect-ratio:1/1;border-radius:13px;background:var(--dev-soft,#eef4f4);border:1px solid var(--dev-border,#e5edf0)}
+.dev-media-item img {width:100%;height:100%;object-fit:cover}.dev-media-play {position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:1.35rem;background:rgba(15,23,42,.18);text-shadow:0 2px 8px rgba(0,0,0,.4)}
+.dev-empty {padding:1.8rem 1rem;text-align:center;border:1px dashed var(--dev-border,#cbd9dc);border-radius:18px;background:var(--dev-soft,#f7faf9)}
+.dev-empty i {font-size:1.65rem;color:#8ba6a8}.dev-empty h4 {font-size:.86rem;font-weight:800;color:var(--dev-ink,#334b57);margin-top:.55rem}.dev-empty p {font-size:.7rem;color:var(--dev-muted,#6b7e8a);line-height:1.5;margin-top:.25rem}
+.dev-disclaimer {display:flex;align-items:flex-start;gap:.55rem;padding:.75rem .9rem;border:1px solid #d9e9ef;border-radius:14px;background:#f1f8fb;color:#526a78;font-size:.66rem;line-height:1.55}.dev-disclaimer i {color:#0c82a5;margin-top:.1rem}
+.dev-source {display:inline-flex;align-items:center;gap:.25rem;color:#62818c;font-size:.61rem;font-weight:700}
+.dev-modal-backdrop {position:fixed;inset:0;z-index:120;background:rgba(15,23,42,.6);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:1rem;}
+.dev-modal {width:min(100%,650px);max-height:min(90vh,850px);overflow:auto;border-radius:24px;background:var(--dev-card,#fff);color:var(--dev-ink,#26384a);box-shadow:0 25px 80px rgba(0,0,0,.28);}
+.dev-modal-head {position:sticky;top:0;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:1.1rem 1.25rem;background:var(--dev-card,#fff);border-bottom:1px solid var(--dev-border,#e5edf0)}
+.dev-modal-body {padding:1.15rem 1.25rem 1.3rem}.dev-field {display:grid;gap:.35rem}.dev-field label {font-size:.7rem;font-weight:800;color:var(--dev-ink,#334b57)}.dev-field input,.dev-field select,.dev-field textarea {width:100%;border:1px solid var(--dev-border,#d9e3e6);border-radius:12px;padding:.72rem .8rem;background:var(--dev-card,#fff);color:var(--dev-ink,#26384a);font-size:.76rem;outline:none}.dev-field input:focus,.dev-field select:focus,.dev-field textarea:focus {border-color:#0d9488;box-shadow:0 0 0 3px rgba(13,148,136,.1)}
+body.dark-mode #sec-post-stimulasi .dev-panel,body.dark-mode #sec-post-stimulasi .dev-stat,body.dark-mode #sec-post-stimulasi .dev-activity-card,body.dark-mode #sec-post-stimulasi .dev-milestone-card,body.dark-mode #sec-post-stimulasi .dev-journal-card,body.dark-mode #sec-post-stimulasi .dev-modal,body.dark-mode #sec-post-stimulasi .dev-modal-head {background:#172a32;border-color:#314852;color:#e5eff2}
+body.dark-mode #sec-post-stimulasi .dev-stat strong,body.dark-mode #sec-post-stimulasi .dev-panel-title h3,body.dark-mode #sec-post-stimulasi .dev-activity-card h4,body.dark-mode #sec-post-stimulasi .dev-milestone-card h4,body.dark-mode #sec-post-stimulasi .dev-journal-card h4,body.dark-mode #sec-post-stimulasi .dev-modal-head h3,body.dark-mode #sec-post-stimulasi .dev-field label {color:#e5eff2}
+body.dark-mode #sec-post-stimulasi .dev-tabs,body.dark-mode #sec-post-stimulasi .dev-empty,body.dark-mode #sec-post-stimulasi .dev-filter-select,body.dark-mode #sec-post-stimulasi .dev-age-select,body.dark-mode #sec-post-stimulasi .dev-search,body.dark-mode #sec-post-stimulasi .dev-field input,body.dark-mode #sec-post-stimulasi .dev-field select,body.dark-mode #sec-post-stimulasi .dev-field textarea {background:#102129;color:#e5eff2;border-color:#314852}
+body.dark-mode #sec-post-stimulasi .dev-tab.active {background:#263f48;color:#8de0d3}body.dark-mode #sec-post-stimulasi .dev-disclaimer {background:#142f3b;border-color:#245263;color:#c0d8e1}body.dark-mode #sec-post-stimulasi {--dev-card:#172a32;--dev-border:#314852;--dev-ink:#e5eff2;--dev-muted:#9bb0ba;--dev-soft:#102129;color:#e5eff2}
+@media(max-width:700px) {
+ .dev-hero {padding:1.15rem;border-radius:22px}.dev-hero-art {width:66px;height:66px;font-size:3rem}.dev-hero-art span {font-size:1.1rem;right:2px}.dev-hero-art b {font-size:1rem;left:2px}.dev-hero-title {font-size:1.52rem}.dev-hero-copy {font-size:.72rem;max-width:21rem}
+ .dev-stats-grid {gap:.45rem}.dev-stat {align-items:flex-start;flex-direction:column;gap:.45rem;padding:.68rem .72rem;border-radius:15px}.dev-stat-icon {width:33px;height:33px;flex-basis:33px;border-radius:11px;font-size:.85rem}.dev-stat strong {font-size:1.02rem}.dev-stat small {font-size:.59rem}
+ .dev-tabs {gap:.2rem}.dev-tab {padding:.65rem .72rem;font-size:.69rem}.dev-activity-grid,.dev-milestone-list {grid-template-columns:1fr}.dev-activity-card {padding:.9rem}.dev-panel {padding:.9rem;border-radius:18px}.dev-filter-row > * {flex:1 1 100%}.dev-journal-card {grid-template-columns:42px minmax(0,1fr);gap:.6rem;padding:.8rem}.dev-journal-date {width:42px;height:50px}
+ .dev-modal-backdrop {align-items:flex-end;padding:.35rem}.dev-modal {max-height:92vh;border-radius:23px 23px 14px 14px}.dev-modal-head {padding:.95rem 1rem}.dev-modal-body {padding:1rem}
+}
+</style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -1442,7 +1517,7 @@
                 <i class="fa-solid fa-notes-medical mr-1"></i> Medis
             </button>
             <button onclick="switchPostnatalTab('post-stimulasi')" id="tab-post-stimulasi" class="tab-btn py-2.5 whitespace-nowrap">
-                <i class="fa-solid fa-shapes mr-1"></i> Stimulasi & Tumbuh Kembang
+                <i class="fa-solid fa-shapes mr-1"></i> Stimulasi & Milestone
             </button>
             <button onclick="switchPhase('prenatal'); switchTab('referensi');" id="tab-post-pustaka" class="tab-btn py-2.5 whitespace-nowrap">
                 <i class="fa-solid fa-book-bookmark mr-1"></i> Pustaka Edukasi
@@ -2134,12 +2209,12 @@
                     <div onclick="switchPostnatalTab('post-stimulasi')" class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3 flex flex-col justify-between cursor-pointer hover:shadow-md transition hover:border-amber-200 group">
                         <div>
                             <div class="flex justify-between items-center mb-2">
-                                <span class="text-2xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">Stimulasi</span>
+                                <span class="text-2xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">Stimulasi & Milestone</span>
                                 <i class="fa-solid fa-shapes text-amber-600 text-sm"></i>
                             </div>
                             <h4 class="font-bold text-slate-800 text-sm">Fokus Bulan Ini</h4>
                             <p class="mt-2 text-xs font-medium text-slate-500 line-clamp-3">
-                                Perbanyak Tummy Time dan interaksi suara (mengobrol) untuk melatih otot leher & respons bayi.
+                                Temukan ide bermain sesuai usia, catat milestone, dan simpan momen perkembangan si kecil.
                             </p>
                         </div>
                         <div class="pt-2 border-t border-slate-100 text-right"><span class="text-3xs text-amber-600 font-bold uppercase group-hover:pr-1 transition-all">Lihat Panduan →</span></div>
@@ -2528,33 +2603,27 @@
                 </div>
             </section>
 
-            <!-- TAB 6: STIMULASI & TUMBUH KEMBANG -->
+            <!-- TAB 6: STIMULASI & MILESTONE -->
             <section id="sec-post-stimulasi" class="hidden space-y-6">
-                <!-- STIMULASI CHECKLIST -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
-                    <h3 class="font-bold text-slate-800 text-lg">🧩 Panduan Stimulasi Bayi (0 - 2 Bulan)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
-                            <div class="font-bold text-sky-700 flex items-center gap-2">
-                                <i class="fa-solid fa-child"></i> Motorik Kasar & Halus
-                            </div>
-                            <ul class="space-y-1.5 text-slate-600">
-                                <li>• <strong>Tummy Time 45°:</strong> Tengkurapkan, gerakkan mainan cerah.</li>
-                                <li>• <strong>Tahan Kepala:</strong> Gendong tegak, tunjukkan benda menarik.</li>
-                                <li>• <strong>Gantung Mainan:</strong> Jarak 30cm di atas mata bayi.</li>
-                            </ul>
+                <div id="development-module" class="space-y-5">
+                    <div class="dev-hero">
+                        <div class="relative z-10 min-w-0">
+                            <span class="dev-eyebrow"><i class="fa-solid fa-seedling mr-1"></i> PERJALANAN TUMBUH KEMBANG</span>
+                            <h2 class="dev-hero-title">Stimulasi & Milestone</h2>
+                            <p class="dev-hero-copy">Temani setiap langkah kecil, simpan setiap cerita berharga.</p>
+                            <div class="dev-age-pill" id="dev-age-summary"><i class="fa-solid fa-calendar-heart"></i> Menghitung usia si kecil…</div>
                         </div>
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
-                            <div class="font-bold text-emerald-700 flex items-center gap-2">
-                                <i class="fa-solid fa-comments"></i> Bahasa & Sosial
-                            </div>
-                            <ul class="space-y-1.5 text-slate-600">
-                                <li>• <strong>Tirukan Ocehan:</strong> Balas mimik "ooh..aah..", ajak senyum.</li>
-                                <li>• <strong>Skin-to-Skin:</strong> Beri pelukan hangat untuk rasa aman.</li>
-                                <li>• <strong>Kenalkan Pola Siang/Malam:</strong> Terangkan ruangan saat siang, redupkan saat malam.</li>
-                            </ul>
-                        </div>
+                        <div class="dev-hero-art" aria-hidden="true"><i class="fa-solid fa-seedling"></i><span>✦</span><b>♡</b></div>
                     </div>
+                    <div class="dev-stats-grid" id="dev-overview-stats"></div>
+                    <div class="dev-tabs" role="tablist" aria-label="Bagian stimulasi dan milestone">
+                        <button type="button" class="dev-tab active" data-dev-view="home" onclick="setDevelopmentView('home')"><i class="fa-solid fa-house"></i><span>Ringkasan</span></button>
+                        <button type="button" class="dev-tab" data-dev-view="activities" onclick="setDevelopmentView('activities')"><i class="fa-solid fa-puzzle-piece"></i><span>Stimulasi</span></button>
+                        <button type="button" class="dev-tab" data-dev-view="milestones" onclick="setDevelopmentView('milestones')"><i class="fa-solid fa-seedling"></i><span>Milestone</span></button>
+                        <button type="button" class="dev-tab" data-dev-view="journal" onclick="setDevelopmentView('journal')"><i class="fa-solid fa-book-heart"></i><span>Jurnal</span></button>
+                    </div>
+                    <div id="dev-content" aria-live="polite"></div>
+                    <div class="dev-disclaimer"><i class="fa-solid fa-circle-info"></i><span>Menu ini adalah jurnal dan panduan aktivitas keluarga, bukan alat diagnosis atau pengganti skrining perkembangan oleh tenaga kesehatan. Setiap anak memiliki ritme perkembangan yang berbeda.</span></div>
                 </div>
             </section>
 
@@ -3834,7 +3903,10 @@
                 prenatalTodos: [],
                 kmsData: [],
                 rsDsa: [],
-                babyMedicalRecords: []
+                babyMedicalRecords: [],
+                stimulationFavorites: [],
+                developmentJournal: [],
+                milestoneObservations: []
             };
         }
 
@@ -4818,6 +4890,8 @@
             } else if (tabId === 'post-medis') {
                 renderKmsChart();
                 renderBabyMedicalRecords();
+            } else if (tabId === 'post-stimulasi') {
+                renderStimulationModule();
             }
             updateMobileNavigation();
             saveToLocalStorage();
@@ -8277,7 +8351,7 @@
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.9.4',
+                    appVersion: '6.10.0',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -10243,6 +10317,348 @@
             }
         }
     </script>
+    <div id="development-modal-root"></div>
+
+<script id="kpt-stimulation-milestone-6100">
+(function () {
+    'use strict';
+    const DEV_AGE_BANDS = [{"id":"b0_28d","label":"0–28 hari","short":"Bayi baru lahir","minMonths":0,"maxMonths":0,"description":"Masa adaptasi, kedekatan, rasa aman, dan respons lembut orang tua."},{"id":"b29_3m","label":"29 hari–3 bulan","short":"Awal interaksi","minMonths":0,"maxMonths":3,"description":"Tatapan, suara, respons sosial, dan gerakan awal."},{"id":"b3_6m","label":"3–6 bulan","short":"Eksplorasi awal","minMonths":3,"maxMonths":6,"description":"Meraih, berguling, mengenali suara, dan bermain bersama."},{"id":"b6_9m","label":"6–9 bulan","short":"Eksplorasi aktif","minMonths":6,"maxMonths":9,"description":"Duduk, eksplorasi benda, meniru, dan mencari sesuatu."},{"id":"b9_12m","label":"9–12 bulan","short":"Menjelang satu tahun","minMonths":9,"maxMonths":12,"description":"Komunikasi sederhana, manipulasi benda, dan mobilitas."},{"id":"b12_18m","label":"12–18 bulan","short":"Balita awal","minMonths":12,"maxMonths":18,"description":"Berjalan, bahasa awal, bermain peran, dan kemandirian sederhana."},{"id":"b18_24m","label":"18–24 bulan","short":"Dua tahun pertama","minMonths":18,"maxMonths":24,"description":"Bahasa berkembang, permainan simbolik, dan koordinasi gerak."},{"id":"b2_3y","label":"2–3 tahun","short":"Usia prasekolah awal","minMonths":24,"maxMonths":36,"description":"Bahasa, imajinasi, pengelompokan, gerak aktif, dan rutinitas."},{"id":"b3_4y","label":"3–4 tahun","short":"Usia prasekolah","minMonths":36,"maxMonths":48,"description":"Bercerita, bermain bersama, kreativitas, dan koordinasi."},{"id":"b4_5y","label":"4–5 tahun","short":"Usia eksplorasi","minMonths":48,"maxMonths":60,"description":"Imajinasi, aturan permainan, gerak, dan kesiapan belajar."},{"id":"b5_6y","label":"5–6 tahun","short":"Menjelang sekolah","minMonths":60,"maxMonths":84,"description":"Kemandirian, bahasa, konsep dasar, kreativitas, dan gerak."}];
+    const DEV_ACTIVITIES = [{"id":"newborn-face-talk","ageBand":"b0_28d","title":"Tatap wajah dan ajak bicara lembut","domain":"Bahasa & komunikasi","duration":"2–5 menit","tools":"Tanpa alat","kind":"home","summary":"Bangun kedekatan melalui suara dan wajah orang tua.","steps":"Saat bayi terjaga dan tenang, dekatkan wajah pada jarak nyaman; bicara perlahan, beri jeda, lalu amati responsnya.","observe":"Apakah bayi menoleh, menatap sebentar, atau tampak lebih tenang.","safety":"Hentikan saat bayi tampak lelah atau overstimulasi. Jangan memaksa kontak mata.","source":"Buku KIA 2024 · WHO/UNICEF Care for Child Development"},{"id":"newborn-cuddle-response","ageBand":"b0_28d","title":"Peluk dan respons sinyal bayi","domain":"Sosial & emosional","duration":"Sepanjang momen pengasuhan","tools":"Tanpa alat","kind":"home","summary":"Respons hangat membantu bayi merasa aman dan diperhatikan.","steps":"Perhatikan tanda lapar, lelah, atau tidak nyaman. Gendong dan tenangkan dengan suara lembut sesuai kebutuhan bayi.","observe":"Perhatikan perubahan ekspresi, tangisan, gerakan, dan kenyamanan bayi.","safety":"Saat menggendong, selalu topang kepala dan leher. Orang dewasa harus tetap sadar dan waspada; jangan tertidur saat menggendong di sofa atau kursi.","source":"Buku KIA 2024 · WHO/UNICEF Care for Child Development"},{"id":"newborn-soft-sounds","ageBand":"b0_28d","title":"Kenalkan suara lembut","domain":"Bahasa & komunikasi","duration":"1–3 menit","tools":"Tanpa alat","kind":"home","summary":"Suara orang tua dan nyanyian lembut menjadi pengalaman awal komunikasi.","steps":"Bicaralah atau nyanyikan lagu pendek dengan volume lembut. Beri jeda agar bayi punya waktu bereaksi.","observe":"Apakah bayi tampak tenang, mengubah gerakan, atau memperhatikan suara.","safety":"Hindari suara keras atau mendadak dekat telinga bayi.","source":"Buku KIA 2024 · WHO/UNICEF Care for Child Development"},{"id":"newborn-tummy-observe","ageBand":"b0_28d","title":"Waktu tengkurap singkat saat terjaga","domain":"Motorik kasar","duration":"Sesuai toleransi, singkat dan diawasi","tools":"Alas datar dan aman","kind":"tools","summary":"Berikan kesempatan awal untuk menggerakkan kepala dan tubuh.","steps":"Saat bayi benar-benar terjaga, letakkan tengkurap di alas datar yang aman dan awasi terus. Mulai singkat; berhenti bila bayi tidak nyaman.","observe":"Amati gerakan kepala dan usaha mengangkatnya.","safety":"Tengkurap hanya saat terjaga dan diawasi langsung. Untuk tidur, selalu telentangkan bayi di alas tidur yang aman.","source":"Adaptasi aktivitas stimulasi · pedoman keselamatan tidur bayi"},{"id":"infant-reply-coos","ageBand":"b29_3m","title":"Balas ocehan bayi","domain":"Bahasa & komunikasi","duration":"3–5 menit","tools":"Tanpa alat","kind":"home","summary":"Percakapan awal dimulai dengan saling memberi suara dan jeda.","steps":"Saat bayi mengeluarkan suara, tirukan dengan lembut, lalu beri jeda. Balas kembali tanpa meminta bayi meniru.","observe":"Apakah bayi mengeluarkan suara lagi atau memperhatikan wajah orang tua.","safety":"Jangan membuat suara terlalu keras atau terlalu dekat.","source":"Buku KIA Kemenkes 2024"},{"id":"infant-follow-toy","ageBand":"b29_3m","title":"Ikuti benda berwarna dengan pandangan","domain":"Kognitif","duration":"2–4 menit","tools":"Mainan ringan berwarna kontras","kind":"tools","summary":"Ajak bayi memperhatikan benda yang bergerak perlahan.","steps":"Pegang mainan aman di depan bayi pada jarak nyaman, gerakkan perlahan ke kiri dan kanan sambil berbicara.","observe":"Apakah pandangan bayi mengikuti benda sesaat.","safety":"Jangan menggantung benda kecil atau tali yang dapat terjangkau bayi. Gunakan mainan utuh tanpa bagian lepas.","source":"Buku KIA Kemenkes 2024"},{"id":"infant-supervised-tummy","ageBand":"b29_3m","title":"Tummy time terawasi","domain":"Motorik kasar","duration":"Mulai singkat sesuai toleransi","tools":"Alas datar","kind":"tools","summary":"Kesempatan bergerak saat bayi terjaga membantu latihan kepala dan bahu.","steps":"Tempatkan bayi tengkurap di alas datar ketika terjaga. Berada dekat dan ajak bicara dari depan.","observe":"Amati apakah bayi mencoba mengangkat atau memutar kepala.","safety":"Pengawasan langsung sepanjang aktivitas. Hentikan jika bayi tampak kesulitan; tidur tetap telentang.","source":"Buku KIA Kemenkes 2024"},{"id":"infant-grasp-soft-toy","ageBand":"b29_3m","title":"Tawarkan mainan ringan untuk digenggam","domain":"Motorik halus","duration":"2–3 menit","tools":"Mainan bayi ringan dan utuh","kind":"tools","summary":"Beri kesempatan bayi menyentuh dan menggenggam benda yang aman.","steps":"Dekatkan mainan ringan ke telapak tangan. Biarkan bayi menyentuh atau menggenggam tanpa memaksa.","observe":"Apakah jari mulai menutup atau tangan bergerak menuju mainan.","safety":"Gunakan benda besar, ringan, bersih, tanpa bagian kecil atau tali. Selalu dampingi.","source":"Buku KIA Kemenkes 2024"},{"id":"3m-peekaboo","ageBand":"b3_6m","title":"Cilukba sederhana","domain":"Sosial & emosional","duration":"3–5 menit","tools":"Tanpa alat","kind":"home","summary":"Permainan bergantian memperkenalkan kejutan yang menyenangkan.","steps":"Tutup wajah dengan tangan, buka sambil tersenyum dan menyebut nama bayi. Beri jeda untuk respons.","observe":"Apakah bayi tersenyum, bersuara, atau memperhatikan wajah.","safety":"Ikuti kenyamanan bayi; jangan membuat suara mengejutkan.","source":"Buku KIA Kemenkes 2024"},{"id":"3m-reach-toy","ageBand":"b3_6m","title":"Ajak meraih mainan","domain":"Motorik halus","duration":"3–5 menit","tools":"Mainan besar dan ringan","kind":"tools","summary":"Letakkan benda menarik dalam jangkauan yang aman untuk dijangkau.","steps":"Saat bayi telentang atau setengah duduk dengan dukungan sesuai kemampuannya, tawarkan mainan di depan atau samping.","observe":"Amati usaha melihat, mengulurkan tangan, atau menyentuh benda.","safety":"Jangan tinggalkan bayi pada permukaan tinggi. Hindari benda kecil yang dapat masuk mulut.","source":"Buku KIA Kemenkes 2024"},{"id":"3m-find-sound","ageBand":"b3_6m","title":"Cari sumber suara","domain":"Bahasa & komunikasi","duration":"2–4 menit","tools":"Suara orang tua atau mainan lembut","kind":"home","summary":"Ajak bayi mengenali suara dari sisi yang berbeda.","steps":"Panggil nama bayi atau buat bunyi lembut dari satu sisi, lalu sisi lain. Beri jeda.","observe":"Apakah bayi mengarahkan mata atau kepala ke arah suara.","safety":"Jangan gunakan bunyi keras atau mendadak dekat telinga.","source":"Buku KIA Kemenkes 2024"},{"id":"3m-roll-play","ageBand":"b3_6m","title":"Bermain berguling di alas","domain":"Motorik kasar","duration":"3–5 menit","tools":"Alas bermain datar","kind":"tools","summary":"Dorong eksplorasi gerak dengan mainan yang menarik perhatian.","steps":"Letakkan mainan di sisi bayi saat di alas datar. Beri ruang untuk mencoba mengubah posisi; bantu seperlunya tanpa menarik anggota tubuh.","observe":"Amati usaha memiringkan badan atau berguling.","safety":"Selalu di lantai/alas datar dan awasi. Jangan tinggalkan di tempat tidur atau meja ganti.","source":"Buku KIA Kemenkes 2024"},{"id":"6m-container-play","ageBand":"b6_9m","title":"Masukkan benda besar ke wadah","domain":"Motorik halus","duration":"5 menit","tools":"Wadah lebar dan balok besar","kind":"tools","summary":"Latih koordinasi tangan dan pemahaman benda masuk-keluar.","steps":"Tunjukkan cara memasukkan balok besar ke wadah, keluarkan kembali, lalu beri giliran bayi.","observe":"Apakah bayi mengambil, memasukkan, atau mengeluarkan benda.","safety":"Gunakan benda besar yang tidak dapat tertelan. Hindari koin, kancing, baterai, dan benda kecil.","source":"Buku KIA Kemenkes 2024"},{"id":"6m-hide-seek","ageBand":"b6_9m","title":"Cari mainan yang disembunyikan","domain":"Kognitif","duration":"3–5 menit","tools":"Mainan besar dan kain tipis","kind":"tools","summary":"Ajak bayi mencari benda yang sebagian tertutup.","steps":"Perlihatkan mainan, tutup sebagian dengan kain, lalu ajak bayi mencarinya. Mulai dengan bagian yang masih terlihat.","observe":"Apakah bayi melihat, meraih, atau membuka kain.","safety":"Jangan menutup wajah bayi dan jangan gunakan plastik atau kain yang dapat menutupi jalan napas.","source":"Buku KIA Kemenkes 2024"},{"id":"6m-wave-clap","ageBand":"b6_9m","title":"Tepuk tangan dan lambaikan tangan","domain":"Sosial & emosional","duration":"3–5 menit","tools":"Tanpa alat","kind":"home","summary":"Bermain meniru gerakan sederhana bersama orang tua.","steps":"Tunjukkan tepuk tangan atau lambaian sambil tersenyum. Ulangi sebagai permainan, bukan tes.","observe":"Apakah bayi memperhatikan atau mencoba meniru gerakan.","safety":"Beri jeda dan jangan memegang paksa tangan bayi.","source":"Buku KIA Kemenkes 2024"},{"id":"6m-picture-book","ageBand":"b6_9m","title":"Lihat buku gambar bersama","domain":"Bahasa & komunikasi","duration":"3–5 menit","tools":"Buku bayi berbahan tebal","kind":"tools","summary":"Perkenalkan kata dan gambar melalui interaksi bersama.","steps":"Tunjuk satu gambar, sebut namanya dengan jelas, lalu beri kesempatan bayi melihat atau menyentuh halaman.","observe":"Apakah bayi memperhatikan gambar atau meraih buku.","safety":"Gunakan buku yang aman dan bersih; dampingi agar halaman tidak dimasukkan ke mulut.","source":"Buku KIA Kemenkes 2024"},{"id":"9m-name-and-point","ageBand":"b9_12m","title":"Tunjuk dan sebut nama benda","domain":"Bahasa & komunikasi","duration":"5 menit","tools":"Benda rumah yang aman","kind":"home","summary":"Hubungkan kata dengan benda nyata di sekitar anak.","steps":"Tunjuk benda yang dikenal, sebut namanya, lalu ulangi dalam konteks sehari-hari.","observe":"Apakah anak melihat benda atau mencoba menunjuk/bersuara.","safety":"Pilih benda yang tidak tajam, panas, mudah pecah, atau berukuran kecil.","source":"Buku KIA Kemenkes 2024"},{"id":"9m-stack-blocks","ageBand":"b9_12m","title":"Susun balok besar","domain":"Kognitif","duration":"5 menit","tools":"Balok besar","kind":"tools","summary":"Eksplorasi menyusun, menjatuhkan, dan mengulang.","steps":"Susun dua balok besar, biarkan anak mencoba mengambil atau menyusun. Beri pujian pada usahanya.","observe":"Apakah anak memegang, meletakkan, atau menjatuhkan balok dengan sengaja.","safety":"Balok harus cukup besar agar tidak berisiko tertelan. Awasi sepanjang permainan.","source":"Buku KIA Kemenkes 2024"},{"id":"9m-scribble","ageBand":"b9_12m","title":"Mencoret-coret dengan alat aman","domain":"Motorik halus","duration":"3–5 menit","tools":"Krayon jumbo non-toksik dan kertas","kind":"tools","summary":"Kenalkan gerakan tangan melalui coretan bebas.","steps":"Tawarkan krayon jumbo yang sesuai usia dan kertas besar. Biarkan anak membuat jejak tanpa menuntut bentuk tertentu.","observe":"Apakah anak menggenggam krayon dan membuat coretan.","safety":"Hanya dengan pendampingan langsung. Hindari pensil kecil, spidol bertutup kecil, dan bahan beracun.","source":"Buku KIA Kemenkes 2024"},{"id":"9m-cruise-safe","ageBand":"b9_12m","title":"Jelajah berdiri dengan pegangan stabil","domain":"Motorik kasar","duration":"Sesuai minat, singkat","tools":"Furnitur rendah dan kokoh","kind":"home","summary":"Beri kesempatan bergerak sambil berpegangan pada penopang stabil.","steps":"Pastikan area bebas sudut tajam dan licin. Berada dekat saat anak berdiri atau berpindah dengan berpegangan.","observe":"Amati usaha berdiri, berpindah, atau meraih benda.","safety":"Jangan gunakan furnitur beroda atau tidak stabil. Jangan menarik kedua tangan anak untuk memaksanya berjalan.","source":"Buku KIA Kemenkes 2024"},{"id":"12m-roll-ball","ageBand":"b12_18m","title":"Gulirkan bola bergantian","domain":"Motorik kasar","duration":"5–10 menit","tools":"Bola lunak ukuran besar","kind":"tools","summary":"Latih koordinasi dan giliran sederhana.","steps":"Duduk berhadapan, gulirkan bola perlahan ke anak, lalu beri kesempatan mendorong balik.","observe":"Apakah anak mengikuti bola atau mencoba mengembalikannya.","safety":"Gunakan bola cukup besar dan ruang bebas benda tajam/tangga.","source":"Buku KIA Kemenkes 2024"},{"id":"12m-picture-talk","ageBand":"b12_18m","title":"Bercerita dari gambar","domain":"Bahasa & komunikasi","duration":"5 menit","tools":"Buku bergambar","kind":"tools","summary":"Perkaya kosakata lewat gambar dan percakapan sederhana.","steps":"Tunjuk gambar, sebut nama benda atau tindakan, lalu tunggu anak menunjuk atau bersuara.","observe":"Catat kata, gestur, atau respons yang muncul secara alami.","safety":"Jadikan interaksi menyenangkan, tidak perlu memaksa anak mengulang kata.","source":"Buku KIA Kemenkes 2024"},{"id":"12m-puzzle-large","ageBand":"b12_18m","title":"Pasang bentuk sederhana","domain":"Kognitif","duration":"5 menit","tools":"Puzzle knob besar sesuai usia","kind":"tools","summary":"Perkenalkan bentuk, posisi, dan pemecahan masalah sederhana.","steps":"Tunjukkan satu keping, sebut bentuknya, lalu bantu anak mencocokkan pada tempatnya.","observe":"Apakah anak mencoba memasang, memutar, atau memilih keping.","safety":"Gunakan puzzle besar tanpa keping kecil; awasi.","source":"Buku KIA Kemenkes 2024"},{"id":"12m-tidy-toys","ageBand":"b12_18m","title":"Ajak merapikan mainan","domain":"Kemandirian","duration":"3–5 menit","tools":"Keranjang ringan","kind":"home","summary":"Bangun kebiasaan membantu lewat tugas kecil bersama.","steps":"Ajak anak memasukkan beberapa mainan besar ke keranjang sambil memberi contoh.","observe":"Apakah anak mencoba mengambil atau meletakkan mainan.","safety":"Jangan gunakan benda berat, tajam, atau kecil. Hindari menjadikan aktivitas sebagai hukuman.","source":"Buku KIA Kemenkes 2024"},{"id":"18m-follow-instruction","ageBand":"b18_24m","title":"Ikuti instruksi sederhana","domain":"Bahasa & komunikasi","duration":"3–5 menit","tools":"Benda sehari-hari","kind":"home","summary":"Latih pemahaman bahasa dalam rutinitas yang akrab.","steps":"Minta satu tindakan sederhana, misalnya mengambil bola atau meletakkan buku di keranjang. Beri contoh bila perlu.","observe":"Apakah anak memahami kata atau mengikuti gestur.","safety":"Gunakan instruksi positif, singkat, dan aman.","source":"Buku KIA Kemenkes 2024"},{"id":"18m-puzzle-sort","ageBand":"b18_24m","title":"Kelompokkan bentuk dan benda","domain":"Kognitif","duration":"5–10 menit","tools":"Balok bentuk besar atau benda aman","kind":"tools","summary":"Ajak membandingkan benda berdasarkan bentuk atau warna sederhana.","steps":"Letakkan dua wadah dan beberapa benda besar. Tunjukkan satu contoh pengelompokan, lalu biarkan anak mencoba.","observe":"Amati cara anak memilih atau memindahkan benda.","safety":"Benda harus besar, bersih, tidak mudah pecah atau tertelan.","source":"Buku KIA Kemenkes 2024"},{"id":"18m-pretend-phone","ageBand":"b18_24m","title":"Bermain telepon-teleponan","domain":"Sosial & emosional","duration":"5 menit","tools":"Telepon mainan besar","kind":"tools","summary":"Permainan pura-pura mengajak anak bergiliran berkomunikasi.","steps":"Orang tua berpura-pura menelepon, menyapa, lalu beri kesempatan anak meniru atau menjawab.","observe":"Amati gestur, suara, dan inisiatif anak.","safety":"Gunakan mainan yang sesuai usia, bukan perangkat asli dengan kabel/baterai lepas.","source":"Buku KIA Kemenkes 2024"},{"id":"18m-ball-kick","ageBand":"b18_24m","title":"Tendang bola ke arah sasaran","domain":"Motorik kasar","duration":"5–10 menit","tools":"Bola lunak besar","kind":"tools","summary":"Latih keseimbangan dan koordinasi kaki.","steps":"Letakkan bola di depan anak di area datar. Tunjukkan tendangan pelan ke arah ruang kosong.","observe":"Apakah anak mencoba menendang atau mengejar bola.","safety":"Area harus bebas kendaraan, tangga, dan benda keras. Dampingi dekat.","source":"Buku KIA Kemenkes 2024"},{"id":"2y-sort-colors","ageBand":"b2_3y","title":"Kelompokkan benda sederhana","domain":"Kognitif","duration":"5–10 menit","tools":"Balok/benda besar dua warna","kind":"tools","summary":"Ajak anak mengamati persamaan dan perbedaan.","steps":"Mulai dari dua kelompok yang jelas, misalnya benda merah dan biru. Sebutkan warna tanpa menuntut hafalan.","observe":"Amati apakah anak mencoba mengelompokkan atau membandingkan.","safety":"Hindari benda kecil; gunakan benda aman dan tidak mudah tertelan.","source":"Buku KIA Kemenkes 2024"},{"id":"2y-story-talk","ageBand":"b2_3y","title":"Baca cerita dan ajak tanya jawab","domain":"Bahasa & komunikasi","duration":"5–10 menit","tools":"Buku cerita bergambar","kind":"tools","summary":"Bangun kosakata dan kebiasaan bercerita bersama.","steps":"Bacakan cerita singkat. Tunjuk gambar, tanyakan hal sederhana, dan beri waktu anak merespons.","observe":"Catat kata, gestur, atau cerita spontan anak.","safety":"Tidak perlu menguji atau mengoreksi berlebihan; ikuti minat anak.","source":"Buku KIA Kemenkes 2024"},{"id":"2y-role-play","ageBand":"b2_3y","title":"Main peran kegiatan sehari-hari","domain":"Sosial & emosional","duration":"10 menit","tools":"Boneka atau alat masak mainan besar","kind":"tools","summary":"Permainan pura-pura membantu anak mengekspresikan pengalaman.","steps":"Ajak bermain masak-masakan, merawat boneka, atau berbelanja pura-pura. Biarkan anak memilih peran.","observe":"Amati ide, kata, dan interaksi yang muncul.","safety":"Gunakan mainan aman; jangan gunakan benda tajam, panas, atau bahan makanan kecil yang berisiko tersedak.","source":"Buku KIA Kemenkes 2024"},{"id":"2y-self-care","ageBand":"b2_3y","title":"Latihan rutinitas mandiri","domain":"Kemandirian","duration":"5–10 menit","tools":"Pakaian mudah dipakai atau alat cuci tangan","kind":"home","summary":"Libatkan anak dalam rutinitas dengan bantuan sesuai kebutuhan.","steps":"Ajak mencuci tangan, merapikan mainan, atau mencoba memakai pakaian. Pecah langkah menjadi bagian sederhana.","observe":"Amati bagian yang mulai dapat dilakukan sendiri.","safety":"Awasi air, lantai licin, dan bahan kebersihan. Jangan memaksa saat anak lelah.","source":"Buku KIA Kemenkes 2024"},{"id":"3y-picture-story","ageBand":"b3_4y","title":"Susun cerita dari gambar","domain":"Bahasa & komunikasi","duration":"10 menit","tools":"Kartu gambar atau buku cerita","kind":"tools","summary":"Ajak anak menyebutkan apa yang terjadi dalam gambar.","steps":"Pilih dua atau tiga gambar. Ajak anak mengurutkan dan menceritakan dengan kata-katanya sendiri.","observe":"Catat kemampuan menyebut, mengurut, atau bercerita.","safety":"Terima variasi cerita dan jangan memaksa jawaban tertentu.","source":"Buku KIA Kemenkes 2024"},{"id":"3y-shape-art","ageBand":"b3_4y","title":"Gambar garis dan bentuk sederhana","domain":"Motorik halus","duration":"10 menit","tools":"Kertas dan krayon jumbo","kind":"tools","summary":"Latih kendali tangan melalui kegiatan menggambar bebas.","steps":"Ajak membuat garis, lingkaran, atau bentuk sederhana. Orang tua boleh memberi contoh, anak bebas bereksperimen.","observe":"Amati cara memegang alat dan jenis coretan.","safety":"Gunakan krayon non-toksik dan awasi agar tidak dimasukkan ke mulut.","source":"Buku KIA Kemenkes 2024"},{"id":"3y-follow-leader","ageBand":"b3_4y","title":"Ikuti gerakan pemimpin","domain":"Motorik kasar","duration":"5–10 menit","tools":"Tanpa alat","kind":"home","summary":"Latih koordinasi dengan meniru gerakan sederhana.","steps":"Orang tua berjalan, berjinjit, bertepuk, atau melompat kecil. Bergantian biarkan anak menjadi pemimpin.","observe":"Apakah anak mencoba meniru dan berganti peran.","safety":"Lakukan di area datar dan tidak licin; sesuaikan kemampuan anak.","source":"Buku KIA Kemenkes 2024"},{"id":"3y-turn-taking","ageBand":"b3_4y","title":"Bermain bergiliran","domain":"Sosial & emosional","duration":"5–10 menit","tools":"Bola atau balok besar","kind":"tools","summary":"Latih menunggu dan mengambil giliran dengan dukungan orang tua.","steps":"Gulirkan bola bergantian atau susun balok satu per satu. Sebut “giliran Ayah/Ibu, lalu giliran kamu”.","observe":"Amati kemampuan menunggu singkat dan mengikuti aturan sederhana.","safety":"Jaga permainan tetap menyenangkan; bantu anak ketika kesal.","source":"Buku KIA Kemenkes 2024"},{"id":"4y-role-story","ageBand":"b4_5y","title":"Bermain peran dan bercerita","domain":"Sosial & emosional","duration":"10–15 menit","tools":"Kostum sederhana atau benda rumah aman","kind":"tools","summary":"Bantu anak mengembangkan imajinasi dan cerita pengalaman.","steps":"Pilih tema yang dikenal anak, misalnya dokter-dokteran atau pasar. Ajak anak bercerita tentang perannya.","observe":"Amati ide cerita, pergantian peran, dan interaksi.","safety":"Hindari alat medis asli, benda tajam, atau benda kecil.","source":"Buku KIA Kemenkes 2024"},{"id":"4y-draw-person","ageBand":"b4_5y","title":"Menggambar orang dan anggota tubuh","domain":"Motorik halus","duration":"10 menit","tools":"Kertas dan pensil/krayon","kind":"tools","summary":"Ajak anak menggambar sesuai imajinasinya.","steps":"Minta anak menggambar orang atau keluarga. Tanyakan bagian yang digambar tanpa menilai hasilnya.","observe":"Simpan karya dan tanggalnya sebagai dokumentasi.","safety":"Gunakan alat gambar aman; awasi gunting atau alat lain.","source":"Buku KIA Kemenkes 2024"},{"id":"4y-number-game","ageBand":"b4_5y","title":"Hitung benda saat bermain","domain":"Kognitif","duration":"5–10 menit","tools":"Balok, buah mainan, atau benda besar","kind":"tools","summary":"Kenalkan angka melalui kegiatan konkret.","steps":"Hitung benda satu per satu ketika menyusun atau merapikan. Sesuaikan jumlah dengan minat anak.","observe":"Amati apakah anak ikut menyebut atau menunjuk jumlah.","safety":"Gunakan benda cukup besar dan tidak mudah tertelan.","source":"Buku KIA Kemenkes 2024"},{"id":"4y-jump-path","ageBand":"b4_5y","title":"Jalur lompat sederhana","domain":"Motorik kasar","duration":"5–10 menit","tools":"Tanda lantai dari kertas/kain","kind":"tools","summary":"Latih keseimbangan dan koordinasi melalui gerak.","steps":"Buat jalur sederhana di lantai datar, ajak melangkah atau melompat sesuai kemampuan.","observe":"Amati koordinasi dan rasa percaya diri.","safety":"Pastikan permukaan tidak licin, jarak aman, dan orang dewasa mendampingi.","source":"Buku KIA Kemenkes 2024"},{"id":"5y-story-sequence","ageBand":"b5_6y","title":"Ceritakan urutan kejadian","domain":"Bahasa & komunikasi","duration":"10–15 menit","tools":"Buku cerita atau foto keluarga","kind":"tools","summary":"Ajak anak menceritakan urutan awal, tengah, dan akhir.","steps":"Baca cerita atau lihat foto bersama. Ajak anak menceritakan apa yang terjadi lebih dulu dan berikutnya.","observe":"Catat pilihan kata dan urutan cerita.","safety":"Jangan menuntut kemampuan membaca atau bercerita dengan cara yang sama pada semua anak.","source":"Buku KIA Kemenkes 2024"},{"id":"5y-puzzle-pattern","ageBand":"b5_6y","title":"Susun puzzle atau pola balok","domain":"Kognitif","duration":"10–15 menit","tools":"Puzzle atau balok besar","kind":"tools","summary":"Latih pemecahan masalah dan pengenalan pola.","steps":"Mulai dari pola dua atau tiga bagian. Ajak anak mencoba, memberi ide, dan memperbaiki susunan.","observe":"Amati strategi anak, bukan hanya hasil akhir.","safety":"Pilih keping sesuai usia dan awasi bila terdapat bagian kecil.","source":"Buku KIA Kemenkes 2024"},{"id":"5y-cut-paste","ageBand":"b5_6y","title":"Gunting dan tempel bentuk","domain":"Motorik halus","duration":"10 menit","tools":"Gunting ujung tumpul anak, kertas, lem aman","kind":"tools","summary":"Latih koordinasi tangan melalui prakarya sederhana.","steps":"Buat bentuk besar di kertas. Anak menggunting dengan pendampingan lalu menempel pada lembar lain.","observe":"Simpan hasil karya dan catat aktivitasnya.","safety":"Gunting harus khusus anak dan digunakan dengan pengawasan langsung. Lem tidak boleh tertelan.","source":"Buku KIA Kemenkes 2024"},{"id":"5y-rules-play","ageBand":"b5_6y","title":"Bermain permainan dengan aturan","domain":"Sosial & emosional","duration":"10–15 menit","tools":"Permainan papan sederhana atau bola","kind":"tools","summary":"Latih bergiliran, mengikuti aturan sederhana, dan menerima hasil permainan.","steps":"Pilih permainan singkat. Jelaskan satu atau dua aturan, main bergantian, dan beri contoh menerima menang/kalah.","observe":"Amati kemampuan menunggu, mengikuti aturan, dan mengekspresikan perasaan.","safety":"Utamakan suasana suportif, bukan kompetisi atau tekanan.","source":"Buku KIA Kemenkes 2024"}];
+    const DEV_MILESTONES = [{"id":"2m-calm","ageBand":"b29_3m","agePoint":"2 bulan","domain":"Sosial & emosional","title":"Lebih mudah tenang ketika diajak bicara atau digendong","sourceType":"CDC","sourceLabel":"CDC · 2 bulan"},{"id":"2m-face","ageBand":"b29_3m","agePoint":"2 bulan","domain":"Sosial & emosional","title":"Memperhatikan wajah orang yang dekat dengannya","sourceType":"CDC","sourceLabel":"CDC · 2 bulan"},{"id":"2m-smile","ageBand":"b29_3m","agePoint":"2 bulan","domain":"Sosial & emosional","title":"Tersenyum ketika diajak bicara atau diberi senyuman","sourceType":"CDC","sourceLabel":"CDC · 2 bulan"},{"id":"2m-sounds","ageBand":"b29_3m","agePoint":"2 bulan","domain":"Bahasa & komunikasi","title":"Mengeluarkan suara selain menangis","sourceType":"CDC","sourceLabel":"CDC · 2 bulan"},{"id":"2m-noise","ageBand":"b29_3m","agePoint":"2 bulan","domain":"Bahasa & komunikasi","title":"Memberi reaksi terhadap suara keras","sourceType":"CDC","sourceLabel":"CDC · 2 bulan"},{"id":"2m-watch","ageBand":"b29_3m","agePoint":"2 bulan","domain":"Kognitif","title":"Mengikuti gerak orang dengan pandangan","sourceType":"CDC","sourceLabel":"CDC · 2 bulan"},{"id":"2m-toy","ageBand":"b29_3m","agePoint":"2 bulan","domain":"Kognitif","title":"Memperhatikan mainan selama beberapa detik","sourceType":"CDC","sourceLabel":"CDC · 2 bulan"},{"id":"2m-head","ageBand":"b29_3m","agePoint":"2 bulan","domain":"Motorik kasar","title":"Mengangkat kepala ketika tengkurap","sourceType":"CDC","sourceLabel":"CDC · 2 bulan"},{"id":"2m-limbs","ageBand":"b29_3m","agePoint":"2 bulan","domain":"Motorik kasar","title":"Menggerakkan kedua lengan dan kedua tungkai","sourceType":"CDC","sourceLabel":"CDC · 2 bulan"},{"id":"2m-hands","ageBand":"b29_3m","agePoint":"2 bulan","domain":"Motorik halus","title":"Membuka tangan sebentar","sourceType":"CDC","sourceLabel":"CDC · 2 bulan"},{"id":"kia-3m-head45","ageBand":"b29_3m","agePoint":"29 hari–3 bulan","domain":"Motorik kasar","title":"Mengangkat kepala saat tengkurap hingga kira-kira 45 derajat","sourceType":"KIA","sourceLabel":"Buku KIA · 29 hari–3 bulan"},{"id":"kia-3m-face","ageBand":"b29_3m","agePoint":"29 hari–3 bulan","domain":"Sosial & emosional","title":"Melihat dan menatap wajah pengasuh","sourceType":"KIA","sourceLabel":"Buku KIA · 29 hari–3 bulan"},{"id":"kia-3m-social-smile","ageBand":"b29_3m","agePoint":"29 hari–3 bulan","domain":"Sosial & emosional","title":"Membalas senyum ketika diajak bicara atau tersenyum","sourceType":"KIA","sourceLabel":"Buku KIA · 29 hari–3 bulan"},{"id":"kia-3m-sound","ageBand":"b29_3m","agePoint":"29 hari–3 bulan","domain":"Bahasa & komunikasi","title":"Bereaksi terhadap suara keras atau mengeluarkan suara gembira","sourceType":"KIA","sourceLabel":"Buku KIA · 29 hari–3 bulan"},{"id":"4m-smile","ageBand":"b3_6m","agePoint":"4 bulan","domain":"Sosial & emosional","title":"Tersenyum untuk menarik perhatian","sourceType":"CDC","sourceLabel":"CDC · 4 bulan"},{"id":"4m-chuckle","ageBand":"b3_6m","agePoint":"4 bulan","domain":"Sosial & emosional","title":"Tertawa kecil ketika diajak bercanda","sourceType":"CDC","sourceLabel":"CDC · 4 bulan"},{"id":"4m-coo","ageBand":"b3_6m","agePoint":"4 bulan","domain":"Bahasa & komunikasi","title":"Mengeluarkan suara seperti “uuu” atau “aaa”","sourceType":"CDC","sourceLabel":"CDC · 4 bulan"},{"id":"4m-voice","ageBand":"b3_6m","agePoint":"4 bulan","domain":"Bahasa & komunikasi","title":"Menoleh ke arah suara orang yang dikenal","sourceType":"CDC","sourceLabel":"CDC · 4 bulan"},{"id":"4m-holdhead","ageBand":"b3_6m","agePoint":"4 bulan","domain":"Motorik kasar","title":"Menahan kepala stabil saat digendong","sourceType":"CDC","sourceLabel":"CDC · 4 bulan"},{"id":"4m-toy","ageBand":"b3_6m","agePoint":"4 bulan","domain":"Motorik halus","title":"Memegang mainan yang diletakkan di tangannya","sourceType":"CDC","sourceLabel":"CDC · 4 bulan"},{"id":"6m-familiar","ageBand":"b3_6m","agePoint":"6 bulan","domain":"Sosial & emosional","title":"Mengenali orang yang akrab","sourceType":"CDC","sourceLabel":"CDC · 6 bulan"},{"id":"6m-laugh","ageBand":"b3_6m","agePoint":"6 bulan","domain":"Sosial & emosional","title":"Tertawa","sourceType":"CDC","sourceLabel":"CDC · 6 bulan"},{"id":"6m-turn-sounds","ageBand":"b3_6m","agePoint":"6 bulan","domain":"Bahasa & komunikasi","title":"Bergantian membuat suara dengan orang tua","sourceType":"CDC","sourceLabel":"CDC · 6 bulan"},{"id":"6m-reach","ageBand":"b3_6m","agePoint":"6 bulan","domain":"Kognitif","title":"Meraih mainan yang diinginkannya","sourceType":"CDC","sourceLabel":"CDC · 6 bulan"},{"id":"6m-roll","ageBand":"b3_6m","agePoint":"6 bulan","domain":"Motorik kasar","title":"Berguling dari tengkurap ke telentang","sourceType":"CDC","sourceLabel":"CDC · 6 bulan"},{"id":"6m-push","ageBand":"b3_6m","agePoint":"6 bulan","domain":"Motorik kasar","title":"Mendorong tubuh dengan lengan saat tengkurap","sourceType":"CDC","sourceLabel":"CDC · 6 bulan"},{"id":"kia-6m-grasp","ageBand":"b3_6m","agePoint":"3–6 bulan","domain":"Motorik halus","title":"Menggenggam mainan atau meraih benda di dekatnya","sourceType":"KIA","sourceLabel":"Buku KIA · 3–6 bulan"},{"id":"kia-6m-track","ageBand":"b3_6m","agePoint":"3–6 bulan","domain":"Kognitif","title":"Mengamati tangan atau benda kecil di sekitarnya","sourceType":"KIA","sourceLabel":"Buku KIA · 3–6 bulan"},{"id":"9m-name","ageBand":"b6_9m","agePoint":"9 bulan","domain":"Bahasa & komunikasi","title":"Menoleh ketika namanya dipanggil","sourceType":"CDC","sourceLabel":"CDC · 9 bulan"},{"id":"9m-babble","ageBand":"b6_9m","agePoint":"9 bulan","domain":"Bahasa & komunikasi","title":"Membuat rangkaian suara seperti “mamamama” atau “babababa”","sourceType":"CDC","sourceLabel":"CDC · 9 bulan"},{"id":"9m-peekaboo","ageBand":"b6_9m","agePoint":"9 bulan","domain":"Sosial & emosional","title":"Tersenyum atau tertawa saat bermain cilukba","sourceType":"CDC","sourceLabel":"CDC · 9 bulan"},{"id":"9m-look-drop","ageBand":"b6_9m","agePoint":"9 bulan","domain":"Kognitif","title":"Mencari benda yang jatuh atau hilang dari pandangan","sourceType":"CDC","sourceLabel":"CDC · 9 bulan"},{"id":"9m-bang","ageBand":"b6_9m","agePoint":"9 bulan","domain":"Kognitif","title":"Membenturkan dua benda satu sama lain","sourceType":"CDC","sourceLabel":"CDC · 9 bulan"},{"id":"9m-sit","ageBand":"b6_9m","agePoint":"9 bulan","domain":"Motorik kasar","title":"Duduk tanpa bantuan","sourceType":"CDC","sourceLabel":"CDC · 9 bulan"},{"id":"9m-transfer","ageBand":"b6_9m","agePoint":"9 bulan","domain":"Motorik halus","title":"Memindahkan benda dari satu tangan ke tangan lain","sourceType":"CDC","sourceLabel":"CDC · 9 bulan"},{"id":"12m-wave","ageBand":"b9_12m","agePoint":"12 bulan","domain":"Sosial & emosional","title":"Melambaikan tangan untuk berpamitan","sourceType":"CDC","sourceLabel":"CDC · 12 bulan"},{"id":"12m-name","ageBand":"b9_12m","agePoint":"12 bulan","domain":"Bahasa & komunikasi","title":"Memanggil orang tua dengan sebutan khusus, misalnya “mama” atau “papa”","sourceType":"CDC","sourceLabel":"CDC · 12 bulan"},{"id":"12m-no","ageBand":"b9_12m","agePoint":"12 bulan","domain":"Bahasa & komunikasi","title":"Memahami kata “tidak” dengan berhenti atau jeda sejenak","sourceType":"CDC","sourceLabel":"CDC · 12 bulan"},{"id":"12m-container","ageBand":"b9_12m","agePoint":"12 bulan","domain":"Kognitif","title":"Memasukkan benda ke dalam wadah","sourceType":"CDC","sourceLabel":"CDC · 12 bulan"},{"id":"12m-hide","ageBand":"b9_12m","agePoint":"12 bulan","domain":"Kognitif","title":"Mencari benda yang dilihat saat disembunyikan","sourceType":"CDC","sourceLabel":"CDC · 12 bulan"},{"id":"12m-pullstand","ageBand":"b9_12m","agePoint":"12 bulan","domain":"Motorik kasar","title":"Menarik tubuh untuk berdiri","sourceType":"CDC","sourceLabel":"CDC · 12 bulan"},{"id":"12m-cruise","ageBand":"b9_12m","agePoint":"12 bulan","domain":"Motorik kasar","title":"Berjalan sambil berpegangan pada furnitur","sourceType":"CDC","sourceLabel":"CDC · 12 bulan"},{"id":"kia-12m-stand","ageBand":"b9_12m","agePoint":"9–12 bulan","domain":"Motorik kasar","title":"Mengangkat tubuh ke posisi berdiri atau berdiri dengan berpegangan","sourceType":"KIA","sourceLabel":"Buku KIA · 9–12 bulan"},{"id":"kia-12m-sounds","ageBand":"b9_12m","agePoint":"9–12 bulan","domain":"Bahasa & komunikasi","title":"Menirukan bunyi yang didengar atau mengulang suku kata","sourceType":"KIA","sourceLabel":"Buku KIA · 9–12 bulan"},{"id":"kia-12m-explore","ageBand":"b9_12m","agePoint":"9–12 bulan","domain":"Kognitif","title":"Menjelajah dan menunjukkan rasa ingin tahu terhadap lingkungan","sourceType":"KIA","sourceLabel":"Buku KIA · 9–12 bulan"},{"id":"15m-words","ageBand":"b12_18m","agePoint":"15 bulan","domain":"Bahasa & komunikasi","title":"Mencoba mengucapkan satu atau dua kata selain “mama” atau “papa”","sourceType":"CDC","sourceLabel":"CDC · 15 bulan"},{"id":"15m-point","ageBand":"b12_18m","agePoint":"15 bulan","domain":"Bahasa & komunikasi","title":"Menunjuk untuk meminta sesuatu atau meminta bantuan","sourceType":"CDC","sourceLabel":"CDC · 15 bulan"},{"id":"15m-show","ageBand":"b12_18m","agePoint":"15 bulan","domain":"Sosial & emosional","title":"Menunjukkan benda yang disukai kepada orang tua","sourceType":"CDC","sourceLabel":"CDC · 15 bulan"},{"id":"15m-stack","ageBand":"b12_18m","agePoint":"15 bulan","domain":"Kognitif","title":"Menumpuk dua benda kecil","sourceType":"CDC","sourceLabel":"CDC · 15 bulan"},{"id":"15m-use","ageBand":"b12_18m","agePoint":"15 bulan","domain":"Kognitif","title":"Mencoba menggunakan benda sesuai fungsinya, seperti cangkir atau buku","sourceType":"CDC","sourceLabel":"CDC · 15 bulan"},{"id":"18m-point","ageBand":"b12_18m","agePoint":"18 bulan","domain":"Sosial & emosional","title":"Menunjuk sesuatu yang menarik untuk dibagikan kepada orang lain","sourceType":"CDC","sourceLabel":"CDC · 18 bulan"},{"id":"18m-directions","ageBand":"b12_18m","agePoint":"18 bulan","domain":"Bahasa & komunikasi","title":"Mengikuti instruksi sederhana tanpa gestur","sourceType":"CDC","sourceLabel":"CDC · 18 bulan"},{"id":"18m-words","ageBand":"b12_18m","agePoint":"18 bulan","domain":"Bahasa & komunikasi","title":"Mencoba mengucapkan beberapa kata selain “mama” atau “papa”","sourceType":"CDC","sourceLabel":"CDC · 18 bulan"},{"id":"18m-walk","ageBand":"b12_18m","agePoint":"18 bulan","domain":"Motorik kasar","title":"Berjalan tanpa berpegangan","sourceType":"CDC","sourceLabel":"CDC · 18 bulan"},{"id":"18m-spoon","ageBand":"b12_18m","agePoint":"18 bulan","domain":"Motorik halus","title":"Mencoba menggunakan sendok","sourceType":"CDC","sourceLabel":"CDC · 18 bulan"},{"id":"2y-two-words","ageBand":"b18_24m","agePoint":"2 tahun","domain":"Bahasa & komunikasi","title":"Mengucapkan gabungan setidaknya dua kata","sourceType":"CDC","sourceLabel":"CDC · 2 tahun"},{"id":"2y-points-book","ageBand":"b18_24m","agePoint":"2 tahun","domain":"Bahasa & komunikasi","title":"Menunjuk gambar atau benda di buku ketika diminta","sourceType":"CDC","sourceLabel":"CDC · 2 tahun"},{"id":"2y-body","ageBand":"b18_24m","agePoint":"2 tahun","domain":"Bahasa & komunikasi","title":"Menunjuk setidaknya dua bagian tubuh ketika diminta","sourceType":"CDC","sourceLabel":"CDC · 2 tahun"},{"id":"2y-pretend","ageBand":"b18_24m","agePoint":"2 tahun","domain":"Kognitif","title":"Menggunakan lebih dari satu benda dalam permainan pura-pura","sourceType":"CDC","sourceLabel":"CDC · 2 tahun"},{"id":"2y-empathy","ageBand":"b18_24m","agePoint":"2 tahun","domain":"Sosial & emosional","title":"Memperhatikan ketika orang lain terluka atau sedih","sourceType":"CDC","sourceLabel":"CDC · 2 tahun"},{"id":"2y-run","ageBand":"b18_24m","agePoint":"2 tahun","domain":"Motorik kasar","title":"Berlari","sourceType":"CDC","sourceLabel":"CDC · 2 tahun"},{"id":"2y-spoon","ageBand":"b18_24m","agePoint":"2 tahun","domain":"Motorik halus","title":"Mencoba makan dengan sendok","sourceType":"CDC","sourceLabel":"CDC · 2 tahun"},{"id":"30m-words","ageBand":"b2_3y","agePoint":"30 bulan","domain":"Bahasa & komunikasi","title":"Mengucapkan sekitar 50 kata","sourceType":"CDC","sourceLabel":"CDC · 30 bulan"},{"id":"30m-combine","ageBand":"b2_3y","agePoint":"30 bulan","domain":"Bahasa & komunikasi","title":"Menggabungkan dua kata atau lebih, termasuk kata kerja","sourceType":"CDC","sourceLabel":"CDC · 30 bulan"},{"id":"30m-color","ageBand":"b2_3y","agePoint":"30 bulan","domain":"Kognitif","title":"Mengenali setidaknya satu warna","sourceType":"CDC","sourceLabel":"CDC · 30 bulan"},{"id":"30m-imagine","ageBand":"b2_3y","agePoint":"30 bulan","domain":"Kognitif","title":"Menggunakan benda sebagai pengganti dalam permainan pura-pura","sourceType":"CDC","sourceLabel":"CDC · 30 bulan"},{"id":"30m-play","ageBand":"b2_3y","agePoint":"30 bulan","domain":"Sosial & emosional","title":"Bermain di dekat anak lain dan kadang mulai bermain bersama","sourceType":"CDC","sourceLabel":"CDC · 30 bulan"},{"id":"30m-jump","ageBand":"b2_3y","agePoint":"30 bulan","domain":"Motorik kasar","title":"Melompat dengan kedua kaki terangkat","sourceType":"CDC","sourceLabel":"CDC · 30 bulan"},{"id":"3y-play","ageBand":"b3_4y","agePoint":"3 tahun","domain":"Sosial & emosional","title":"Memperhatikan anak lain dan ikut bermain bersama mereka","sourceType":"CDC","sourceLabel":"CDC · 3 tahun"},{"id":"3y-conversation","ageBand":"b3_4y","agePoint":"3 tahun","domain":"Bahasa & komunikasi","title":"Melakukan percakapan bolak-balik setidaknya dua kali","sourceType":"CDC","sourceLabel":"CDC · 3 tahun"},{"id":"3y-question","ageBand":"b3_4y","agePoint":"3 tahun","domain":"Bahasa & komunikasi","title":"Bertanya “siapa”, “apa”, “di mana”, atau “mengapa”","sourceType":"CDC","sourceLabel":"CDC · 3 tahun"},{"id":"3y-name","ageBand":"b3_4y","agePoint":"3 tahun","domain":"Kognitif","title":"Menyebut nama depan ketika ditanya","sourceType":"CDC","sourceLabel":"CDC · 3 tahun"},{"id":"3y-circle","ageBand":"b3_4y","agePoint":"3 tahun","domain":"Motorik halus","title":"Menggambar lingkaran setelah diberi contoh","sourceType":"CDC","sourceLabel":"CDC · 3 tahun"},{"id":"4y-pretend","ageBand":"b4_5y","agePoint":"4 tahun","domain":"Sosial & emosional","title":"Berpura-pura menjadi tokoh lain saat bermain","sourceType":"CDC","sourceLabel":"CDC · 4 tahun"},{"id":"4y-comfort","ageBand":"b4_5y","agePoint":"4 tahun","domain":"Sosial & emosional","title":"Menunjukkan perhatian ketika orang lain sedih atau terluka","sourceType":"CDC","sourceLabel":"CDC · 4 tahun"},{"id":"4y-sentence","ageBand":"b4_5y","agePoint":"4 tahun","domain":"Bahasa & komunikasi","title":"Mengucapkan kalimat dengan empat kata atau lebih","sourceType":"CDC","sourceLabel":"CDC · 4 tahun"},{"id":"4y-colors","ageBand":"b4_5y","agePoint":"4 tahun","domain":"Kognitif","title":"Menyebut beberapa warna benda","sourceType":"CDC","sourceLabel":"CDC · 4 tahun"},{"id":"4y-story","ageBand":"b4_5y","agePoint":"4 tahun","domain":"Kognitif","title":"Mengingat atau menyebut hal yang terjadi berikutnya dalam cerita yang dikenal","sourceType":"CDC","sourceLabel":"CDC · 4 tahun"},{"id":"4y-draw","ageBand":"b4_5y","agePoint":"4 tahun","domain":"Motorik halus","title":"Menggambar orang dengan tiga bagian tubuh atau lebih","sourceType":"CDC","sourceLabel":"CDC · 4 tahun"},{"id":"5y-turns","ageBand":"b5_6y","agePoint":"5 tahun","domain":"Sosial & emosional","title":"Mengikuti aturan atau bergiliran saat bermain","sourceType":"CDC","sourceLabel":"CDC · 5 tahun"},{"id":"5y-story","ageBand":"b5_6y","agePoint":"5 tahun","domain":"Bahasa & komunikasi","title":"Menceritakan kisah dengan sedikitnya dua kejadian","sourceType":"CDC","sourceLabel":"CDC · 5 tahun"},{"id":"5y-conversation","ageBand":"b5_6y","agePoint":"5 tahun","domain":"Bahasa & komunikasi","title":"Melanjutkan percakapan dengan beberapa giliran bicara","sourceType":"CDC","sourceLabel":"CDC · 5 tahun"},{"id":"5y-count","ageBand":"b5_6y","agePoint":"5 tahun","domain":"Kognitif","title":"Menghitung sampai 10","sourceType":"CDC","sourceLabel":"CDC · 5 tahun"},{"id":"5y-time","ageBand":"b5_6y","agePoint":"5 tahun","domain":"Kognitif","title":"Menggunakan kata waktu sederhana seperti kemarin atau besok","sourceType":"CDC","sourceLabel":"CDC · 5 tahun"},{"id":"5y-hop","ageBand":"b5_6y","agePoint":"5 tahun","domain":"Motorik kasar","title":"Melompat dengan satu kaki","sourceType":"CDC","sourceLabel":"CDC · 5 tahun"},{"id":"5y-buttons","ageBand":"b5_6y","agePoint":"5 tahun","domain":"Motorik halus","title":"Mengancingkan beberapa kancing","sourceType":"CDC","sourceLabel":"CDC · 5 tahun"},{"id":"kia-56-stand","ageBand":"b5_6y","agePoint":"5–6 tahun","domain":"Motorik kasar","title":"Berjalan lurus dan menjaga keseimbangan saat berdiri satu kaki","sourceType":"KIA","sourceLabel":"Buku KIA · 5–6 tahun"},{"id":"kia-56-draw","ageBand":"b5_6y","agePoint":"5–6 tahun","domain":"Motorik halus","title":"Menggambar orang dengan beberapa bagian tubuh dan bentuk sederhana","sourceType":"KIA","sourceLabel":"Buku KIA · 5–6 tahun"},{"id":"kia-56-language","ageBand":"b5_6y","agePoint":"5–6 tahun","domain":"Bahasa & komunikasi","title":"Memahami percakapan dan menjawab pertanyaan sederhana","sourceType":"KIA","sourceLabel":"Buku KIA · 5–6 tahun"},{"id":"kia-56-selfcare","ageBand":"b5_6y","agePoint":"5–6 tahun","domain":"Kemandirian","title":"Berpakaian dan melakukan aktivitas perawatan diri dengan lebih mandiri","sourceType":"KIA","sourceLabel":"Buku KIA · 5–6 tahun"}];
+    const CDC_ROOT = 'https://www.cdc.gov/act-early/milestones/';
+    const KIA_URL = 'https://kesprimkom.kemkes.go.id/assets/uploads/contents/others/Buku_KIA_2024.pdf';
+    const DEV_DOMAINS = ['Semua', 'Motorik kasar', 'Motorik halus', 'Bahasa & komunikasi', 'Kognitif', 'Sosial & emosional', 'Kemandirian'];
+    let devCurrentView = 'home';
+    let devSelectedAgeBand = 'auto';
+    let devSelectedDomain = 'Semua';
+    let devSelectedMilestoneBand = 'auto';
+    let devModalBusy = false;
+
+    function devEscape(value) {
+        return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+    function devId() { return 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,8); }
+    function devNowDateKey() { return typeof getLocalDateKey === 'function' ? getLocalDateKey(new Date()) : new Date().toISOString().slice(0,10); }
+    function devDateFromKey(key) { return typeof parseLocalDateValue === 'function' ? parseLocalDateValue(key) : new Date(key + 'T00:00:00'); }
+    function devMonthsBetween(birth, today) {
+        let months = (today.getFullYear() - birth.getFullYear()) * 12 + (today.getMonth() - birth.getMonth());
+        if (today.getDate() < birth.getDate()) months--;
+        return Math.max(0, months);
+    }
+    function devAgeInfo() {
+        const dobText = (appState && appState.babyBirthDate) || (appState && appState.postnatalProfile && appState.postnatalProfile.birthDate) || '';
+        if (!dobText) return { known:false, label:'Tanggal lahir belum diatur', bandId:null, months:null, days:null };
+        const dob = devDateFromKey(dobText);
+        const today = new Date();
+        if (!dob || Number.isNaN(dob.getTime()) || dob > today) return { known:false, label:'Tanggal lahir belum valid', bandId:null, months:null, days:null };
+        const months = devMonthsBetween(dob, today);
+        const monthAnchor = new Date(dob.getFullYear(), dob.getMonth() + months, dob.getDate());
+        const days = Math.max(0, Math.floor((Date.UTC(today.getFullYear(),today.getMonth(),today.getDate()) - Date.UTC(monthAnchor.getFullYear(),monthAnchor.getMonth(),monthAnchor.getDate())) / 86400000));
+        const totalDays = Math.floor((Date.UTC(today.getFullYear(),today.getMonth(),today.getDate()) - Date.UTC(dob.getFullYear(),dob.getMonth(),dob.getDate())) / 86400000);
+        let bandId = null;
+        if (totalDays <= 28) bandId = 'b0_28d';
+        else if (months < 3) bandId = 'b29_3m';
+        else if (months < 6) bandId = 'b3_6m';
+        else if (months < 9) bandId = 'b6_9m';
+        else if (months < 12) bandId = 'b9_12m';
+        else if (months < 18) bandId = 'b12_18m';
+        else if (months < 24) bandId = 'b18_24m';
+        else if (months < 36) bandId = 'b2_3y';
+        else if (months < 48) bandId = 'b3_4y';
+        else if (months < 60) bandId = 'b4_5y';
+        else if (months < 84) bandId = 'b5_6y';
+        const ageLabel = months < 1 ? `${totalDays} hari` : `${Math.floor(months/12) ? Math.floor(months/12) + ' tahun ' : ''}${months%12 ? (months%12) + ' bulan ' : ''}${days ? days + ' hari' : ''}`.trim();
+        return { known:true, label:ageLabel || '0 hari', bandId, months, days, totalDays, dobText };
+    }
+    function devSelectedBandId() {
+        const age = devAgeInfo();
+        return devSelectedAgeBand === 'auto' ? age.bandId : devSelectedAgeBand;
+    }
+    function devBandLabel(id) { const b = DEV_AGE_BANDS.find(x => x.id === id); return b ? b.label : 'Semua usia'; }
+    function devBandSelectHtml(current) {
+        return `<select class="dev-age-select" aria-label="Pilih kelompok usia" onchange="setDevelopmentAgeBand(this.value)">
+            <option value="auto" ${current==='auto'?'selected':''}>Usia si kecil saat ini (otomatis)</option>
+            ${DEV_AGE_BANDS.map(b=>`<option value="${b.id}" ${current===b.id?'selected':''}>${b.label}</option>`).join('')}
+        </select>`;
+    }
+    function devGetJournal() { if (!Array.isArray(appState.developmentJournal)) appState.developmentJournal=[]; return appState.developmentJournal; }
+    function devGetMilestoneObservations() { if (!Array.isArray(appState.milestoneObservations)) appState.milestoneObservations=[]; return appState.milestoneObservations; }
+    function devGetFavorites() { if (!Array.isArray(appState.stimulationFavorites)) appState.stimulationFavorites=[]; return appState.stimulationFavorites; }
+    function devFindMilestoneRecord(id) { return devGetMilestoneObservations().find(x=>x.milestoneId===id); }
+    function devCurrentUserMeta() { return { uid: currentAuthenticatedUser?.uid || '', email: currentAuthenticatedUser?.email || '' }; }
+    function devDateFormat(value, options) {
+        const date = devDateFromKey(value || devNowDateKey());
+        if (!date || Number.isNaN(date.getTime())) return 'Tanggal tidak diketahui';
+        return date.toLocaleDateString('id-ID', options || {day:'numeric',month:'long',year:'numeric'});
+    }
+    function devStatusName(status) {
+        return ({emerging:'Mulai terlihat',observed:'Sudah konsisten',discuss:'Ingin didiskusikan'})[status] || 'Belum dicatat';
+    }
+    function devStatusClass(status) { return status==='observed'?'observed':status==='emerging'?'emerging':status==='discuss'?'discuss':''; }
+    function devDomainTone(domain) {
+        if (domain.includes('Motorik')) return 'blue';
+        if (domain.includes('Bahasa')) return 'teal';
+        if (domain.includes('Kognitif')) return 'amber';
+        if (domain.includes('Sosial')) return 'pink';
+        if (domain.includes('Kemandirian')) return 'green';
+        return 'slate';
+    }
+    function devIconForDomain(domain) {
+        if (domain.includes('Motorik kasar')) return 'fa-person-running';
+        if (domain.includes('Motorik halus')) return 'fa-hand';
+        if (domain.includes('Bahasa')) return 'fa-comments';
+        if (domain.includes('Kognitif')) return 'fa-lightbulb';
+        if (domain.includes('Sosial')) return 'fa-heart';
+        if (domain.includes('Kemandirian')) return 'fa-child-reaching';
+        return 'fa-seedling';
+    }
+    function devSourceLink(item) {
+        if (item.sourceType === 'CDC') {
+            const age = (item.agePoint || '').toLowerCase();
+            const file = age.includes('2 bulan')?'2-months.html':age.includes('4 bulan')?'4-months.html':age.includes('6 bulan')?'6-months.html':age.includes('9 bulan')?'9-months.html':age.includes('12 bulan')?'1-year.html':age.includes('15 bulan')?'15-months.html':age.includes('18 bulan')?'18-months.html':age.includes('2 tahun')?'2-years.html':age.includes('30 bulan')?'30-months.html':age.includes('3 tahun')?'3-years.html':age.includes('4 tahun')?'4-years.html':age.includes('5 tahun')?'5-years.html':'';
+            return file ? CDC_ROOT + file : CDC_ROOT;
+        }
+        return KIA_URL;
+    }
+    function renderStimulationModule() {
+        const root = document.getElementById('dev-content');
+        if (!root) return;
+        if (!Array.isArray(appState.stimulationFavorites)) appState.stimulationFavorites=[];
+        if (!Array.isArray(appState.developmentJournal)) appState.developmentJournal=[];
+        if (!Array.isArray(appState.milestoneObservations)) appState.milestoneObservations=[];
+        const age = devAgeInfo();
+        const band = DEV_AGE_BANDS.find(x=>x.id===age.bandId);
+        const journal = devGetJournal();
+        const currentMonth = devNowDateKey().slice(0,7);
+        const activitiesThisMonth = journal.filter(x=>x.type==='activity' && String(x.date||'').startsWith(currentMonth)).length;
+        const milestonesObserved = devGetMilestoneObservations().filter(x=>x.status==='observed').length;
+        const journalThisMonth = journal.filter(x=>String(x.date||'').startsWith(currentMonth)).length;
+        const name = appState.babyName || (appState.postnatalProfile && appState.postnatalProfile.name) || 'Si Kecil';
+        const ageEl = document.getElementById('dev-age-summary');
+        if (ageEl) ageEl.innerHTML = `<i class="fa-solid fa-calendar-heart"></i> ${age.known ? devEscape(name) + ' · ' + devEscape(age.label) : 'Lengkapi tanggal lahir agar rekomendasi usia otomatis'}`;
+        const statEl = document.getElementById('dev-overview-stats');
+        if (statEl) statEl.innerHTML = `
+            <div class="dev-stat"><span class="dev-stat-icon" style="background:#e0f2fe;color:#0284c7"><i class="fa-solid fa-puzzle-piece"></i></span><span><strong>${activitiesThisMonth}</strong><small>Aktivitas bulan ini</small></span></div>
+            <div class="dev-stat"><span class="dev-stat-icon" style="background:#dcfce7;color:#15803d"><i class="fa-solid fa-seedling"></i></span><span><strong>${milestonesObserved}</strong><small>Milestone teramati</small></span></div>
+            <div class="dev-stat"><span class="dev-stat-icon" style="background:#fce7f3;color:#be185d"><i class="fa-solid fa-book-heart"></i></span><span><strong>${journalThisMonth}</strong><small>Catatan bulan ini</small></span></div>`;
+        document.querySelectorAll('.dev-tab').forEach(btn=>btn.classList.toggle('active',btn.dataset.devView===devCurrentView));
+        if (devCurrentView==='home') root.innerHTML = renderDevHome(age,band);
+        else if (devCurrentView==='activities') root.innerHTML = renderDevActivities();
+        else if (devCurrentView==='milestones') root.innerHTML = renderDevMilestones();
+        else root.innerHTML = renderDevJournal();
+    }
+    function renderDevHome(age,band) {
+        const currentBandId = age.bandId || devSelectedBandId();
+        const currentBand = DEV_AGE_BANDS.find(x=>x.id===currentBandId) || null;
+        const suggestions = currentBandId ? DEV_ACTIVITIES.filter(x=>x.ageBand===currentBandId).slice(0,3) : [];
+        const journal = devGetJournal().slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,3);
+        const concern = `<div class="dev-panel" style="background:linear-gradient(120deg,#f0fdfa,#f0f9ff);border-color:#ccebe6"><div class="flex items-start gap-3"><span class="dev-stat-icon" style="background:#ccfbf1;color:#0f766e"><i class="fa-solid fa-heart"></i></span><div class="min-w-0"><h3 class="font-extrabold text-sm text-slate-800">Tumbuh bersama, tanpa terburu-buru</h3><p class="text-xs leading-relaxed text-slate-600 mt-1">Tidak perlu mengejar semua aktivitas setiap hari. Pilih yang menyenangkan, ikuti respons anak, dan berhenti ketika ia lelah atau tidak tertarik.</p></div></div></div>`;
+        return `
+          <div class="space-y-4">
+            ${!age.known ? `<div class="dev-panel flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div><h3 class="font-extrabold text-sm">Atur usia si kecil</h3><p class="text-xs text-slate-500 mt-1">Tanggal lahir diperlukan untuk menampilkan rekomendasi otomatis. Kamu tetap bisa menjelajah seluruh kelompok usia secara manual.</p></div><button class="dev-btn primary" onclick="editBabyProfile()"><i class="fa-solid fa-calendar-plus"></i> Atur profil bayi</button></div>` : ''}
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+              <div class="dev-panel lg:col-span-3"><div class="dev-panel-title"><div><h3>Fokus usia saat ini</h3><p>${currentBand?devEscape(currentBand.description):'Atur tanggal lahir atau pilih kelompok usia di menu Stimulasi untuk melihat rekomendasi yang sesuai.'}</p></div>${currentBand?`<span class="dev-chip teal">${devEscape(currentBand.label)}</span>`:''}</div>
+                <div class="flex flex-wrap gap-2 mb-3"><span class="dev-chip slate"><i class="fa-regular fa-clock"></i> Aktivitas singkat</span><span class="dev-chip slate"><i class="fa-solid fa-house"></i> Bisa dilakukan di rumah</span></div>
+                ${suggestions.length?`<div class="grid gap-2">${suggestions.map(a=>`<div class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50"><span class="w-9 h-9 rounded-xl bg-white text-teal-700 grid place-items-center"><i class="fa-solid ${devIconForDomain(a.domain)}"></i></span><div class="flex-1 min-w-0"><strong class="block text-xs text-slate-800">${devEscape(a.title)}</strong><small class="text-[10px] text-slate-500">${devEscape(a.domain)} · ${devEscape(a.duration)}</small></div><button class="dev-btn soft !px-3 !py-2" onclick="openDevelopmentActivity('${a.id}')">Lihat</button></div>`).join('')}</div>`:`<div class="dev-empty"><i class="fa-solid fa-calendar-check"></i><h4>Atur kelompok usia</h4><p>Lengkapi tanggal lahir pada profil bayi agar rekomendasi otomatis sesuai usia.</p></div>`}
+                <button class="dev-btn primary mt-3" onclick="setDevelopmentView('activities')">Lihat semua ide stimulasi <i class="fa-solid fa-arrow-right"></i></button>
+              </div>
+              <div class="dev-panel lg:col-span-2"><div class="dev-panel-title"><div><h3>Mulai dari hal kecil</h3><p>Rekam momen yang ingin kamu ingat.</p></div><i class="fa-solid fa-camera-retro text-2xl text-rose-400"></i></div>
+                <div class="space-y-2"><button class="dev-btn soft w-full justify-start" onclick="openDevelopmentJournalModal('first-moment')"><i class="fa-solid fa-sparkles"></i> Catat momen pertama</button><button class="dev-btn ghost w-full justify-start" onclick="openDevelopmentJournalModal('note')"><i class="fa-solid fa-pen"></i> Tulis jurnal perkembangan</button><button class="dev-btn ghost w-full justify-start" onclick="setDevelopmentView('milestones')"><i class="fa-solid fa-list-check"></i> Amati milestone usia</button></div>
+                <div class="mt-4 rounded-xl p-3 bg-amber-50 border border-amber-100"><p class="text-[11px] leading-relaxed text-amber-900"><i class="fa-solid fa-lightbulb mr-1"></i> Foto atau video bisa dilampirkan saat menulis jurnal. File media disimpan di folder Drive khusus, sedangkan catatan dan tautannya tersinkron melalui Firebase.</p></div>
+              </div>
+            </div>
+            <div class="dev-panel"><div class="dev-panel-title"><div><h3>Jejak terbaru</h3><p>Aktivitas, milestone, dan cerita yang baru dicatat.</p></div><button class="dev-btn ghost" onclick="setDevelopmentView('journal')">Lihat jurnal</button></div>
+              ${journal.length ? `<div class="dev-journal-list">${journal.map(renderDevJournalCard).join('')}</div>` : `<div class="dev-empty"><i class="fa-solid fa-book-open"></i><h4>Belum ada cerita yang dicatat</h4><p>Mulai dengan aktivitas sederhana atau catat momen pertama yang ingin disimpan.</p></div>`}
+            </div>
+            ${concern}
+          </div>`;
+    }
+    function renderDevActivities() {
+        const bandId = devSelectedBandId();
+        const items = DEV_ACTIVITIES.filter(a=>(!bandId || a.ageBand===bandId) && (devSelectedDomain==='Semua'||a.domain===devSelectedDomain));
+        const totalDone = new Set(devGetJournal().filter(x=>x.type==='activity').map(x=>x.activityId)).size;
+        return `<div class="dev-panel">
+          <div class="dev-panel-title"><div><h3>Panduan stimulasi</h3><p>Pilih aktivitas sesuai usia dan minat si kecil. Setiap aktivitas bersifat ajakan, bukan kewajiban.</p></div><span class="dev-chip teal">${items.length} ide</span></div>
+          <div class="dev-filter-row">${devBandSelectHtml(devSelectedAgeBand)}<select class="dev-filter-select" onchange="setDevelopmentDomain(this.value)" aria-label="Filter area perkembangan">${DEV_DOMAINS.map(d=>`<option ${devSelectedDomain===d?'selected':''}>${devEscape(d)}</option>`).join('')}</select></div>
+          ${!bandId ? `<div class="rounded-xl p-3 mb-3 bg-sky-50 text-sky-800 text-xs">Tanggal lahir belum diatur atau usia berada di luar cakupan 0–6 tahun. Semua kelompok usia ditampilkan; pilih kelompok usia secara manual untuk menyaring aktivitas.</div>` : ''}
+          <div class="dev-activity-grid">${items.map(a=>{
+            const fav=devGetFavorites().includes(a.id); const done=devGetJournal().some(x=>x.type==='activity'&&x.activityId===a.id);
+            return `<article class="dev-activity-card"><div class="flex items-center justify-between gap-2"><span class="dev-chip ${devDomainTone(a.domain)}">${devEscape(a.domain)}</span><button type="button" class="text-base ${fav?'text-rose-500':'text-slate-300'}" title="${fav?'Hapus favorit':'Simpan favorit'}" onclick="toggleDevelopmentFavorite('${a.id}')"><i class="fa-${fav?'solid':'regular'} fa-heart"></i></button></div><h4>${devEscape(a.title)}</h4><p>${devEscape(a.summary)}</p><div class="dev-card-meta"><span class="dev-chip slate"><i class="fa-regular fa-clock"></i> ${devEscape(a.duration)}</span><span class="dev-chip slate"><i class="fa-solid ${a.kind==='home'?'fa-house':'fa-cubes'}"></i> ${a.kind==='home'?'Tanpa alat':'Alat sederhana'}</span>${done?'<span class="dev-chip green"><i class="fa-solid fa-check"></i> Pernah dicatat</span>':''}</div><div class="dev-card-actions"><span class="dev-source"><i class="fa-solid fa-book-open"></i> ${devEscape(a.source.split(' · ')[0])}</span><button class="dev-btn soft" onclick="openDevelopmentActivity('${a.id}')">Detail <i class="fa-solid fa-arrow-right"></i></button></div></article>`;
+          }).join('')}</div>
+          ${items.length===0?`<div class="dev-empty mt-3"><i class="fa-solid fa-filter-circle-xmark"></i><h4>Tidak ada aktivitas di filter ini</h4><p>Coba pilih kelompok usia atau area perkembangan yang lain.</p></div>`:''}
+          <div class="mt-4 text-[10px] text-slate-500">${totalDone} aktivitas berbeda pernah dicatat. Aktivitas yang sama boleh dicoba berulang dan dicatat sebagai pengalaman baru.</div>
+        </div>`;
+    }
+    function renderDevMilestones() {
+        const bandId = devMilestoneBand();
+        const list = DEV_MILESTONES.filter(m=>!bandId||m.ageBand===bandId);
+        const statuses = devGetMilestoneObservations();
+        const completed = list.filter(m=>{const r=statuses.find(x=>x.milestoneId===m.id);return r&&r.status==='observed';}).length;
+        return `<div class="dev-panel">
+          <div class="dev-panel-title"><div><h3>Milestone tracker</h3><p>Catat kemampuan yang mulai terlihat atau sudah konsisten. “Belum dicatat” bukan berarti anak belum mampu.</p></div><span class="dev-chip green">${completed}/${list.length} konsisten</span></div>
+          <div class="dev-filter-row">${devBandSelectHtml(devSelectedMilestoneBand==='auto'?'auto':devSelectedMilestoneBand)}</div>
+          ${!devAgeInfo().known && devSelectedMilestoneBand==='auto'?`<div class="rounded-xl p-3 mb-3 bg-sky-50 text-sky-800 text-xs">Tanggal lahir belum diatur. Semua kelompok usia ditampilkan; pilih rentang usia secara manual untuk menyaring pengamatan.</div>`:''}
+          ${bandId==='b0_28d'?`<div class="dev-empty"><i class="fa-solid fa-heart"></i><h4>Fokus pada pengamatan awal</h4><p>Untuk usia 0–28 hari, gunakan jurnal untuk mencatat respons awal bayi dan ikuti pemeriksaan neonatus. Daftar milestone pada modul ini dimulai dari usia 2 bulan; tidak ada penilaian lulus atau gagal untuk bayi baru lahir.</p><button class="dev-btn primary mt-3" onclick="openDevelopmentJournalModal('note')">Catat pengamatan awal</button></div>`:''}
+          ${list.length?`<div class="dev-milestone-list">${list.map(m=>{const record=devFindMilestoneRecord(m.id);const status=record?record.status:'';return `<article class="dev-milestone-card"><div class="flex flex-wrap items-center justify-between gap-2"><span class="dev-chip ${devDomainTone(m.domain)}">${devEscape(m.domain)}</span><span class="text-[10px] font-bold text-slate-400">${devEscape(m.agePoint)}</span></div><h4>${devEscape(m.title)}</h4><div class="dev-source mt-1"><i class="fa-solid fa-book-open"></i> ${devEscape(m.sourceLabel)}</div><div class="dev-milestone-status"><span class="dev-status-pill ${devStatusClass(status)}">${devStatusName(status)}</span><button class="dev-btn soft !px-3 !py-2" onclick="openDevelopmentMilestoneModal('${m.id}')">Catat</button></div></article>`;}).join('')}</div>`:''}
+          <div class="mt-4 rounded-xl border border-amber-100 bg-amber-50 p-3 text-[11px] leading-relaxed text-amber-900"><strong>Catatan penting:</strong> Daftar di aplikasi ini adalah ringkasan pilihan dari beberapa penanda Buku KIA dan milestone CDC, bukan checklist resmi yang lengkap. CDC menempatkan milestone pada usia ketika sekitar 75% atau lebih anak diperkirakan menunjukkannya. Daftar ini bukan standar perkembangan, alat skrining, atau alat diagnosis. Bila ada kekhawatiran atau anak kehilangan kemampuan yang pernah dimiliki, diskusikan dengan dokter/bidan/tenaga kesehatan dan lakukan skrining formal sesuai anjuran.</div>
+          <div class="flex flex-wrap gap-3 mt-3 text-[10px]"><a href="${CDC_ROOT}" target="_blank" rel="noopener" class="underline text-sky-700 font-bold">Sumber milestone CDC</a><a href="${KIA_URL}" target="_blank" rel="noopener" class="underline text-sky-700 font-bold">Buku KIA Kemenkes 2024</a></div>
+        </div>`;
+    }
+    function devMilestoneBand() { return devSelectedMilestoneBand==='auto' ? devAgeInfo().bandId : devSelectedMilestoneBand; }
+    function renderDevJournalCard(entry) {
+        const date = devDateFromKey(entry.date||devNowDateKey());
+        const day = date && !Number.isNaN(date.getTime()) ? date.getDate() : '—';
+        const month = date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString('id-ID',{month:'short'}).replace('.','') : '';
+        const typeLabel = ({activity:'Aktivitas stimulasi','first-moment':'First moment',note:'Catatan',milestone:'Milestone'})[entry.type] || 'Jurnal';
+        const media = Array.isArray(entry.media)?entry.media:[];
+        const thumbs = media.map(m=>`<a class="dev-media-item" href="${devEscape(m.webViewLink||('https://drive.google.com/file/d/'+m.driveFileId+'/view'))}" target="_blank" rel="noopener noreferrer" title="Buka ${devEscape(m.name)} di Google Drive">${m.thumbnailDataUrl?`<img src="${m.thumbnailDataUrl}" alt="${devEscape(m.name)}" loading="lazy">`:`<span class="w-full h-full grid place-items-center text-slate-400"><i class="fa-solid ${String(m.mimeType||'').startsWith('video/')?'fa-film':'fa-image'} text-2xl"></i></span>`}${String(m.mimeType||'').startsWith('video/')?'<span class="dev-media-play"><i class="fa-solid fa-circle-play"></i></span>':''}</a>`).join('');
+        return `<article class="dev-journal-card"><div class="dev-journal-date"><strong>${day}</strong><small>${devEscape(month)}</small></div><div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><span class="dev-chip ${entry.type==='first-moment'?'pink':entry.type==='activity'?'teal':'slate'}">${typeLabel}</span><span class="text-[10px] text-slate-400">${devEscape(devDateFormat(entry.date,{year:'numeric'}))}</span></div><h4 class="mt-1">${devEscape(entry.title||'Catatan perkembangan')}</h4>${entry.content?`<p>${devEscape(entry.content)}</p>`:''}${entry.response?`<p><strong>Respons:</strong> ${devEscape(entry.response)}</p>`:''}${thumbs?`<div class="dev-media-grid">${thumbs}</div>`:''}${entry.type==='milestone'?'':`<div class="flex justify-end mt-2"><button class="text-[10px] font-bold text-rose-500 px-2 py-1" onclick="deleteDevelopmentJournalEntry('${entry.id}')"><i class="fa-solid fa-trash mr-1"></i>Hapus catatan</button></div>`}</div></article>`;
+    }
+    function renderDevJournal() {
+        const entries = devGetJournal().slice();
+        devGetMilestoneObservations().filter(x=>x.status && x.status!=='').forEach(r=>{
+            const milestone=DEV_MILESTONES.find(m=>m.id===r.milestoneId); if(!milestone)return;
+            entries.push({id:'milestone-'+r.milestoneId,type:'milestone',date:r.observedDate||r.recordedDate||devNowDateKey(),title:milestone.title,content:(r.note||'')+' · Status: '+devStatusName(r.status),media:[]});
+        });
+        entries.sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+        return `<div class="dev-panel"><div class="dev-panel-title"><div><h3>Jurnal perkembangan</h3><p>Simpan cerita, aktivitas, first moments, serta foto dan video kenangan.</p></div><button class="dev-btn primary" onclick="openDevelopmentJournalModal('note')"><i class="fa-solid fa-plus"></i> Tambah</button></div>
+          <div class="rounded-xl border border-sky-100 bg-sky-50 p-3 mb-4"><div class="flex items-start gap-2"><i class="fa-solid fa-cloud-arrow-up text-sky-600 mt-0.5"></i><p class="text-[11px] text-sky-900 leading-relaxed"><strong>Media keluarga disimpan di Google Drive.</strong> Foto/video diunggah ke subfolder khusus dalam folder Drive keluarga; jurnal dan metadata file tersinkron melalui Firebase. File media tidak disalin ke dalam JSON backup, sehingga folder Drive tetap perlu dijaga.</p></div></div>
+          ${entries.length?`<div class="dev-journal-list">${entries.map(renderDevJournalCard).join('')}</div>`:`<div class="dev-empty"><i class="fa-solid fa-book-heart"></i><h4>Belum ada catatan perkembangan</h4><p>Simpan momen pertama, cerita hari ini, atau dokumentasikan aktivitas stimulasi.</p><button class="dev-btn primary mt-3" onclick="openDevelopmentJournalModal('first-moment')">Catat first moment</button></div>`}
+        </div>`;
+    }
+    function setDevelopmentView(view) { devCurrentView=view; renderStimulationModule(); }
+    function setDevelopmentAgeBand(value) { devSelectedAgeBand=value; devSelectedMilestoneBand=value; renderStimulationModule(); }
+    function setDevelopmentDomain(value) { devSelectedDomain=value; renderStimulationModule(); }
+    function toggleDevelopmentFavorite(id) {
+        const fav=devGetFavorites(); const idx=fav.indexOf(id); if(idx>=0) fav.splice(idx,1); else fav.push(id);
+        appState.stimulationFavorites=fav; saveToLocalStorage(); renderStimulationModule();
+    }
+    function devShowModal(html) { const root=document.getElementById('development-modal-root'); if(!root)return; root.innerHTML=html; root.querySelector('.dev-modal-backdrop')?.addEventListener('click',e=>{if(e.target===e.currentTarget)closeDevelopmentModal();}); }
+    function closeDevelopmentModal(force) { if(devModalBusy && !force) return; const root=document.getElementById('development-modal-root'); if(root)root.innerHTML=''; devModalBusy=false; }
+    function openDevelopmentActivity(id) {
+        const a=DEV_ACTIVITIES.find(x=>x.id===id); if(!a)return;
+        const done=devGetJournal().filter(x=>x.type==='activity'&&x.activityId===id).length;
+        devShowModal(`<div class="dev-modal-backdrop"><div class="dev-modal"><div class="dev-modal-head"><div><span class="dev-chip ${devDomainTone(a.domain)}">${devEscape(a.domain)}</span><h3 class="font-extrabold text-lg mt-2">${devEscape(a.title)}</h3><p class="text-xs text-slate-500 mt-1">${devEscape(devBandLabel(a.ageBand))} · ${devEscape(a.duration)}</p></div><button class="text-slate-400 text-xl" onclick="closeDevelopmentModal()"><i class="fa-solid fa-xmark"></i></button></div><div class="dev-modal-body space-y-4"><p class="text-sm leading-relaxed text-slate-600">${devEscape(a.summary)}</p><div class="grid grid-cols-2 gap-2"><div class="rounded-xl bg-slate-50 p-3"><small class="text-[10px] text-slate-500 block">Alat</small><strong class="text-xs text-slate-800">${devEscape(a.tools)}</strong></div><div class="rounded-xl bg-slate-50 p-3"><small class="text-[10px] text-slate-500 block">Jenis</small><strong class="text-xs text-slate-800">${a.kind==='home'?'Aktivitas di rumah':'Dengan alat sederhana'}</strong></div></div><div><h4 class="font-extrabold text-sm mb-2">Cara melakukan</h4><p class="text-xs leading-relaxed text-slate-600">${devEscape(a.steps)}</p></div><div class="rounded-xl bg-emerald-50 border border-emerald-100 p-3"><h4 class="font-extrabold text-xs text-emerald-800"><i class="fa-solid fa-eye mr-1"></i> Yang bisa diamati</h4><p class="text-xs leading-relaxed text-emerald-900 mt-1">${devEscape(a.observe)}</p></div><div class="rounded-xl bg-amber-50 border border-amber-100 p-3"><h4 class="font-extrabold text-xs text-amber-800"><i class="fa-solid fa-shield-heart mr-1"></i> Catatan keamanan</h4><p class="text-xs leading-relaxed text-amber-900 mt-1">${devEscape(a.safety)}</p></div><div class="text-[10px] text-slate-400">Sumber: ${devEscape(a.source)} · ${done} kali dicatat</div><div class="flex flex-wrap gap-2 pt-1"><button class="dev-btn ghost flex-1" onclick="toggleDevelopmentFavorite('${a.id}');openDevelopmentActivity('${a.id}')"><i class="fa-heart ${devGetFavorites().includes(a.id)?'fa-solid text-rose-500':'fa-regular'}"></i> Favorit</button><button class="dev-btn primary flex-1" onclick="closeDevelopmentModal();openDevelopmentJournalModal('activity','${a.id}')"><i class="fa-solid fa-check"></i> Catat aktivitas</button></div></div></div></div>`);
+    }
+    function openDevelopmentMilestoneModal(id) {
+        const m=DEV_MILESTONES.find(x=>x.id===id);if(!m)return;
+        const record=devFindMilestoneRecord(id)||{};
+        const status=record.status||'';
+        devShowModal(`<div class="dev-modal-backdrop"><div class="dev-modal"><div class="dev-modal-head"><div><span class="dev-chip ${devDomainTone(m.domain)}">${devEscape(m.domain)}</span><h3 class="font-extrabold text-lg mt-2">Catat milestone</h3><p class="text-xs text-slate-500 mt-1">${devEscape(m.agePoint)}</p></div><button class="text-slate-400 text-xl" onclick="closeDevelopmentModal()"><i class="fa-solid fa-xmark"></i></button></div><form class="dev-modal-body space-y-3" onsubmit="saveDevelopmentMilestone(event,'${m.id}')"><div class="rounded-xl bg-slate-50 p-3"><p class="text-sm font-bold text-slate-800">${devEscape(m.title)}</p><small class="text-[10px] text-slate-500">${devEscape(m.sourceLabel)}</small></div><div class="dev-field"><label>Status pengamatan</label><select name="status" required><option value="" ${!status?'selected':''} disabled>Pilih status</option><option value="emerging" ${status==='emerging'?'selected':''}>Mulai terlihat</option><option value="observed" ${status==='observed'?'selected':''}>Sudah konsisten</option><option value="discuss" ${status==='discuss'?'selected':''}>Ingin didiskusikan dengan tenaga kesehatan</option></select><small class="text-[10px] text-slate-500">Belum dicatat bukan berarti anak belum mampu.</small></div><div class="dev-field"><label>Tanggal diamati (opsional)</label><input type="date" name="observedDate" value="${devEscape(record.observedDate||devNowDateKey())}"></div><div class="dev-field"><label>Catatan orang tua (opsional)</label><textarea name="note" rows="3" placeholder="Contoh: terlihat saat bermain bersama Ayah…">${devEscape(record.note||'')}</textarea></div><div id="dev-modal-status" class="text-xs text-slate-500"></div><div class="flex gap-2 pt-2"><button type="button" class="dev-btn ghost flex-1" onclick="closeDevelopmentModal()">Batal</button><button type="submit" class="dev-btn primary flex-1">Simpan pengamatan</button></div></form></div></div>`);
+    }
+    function saveDevelopmentMilestone(event,id) {
+        event.preventDefault();const form=event.target;const data=new FormData(form);const status=String(data.get('status')||'');if(!status)return;
+        const list=devGetMilestoneObservations();const idx=list.findIndex(x=>x.milestoneId===id);const meta=devCurrentUserMeta();
+        const record={milestoneId:id,status,observedDate:String(data.get('observedDate')||''),note:String(data.get('note')||'').trim(),recordedDate:devNowDateKey(),recordedAt:new Date().toISOString(),recordedBy:meta};
+        if(idx>=0)list[idx]=record;else list.unshift(record);appState.milestoneObservations=list;saveToLocalStorage();closeDevelopmentModal();devCurrentView='milestones';renderStimulationModule();
+    }
+    function openDevelopmentJournalModal(type,activityId) {
+        const a=activityId?DEV_ACTIVITIES.find(x=>x.id===activityId):null;
+        const title=a?a.title:(type==='first-moment'?'Momen pertama si kecil':'');
+        const options=[['note','Catatan perkembangan'],['first-moment','First moment'],['activity','Aktivitas stimulasi']];
+        devShowModal(`<div class="dev-modal-backdrop"><div class="dev-modal"><div class="dev-modal-head"><div><span class="dev-chip pink"><i class="fa-solid fa-book-heart mr-1"></i> JURNAL KELUARGA</span><h3 class="font-extrabold text-lg mt-2">${a?'Catat aktivitas stimulasi':type==='first-moment'?'Simpan momen pertama':'Catatan perkembangan baru'}</h3><p class="text-xs text-slate-500 mt-1">Cerita dan media akan terhubung dengan perjalanan si kecil.</p></div><button class="text-slate-400 text-xl" onclick="closeDevelopmentModal()"><i class="fa-solid fa-xmark"></i></button></div><form id="dev-journal-form" class="dev-modal-body space-y-3" onsubmit="saveDevelopmentJournalForm(event,'${type||'note'}','${activityId||''}')"><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div class="dev-field"><label>Jenis catatan</label><select name="type" ${a?'disabled':''}>${options.map(o=>`<option value="${o[0]}" ${(a?'activity':type)===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div><div class="dev-field"><label>Tanggal</label><input type="date" name="date" value="${devNowDateKey()}" required></div></div><div class="dev-field"><label>Judul</label><input name="title" value="${devEscape(title)}" maxlength="120" placeholder="Contoh: Pertama kali tertawa lepas" required></div><div class="dev-field"><label>Cerita / catatan</label><textarea name="content" rows="3" maxlength="3000" placeholder="Ceritakan apa yang terjadi, respons si kecil, atau hal yang ingin diingat…"></textarea></div>${a?`<div class="dev-field"><label>Respons si kecil (opsional)</label><select name="response"><option value="">Pilih jika ingin mencatat</option><option>Antusias dan tertarik</option><option>Merespons dengan baik</option><option>Masih mengamati</option><option>Belum tertarik</option><option>Tampak lelah, aktivitas dihentikan</option></select></div><input type="hidden" name="activityId" value="${a.id}">`:`<input type="hidden" name="response" value="">`}
+          <div class="dev-field"><label>Foto atau video (maksimal 4 file)</label><input type="file" name="media" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple><small class="text-[10px] text-slate-500">Foto akan dikecilkan sebelum diunggah. Video maksimal 100 MB per file. File disimpan ke Google Drive keluarga, bukan ke Firebase.</small></div><div class="rounded-xl bg-sky-50 border border-sky-100 p-3 text-[10px] text-sky-900 leading-relaxed"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Untuk melampirkan media, Google Drive harus sudah terhubung pada akun aplikasi ini dan folder backup keluarga telah dipilih. Gunakan akun Drive utama yang sama pada kedua perangkat.</div><div id="dev-journal-upload-status" class="text-xs text-slate-500" aria-live="polite"></div><div class="flex gap-2 pt-2"><button type="button" class="dev-btn ghost flex-1" onclick="closeDevelopmentModal()">Batal</button><button id="dev-journal-submit" type="submit" class="dev-btn primary flex-1"><i class="fa-solid fa-floppy-disk"></i> Simpan jurnal</button></div></form></div></div>`);
+    }
+    function blobToDataUrl(blob) { return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result||''));r.onerror=()=>reject(r.error||new Error('Gagal membaca thumbnail'));r.readAsDataURL(blob);}); }
+    async function createImageThumbnail(file) {
+        try {
+            let bitmap;
+            if (window.createImageBitmap) bitmap=await createImageBitmap(file);
+            else bitmap=await new Promise((resolve,reject)=>{const img=new Image();const url=URL.createObjectURL(file);img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Foto tidak bisa dibaca'))};img.src=url;});
+            const ratio=Math.min(1,240/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*ratio));canvas.height=Math.max(1,Math.round(bitmap.height*ratio));const ctx=canvas.getContext('2d');ctx.fillStyle='#ffffff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);if(bitmap.close)bitmap.close();
+            const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.38));return blob?await blobToDataUrl(blob):'';
+        } catch(e){console.warn('Thumbnail foto dilewati:',e);return '';}
+    }
+    async function compressDevelopmentPhoto(file) {
+        if(!file.type.startsWith('image/'))return {file,thumbnailDataUrl:''};
+        if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Format foto belum didukung. Gunakan JPG, PNG, atau WEBP (HEIC perlu dikonversi ke JPG terlebih dahulu).');
+        let bitmap;
+        try { bitmap=window.createImageBitmap?await createImageBitmap(file):await new Promise((resolve,reject)=>{const img=new Image();const url=URL.createObjectURL(file);img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Foto tidak bisa dibaca oleh browser'))};img.src=url;}); }
+        catch(e){throw new Error('Foto tidak dapat diproses. Coba gunakan format JPG.');}
+        const maxSide=1920;const scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);if(bitmap.close)bitmap.close();
+        const compressed=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.82));if(!compressed)throw new Error('Browser gagal mengompres foto.');
+        const base=(file.name||'foto').replace(/\.[^.]+$/,'').replace(/[^a-zA-Z0-9_-]+/g,'_').slice(0,70)||'foto';
+        const newFile=new File([compressed],base+'.jpg',{type:'image/jpeg',lastModified:Date.now()});
+        if(newFile.size>8*1024*1024)throw new Error('Foto masih lebih dari 8 MB setelah dikompres. Pilih foto dengan resolusi/ukuran lebih kecil.');
+        const thumbnailDataUrl=await createImageThumbnail(newFile);
+        return {file:newFile,thumbnailDataUrl};
+    }
+    async function createVideoThumbnail(file) {
+        return new Promise(resolve=>{
+            const video=document.createElement('video');const url=URL.createObjectURL(file);let done=false;
+            const finish=async()=>{if(done)return;done=true;try{const canvas=document.createElement('canvas');const ratio=Math.min(1,240/Math.max(video.videoWidth||1,video.videoHeight||1));canvas.width=Math.max(1,Math.round((video.videoWidth||320)*ratio));canvas.height=Math.max(1,Math.round((video.videoHeight||180)*ratio));canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',.38));resolve(blob?await blobToDataUrl(blob):'');}catch(_){resolve('')}finally{URL.revokeObjectURL(url);video.remove();}};
+            video.muted=true;video.playsInline=true;video.preload='metadata';video.onloadeddata=()=>{try{video.currentTime=Math.min(.2,Math.max(0,(video.duration||1)/10));}catch(_){finish()}};video.onseeked=finish;video.onerror=()=>{if(!done){done=true;URL.revokeObjectURL(url);resolve('')}};video.src=url;video.load();setTimeout(()=>{if(!done){done=true;URL.revokeObjectURL(url);resolve('')}},5000);
+        });
+    }
+    async function saveDevelopmentJournalForm(event, initialType, activityId) {
+        event.preventDefault();if(devModalBusy)return;devModalBusy=true;
+        const form=event.target;const submit=document.getElementById('dev-journal-submit');const status=document.getElementById('dev-journal-upload-status');if(submit){submit.disabled=true;submit.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan…';}
+        const data=new FormData(form);const selectedFiles=Array.from(form.querySelector('input[name="media"]')?.files||[]);
+        if(selectedFiles.length>4){if(status)status.textContent='Maksimal 4 file per catatan.';devModalBusy=false;if(submit)submit.disabled=false;return;}
+        const type=activityId?'activity':String(data.get('type')||initialType||'note');
+        const meta=devCurrentUserMeta();const media=[];let failed=[];
+        try {
+            if(selectedFiles.length && typeof window.kptDriveUploadDevelopmentMedia!=='function')throw new Error('Fitur unggah media Drive belum tersedia. Muat ulang aplikasi versi terbaru.');
+            for(let i=0;i<selectedFiles.length;i++){
+                const original=selectedFiles[i];if(status)status.textContent=`Menyiapkan media ${i+1}/${selectedFiles.length}: ${original.name}`;
+                let prepared;
+                if(original.type.startsWith('image/')) prepared=await compressDevelopmentPhoto(original);
+                else if(original.type.startsWith('video/')) {if(!['video/mp4','video/webm','video/quicktime'].includes(original.type))throw new Error('Format video yang didukung: MP4, WEBM, atau MOV.');if(original.size>100*1024*1024)throw new Error('Video melebihi batas 100 MB per file.');prepared={file:original,thumbnailDataUrl:await createVideoThumbnail(original)};}
+                else throw new Error('File harus berupa foto JPG/PNG/WEBP atau video MP4/WEBM/MOV.');
+                if(status)status.textContent=`Mengunggah ${i+1}/${selectedFiles.length}: ${prepared.file.name}. Jangan tutup halaman…`;
+                const uploaded=await window.kptDriveUploadDevelopmentMedia(prepared.file,{onProgress:(percent)=>{if(status)status.textContent=`Mengunggah ${i+1}/${selectedFiles.length}: ${prepared.file.name} (${percent}%)`;}});
+                media.push({...uploaded,thumbnailDataUrl:prepared.thumbnailDataUrl||'',originalName:original.name});
+            }
+            const entry={id:devId(),type,title:String(data.get('title')||'').trim(),content:String(data.get('content')||'').trim(),date:String(data.get('date')||devNowDateKey()),response:String(data.get('response')||''),activityId:activityId||'',durationMinutes:'',media,createdAt:new Date().toISOString(),createdBy:meta};
+            if(!entry.title)throw new Error('Judul catatan wajib diisi.');
+            devGetJournal().unshift(entry);saveToLocalStorage();devModalBusy=false;closeDevelopmentModal();devCurrentView='journal';renderStimulationModule();
+            return;
+        } catch(error) {
+            console.error('Gagal menyimpan jurnal perkembangan:',error);
+            failed.push(error.message||String(error));
+            if(media.length){
+                const keep=confirm(`${media.length} file berhasil diunggah ke Google Drive, tetapi proses berikutnya gagal. Simpan jurnal dengan ${media.length} file yang berhasil diunggah? File yang belum berhasil diunggah tidak akan tercatat.`);
+                if(keep){
+                    const entry={id:devId(),type,title:String(data.get('title')||'Catatan perkembangan').trim(),content:String(data.get('content')||'').trim(),date:String(data.get('date')||devNowDateKey()),response:String(data.get('response')||''),activityId:activityId||'',media,createdAt:new Date().toISOString(),createdBy:meta};
+                    devGetJournal().unshift(entry);saveToLocalStorage();devModalBusy=false;closeDevelopmentModal();devCurrentView='journal';renderStimulationModule();return;
+                }
+            }
+            if(status)status.textContent=failed.join(' ')+(media.length?` ${media.length} file yang sudah terunggah tetap berada di folder media Drive, tetapi belum terhubung ke jurnal ini.`:'');
+            if(submit){submit.disabled=false;submit.innerHTML='<i class="fa-solid fa-floppy-disk"></i> Coba lagi';}devModalBusy=false;
+        }
+    }
+    function deleteDevelopmentJournalEntry(id) {
+        const entry=devGetJournal().find(x=>x.id===id);if(!entry)return;
+        const count=(entry.media||[]).length;
+        const message=count?`Hapus catatan ini dari jurnal? ${count} file media tetap tersimpan di Google Drive dan tidak ikut dihapus.`:'Hapus catatan ini dari jurnal?';
+        if(!confirm(message))return;
+        appState.developmentJournal=devGetJournal().filter(x=>x.id!==id);saveToLocalStorage();renderStimulationModule();
+    }
+
+    window.renderStimulationModule=renderStimulationModule;
+    window.setDevelopmentView=setDevelopmentView;
+    window.setDevelopmentAgeBand=setDevelopmentAgeBand;
+    window.setDevelopmentDomain=setDevelopmentDomain;
+    window.toggleDevelopmentFavorite=toggleDevelopmentFavorite;
+    window.openDevelopmentActivity=openDevelopmentActivity;
+    window.closeDevelopmentModal=closeDevelopmentModal;
+    window.openDevelopmentMilestoneModal=openDevelopmentMilestoneModal;
+    window.saveDevelopmentMilestone=saveDevelopmentMilestone;
+    window.openDevelopmentJournalModal=openDevelopmentJournalModal;
+    window.saveDevelopmentJournalForm=saveDevelopmentJournalForm;
+    window.deleteDevelopmentJournalEntry=deleteDevelopmentJournalEntry;
+
+    // Rendering is triggered by the existing switchPostnatalTab branch.
+    document.addEventListener('DOMContentLoaded',()=>{
+        if (typeof appState !== 'undefined') {
+            if(!Array.isArray(appState.stimulationFavorites))appState.stimulationFavorites=[];
+            if(!Array.isArray(appState.developmentJournal))appState.developmentJournal=[];
+            if(!Array.isArray(appState.milestoneObservations))appState.milestoneObservations=[];
+        }
+    });
+})();
+</script>
+
 <script id="mobile-deep-ux-logic-671">
 /* 6.7.1: Add accessible column labels to legacy tables. The source rows,
    input names, onclick handlers and stored data are left untouched. */
@@ -11187,7 +11603,7 @@
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.9.4. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.10.0. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
@@ -11277,6 +11693,116 @@
         else if (!readFolder()) setStatus('Konfigurasi tersedia. Hubungkan akun Google dan pilih folder backup bersama untuk akun aplikasi yang sedang login.', 'info');
         else setStatus('Folder backup siap: ' + readFolder().name + '. Token Google diminta kembali saat tindakan Drive dilakukan.', 'success');
     }
+
+
+    const MEDIA_FOLDER_KEY_PREFIX = 'kptDriveDevMediaFolder_v1_';
+    const MEDIA_FOLDER_NAME = 'KPT - Stimulasi & Milestone Media';
+    const MEDIA_FOLDER_MIME = 'application/vnd.google-apps.folder';
+    const MAX_MEDIA_UPLOAD_BYTES = 100 * 1024 * 1024;
+
+    async function ensureDevelopmentMediaFolder() {
+        const parent = readFolder();
+        if (!parent) throw new Error('Pilih folder Google Drive keluarga terlebih dahulu di Backup & Recovery.');
+        const uid = currentAuthenticatedUser && currentAuthenticatedUser.uid;
+        if (!uid) throw new Error('Sesi login aplikasi tidak ditemukan.');
+        const cacheKey = MEDIA_FOLDER_KEY_PREFIX + uid;
+        let cached = null;
+        try { cached = JSON.parse(localStorage.getItem(cacheKey) || 'null'); } catch (_) {}
+        if (cached && cached.id && cached.parentId === parent.id) {
+            try {
+                const check = await driveFetch('https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(cached.id) + '?fields=id,name,mimeType,trashed', { method: 'GET' });
+                const found = await check.json();
+                if (found && found.id && found.mimeType === MEDIA_FOLDER_MIME && !found.trashed) return { id: found.id, name: found.name || MEDIA_FOLDER_NAME };
+            } catch (_) { localStorage.removeItem(cacheKey); }
+        }
+        const escapedParent = parent.id.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        const q = "'" + escapedParent + "' in parents and name='" + MEDIA_FOLDER_NAME.replace(/'/g, "\\'") + "' and mimeType='" + MEDIA_FOLDER_MIME + "' and trashed=false";
+        const listUrl = 'https://www.googleapis.com/drive/v3/files?q=' + encodeURIComponent(q) + '&pageSize=10&fields=files(id,name,mimeType)';
+        const listResponse = await driveFetch(listUrl, { method: 'GET' });
+        const list = await listResponse.json();
+        let folder = (list.files || []).find(x => x.mimeType === MEDIA_FOLDER_MIME);
+        if (!folder) {
+            const createResponse = await driveFetch('https://www.googleapis.com/drive/v3/files?fields=id,name,mimeType', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: MEDIA_FOLDER_NAME, mimeType: MEDIA_FOLDER_MIME, parents: [parent.id], description: 'Media jurnal Stimulasi & Milestone Keluarga Pohon Teduh.' })
+            });
+            folder = await createResponse.json();
+            if (!folder.id) throw new Error('Google Drive tidak mengembalikan ID subfolder media.');
+        }
+        localStorage.setItem(cacheKey, JSON.stringify({ id: folder.id, name: folder.name || MEDIA_FOLDER_NAME, parentId: parent.id }));
+        return { id: folder.id, name: folder.name || MEDIA_FOLDER_NAME };
+    }
+
+    async function uploadDevelopmentMediaFile(file, options) {
+        if (!isAppAuthorized || !currentAuthenticatedUser) throw new Error('Login aplikasi harus aktif sebelum mengunggah media.');
+        if (!file || !file.size) throw new Error('File media kosong atau tidak valid.');
+        if (file.size > MAX_MEDIA_UPLOAD_BYTES) throw new Error('Ukuran media melebihi batas 100 MB per file.');
+        const mime = String(file.type || '').toLowerCase();
+        if (!(mime.startsWith('image/') || ['video/mp4','video/webm','video/quicktime'].includes(mime))) throw new Error('Format media tidak didukung.');
+        const folder = await ensureDevelopmentMediaFolder();
+        const token = await getAccessToken();
+        const uid = currentAuthenticatedUser.uid;
+        const safeName = String(file.name || 'media').replace(/[\\/:*?"<>|#%{}]/g, '_').slice(0, 120);
+        const metadata = { name: Date.now() + '_' + safeName, mimeType: mime, parents: [folder.id], description: 'Media jurnal Stimulasi & Milestone Keluarga Pohon Teduh.' };
+        let result = null;
+        if (file.size <= 5 * 1024 * 1024) {
+            const boundary = 'kpt_media_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
+            const head = '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + '\r\n' + '--' + boundary + '\r\nContent-Type: ' + mime + '\r\n\r\n';
+            const tail = '\r\n--' + boundary + '--';
+            const body = new Blob([head, file, tail], { type: 'multipart/related; boundary=' + boundary });
+            const response = await driveFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,mimeType,size,createdTime,webViewLink,thumbnailLink', {
+                method: 'POST', headers: { 'Content-Type': 'multipart/related; boundary=' + boundary }, body
+            });
+            result = await response.json();
+            if (options && typeof options.onProgress === 'function') options.onProgress(100);
+        } else {
+            // Resumable upload for larger video files. 8 MiB chunks comply with Drive's 256 KiB alignment.
+            const init = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id,name,mimeType,size,createdTime,webViewLink,thumbnailLink', {
+                method: 'POST',
+                headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json; charset=UTF-8', 'X-Upload-Content-Type': mime, 'X-Upload-Content-Length': String(file.size) },
+                body: JSON.stringify(metadata)
+            });
+            if (!init.ok) {
+                let detail=''; try { detail=(await init.json()).error?.message || ''; } catch (_) {}
+                throw new Error('Tidak dapat memulai unggahan video ke Google Drive (HTTP ' + init.status + '). ' + detail);
+            }
+            const uploadUrl = init.headers.get('Location');
+            if (!uploadUrl) throw new Error('Google Drive tidak mengembalikan URL sesi unggah. Coba lagi atau gunakan video lebih kecil.');
+            const chunkSize = 8 * 1024 * 1024;
+            let offset = 0;
+            while (offset < file.size) {
+                if (!isAppAuthorized || !currentAuthenticatedUser || currentAuthenticatedUser.uid !== uid) throw new Error('Akun aplikasi berubah saat media diunggah.');
+                const end = Math.min(offset + chunkSize, file.size);
+                const chunk = file.slice(offset, end);
+                const response = await fetch(uploadUrl, {
+                    method: 'PUT',
+                    headers: { Authorization: 'Bearer ' + token, 'Content-Type': mime, 'Content-Range': 'bytes ' + offset + '-' + (end - 1) + '/' + file.size },
+                    body: chunk
+                });
+                if (response.status === 308) {
+                    const range = response.headers.get('Range');
+                    if (range) {
+                        const match = /bytes=0-(\\d+)/i.exec(range);
+                        offset = match ? Number(match[1]) + 1 : end;
+                    } else offset = end;
+                    if (options && typeof options.onProgress === 'function') options.onProgress(Math.min(99, Math.round(offset / file.size * 100)));
+                    continue;
+                }
+                if (response.status === 200 || response.status === 201) {
+                    result = await response.json(); offset = file.size;
+                    if (options && typeof options.onProgress === 'function') options.onProgress(100);
+                    break;
+                }
+                let detail=''; try { detail=(await response.json()).error?.message || ''; } catch (_) {}
+                throw new Error('Unggahan media terhenti (HTTP ' + response.status + '). ' + detail);
+            }
+        }
+        if (!result || !result.id) throw new Error('Google Drive belum mengonfirmasi file media yang diunggah.');
+        return { driveFileId: result.id, driveFolderId: folder.id, name: result.name || safeName, mimeType: result.mimeType || mime, size: Number(result.size || file.size), createdTime: result.createdTime || new Date().toISOString(), webViewLink: result.webViewLink || ('https://drive.google.com/file/d/' + result.id + '/view'), thumbnailLink: result.thumbnailLink || '' };
+    }
+
+    window.kptDriveUploadDevelopmentMedia = uploadDevelopmentMediaFile;
+    window.kptDriveDevelopmentMediaReady = function () { return !!(readConfig() && readFolder() && currentAuthenticatedUser); };
 
     // Public handlers used by the buttons in Backup & Recovery Center.
     window.kptDriveSaveConfig = saveConfig;
