@@ -1338,6 +1338,65 @@ body.dark-mode #sec-post-stimulasi .dev-tab.active {background:#263f48;color:#8d
  .dev-tabs {gap:.2rem}.dev-tab {padding:.65rem .72rem;font-size:.69rem}.dev-activity-grid,.dev-milestone-list {grid-template-columns:1fr}.dev-activity-card {padding:.9rem}.dev-panel {padding:.9rem;border-radius:18px}.dev-filter-row > * {flex:1 1 100%}.dev-journal-card {grid-template-columns:42px minmax(0,1fr);gap:.6rem;padding:.8rem}.dev-journal-date {width:42px;height:50px}
  .dev-modal-backdrop {align-items:flex-end;padding:.35rem}.dev-modal {max-height:92vh;border-radius:23px 23px 14px 14px}.dev-modal-head {padding:.95rem 1rem}.dev-modal-body {padding:1rem}
 }
+
+/* 6.10.1: Dark-mode support for dynamically rendered development modals.
+   The modal root is intentionally outside #sec-post-stimulasi, so it needs
+   its own theme variables and selectors instead of section-scoped rules. */
+body.dark-mode #development-modal-root {
+    --dev-card: #172a32;
+    --dev-border: #314852;
+    --dev-ink: #e5eff2;
+    --dev-muted: #9bb0ba;
+    --dev-soft: #102129;
+    color: #e5eff2;
+}
+body.dark-mode #development-modal-root .dev-modal,
+body.dark-mode #development-modal-root .dev-modal-head {
+    background: #172a32 !important;
+    border-color: #314852 !important;
+    color: #e5eff2 !important;
+}
+body.dark-mode #development-modal-root .dev-modal-head h3,
+body.dark-mode #development-modal-root .dev-field label {
+    color: #e5eff2 !important;
+}
+body.dark-mode #development-modal-root .dev-modal-body,
+body.dark-mode #development-modal-root .dev-modal-body p,
+body.dark-mode #development-modal-root .dev-modal-body small {
+    color: #c2d1d6;
+}
+body.dark-mode #development-modal-root .dev-field input,
+body.dark-mode #development-modal-root .dev-field select,
+body.dark-mode #development-modal-root .dev-field textarea {
+    background: #102129 !important;
+    color: #e5eff2 !important;
+    border-color: #405963 !important;
+}
+body.dark-mode #development-modal-root .dev-modal .bg-slate-50 {
+    background: #102129 !important;
+    border-color: #314852 !important;
+}
+body.dark-mode #development-modal-root .dev-modal .text-slate-800,
+body.dark-mode #development-modal-root .dev-modal .text-slate-700 {
+    color: #e5eff2 !important;
+}
+body.dark-mode #development-modal-root .dev-modal .text-slate-600,
+body.dark-mode #development-modal-root .dev-modal .text-slate-500,
+body.dark-mode #development-modal-root .dev-modal .text-slate-400 {
+    color: #9bb0ba !important;
+}
+body.dark-mode #development-modal-root .dev-chip.teal { background: #123d3a; color: #8de0d3; }
+body.dark-mode #development-modal-root .dev-chip.blue { background: #173a54; color: #9bd8fb; }
+body.dark-mode #development-modal-root .dev-chip.amber { background: #49351b; color: #f6d38a; }
+body.dark-mode #development-modal-root .dev-chip.pink { background: #4a263d; color: #f3add0; }
+body.dark-mode #development-modal-root .dev-chip.slate { background: #293b45; color: #c2d1d6; }
+body.dark-mode #development-modal-root .dev-chip.green { background: #1b4030; color: #a1e4b8; }
+body.dark-mode #development-modal-root .dev-btn.ghost {
+    background: transparent !important;
+    color: #c2d1d6 !important;
+    border-color: #405963 !important;
+}
+
 </style>
 
 </head>
