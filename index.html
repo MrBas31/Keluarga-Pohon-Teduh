@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.12">
+    <meta name="application-version" content="6.12.5">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1515,6 +1515,51 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 
     
 
+
+<style id="kpt-postnatal-welcome-title-fix-6125">
+/* Keep the welcome phrase and its heart together on one line. The font scales down
+   on narrow screens instead of allowing the emoji to wrap by itself. */
+#sec-post-dashboard #display-welcome-title {
+    display: flex !important;
+    align-items: baseline !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    width: 100%;
+    min-width: 0;
+    gap: .12em;
+    font-size: clamp(13px, 4.45vw, 18px) !important;
+    line-height: 1.2 !important;
+    letter-spacing: -.045em !important;
+}
+#sec-post-dashboard #display-welcome-title .kpt-post-welcome-text {
+    display: block;
+    flex: 0 1 auto;
+    min-width: 0;
+    white-space: nowrap !important;
+}
+#sec-post-dashboard #display-welcome-title .kpt-post-welcome-heart {
+    display: inline-block;
+    flex: 0 0 auto;
+    white-space: nowrap !important;
+    line-height: 1;
+    font-size: .92em;
+    margin: 0;
+}
+@media (min-width: 768px) {
+    #sec-post-dashboard #display-welcome-title {
+        font-size: clamp(19px, 2.35vw, 31px) !important;
+        gap: .16em;
+        letter-spacing: -.04em !important;
+    }
+}
+@media (max-width: 350px) {
+    #sec-post-dashboard #display-welcome-title {
+        font-size: 13.5px !important;
+        letter-spacing: -.055em !important;
+    }
+}
+</style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -2312,7 +2357,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 
                             <div class="space-y-3">
                                 <div>
-                                    <h2 class="kpt-post-welcome-title text-2xl md:text-3xl font-extrabold font-brand tracking-tight leading-tight" id="display-welcome-title">Welcome to the World, Baby Boy 🩵</h2>
+                                    <h2 class="kpt-post-welcome-title text-2xl md:text-3xl font-extrabold font-brand tracking-tight leading-tight" id="display-welcome-title"><span class="kpt-post-welcome-text">Welcome to the World, Baby Boy</span><span class="kpt-post-welcome-heart" aria-hidden="true">🩵</span></h2>
                                     <div class="kpt-post-name-row mt-2 flex flex-wrap items-center gap-2">
                                         <span class="text-xs md:text-sm text-emerald-50/90"><i class="fa-solid fa-id-card mr-1.5"></i>Nama lengkap</span>
                                         <button type="button" id="display-baby-full-name" onclick="editBabyProfile()" class="font-bold text-white border-b border-dashed border-white/60 pb-0.5 cursor-pointer hover:text-emerald-100 transition text-left" title="Klik untuk edit nama dan tanggal lahir">Belum diatur</button>
@@ -5206,11 +5251,10 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             // Atur Judul Boy / Girl
             const titleEl = document.getElementById('display-welcome-title');
             if (titleEl) {
-                if (appState.babyGender === 'girl') {
-                    titleEl.innerHTML = "Welcome to the World, Baby Girl 🩷";
-                } else {
-                    titleEl.innerHTML = "Welcome to the World, Baby Boy 🩵";
-                }
+                const isGirl = appState.babyGender === 'girl';
+                const babyLabel = isGirl ? 'Girl' : 'Boy';
+                const heart = isGirl ? '🩷' : '🩵';
+                titleEl.innerHTML = `<span class="kpt-post-welcome-text">Welcome to the World, Baby ${babyLabel}</span><span class="kpt-post-welcome-heart" aria-hidden="true">${heart}</span>`;
             }
 
             // Nama Lengkap
@@ -11004,6 +11048,9 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
     function deleteDevelopmentMilestoneObservation(recordId,milestoneId) { if(!confirm('Hapus satu catatan pengamatan ini? Catatan milestone lainnya tetap tersimpan.'))return;appState.milestoneObservationHistory=devGetMilestoneHistory().filter(x=>x.id!==recordId);const latest=devGetMilestoneHistory().filter(x=>x.milestoneId===milestoneId).sort((a,b)=>String(b.recordedAt||'').localeCompare(String(a.recordedAt||'')))[0];const snapshots=devGetMilestoneObservations().filter(x=>x.milestoneId!==milestoneId);if(latest)snapshots.unshift({...latest});appState.milestoneObservations=snapshots;saveToLocalStorage();closeDevelopmentModal();openDevelopmentMilestoneHistory(milestoneId); }
     const DEV_BUILTIN_SNAPSHOT = DEV_ACTIVITIES.map(x=>({...x,isBuiltin:true}));
 
+    // Expose only the dashboard renderer; profile edits and remote profile refreshes
+    // can then refresh the widget without changing Firebase storage or sync behavior.
+    window.renderPostnatalStimulationDashboardWidget = renderPostnatalStimulationDashboardWidget;
     window.renderStimulationModule=renderStimulationModule;
     window.setDevelopmentView=setDevelopmentView;
     window.setDevelopmentAgeBand=setDevelopmentAgeBand;
