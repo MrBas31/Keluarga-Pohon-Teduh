@@ -2391,7 +2391,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                                             <div id="dash-log-tidur" class="kpt-post-mini-value">0j 0m</div>
                                         </div>
                                         <div class="kpt-post-mini kpt-post-mini-amber">
-                                            <div class="kpt-post-mini-label"><i class="fa-solid fa-poop"></i> Popok</div>
+                                            <div class="kpt-post-mini-label"><i class="fa-solid fa-toilet"></i> Buang Air</div>
                                             <div id="dash-log-popok" class="kpt-post-mini-value">0 Pipis, 0 Pup</div>
                                         </div>
                                         <div class="kpt-post-mini kpt-post-mini-teal">
@@ -2410,20 +2410,26 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                             </div>
                         </article>
 
-                        <!-- WIDGET 2: STIMULASI & MILESTONE -->
-                        <article class="kpt-post-card rounded-3xl p-5 flex flex-col justify-between gap-4">
+                        <!-- WIDGET 2: STIMULASI & MILESTONE — RINGKASAN DINAMIS SESUAI USIA -->
+                        <article class="kpt-post-card kpt-post-card-stimulation rounded-3xl p-5 flex flex-col justify-between gap-4">
                             <div class="space-y-3">
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="kpt-post-tag kpt-post-tag-amber">Stimulasi & Milestone</span>
                                     <span class="kpt-post-icon kpt-post-icon-amber"><i class="fa-solid fa-shapes"></i></span>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-bold">Fokus Bulan Ini</h3>
-                                    <p class="kpt-post-card-copy mt-2 text-xs leading-relaxed">Temukan ide bermain sesuai usia, catat milestone, dan simpan momen perkembangan si kecil.</p>
+                                    <h3 class="text-sm font-bold">Fokus Tumbuh Kembang</h3>
+                                    <div class="kpt-post-stim-age mt-2"><i class="fa-solid fa-calendar-heart" aria-hidden="true"></i><span id="dash-stim-age">Tanggal lahir belum diatur</span></div>
+                                    <div class="kpt-post-stim-countline mt-2"><strong id="dash-stim-count">--</strong><span id="dash-stim-count-label">panduan tersedia</span></div>
+                                    <p id="dash-stim-hint" class="kpt-post-stim-hint mt-1">Panduan stimulasi dan milestone untuk perjalanan tumbuh kembang si kecil.</p>
+                                </div>
+                                <div class="kpt-post-stim-stats">
+                                    <div class="kpt-post-stim-stat"><small>Catatan aktivitas bulan ini</small><strong id="dash-stim-month">0</strong></div>
+                                    <div class="kpt-post-stim-stat"><small>Milestone sudah konsisten</small><strong id="dash-stim-milestones">0</strong></div>
                                 </div>
                             </div>
                             <div class="kpt-post-card-footer pt-3 border-t">
-                                <button type="button" onclick="mobileNavigate('post-stimulasi')" class="kpt-post-link kpt-post-link-amber">Lihat Panduan <i class="fa-solid fa-arrow-right"></i></button>
+                                <button type="button" onclick="mobileNavigate('post-stimulasi')" class="kpt-post-link kpt-post-link-amber">Buka Stimulasi & Milestone <i class="fa-solid fa-arrow-right"></i></button>
                             </div>
                         </article>
 
@@ -5288,6 +5294,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                     if (lengthEl) lengthEl.innerText = latest.crl ? parseInt(String(latest.crl).replace(/\D/g, '')) || '--' : '--';
                 }
             }
+            if (typeof renderPostnatalStimulationDashboardWidget === 'function') renderPostnatalStimulationDashboardWidget();
         }
         
         // PREGNANCY CALCULATOR
@@ -8267,7 +8274,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
           ];
           if (prenatalDashboardVisible && has(...prenatalDashboardKeys)) renderDashboardWidgets();
 
-          const postDashboardKeys = ['dailyLogs', 'postnatalBudgets', 'postnatalShopping'];
+          const postDashboardKeys = ['dailyLogs', 'postnatalBudgets', 'postnatalShopping', 'stimulationLibrary', 'stimulationLibraryInitialized611', 'stimulationFavorites', 'developmentJournal', 'milestoneObservations', 'milestoneObservationHistory'];
           if (postDashboardVisible && has(...postDashboardKeys)) updateDashboardWidgets();
         }
 
@@ -9809,6 +9816,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 sisaVal.className = 'text-lg font-bold text-emerald-700';
                 sisaVal.innerText = `Rp ${sisaAnggaran.toLocaleString('id-ID')}`;
             }
+            if (typeof renderPostnatalStimulationDashboardWidget === 'function') renderPostnatalStimulationDashboardWidget();
         }
 
         // 1. Inisialisasi State (Wajib)
@@ -10641,6 +10649,39 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         DEV_ACTIVITIES = appState.stimulationLibrary;
         return DEV_ACTIVITIES;
     }
+    function renderPostnatalStimulationDashboardWidget() {
+        const ageEl = document.getElementById('dash-stim-age');
+        if (!ageEl) return;
+        const countEl = document.getElementById('dash-stim-count');
+        const countLabelEl = document.getElementById('dash-stim-count-label');
+        const hintEl = document.getElementById('dash-stim-hint');
+        const monthEl = document.getElementById('dash-stim-month');
+        const milestonesEl = document.getElementById('dash-stim-milestones');
+        const hasSavedLibrary = Array.isArray(appState.stimulationLibrary) && appState.stimulationLibraryInitialized611 === true;
+        const activities = hasSavedLibrary ? appState.stimulationLibrary : (typeof DEV_ACTIVITIES !== 'undefined' && Array.isArray(DEV_ACTIVITIES) ? DEV_ACTIVITIES : []);
+        const age = typeof devAgeInfo === 'function' ? devAgeInfo() : { known:false, bandId:null, label:'' };
+        const bandKnown = !!(age.known && age.bandId);
+        const band = bandKnown && typeof DEV_AGE_BANDS !== 'undefined' ? DEV_AGE_BANDS.find(x=>x.id===age.bandId) : null;
+        const matchingActivities = bandKnown ? activities.filter(x=>x && x.ageBand===age.bandId) : [];
+        const displayedCount = bandKnown ? matchingActivities.length : activities.length;
+        const journal = Array.isArray(appState.developmentJournal) ? appState.developmentJournal : [];
+        const now = new Date();
+        const monthKey = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+        const activitiesThisMonth = journal.filter(x=>x && x.type==='activity' && String(x.date||'').slice(0,7)===monthKey).length;
+        const milestoneSnapshot = Array.isArray(appState.milestoneObservations) ? appState.milestoneObservations : [];
+        const milestonesObserved = milestoneSnapshot.filter(x=>x && x.status==='observed').length;
+
+        ageEl.textContent = bandKnown ? ('Kelompok usia ' + (band ? band.label : age.bandId)) : (age.known ? 'Di luar rentang katalog usia' : 'Tanggal lahir belum diatur');
+        if (countEl) countEl.textContent = String(displayedCount);
+        if (countLabelEl) countLabelEl.textContent = bandKnown ? 'aktivitas sesuai usia' : 'panduan dalam katalog';
+        if (hintEl) {
+            if (bandKnown) hintEl.textContent = 'Panduan mengikuti usia si kecil saat ini (' + age.label + '). Pilih aktivitas yang menyenangkan dan ikuti respons si kecil.';
+            else if (!age.known) hintEl.textContent = 'Lengkapi tanggal lahir si kecil agar panduan aktivitas otomatis mengikuti kelompok usianya.';
+            else hintEl.textContent = 'Katalog stimulasi tersedia untuk kelompok usia hingga 5–6 tahun. Kamu tetap dapat menjelajah kelompok usia secara manual.';
+        }
+        if (monthEl) monthEl.textContent = String(activitiesThisMonth);
+        if (milestonesEl) milestonesEl.textContent = String(milestonesObserved);
+    }
     function devMigrateMilestoneHistory() {
         const history=devGetMilestoneHistory();
         const migrated=appState.milestoneHistoryMigration611===true;
@@ -11294,7 +11335,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         if (endingMatch) {
             const ending = document.createElement('span');
             ending.className = 'kpt-welcome-ending';
-            ending.textContent = endingMatch[1] + ' ';
+            ending.textContent = endingMatch[1] + '\u00A0';
             const heart = document.createElement('span');
             heart.className = 'kpt-welcome-heart';
             heart.textContent = emoji;
@@ -12305,7 +12346,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
     </style>
 
 
-<style id="kpt-6123-unified-postnatal-dashboard">
+<style id="kpt-6124-unified-postnatal-dashboard">
     /* 6.12.3: unified, balanced Dashboard presentation for the baby phase. */
     #sec-post-dashboard { color: #243447; }
     #sec-post-dashboard .kpt-post-hero {
@@ -12320,7 +12361,9 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
     #sec-post-dashboard .kpt-post-hero-orb-one { width: 250px; height: 250px; right: -82px; top: -112px; }
     #sec-post-dashboard .kpt-post-hero-orb-two { width: 190px; height: 190px; left: 42%; bottom: -145px; background: rgba(255,255,255,.045); }
     #sec-post-dashboard .kpt-post-eyebrow { color: #ecfeff; }
-    #sec-post-dashboard .kpt-post-welcome-title { color: #fff; overflow-wrap: anywhere; }
+    #sec-post-dashboard .kpt-post-welcome-title { color: #fff; overflow-wrap: normal; word-break: normal; hyphens: none; }
+    #sec-post-dashboard .kpt-welcome-ending { display: inline-block !important; white-space: nowrap !important; word-break: keep-all !important; }
+    #sec-post-dashboard .kpt-welcome-heart { display: inline-block !important; white-space: nowrap !important; margin-left: 2px; }
     #sec-post-dashboard #display-baby-full-name { color: #fff; background: transparent; border-top: 0; border-left: 0; border-right: 0; }
     #sec-post-dashboard .kpt-post-gender-toggle { flex: 0 0 auto; }
     #sec-post-dashboard .kpt-post-metric {
@@ -12369,8 +12412,12 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
     #sec-post-dashboard .kpt-post-schedule { display: flex; flex-direction: column; gap: .42rem; padding: .85rem; border-radius: 15px; background: #ecfdf5; border: 1px solid #d1fae5; color: #047857; }
     #sec-post-dashboard .kpt-post-schedule strong { font-size: .83rem; line-height: 1.35; }
     #sec-post-dashboard .kpt-post-schedule span { font-size: .7rem; color: #0f766e; }
-    #sec-post-dashboard .kpt-post-budget-row { display: flex; align-items: center; justify-content: space-between; gap: .55rem; padding: .7rem .75rem; border-radius: 13px; background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b; font-size: .68rem; }
-    #sec-post-dashboard .kpt-post-budget-row strong { color: #1e293b; text-align: right; font-size: .76rem; font-weight: 850; overflow-wrap: anywhere; }
+    #sec-post-dashboard .kpt-post-budget-row { display: flex; align-items: center; justify-content: space-between; gap: .55rem; min-width: 0; padding: .7rem .75rem; border-radius: 13px; background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b; font-size: .68rem; }
+    #sec-post-dashboard .kpt-post-budget-row > span { min-width: 0; flex: 1 1 auto; line-height: 1.25; }
+    #sec-post-dashboard .kpt-post-budget-row strong { color: #1e293b; flex: 0 0 auto; max-width: 62%; min-width: 0; text-align: right; font-size: .72rem; line-height: 1.2; font-weight: 850; white-space: nowrap; overflow-wrap: normal; font-variant-numeric: tabular-nums; letter-spacing: -.025em; }
+    #sec-post-dashboard #dash-budget-sisa-container { display: grid !important; grid-template-columns: minmax(0,.88fr) minmax(0,1.12fr); align-items: center !important; gap: .5rem !important; min-width: 0; }
+    #sec-post-dashboard #dash-budget-sisa-label { min-width: 0; line-height: 1.2; font-size: .61rem; }
+    #sec-post-dashboard #dash-budget-sisa { min-width: 0; max-width: none; text-align: right !important; white-space: nowrap !important; overflow-wrap: normal !important; font-size: clamp(.64rem,.72vw,.76rem) !important; line-height: 1.2 !important; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
     #sec-post-dashboard .kpt-post-budget-row-info { background: #eff6ff; border-color: #dbeafe; color: #0369a1; }
     #sec-post-dashboard .kpt-post-budget-row-info strong { color: #1d4ed8; }
     #sec-post-dashboard .kpt-post-budget-row-success { background: #ecfdf5; border-color: #d1fae5; color: #047857; }
@@ -12380,6 +12427,16 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
     #sec-post-dashboard .kpt-post-link-sky { color: #0284c7; }
     #sec-post-dashboard .kpt-post-link-amber { color: #b45309; }
     #sec-post-dashboard .kpt-post-link-emerald { color: #059669; }
+    #sec-post-dashboard .kpt-post-stim-age { display: inline-flex; align-items: center; gap: .35rem; max-width: 100%; padding: .32rem .52rem; border-radius: 999px; background: #fffbeb; border: 1px solid #fde68a; color: #92400e; font-size: .61rem; font-weight: 750; line-height: 1.25; }
+    #sec-post-dashboard .kpt-post-stim-age span { min-width: 0; overflow-wrap: anywhere; }
+    #sec-post-dashboard .kpt-post-stim-countline { display: flex; align-items: baseline; gap: .42rem; min-width: 0; }
+    #sec-post-dashboard .kpt-post-stim-countline strong { color: #d97706; font-size: 1.8rem; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+    #sec-post-dashboard .kpt-post-stim-countline span { color: #475569; font-size: .68rem; font-weight: 750; line-height: 1.25; }
+    #sec-post-dashboard .kpt-post-stim-hint { color: #64748b; font-size: .65rem; line-height: 1.45; }
+    #sec-post-dashboard .kpt-post-stim-stats { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .5rem; }
+    #sec-post-dashboard .kpt-post-stim-stat { min-width: 0; display: flex; flex-direction: column; gap: .2rem; padding: .55rem .62rem; border: 1px solid #fde68a; border-radius: 12px; background: #fffbeb; }
+    #sec-post-dashboard .kpt-post-stim-stat small { color: #92400e; font-size: .56rem; line-height: 1.3; }
+    #sec-post-dashboard .kpt-post-stim-stat strong { color: #b45309; font-size: 1rem; line-height: 1.1; font-weight: 900; font-variant-numeric: tabular-nums; }
 
     body.dark-mode #sec-post-dashboard .kpt-post-section-eyebrow { color: #5eead4 !important; }
     body.dark-mode #sec-post-dashboard .kpt-post-summary-section h2 { color: #f1f5f9 !important; }
@@ -12401,6 +12458,13 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
     body.dark-mode #sec-post-dashboard .kpt-post-budget-row-info strong { color: #bfdbfe !important; }
     body.dark-mode #sec-post-dashboard .kpt-post-budget-row-success { background: rgba(6,95,70,.2) !important; border-color: rgba(52,211,153,.2) !important; color: #a7f3d0 !important; }
     body.dark-mode #sec-post-dashboard .kpt-post-budget-row-success strong { color: #a7f3d0 !important; }
+    body.dark-mode #sec-post-dashboard .kpt-post-stim-age { background: rgba(120,53,15,.22); border-color: rgba(245,158,11,.28); color: #fcd34d; }
+    body.dark-mode #sec-post-dashboard .kpt-post-stim-countline strong { color: #fbbf24; }
+    body.dark-mode #sec-post-dashboard .kpt-post-stim-countline span,
+    body.dark-mode #sec-post-dashboard .kpt-post-stim-hint { color: #cbd5e1; }
+    body.dark-mode #sec-post-dashboard .kpt-post-stim-stat { background: rgba(120,53,15,.18); border-color: rgba(245,158,11,.22); }
+    body.dark-mode #sec-post-dashboard .kpt-post-stim-stat small { color: #fcd34d; }
+    body.dark-mode #sec-post-dashboard .kpt-post-stim-stat strong { color: #fbbf24; }
 
     @media (max-width: 767px) {
         /* Override legacy nth-child mobile rules that targeted the old postnatal layout. */
@@ -12421,7 +12485,12 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         #sec-post-dashboard .kpt-post-card-copy { font-size: .68rem !important; }
         #sec-post-dashboard .kpt-post-link { font-size: .62rem !important; }
         #sec-post-dashboard .kpt-post-budget-row { align-items: flex-start; flex-direction: column; gap: .2rem; padding: .58rem !important; font-size: .58rem !important; }
-        #sec-post-dashboard .kpt-post-budget-row strong { text-align: left; font-size: .7rem !important; }
+        #sec-post-dashboard .kpt-post-budget-row strong { text-align: left; font-size: .7rem !important; max-width: 100%; }
+        #sec-post-dashboard #dash-budget-sisa-container { grid-template-columns: minmax(0,1fr); gap: .2rem !important; padding: .58rem !important; }
+        #sec-post-dashboard #dash-budget-sisa { text-align: left !important; font-size: .7rem !important; }
+        #sec-post-dashboard .kpt-post-stim-countline strong { font-size: 1.55rem; }
+        #sec-post-dashboard .kpt-post-stim-countline span { font-size: .62rem; }
+        #sec-post-dashboard .kpt-post-stim-stat { padding: .48rem .5rem; }
         #sec-post-dashboard .kpt-post-schedule { padding: .65rem !important; }
         #sec-post-dashboard .kpt-post-schedule strong { font-size: .72rem !important; }
         #sec-post-dashboard .kpt-post-schedule span { font-size: .62rem !important; }
