@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.0: Birth Profile, Date-based Growth Records, WHO reference extension; sync and backup structure preserved -->
+    <!-- Keluarga Pohon Teduh 6.13.1: Medical summary, immunization planner, growth tab naming; existing sync and backup structure preserved -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.0">
+    <meta name="application-version" content="6.13.1">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1560,6 +1560,37 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 }
 </style>
 
+
+    <style id="kpt-medical-6131-styles">
+      .medical-hero { position:relative; overflow:hidden; background:linear-gradient(115deg,#ecfeff 0%,#eff6ff 54%,#f0f9ff 100%); }
+      body.dark-mode .medical-hero { background:linear-gradient(115deg,#0f2a3b 0%,#14263d 54%,#102b3b 100%); }
+      .medical-hero-art { position:absolute; right:2.25rem; top:50%; transform:translateY(-50%); width:112px; height:112px; border-radius:34px; align-items:center; justify-content:center; color:rgba(2,132,199,.18); font-size:66px; }
+      .medical-hero-art span { position:absolute; right:8px; top:0; font-size:30px; color:rgba(13,148,136,.42); }
+      .medical-hero-art b { position:absolute; right:10px; bottom:-8px; font-size:34px; color:rgba(14,165,233,.45); }
+      .medical-tab { flex:0 0 auto; min-height:44px; padding-left:1rem; padding-right:1rem; background:#f8fafc; color:#64748b; border:1px solid #e2e8f0; }
+      body.dark-mode .medical-tab { background:#1e293b; color:#94a3b8; border-color:#334155; }
+      .medical-tab.active { background:#e0f2fe; color:#0369a1; border-color:#7dd3fc; box-shadow:0 2px 8px rgba(2,132,199,.08); }
+      body.dark-mode .medical-tab.active { background:rgba(2,132,199,.2); color:#7dd3fc; border-color:#0369a1; }
+      .baby-imm-filter { flex:0 0 auto; min-height:40px; padding:.55rem .9rem; border-radius:999px; border:1px solid #e2e8f0; background:#fff; color:#64748b; font-size:.75rem; font-weight:800; white-space:nowrap; }
+      body.dark-mode .baby-imm-filter { background:#1e293b; color:#cbd5e1; border-color:#334155; }
+      .baby-imm-filter.active { background:#e0f2fe; border-color:#7dd3fc; color:#0369a1; }
+      body.dark-mode .baby-imm-filter.active { background:rgba(2,132,199,.2); border-color:#0369a1; color:#7dd3fc; }
+      .baby-imm-label { display:block; margin-bottom:.35rem; color:#64748b; font-size:.72rem; font-weight:800; }
+      body.dark-mode .baby-imm-label { color:#cbd5e1; }
+      .baby-imm-input { width:100%; min-height:46px; border:1px solid #e2e8f0; background:#fff; color:#0f172a; border-radius:.85rem; padding:.7rem .8rem; font-size:.85rem; outline:none; }
+      .baby-imm-input:focus { border-color:#38bdf8; box-shadow:0 0 0 3px rgba(56,189,248,.14); }
+      body.dark-mode .baby-imm-input { background:#0f172a; color:#f8fafc; border-color:#334155; }
+      .baby-imm-input::placeholder { color:#94a3b8; }
+      @media(max-width:640px) {
+        #baby-medical-subtabs { gap:.4rem; }
+        #baby-medical-subtabs .medical-tab { min-height:44px; padding:.58rem .78rem; font-size:.72rem; }
+        #tab-content-ringkasan, #tab-content-imunisasi, #tab-content-kms, #tab-content-riwayat { min-width:0; }
+        #tab-content-ringkasan .medical-summary-card { padding:.85rem !important; }
+        #baby-immunization-list .baby-imm-card { padding:.9rem !important; }
+        #modal-baby-immunization { align-items:flex-end; }
+        #modal-baby-immunization > div { max-height:94dvh; border-bottom-left-radius:0; border-bottom-right-radius:0; }
+      }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -2761,29 +2792,40 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 
             <!-- TAB 5: MEDIS -->
             <section id="sec-post-medis" class="hidden space-y-6">
-                <!-- Header Medis -->
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-[#1e293b] p-5 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-800 dark:text-white"><i class="fa-solid fa-notes-medical text-blue-500 mr-2"></i>Rekam Medis & KMS</h2>
-                        <p class="text-sm text-slate-500 dark:text-slate-400">Pantau Grafik Tumbuh Kembang (KMS)</p>
+                <!-- Header Medis Bayi Lahir -->
+                <div class="medical-hero flex flex-col sm:flex-row justify-between items-center gap-4 p-5 sm:p-6 rounded-3xl border border-sky-100 dark:border-slate-700 shadow-sm">
+                    <div class="relative z-10 min-w-0">
+                        <span class="text-[10px] font-extrabold tracking-[.16em] text-sky-700 dark:text-sky-300">PERAWATAN & KESEHATAN SI KECIL</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800 dark:text-white mt-1"><i class="fa-solid fa-heart-pulse text-sky-500 mr-2"></i>Medis Bayi Lahir</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Satu tempat untuk memantau pertumbuhan, imunisasi, dan catatan kesehatan.</p>
+                        <div id="medical-age-pill" class="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 border border-sky-100 dark:border-slate-600 text-xs font-semibold text-sky-800 dark:text-sky-200"><i class="fa-regular fa-calendar"></i> Lengkapi tanggal lahir untuk menghitung usia</div>
                     </div>
-                    
-                    <!-- Jenis kelamin KMS mengikuti satu sumber: Profil Si Kecil -->
-                    <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2">
-                        <span id="kms-gender-label" class="text-xs font-semibold text-slate-600 dark:text-slate-300">Standar mengikuti profil bayi</span>
-                        <button type="button" onclick="editBabyProfile()" class="min-h-[36px] px-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-sky-700 dark:text-sky-300 text-xs font-bold">Edit Profil</button>
+                    <div class="flex items-center gap-2 w-full sm:w-auto rounded-2xl border border-sky-100 dark:border-slate-600 bg-white/75 dark:bg-slate-800/75 px-3 py-2 relative z-10">
+                        <span id="kms-gender-label" class="text-xs font-semibold text-slate-600 dark:text-slate-300">Standar pertumbuhan mengikuti profil</span>
+                        <button type="button" onclick="editBabyProfile()" class="min-h-[40px] px-3 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-sky-700 dark:text-sky-300 text-xs font-bold whitespace-nowrap">Edit Profil</button>
                     </div>
+                    <div class="medical-hero-art hidden sm:flex" aria-hidden="true"><i class="fa-solid fa-heart-pulse"></i><span>+</span><b>♡</b></div>
                 </div>
             
-                <!-- TOMBOL NAVIGASI TAB MEDIS BAYI -->
-                <div id="baby-medical-subtabs" class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                    <button id="tab-btn-kms" onclick="switchBabyMedicalTab('kms')" class="px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition bg-blue-50 dark:bg-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/50">Grafik KMS</button>
-                    <button id="tab-btn-riwayat" onclick="switchBabyMedicalTab('riwayat')" class="px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:text-slate-700 dark:hover:text-white">Riwayat Kontrol</button>
-                    <button class="bg-slate-50 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap opacity-50 cursor-not-allowed">Q&A Dokter (Segera)</button>
+                <!-- TAB NAVIGASI MEDIS BAYI -->
+                <div id="baby-medical-subtabs" class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" role="tablist" aria-label="Menu Medis Bayi Lahir">
+                    <button type="button" id="tab-btn-ringkasan" onclick="switchBabyMedicalTab('ringkasan')" class="medical-tab active px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition"><i class="fa-solid fa-house-medical mr-1.5"></i>Ringkasan</button>
+                    <button type="button" id="tab-btn-kms" onclick="switchBabyMedicalTab('kms')" class="medical-tab px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition"><i class="fa-solid fa-chart-line mr-1.5"></i>Pertumbuhan</button>
+                    <button type="button" id="tab-btn-imunisasi" onclick="switchBabyMedicalTab('imunisasi')" class="medical-tab px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition"><i class="fa-solid fa-syringe mr-1.5"></i>Imunisasi</button>
+                    <button type="button" id="tab-btn-riwayat" onclick="switchBabyMedicalTab('riwayat')" class="medical-tab px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition"><i class="fa-solid fa-notes-medical mr-1.5"></i>Riwayat Medis</button>
+                </div>
+
+                <!-- KONTEN TAB: RINGKASAN KESEHATAN -->
+                <div id="tab-content-ringkasan" class="block">
+                    <div id="baby-medical-summary" class="space-y-4"></div>
                 </div>
             
-                <!-- KONTEN TAB 1: GRAFIK KMS -->
-                <div id="tab-content-kms" class="block">
+                <!-- KONTEN TAB: PERTUMBUHAN (GRAFIK KMS) -->
+                <div id="tab-content-kms" class="hidden">
+                    <div class="flex items-center justify-between gap-3 mb-3 px-1">
+                        <div><h3 class="text-base font-bold text-slate-800 dark:text-white">Pemantauan Pertumbuhan</h3><p class="text-xs text-slate-500 dark:text-slate-400">Grafik dan riwayat pengukuran berdasarkan usia si kecil.</p></div>
+                        <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300">KMS</span>
+                    </div>
                     <!-- Area Grafik KMS -->
                     <div class="bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-3xl p-5 shadow-lg">
                         <!-- Tipe Grafik (BB/TB/LK) -->
@@ -2809,11 +2851,45 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                     </div>
                 </div>
             
-                <!-- KONTEN TAB 2: RIWAYAT KONTROL & IMUNISASI -->
+                <!-- KONTEN TAB: IMUNISASI -->
+                <div id="tab-content-imunisasi" class="hidden space-y-4">
+                    <div class="bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-3xl p-5 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div><h3 class="text-base font-bold text-slate-800 dark:text-white">Jadwal & Riwayat Imunisasi</h3><p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Panduan jadwal program nasional, rekomendasi IDAI, dan imunisasi tambahan keluarga.</p></div>
+                            <button type="button" onclick="openBabyImmunizationModal()" class="min-h-[44px] bg-sky-600 hover:bg-sky-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-sm transition whitespace-nowrap"><i class="fa-solid fa-plus mr-1"></i>Tambah Imunisasi</button>
+                        </div>
+                        <div id="baby-immunization-stats" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4"></div>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-3">Catatan imunisasi yang sudah tersimpan sebelum pembaruan ini tetap aman dan dapat dilihat di tab Riwayat Medis.</p>
+                    </div>
+                    <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="baby-immunization-filters">
+                        <button type="button" onclick="setBabyImmunizationFilter('all')" data-immunization-filter="all" class="baby-imm-filter active">Semua</button>
+                        <button type="button" onclick="setBabyImmunizationFilter('national')" data-immunization-filter="national" class="baby-imm-filter">Program Kemenkes</button>
+                        <button type="button" onclick="setBabyImmunizationFilter('idai')" data-immunization-filter="idai" class="baby-imm-filter">Rekomendasi IDAI</button>
+                        <button type="button" onclick="setBabyImmunizationFilter('custom')" data-immunization-filter="custom" class="baby-imm-filter">Tambahan Saya</button>
+                    </div>
+                    <div id="baby-immunization-list" class="space-y-3"></div>
+                    <div class="bg-sky-50 dark:bg-sky-950/30 border border-sky-100 dark:border-sky-900/60 rounded-2xl p-4 space-y-2">
+                        <div class="flex items-center gap-2 text-sky-900 dark:text-sky-200 font-bold text-sm"><i class="fa-solid fa-book-medical"></i>Sumber Panduan</div>
+                        <p class="text-xs text-sky-900/80 dark:text-sky-200/80">Jadwal nasional dan rekomendasi IDAI ditampilkan terpisah. Mulai 2026, Kemenkes memperluas vaksin heksavalen untuk jadwal primer usia 2, 3, dan 4 bulan di seluruh Indonesia; polio tetes (bOPV) tetap diberikan. Jadwal dapat berubah dan perlu disesuaikan dokter dengan riwayat imunisasi, usia, kondisi kesehatan, jenis/merek vaksin, serta wilayah tempat tinggal.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            <a href="https://jdih.kemkes.go.id/documents/keputusan-menteri-kesehatan-nomor-hk0107menkes352025" target="_blank" rel="noopener" class="min-h-[40px] flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-2 text-sky-700 dark:text-sky-300 font-semibold border border-sky-100 dark:border-slate-700"><i class="fa-solid fa-arrow-up-right-from-square"></i>KMK 35/2025 · Jadwal Program</a>
+                            <a href="https://jdih.kemkes.go.id/documents/keputusan-menteri-kesehatan-nomor-hk0107menkes9322025" target="_blank" rel="noopener" class="min-h-[40px] flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-2 text-sky-700 dark:text-sky-300 font-semibold border border-sky-100 dark:border-slate-700"><i class="fa-solid fa-file-contract"></i>KMK 932/2025 · Heksavalen</a>
+                            <a href="https://www.kemkes.go.id/id/pemerintah-perkuat-perlindungan-anak-melalui-imunisasi-heksavalen" target="_blank" rel="noopener" class="min-h-[40px] flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-2 text-sky-700 dark:text-sky-300 font-semibold border border-sky-100 dark:border-slate-700"><i class="fa-solid fa-arrow-up-right-from-square"></i>Penjelasan Kemenkes: Heksavalen 2026</a>
+                            <a href="https://ayosehat.kemkes.go.id/1000-hari-pertama-kehidupan/seputar-imunisasi" target="_blank" rel="noopener" class="min-h-[40px] flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-2 text-sky-700 dark:text-sky-300 font-semibold border border-sky-100 dark:border-slate-700"><i class="fa-solid fa-arrow-up-right-from-square"></i>Jadwal Kemenkes</a>
+                            <a href="https://kesprimkom.kemkes.go.id/assets/uploads/contents/others/Buku_KIA_2024.pdf" target="_blank" rel="noopener" class="min-h-[40px] flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-2 text-sky-700 dark:text-sky-300 font-semibold border border-sky-100 dark:border-slate-700"><i class="fa-solid fa-file-pdf"></i>Buku KIA 2024</a>
+                            <a href="https://www.idai.or.id/news-event/agenda-nasional/others/6798" target="_blank" rel="noopener" class="min-h-[40px] flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-2 text-sky-700 dark:text-sky-300 font-semibold border border-sky-100 dark:border-slate-700"><i class="fa-solid fa-arrow-up-right-from-square"></i>Jadwal IDAI 2024</a>
+                            <a href="https://www.idai.or.id/publications/buku-idai/pedoman-imunisasi-di-indonesia-edisi-7-tahun-2024" target="_blank" rel="noopener" class="min-h-[40px] flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-2 text-sky-700 dark:text-sky-300 font-semibold border border-sky-100 dark:border-slate-700 sm:col-span-2"><i class="fa-solid fa-book-open"></i>Pedoman Imunisasi IDAI Edisi 7 Tahun 2024</a>
+                            <a href="https://doi.org/10.14238/sp26.5.2025.328-36" target="_blank" rel="noopener" class="min-h-[40px] flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-2 text-sky-700 dark:text-sky-300 font-semibold border border-sky-100 dark:border-slate-700 sm:col-span-2"><i class="fa-solid fa-file-lines"></i>Kajian Jadwal IDAI 2024 · Sari Pediatri 2025</a>
+                        </div>
+                        <p class="text-[11px] leading-relaxed text-sky-900/75 dark:text-sky-200/70">Catatan: kolom biaya tidak diisi otomatis. Isi sendiri biaya aktual atau perkiraan dari fasilitas kesehatan. Untuk imunisasi kejar, vaksin kombinasi, batas usia produk, kontraindikasi, dan interval dosis, konsultasikan dengan dokter anak/petugas imunisasi.</p>
+                    </div>
+                </div>
+
+                <!-- KONTEN TAB: RIWAYAT MEDIS (MENJAGA CATATAN LAMA) -->
                 <div id="tab-content-riwayat" class="hidden">
                     <div class="bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-3xl p-5 shadow-lg">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-base font-bold text-slate-800 dark:text-white">Riwayat Kontrol & Imunisasi</h3>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                            <div><h3 class="text-base font-bold text-slate-800 dark:text-white">Riwayat Medis</h3><p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Catatan kontrol, pemeriksaan, keluhan, dan riwayat medis yang sudah tersimpan.</p></div>
                             <button onclick="openBabyMedicalModal()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-sm transition">+ Catat Kontrol</button>
                         </div>
                         <!-- Tempat daftar riwayat akan dirender -->
@@ -2876,8 +2952,39 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                         </div>
                     </div>
                 </div>
+                <!-- MODAL TAMBAH / EDIT IMUNISASI -->
+                <div id="modal-baby-immunization" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-[70] backdrop-blur-sm p-3 sm:p-4">
+                    <div class="bg-white dark:bg-[#1e293b] w-full max-w-2xl rounded-3xl shadow-2xl max-h-[94vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
+                        <div class="sticky top-0 z-10 flex items-start justify-between gap-3 p-5 bg-white/95 dark:bg-[#1e293b]/95 backdrop-blur border-b border-slate-100 dark:border-slate-700 rounded-t-3xl">
+                            <div><h3 id="baby-imm-modal-title" class="text-lg font-extrabold text-slate-800 dark:text-white">Tambah Imunisasi</h3><p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Catat jadwal, pelaksanaan, dan biaya vaksin.</p></div>
+                            <button type="button" onclick="closeBabyImmunizationModal()" aria-label="Tutup" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form id="baby-imm-form" class="p-5 space-y-4" onsubmit="event.preventDefault(); saveBabyImmunization();">
+                            <input type="hidden" id="baby-imm-id">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="sm:col-span-2"><label class="baby-imm-label" for="baby-imm-name">Nama vaksin / imunisasi *</label><input required id="baby-imm-name" type="text" maxlength="100" placeholder="Contoh: Influenza" class="baby-imm-input"></div>
+                                <div><label class="baby-imm-label" for="baby-imm-dose">Dosis / seri</label><input id="baby-imm-dose" type="text" maxlength="60" placeholder="Contoh: Dosis 1" class="baby-imm-input"></div>
+                                <div><label class="baby-imm-label" for="baby-imm-source">Kelompok sumber</label><select id="baby-imm-source" class="baby-imm-input"><option value="national">Program Nasional Kemenkes</option><option value="idai">Rekomendasi IDAI</option><option value="custom">Tambahan Saya</option></select></div>
+                                <div><label class="baby-imm-label" for="baby-imm-age-label">Usia target (teks)</label><input id="baby-imm-age-label" type="text" maxlength="80" placeholder="Contoh: 6 bulan" class="baby-imm-input"></div>
+                                <div><label class="baby-imm-label" for="baby-imm-age-months">Usia target (bulan)</label><input id="baby-imm-age-months" type="number" min="0" max="216" step="0.1" placeholder="6" class="baby-imm-input"><p class="text-[10px] text-slate-400 mt-1">Digunakan untuk menghitung tanggal target dari tanggal lahir.</p></div>
+                                <div><label class="baby-imm-label" for="baby-imm-planned-date">Tanggal rencana (opsional)</label><input id="baby-imm-planned-date" type="date" class="baby-imm-input"><p class="text-[10px] text-slate-400 mt-1">Jika diisi, tanggal ini mengesampingkan hitungan usia target.</p></div>
+                                <div><label class="baby-imm-label" for="baby-imm-status">Status</label><select id="baby-imm-status" class="baby-imm-input"><option value="pending">Belum dilakukan</option><option value="planned">Sudah direncanakan</option><option value="done">Sudah diberikan</option><option value="discuss">Diskusikan dengan dokter</option><option value="not_applicable">Tidak berlaku</option></select></div>
+                                <div><label class="baby-imm-label" for="baby-imm-admin-date">Tanggal diberikan</label><input id="baby-imm-admin-date" type="date" class="baby-imm-input"></div>
+                                <div><label class="baby-imm-label" for="baby-imm-cost">Biaya (Rp)</label><input id="baby-imm-cost" type="number" min="0" step="1000" inputmode="numeric" placeholder="Isi jika sudah diketahui" class="baby-imm-input"><p class="text-[10px] text-slate-400 mt-1">Boleh dikosongkan. Nilai ini selalu dapat diedit.</p></div>
+                                <div><label class="baby-imm-label" for="baby-imm-brand">Merek / jenis vaksin</label><input id="baby-imm-brand" type="text" maxlength="100" placeholder="Opsional" class="baby-imm-input"></div>
+                                <div><label class="baby-imm-label" for="baby-imm-facility">Fasilitas kesehatan</label><input id="baby-imm-facility" type="text" maxlength="120" placeholder="Puskesmas / klinik / rumah sakit" class="baby-imm-input"></div>
+                                <div class="sm:col-span-2"><label class="baby-imm-label" for="baby-imm-notes">Catatan</label><textarea id="baby-imm-notes" rows="3" maxlength="1200" placeholder="Catatan dokter, interval dosis, reaksi setelah imunisasi, atau informasi lainnya" class="baby-imm-input"></textarea></div>
+                            </div>
+                            <div class="flex flex-col-reverse sm:flex-row gap-2 pt-2">
+                                <button type="button" onclick="closeBabyImmunizationModal()" class="min-h-[46px] flex-1 px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 font-bold">Batal</button>
+                                <button type="submit" class="min-h-[46px] flex-1 px-4 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold"><i class="fa-solid fa-floppy-disk mr-1"></i>Simpan Imunisasi</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </section>
 
+        
             <!-- TAB 6: STIMULASI & MILESTONE -->
             <section id="sec-post-stimulasi" class="hidden space-y-6">
                 <div id="development-module" class="space-y-5">
@@ -4187,6 +4294,8 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 kmsData: [],
                 rsDsa: [],
                 babyMedicalRecords: [],
+                babyImmunizations: [],
+                babyImmunizationsInitialized: false,
                 stimulationFavorites: [],
                 developmentJournal: [],
                 milestoneObservations: [],
@@ -5135,8 +5244,9 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             } else if (tabId === 'rs-dsa') {
                 renderRsDsa();
             } else if (tabId === 'post-medis') {
-                renderKmsChart();
-                renderBabyMedicalRecords();
+                ensureBabyImmunizations();
+                switchBabyMedicalTab(activeBabyMedicalTab || 'ringkasan');
+                renderBabyMedicalSummary();
             } else if (tabId === 'post-stimulasi') {
                 renderStimulationModule();
             }
@@ -5157,7 +5267,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         }
 
         // ==========================================================
-        // 6.13.0 — PROFIL BAYI & DATA KELAHIRAN
+        // 6.13.1 — PROFIL BAYI & DATA KELAHIRAN
         // babyName, babyGender, and babyBirthDate remain the canonical
         // fields to preserve compatibility with existing modules.
         // Birth measurements are separate from postnatal KMS measurements.
@@ -8371,8 +8481,14 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
           if (postShoppingVisible && has('postnatalBudgets', 'postnatalShopping')) renderPostShopping();
           if (rsDsaVisible && has('rsDsa')) renderRsDsa();
           if (postMedicalVisible) {
-            if (has('kmsData')) renderKmsChart();
-            if (has('babyMedicalRecords')) renderBabyMedicalRecords();
+            const medicalKeysChanged = has('babyName', 'babyGender', 'babyBirthDate', 'babyProfile', 'kmsData', 'babyMedicalRecords', 'babyImmunizations', 'babyImmunizationsInitialized');
+            if (medicalKeysChanged) {
+              if ((activeBabyMedicalTab || 'ringkasan') === 'ringkasan') renderBabyMedicalSummary();
+              if (activeBabyMedicalTab === 'kms' && has('kmsData', 'babyGender', 'babyBirthDate', 'babyProfile')) renderKmsChart();
+              if (activeBabyMedicalTab === 'riwayat' && has('babyMedicalRecords')) renderBabyMedicalRecords();
+              if (activeBabyMedicalTab === 'imunisasi' && has('babyImmunizations', 'babyBirthDate')) renderBabyImmunizations();
+              if (has('babyName', 'babyGender', 'babyBirthDate', 'babyProfile')) updateBabyMedicalHero();
+            }
           }
 
           const prenatalDashboardKeys = [
@@ -8713,7 +8829,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.0',
+                    appVersion: '6.13.1',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -8839,7 +8955,8 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             return [
                 ['Kategori & item belanja', len('budgetCategories') + len('shoppingItems') + len('postnatalShopping')],
                 ['Rumah sakit & dokter', len('hospitals') + len('rsDsa')],
-                ['Catatan medis & kontraksi', len('medicalRecords') + len('babyMedicalRecords') + len('contractions')],
+                ['Riwayat medis & kontraksi', len('medicalRecords') + len('babyMedicalRecords') + len('contractions')],
+                ['Jadwal & catatan imunisasi', len('babyImmunizations')],
                 ['Log harian bayi', len('dailyLogs')],
                 ['Checklist & persiapan', len('hospitalBag') + len('departureChecklist') + len('husbandRoles') + len('birthPlan')],
                 ['Nama & referensi', len('babyNames') + len('references')],
@@ -10277,7 +10394,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         }
 
         // ==========================================================
-        // 6.13.0 — KMS / GROWTH TRACKER (DATE-BASED, HYBRID SUMMARY)
+        // 6.13.1 — KMS / GROWTH TRACKER (DATE-BASED, HYBRID SUMMARY)
         // WHO -2 SD / +2 SD anchors: 0–60 months (WHO Child Growth Standards,
         // sampled every 6 months) and 61–72 months (WHO Reference 2007 monthly).
         // Values between 6-month anchors are linearly interpolated for display.
@@ -10780,44 +10897,454 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             }
         }
 
-        // FUNGSI PENUKAR TAB MEDIS BAYI (Versi UI Asli)
-        function switchBabyMedicalTab(tabName) {
-            const btnKms = document.getElementById('tab-btn-kms');
-            const btnRiwayat = document.getElementById('tab-btn-riwayat');
-            const contentKms = document.getElementById('tab-content-kms');
-            const contentRiwayat = document.getElementById('tab-content-riwayat');
-        
-            if (!btnKms || !btnRiwayat || !contentKms || !contentRiwayat) return;
-        
-            // Reset kelas warna berdasarkan desain aslimu
-            const activeClass = ['bg-blue-50', 'dark:bg-blue-600/20', 'text-blue-600', 'dark:text-blue-400', 'border-blue-200', 'dark:border-blue-500/50'];
-            const inactiveClass = ['bg-slate-50', 'dark:bg-slate-800', 'text-slate-500', 'dark:text-slate-400', 'border-slate-200', 'dark:border-slate-700'];
-        
-            // Hapus semua styling lama
-            btnKms.classList.remove(...activeClass, ...inactiveClass);
-            btnRiwayat.classList.remove(...activeClass, ...inactiveClass);
-            
-            // Sembunyikan semua konten tab
-            contentKms.classList.remove('block');
-            contentKms.classList.add('hidden');
-            contentRiwayat.classList.remove('block');
-            contentRiwayat.classList.add('hidden');
-        
-            // Aktifkan tab yang dipilih
-            if (tabName === 'kms') {
-                btnKms.classList.add(...activeClass);
-                btnRiwayat.classList.add(...inactiveClass);
-                contentKms.classList.remove('hidden');
-                contentKms.classList.add('block');
-                if (typeof renderKmsChart === 'function') renderKmsChart();
-            } else if (tabName === 'riwayat') {
-                btnRiwayat.classList.add(...activeClass);
-                btnKms.classList.add(...inactiveClass);
-                contentRiwayat.classList.remove('hidden');
-                contentRiwayat.classList.add('block');
-                if (typeof renderBabyMedicalRecords === 'function') renderBabyMedicalRecords();
+        // ==========================================================
+        // 6.13.1 — MEDICAL SUMMARY & IMMUNIZATION PLANNER
+        // Sumber jadwal: Program Nasional Kemenkes (Buku KIA 2024 / KMK
+        // 1098/2024 sebagaimana diubah KMK 35/2025) and IDAI 2024.
+        // Vaccine costs intentionally remain blank until entered by parents.
+        // ==========================================================
+        let activeBabyMedicalTab = 'ringkasan';
+        let babyImmunizationFilter = 'all';
+
+        const BABY_IMMUNIZATION_DEFAULTS = [
+            // Program Nasional Kemenkes — Buku KIA 2024, jadwal terbaru dilengkapi transisi heksavalen 2026 (KMK 345/2025 jo. KMK 932/2025).
+            { id:'imm-kmk-hb0', name:'Hepatitis B (HB0)', dose:'Dosis lahir', source:'national', targetAgeMonths:0, targetAgeLabel:'0–24 jam setelah lahir', status:'pending', notes:'Diberikan dalam 0–24 jam setelah lahir. Ikuti petunjuk petugas kesehatan.' },
+            { id:'imm-kmk-bcg', name:'BCG', dose:'Dosis 1', source:'national', targetAgeMonths:1, targetAgeLabel:'1 bulan', status:'pending', notes:'Buku KIA mencantumkan usia 1 bulan. Jadwal IDAI menyebut BCG segera setelah lahir atau sebelum usia 1 bulan; konfirmasi waktu pemberian dengan petugas kesehatan.' },
+            { id:'imm-kmk-opv1', name:'Polio tetes (OPV)', dose:'Dosis 1', source:'national', targetAgeMonths:1, targetAgeLabel:'1 bulan', status:'pending', notes:'Jadwal program nasional menurut Buku KIA 2024.' },
+            { id:'imm-kmk-dpt1', name:'DPT-HB-Hib-IPV (Heksavalen)', dose:'Dosis 1', source:'national', targetAgeMonths:2, targetAgeLabel:'2 bulan', status:'pending', notes:'Program nasional beralih ke vaksin heksavalen mulai 2026 di seluruh Indonesia (KMK 345/2025 jo. KMK 932/2025). Pada usia 2, 3, dan 4 bulan, heksavalen menggantikan pemberian DPT-HB-Hib dan IPV secara terpisah. Polio tetes (bOPV) tetap diberikan. Jika menggunakan vaksin swasta/skema IDAI atau ada imunisasi kejar, konfirmasi produk dan jadwal kepada dokter.' },
+            { id:'imm-kmk-opv2', name:'Polio tetes (OPV)', dose:'Dosis 2', source:'national', targetAgeMonths:2, targetAgeLabel:'2 bulan', status:'pending', notes:'Jadwal program nasional.' },
+            { id:'imm-kmk-pcv1', name:'PCV', dose:'Dosis 1', source:'national', targetAgeMonths:2, targetAgeLabel:'2 bulan', status:'pending', notes:'Program nasional mencantumkan PCV pada usia 2, 3, dan 12 bulan. Jadwal dan jenis/produk PCV dapat berbeda; konfirmasi vaksin yang digunakan kepada fasilitas kesehatan.' },
+            { id:'imm-kmk-rv1', name:'Rotavirus (RV)', dose:'Dosis 1', source:'national', targetAgeMonths:2, targetAgeLabel:'2 bulan', status:'pending', notes:'Program nasional memakai jadwal 2, 3, dan 4 bulan. IDAI menjelaskan batas usia berbeda menurut produk: RV1 dua dosis paling lambat 24 minggu; RV5 tiga dosis paling lambat 32 minggu. Jangan mencampur skema produk; konfirmasi merek dan batas usia.' },
+            { id:'imm-kmk-dpt2', name:'DPT-HB-Hib-IPV (Heksavalen)', dose:'Dosis 2', source:'national', targetAgeMonths:3, targetAgeLabel:'3 bulan', status:'pending', notes:'Dosis kedua dalam rangkaian heksavalen program nasional usia 2, 3, dan 4 bulan. Polio tetes (bOPV) tetap diberikan terpisah.' },
+            { id:'imm-kmk-opv3', name:'Polio tetes (OPV)', dose:'Dosis 3', source:'national', targetAgeMonths:3, targetAgeLabel:'3 bulan', status:'pending', notes:'Jadwal program nasional.' },
+            { id:'imm-kmk-pcv2', name:'PCV', dose:'Dosis 2', source:'national', targetAgeMonths:3, targetAgeLabel:'3 bulan', status:'pending', notes:'Jadwal program nasional.' },
+            { id:'imm-kmk-rv2', name:'Rotavirus (RV)', dose:'Dosis 2', source:'national', targetAgeMonths:3, targetAgeLabel:'3 bulan', status:'pending', notes:'Dosis kedua dalam jadwal program nasional. Interval dan batas usia tetap harus sesuai produk vaksin yang diberikan.' },
+            { id:'imm-kmk-dpt3', name:'DPT-HB-Hib-IPV (Heksavalen)', dose:'Dosis 3', source:'national', targetAgeMonths:4, targetAgeLabel:'4 bulan', status:'pending', notes:'Dosis ketiga rangkaian heksavalen program nasional usia 2, 3, dan 4 bulan. Heksavalen sudah mencakup IPV; tidak perlu membuat entri IPV terpisah untuk rangkaian program ini kecuali ada instruksi khusus tenaga kesehatan.' },
+            { id:'imm-kmk-opv4', name:'Polio tetes (OPV)', dose:'Dosis 4', source:'national', targetAgeMonths:4, targetAgeLabel:'4 bulan', status:'pending', notes:'Jadwal program nasional.' },
+            { id:'imm-kmk-rv3', name:'Rotavirus (RV)', dose:'Dosis 3', source:'national', targetAgeMonths:4, targetAgeLabel:'4 bulan', status:'pending', notes:'Dosis ketiga pada jadwal program nasional. Buku KIA mencantumkan seri dilengkapi sebelum usia 8 bulan; pedoman IDAI menyebut batas produk RV5 paling lambat 32 minggu. Konfirmasi sesuai produk.' },
+            { id:'imm-kmk-mr1', name:'Campak-Rubella (MR)', dose:'Dosis 1', source:'national', targetAgeMonths:9, targetAgeLabel:'9 bulan', status:'pending', notes:'Jadwal program nasional.' },
+            { id:'imm-kmk-je', name:'Japanese Encephalitis (JE)', dose:'Dosis program', source:'national', targetAgeMonths:10, targetAgeLabel:'10 bulan', status:'discuss', conditional:true, notes:'Buku KIA menempatkan JE pada 10 bulan untuk wilayah endemis/daerah introduksi tertentu. IDAI menyebut mulai 9 bulan untuk anak di wilayah endemis atau yang akan bepergian ke wilayah endemis ≥1 bulan. Pastikan indikasi wilayah/perjalanan ke Puskesmas atau dokter.' },
+            { id:'imm-kmk-pcv3', name:'PCV', dose:'Dosis 3 / lanjutan', source:'national', targetAgeMonths:12, targetAgeLabel:'12 bulan', status:'pending', notes:'Program nasional: dosis ketiga pada 12 bulan. Jadwal IDAI untuk PCV non-program/produk lain dapat memakai 2, 4, 6 bulan dan booster 12–15 bulan; jangan menggabungkan skema tanpa arahan dokter.' },
+            { id:'imm-kmk-dpt4', name:'DPT-HB-Hib', dose:'Dosis lanjutan', source:'national', targetAgeMonths:18, targetAgeLabel:'18 bulan', status:'pending', notes:'Buku KIA 2024 mencantumkan dosis lanjutan DPT-HB-Hib pada 18 bulan. Pengalihan heksavalen yang dijelaskan Kemenkes untuk jadwal primer usia 2, 3, dan 4 bulan; konfirmasi jenis vaksin booster yang tersedia di fasilitas kesehatan.' },
+            { id:'imm-kmk-mr2', name:'Campak-Rubella (MR)', dose:'Dosis lanjutan', source:'national', targetAgeMonths:18, targetAgeLabel:'18 bulan', status:'pending', notes:'Imunisasi lanjutan program nasional. Jadwal IDAI menempatkan dosis kedua MR pada rentang 15–18 bulan; dokter dapat menyesuaikan dengan riwayat imunisasi anak.' },
+
+            // Opsi rekomendasi IDAI/rujukan dokter — bukan program imunisasi nasional.
+            // Hanya titik mulai usia yang ditampilkan; seri dan interval harus
+            // dikonfirmasi berdasarkan pedoman IDAI, produk vaksin, dan dokter anak.
+            { id:'imm-idai-influenza', name:'Influenza', dose:'Dosis awal', source:'idai', targetAgeMonths:6, targetAgeLabel:'Mulai usia 6 bulan', status:'discuss', notes:'IDAI 2024: mulai usia 6 bulan. Untuk seri pertama pada usia 6 bulan–8 tahun, berikan 2 dosis dengan interval 4 minggu; selanjutnya 1 dosis setiap tahun. Konfirmasi riwayat dan jadwal dengan dokter.' },
+            { id:'imm-idai-hepa', name:'Hepatitis A', dose:'Dosis 1', source:'idai', targetAgeMonths:12, targetAgeLabel:'Mulai usia 12 bulan', status:'discuss', notes:'IDAI 2024: mulai usia 12 bulan, 2 dosis dengan interval 6–18 bulan. Setelah dosis pertama diberikan, tambahkan/edit tanggal target dosis kedua sesuai interval yang disepakati dengan dokter.' },
+            { id:'imm-idai-varisela', name:'Varisela (cacar air)', dose:'Dosis 1', source:'idai', targetAgeMonths:12, targetAgeLabel:'Mulai usia 12 bulan', status:'discuss', notes:'IDAI 2024: mulai usia 12 bulan. Untuk usia 1–12 tahun, 2 dosis dengan interval 6 minggu sampai 3 bulan. Tambahkan/edit dosis kedua setelah tanggal dosis pertama ditetapkan.' },
+            { id:'imm-idai-tifoid', name:'Tifoid', dose:'Dosis awal', source:'idai', targetAgeMonths:24, targetAgeLabel:'Mulai usia 2 tahun', status:'discuss', notes:'IDAI 2024: vaksin tifoid polisakarida mulai usia 2 tahun dan diulang setiap 3 tahun. Jenis vaksin dan kecocokan jadwal perlu dikonfirmasi dengan dokter.' },
+            { id:'imm-idai-je-booster', name:'Japanese Encephalitis (JE)', dose:'Booster / dosis lanjutan', source:'idai', targetAgeMonths:null, targetAgeLabel:'1–2 tahun setelah dosis pertama (wilayah endemis)', status:'discuss', notes:'IDAI 2024 menyebut booster 1–2 tahun setelah dosis pertama bagi anak yang tinggal di daerah endemis. Atur tanggal setelah dosis pertama dan konfirmasi dokter/Puskesmas.' }
+        ];
+
+        function ensureBabyImmunizations() {
+            if (!Array.isArray(appState.babyImmunizations)) appState.babyImmunizations = [];
+            if (appState.babyImmunizationsInitialized === true) return false;
+            const existingIds = new Set(appState.babyImmunizations.map(item => String(item.id)));
+            const seededAt = new Date().toISOString();
+            BABY_IMMUNIZATION_DEFAULTS.forEach(item => {
+                if (!existingIds.has(String(item.id))) {
+                    appState.babyImmunizations.push({ ...item, cost: null, administeredDate: '', plannedDate: '', brand: '', facility: '', createdAt: seededAt, updatedAt: seededAt });
+                }
+            });
+            appState.babyImmunizationsInitialized = true;
+            saveToLocalStorage();
+            return true;
+        }
+
+        function babyImmEscape(value) {
+            return typeof kptEscapeHtml === 'function' ? kptEscapeHtml(value == null ? '' : value) : String(value == null ? '' : value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        }
+
+        function babyImmAddMonths(dateValue, months) {
+            if (!dateValue || !Number.isFinite(Number(months))) return '';
+            const base = parseLocalDateValue(dateValue);
+            if (Number.isNaN(base.getTime())) return '';
+            const whole = Math.trunc(Number(months));
+            const fraction = Number(months) - whole;
+            const day = base.getDate();
+            const targetMonth = base.getMonth() + whole;
+            const first = new Date(base.getFullYear(), targetMonth, 1);
+            const lastDay = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+            first.setDate(Math.min(day, lastDay));
+            if (fraction > 0) first.setDate(first.getDate() + Math.round(fraction * 30.4375));
+            return getLocalDateKey(first);
+        }
+
+        function babyImmFormatDate(dateValue) {
+            if (!dateValue) return 'Belum ditentukan';
+            const date = parseLocalDateValue(dateValue);
+            if (Number.isNaN(date.getTime())) return 'Tanggal tidak valid';
+            return date.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+        }
+
+        function babyImmGetDueDate(item) {
+            if (item && item.plannedDate) return item.plannedDate;
+            const dob = typeof getBabyBirthDateKey === 'function' ? getBabyBirthDateKey() : '';
+            if (!dob || !item || item.targetAgeMonths === null || item.targetAgeMonths === undefined || item.targetAgeMonths === '') return '';
+            return babyImmAddMonths(dob, Number(item.targetAgeMonths));
+        }
+
+        function babyImmFormatAge(months) {
+            const value = Number(months);
+            if (!Number.isFinite(value)) return '';
+            if (value === 0) return 'Saat lahir';
+            if (value < 1) return `${Math.round(value * 30.4375)} hari`;
+            const whole = Math.floor(value);
+            const year = Math.floor(whole / 12);
+            const month = whole % 12;
+            if (year && month) return `${year} tahun ${month} bulan`;
+            if (year) return `${year} tahun`;
+            return `${whole} bulan`;
+        }
+
+        function babyImmStatusMeta(status) {
+            const map = {
+                pending: { label:'Belum dilakukan', cls:'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-900/25 dark:text-amber-200 dark:border-amber-800' },
+                planned: { label:'Sudah direncanakan', cls:'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-900/25 dark:text-sky-200 dark:border-sky-800' },
+                done: { label:'Sudah diberikan', cls:'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-900/25 dark:text-emerald-200 dark:border-emerald-800' },
+                discuss: { label:'Diskusikan dengan dokter', cls:'bg-violet-50 text-violet-800 border-violet-200 dark:bg-violet-900/25 dark:text-violet-200 dark:border-violet-800' },
+                not_applicable: { label:'Tidak berlaku', cls:'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600' }
+            };
+            return map[status] || map.pending;
+        }
+
+        function babyImmSourceMeta(source) {
+            if (source === 'national') return { label:'Program Kemenkes', cls:'bg-sky-50 text-sky-700 dark:bg-sky-900/30 dark:text-sky-200' };
+            if (source === 'idai') return { label:'Rekomendasi IDAI', cls:'bg-violet-50 text-violet-700 dark:bg-violet-900/30 dark:text-violet-200' };
+            return { label:'Tambahan Saya', cls:'bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-200' };
+        }
+
+        function babyImmFormatCurrency(value) {
+            if (value === null || value === undefined || value === '') return 'Biaya belum diisi';
+            const number = Number(value);
+            if (!Number.isFinite(number)) return 'Biaya belum diisi';
+            return 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits:0 }).format(number);
+        }
+
+        function babyImmGetAgeLabel(item) {
+            return item.targetAgeLabel || (item.targetAgeMonths !== null && item.targetAgeMonths !== undefined && item.targetAgeMonths !== '' ? babyImmFormatAge(item.targetAgeMonths) : 'Usia target belum diatur');
+        }
+
+        function setBabyImmunizationFilter(filter) {
+            babyImmunizationFilter = ['all','national','idai','custom'].includes(filter) ? filter : 'all';
+            document.querySelectorAll('[data-immunization-filter]').forEach(button => button.classList.toggle('active', button.dataset.immunizationFilter === babyImmunizationFilter));
+            renderBabyImmunizations();
+        }
+
+        function renderBabyImmunizations() {
+            const list = document.getElementById('baby-immunization-list');
+            if (!list) return;
+            if (!Array.isArray(appState.babyImmunizations)) appState.babyImmunizations = [];
+            const records = appState.babyImmunizations.filter(item => babyImmunizationFilter === 'all' || item.source === babyImmunizationFilter);
+            const stats = document.getElementById('baby-immunization-stats');
+            if (stats) {
+                const national = appState.babyImmunizations.filter(item => item.source === 'national' && !item.conditional && item.status !== 'not_applicable');
+                const done = national.filter(item => item.status === 'done').length;
+                const upcoming = appState.babyImmunizations.filter(item => ['pending','planned'].includes(item.status)).filter(item => babyImmGetDueDate(item)).sort((a,b) => babyImmGetDueDate(a).localeCompare(babyImmGetDueDate(b)))[0];
+                const totalCosts = appState.babyImmunizations.reduce((sum,item) => sum + (item.cost === null || item.cost === '' || item.cost === undefined ? 0 : (Number(item.cost) || 0)), 0);
+                const costCount = appState.babyImmunizations.filter(item => item.cost !== null && item.cost !== '' && item.cost !== undefined && Number.isFinite(Number(item.cost))).length;
+                stats.innerHTML = `
+                  <div class="rounded-2xl bg-sky-50 dark:bg-sky-950/30 border border-sky-100 dark:border-sky-900/50 p-3"><div class="text-[10px] font-bold text-sky-700 dark:text-sky-300">PROGRAM NASIONAL</div><div class="text-xl font-extrabold text-slate-800 dark:text-white mt-1">${done}/${national.length}</div><div class="text-[10px] text-slate-500 dark:text-slate-400">Sudah diberikan</div></div>
+                  <div class="rounded-2xl bg-violet-50 dark:bg-violet-950/25 border border-violet-100 dark:border-violet-900/50 p-3"><div class="text-[10px] font-bold text-violet-700 dark:text-violet-300">REKOMENDASI IDAI</div><div class="text-xl font-extrabold text-slate-800 dark:text-white mt-1">${appState.babyImmunizations.filter(item => item.source === 'idai').length}</div><div class="text-[10px] text-slate-500 dark:text-slate-400">Opsi untuk didiskusikan</div></div>
+                  <div class="rounded-2xl bg-amber-50 dark:bg-amber-950/25 border border-amber-100 dark:border-amber-900/50 p-3"><div class="text-[10px] font-bold text-amber-700 dark:text-amber-300">AGENDA TERDEKAT</div><div class="text-sm font-extrabold text-slate-800 dark:text-white mt-1">${upcoming ? babyImmEscape(babyImmFormatDate(babyImmGetDueDate(upcoming))) : 'Belum ada'}</div><div class="text-[10px] text-slate-500 dark:text-slate-400">${upcoming ? babyImmEscape(upcoming.name) : (getBabyBirthDateKey() ? 'Tidak ada jadwal aktif' : 'Lengkapi tanggal lahir')}</div></div>
+                  <div class="rounded-2xl bg-teal-50 dark:bg-teal-950/25 border border-teal-100 dark:border-teal-900/50 p-3"><div class="text-[10px] font-bold text-teal-700 dark:text-teal-300">BIAYA TERCATAT</div><div class="text-sm font-extrabold text-slate-800 dark:text-white mt-1">${costCount ? babyImmEscape(babyImmFormatCurrency(totalCosts)) : 'Belum diisi'}</div><div class="text-[10px] text-slate-500 dark:text-slate-400">${costCount} catatan biaya</div></div>`;
+            }
+            document.querySelectorAll('[data-immunization-filter]').forEach(button => button.classList.toggle('active', button.dataset.immunizationFilter === babyImmunizationFilter));
+            if (!records.length) {
+                list.innerHTML = '<div class="text-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-8 text-slate-500 dark:text-slate-400"><i class="fa-solid fa-syringe text-3xl mb-3 opacity-40"></i><p class="font-bold text-sm">Belum ada imunisasi pada kelompok ini</p><p class="text-xs mt-1">Tambahkan catatan imunisasi yang sesuai kebutuhan keluarga.</p><button type="button" onclick="openBabyImmunizationModal()" class="mt-4 min-h-[42px] px-4 rounded-xl bg-sky-600 text-white text-xs font-bold">+ Tambah Imunisasi</button></div>';
+                return;
+            }
+            const sorted = [...records].sort((a,b) => {
+                const da = babyImmGetDueDate(a) || '9999-12-31';
+                const db = babyImmGetDueDate(b) || '9999-12-31';
+                if (a.status === 'done' && b.status !== 'done') return 1;
+                if (b.status === 'done' && a.status !== 'done') return -1;
+                return da.localeCompare(db) || String(a.name || '').localeCompare(String(b.name || ''));
+            });
+            list.innerHTML = sorted.map(item => {
+                const source = babyImmSourceMeta(item.source);
+                const status = babyImmStatusMeta(item.status);
+                const due = babyImmGetDueDate(item);
+                const targetText = babyImmGetAgeLabel(item);
+                const dateLine = item.status === 'done' && item.administeredDate ? `Diberikan ${babyImmFormatDate(item.administeredDate)}` : (due ? `Tanggal target ${babyImmFormatDate(due)}` : (getBabyBirthDateKey() ? 'Tanggal target belum diatur' : 'Tanggal lahir belum dilengkapi'));
+                const cost = babyImmFormatCurrency(item.cost);
+                const conditionNote = item.conditional ? '<div class="mt-2 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900/60 px-3 py-2 text-[11px] text-amber-800 dark:text-amber-200"><i class="fa-solid fa-location-dot mr-1"></i>Hanya untuk wilayah tertentu / endemis. Konfirmasi ke Puskesmas atau dokter.</div>' : '';
+                const note = item.notes ? `<p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400 mt-2">${babyImmEscape(item.notes)}</p>` : '';
+                return `<article class="baby-imm-card bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-2xl p-4 shadow-sm">
+                  <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                      <div class="flex flex-wrap gap-1.5 items-center"><span class="text-[10px] font-extrabold px-2 py-1 rounded-lg ${source.cls}">${source.label}</span><span class="text-[10px] font-bold px-2 py-1 rounded-lg border ${status.cls}">${status.label}</span></div>
+                      <h4 class="font-extrabold text-sm sm:text-base text-slate-800 dark:text-white mt-2">${babyImmEscape(item.name || 'Imunisasi')}</h4>
+                      <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">${babyImmEscape(item.dose || '')} ${item.dose ? '• ' : ''}Usia target: ${babyImmEscape(targetText)}</div>
+                      <div class="text-xs font-semibold text-slate-600 dark:text-slate-300 mt-2"><i class="fa-regular fa-calendar mr-1 text-sky-500"></i>${babyImmEscape(dateLine)}</div>
+                    </div>
+                    <div class="sm:text-right shrink-0">
+                      <div class="text-[10px] uppercase tracking-wide font-extrabold text-slate-400">Biaya</div>
+                      <div class="text-sm font-extrabold ${item.cost === null || item.cost === undefined || item.cost === '' ? 'text-slate-400' : 'text-slate-800 dark:text-white'} mt-1">${babyImmEscape(cost)}</div>
+                    </div>
+                  </div>
+                  ${(item.brand || item.facility) ? `<div class="text-[11px] text-slate-500 dark:text-slate-400 mt-2">${item.brand ? 'Vaksin: ' + babyImmEscape(item.brand) : ''}${item.brand && item.facility ? ' · ' : ''}${item.facility ? babyImmEscape(item.facility) : ''}</div>` : ''}
+                  ${conditionNote}${note}
+                  <div class="flex flex-wrap gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
+                    ${item.status !== 'done' ? `<button type="button" onclick="markBabyImmunizationDone('${babyImmEscape(item.id)}')" class="min-h-[38px] px-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/25 text-emerald-700 dark:text-emerald-200 text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>Tandai diberikan</button>` : ''}
+                    <button type="button" onclick="editBabyImmunization('${babyImmEscape(item.id)}')" class="min-h-[38px] px-3 rounded-xl bg-sky-50 dark:bg-sky-900/25 text-sky-700 dark:text-sky-200 text-xs font-bold"><i class="fa-solid fa-pen mr-1"></i>Edit</button>
+                    <button type="button" onclick="deleteBabyImmunization('${babyImmEscape(item.id)}')" class="min-h-[38px] px-3 rounded-xl bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-200 text-xs font-bold"><i class="fa-solid fa-trash mr-1"></i>Hapus</button>
+                  </div>
+                </article>`;
+            }).join('');
+        }
+
+        function openBabyImmunizationModal(id) {
+            const modal = document.getElementById('modal-baby-immunization');
+            if (!modal) return;
+            const item = id && Array.isArray(appState.babyImmunizations) ? appState.babyImmunizations.find(row => String(row.id) === String(id)) : null;
+            document.getElementById('baby-imm-modal-title').textContent = item ? 'Edit Imunisasi' : 'Tambah Imunisasi';
+            document.getElementById('baby-imm-id').value = item ? item.id : '';
+            document.getElementById('baby-imm-name').value = item ? item.name || '' : '';
+            document.getElementById('baby-imm-dose').value = item ? item.dose || '' : '';
+            document.getElementById('baby-imm-source').value = item ? item.source || 'custom' : 'custom';
+            document.getElementById('baby-imm-age-label').value = item ? item.targetAgeLabel || '' : '';
+            document.getElementById('baby-imm-age-months').value = item && item.targetAgeMonths !== null && item.targetAgeMonths !== undefined ? item.targetAgeMonths : '';
+            document.getElementById('baby-imm-planned-date').value = item ? item.plannedDate || '' : '';
+            document.getElementById('baby-imm-status').value = item ? item.status || 'pending' : 'pending';
+            document.getElementById('baby-imm-admin-date').value = item ? item.administeredDate || '' : '';
+            document.getElementById('baby-imm-cost').value = item && item.cost !== null && item.cost !== undefined ? item.cost : '';
+            document.getElementById('baby-imm-brand').value = item ? item.brand || '' : '';
+            document.getElementById('baby-imm-facility').value = item ? item.facility || '' : '';
+            document.getElementById('baby-imm-notes').value = item ? item.notes || '' : '';
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => document.getElementById('baby-imm-name')?.focus(), 50);
+        }
+
+        function closeBabyImmunizationModal() {
+            const modal = document.getElementById('modal-baby-immunization');
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+        }
+
+        function saveBabyImmunization() {
+            if (!Array.isArray(appState.babyImmunizations)) appState.babyImmunizations = [];
+            const id = String(document.getElementById('baby-imm-id').value || '').trim();
+            const name = String(document.getElementById('baby-imm-name').value || '').trim();
+            if (!name) return alert('Nama vaksin wajib diisi.');
+            const ageRaw = String(document.getElementById('baby-imm-age-months').value || '').trim();
+            const ageMonths = ageRaw === '' ? null : Number(ageRaw);
+            if (ageMonths !== null && (!Number.isFinite(ageMonths) || ageMonths < 0 || ageMonths > 216)) return alert('Usia target harus berada pada rentang 0–216 bulan.');
+            const plannedDate = String(document.getElementById('baby-imm-planned-date').value || '').trim();
+            const administeredDate = String(document.getElementById('baby-imm-admin-date').value || '').trim();
+            const status = String(document.getElementById('baby-imm-status').value || 'pending');
+            const costRaw = String(document.getElementById('baby-imm-cost').value || '').trim();
+            const cost = costRaw === '' ? null : Number(costRaw);
+            if (cost !== null && (!Number.isFinite(cost) || cost < 0)) return alert('Biaya harus berupa angka nol atau lebih.');
+            const existing = id ? appState.babyImmunizations.find(row => String(row.id) === id) : null;
+            const now = new Date().toISOString();
+            const record = {
+                ...(existing || {}),
+                id: existing ? existing.id : `imm-custom-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,
+                name,
+                dose: String(document.getElementById('baby-imm-dose').value || '').trim(),
+                source: String(document.getElementById('baby-imm-source').value || 'custom'),
+                targetAgeLabel: String(document.getElementById('baby-imm-age-label').value || '').trim(),
+                targetAgeMonths: ageMonths,
+                plannedDate,
+                administeredDate: status === 'done' ? (administeredDate || getLocalDateKey()) : administeredDate,
+                status,
+                cost,
+                brand: String(document.getElementById('baby-imm-brand').value || '').trim(),
+                facility: String(document.getElementById('baby-imm-facility').value || '').trim(),
+                notes: String(document.getElementById('baby-imm-notes').value || '').trim(),
+                updatedAt: now,
+                createdAt: existing && existing.createdAt ? existing.createdAt : now
+            };
+            if (existing) {
+                const index = appState.babyImmunizations.findIndex(row => String(row.id) === id);
+                if (index >= 0) appState.babyImmunizations[index] = record;
+            } else appState.babyImmunizations.push(record);
+            saveToLocalStorage();
+            closeBabyImmunizationModal();
+            renderBabyImmunizations();
+            renderBabyMedicalSummary();
+        }
+
+        function editBabyImmunization(id) { openBabyImmunizationModal(id); }
+
+        function deleteBabyImmunization(id) {
+            const item = (appState.babyImmunizations || []).find(row => String(row.id) === String(id));
+            if (!item) return;
+            if (!confirm(`Hapus catatan ${item.name || 'imunisasi'}? Tindakan ini tidak memengaruhi riwayat medis lama.`)) return;
+            appState.babyImmunizations = appState.babyImmunizations.filter(row => String(row.id) !== String(id));
+            saveToLocalStorage();
+            renderBabyImmunizations();
+            renderBabyMedicalSummary();
+        }
+
+        function markBabyImmunizationDone(id) {
+            const item = (appState.babyImmunizations || []).find(row => String(row.id) === String(id));
+            if (!item) return;
+            const date = prompt('Tanggal imunisasi diberikan (YYYY-MM-DD):', item.administeredDate || getLocalDateKey());
+            if (date === null) return;
+            if (date && Number.isNaN(parseLocalDateValue(date).getTime())) return alert('Format tanggal tidak valid. Gunakan YYYY-MM-DD.');
+            item.status = 'done';
+            item.administeredDate = date || getLocalDateKey();
+            item.updatedAt = new Date().toISOString();
+            saveToLocalStorage();
+            renderBabyImmunizations();
+            renderBabyMedicalSummary();
+        }
+
+        function getBabyAgeSummaryLabel() {
+            const dob = getBabyBirthDateKey();
+            if (!dob) return 'Tanggal lahir belum dilengkapi';
+            const birth = parseLocalDateValue(dob);
+            const now = parseLocalDateValue(getLocalDateKey());
+            if (Number.isNaN(birth.getTime()) || birth > now) return 'Tanggal lahir perlu diperiksa';
+            let years = now.getFullYear() - birth.getFullYear();
+            let months = now.getMonth() - birth.getMonth();
+            let days = now.getDate() - birth.getDate();
+            if (days < 0) { months--; days += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+            if (months < 0) { years--; months += 12; }
+            if (years > 0) return `${years} tahun ${months} bulan`;
+            if (months > 0) return `${months} bulan ${days} hari`;
+            return `${days} hari`;
+        }
+
+        function updateBabyMedicalHero() {
+            const pill = document.getElementById('medical-age-pill');
+            if (pill) pill.innerHTML = `<i class="fa-regular fa-calendar"></i> ${babyImmEscape(getBabyAgeSummaryLabel())}`;
+            const gender = document.getElementById('kms-gender-label');
+            if (gender) {
+                const label = appState.babyGender === 'boy' ? 'Laki-laki' : (appState.babyGender === 'girl' ? 'Perempuan' : 'Jenis kelamin belum diatur');
+                gender.textContent = `Standar pertumbuhan: ${label}`;
             }
         }
+
+        function getBabyLatestGrowthSummary() {
+            const records = Array.isArray(appState.kmsData) ? [...appState.kmsData] : [];
+            const valid = records.filter(row => row && (row.date || Number.isFinite(Number(row.ageMonths ?? row.bulan))));
+            valid.sort((a,b) => {
+                const da = a.date ? parseLocalDateValue(a.date).getTime() : Number(a.ageMonths ?? a.bulan ?? -1);
+                const db = b.date ? parseLocalDateValue(b.date).getTime() : Number(b.ageMonths ?? b.bulan ?? -1);
+                return db - da;
+            });
+            return valid[0] || null;
+        }
+
+        function getBabyLatestVaccination() {
+            const entries = [];
+            (Array.isArray(appState.babyImmunizations) ? appState.babyImmunizations : []).filter(row => row.status === 'done' && row.administeredDate).forEach(row => entries.push({ date:row.administeredDate, title:row.name, detail:row.dose || 'Imunisasi', type:'Imunisasi' }));
+            (Array.isArray(appState.babyMedicalRecords) ? appState.babyMedicalRecords : []).filter(row => row.category === 'Imunisasi' && row.date).forEach(row => entries.push({ date:row.date, title:row.notes || 'Imunisasi', detail:row.doctor || 'Riwayat lama', type:'Riwayat medis' }));
+            entries.sort((a,b) => String(b.date).localeCompare(String(a.date)));
+            return entries[0] || null;
+        }
+
+        function getBabyUpcomingMedicalVisit() {
+            const today = getLocalDateKey();
+            return (Array.isArray(appState.babyMedicalRecords) ? appState.babyMedicalRecords : []).filter(row => row.nextVisit && row.nextVisit >= today).sort((a,b) => String(a.nextVisit).localeCompare(String(b.nextVisit)))[0] || null;
+        }
+
+        function renderBabyMedicalSummary() {
+            const container = document.getElementById('baby-medical-summary');
+            if (!container) return;
+            if (!Array.isArray(appState.babyImmunizations)) appState.babyImmunizations = [];
+            updateBabyMedicalHero();
+            const name = String(appState.babyName || '').trim() || 'Si Kecil';
+            const dob = getBabyBirthDateKey();
+            const age = getBabyAgeSummaryLabel();
+            const latest = getBabyLatestGrowthSummary();
+            const latestVaccine = getBabyLatestVaccination();
+            const nextVisit = getBabyUpcomingMedicalVisit();
+            const nationalItems = appState.babyImmunizations.filter(row => row.source === 'national' && !row.conditional && row.status !== 'not_applicable');
+            const nationalDone = nationalItems.filter(row => row.status === 'done').length;
+            const nextVaccine = appState.babyImmunizations.filter(row => ['pending','planned'].includes(row.status)).map(row => ({ row, due: babyImmGetDueDate(row) })).filter(entry => entry.due && entry.due >= getLocalDateKey()).sort((a,b) => a.due.localeCompare(b.due))[0];
+            const latestDate = latest && latest.date ? babyImmFormatDate(latest.date) : (latest ? 'Tanggal belum tersedia' : 'Belum ada pengukuran');
+            const growthValue = (key, unit) => latest && latest[key] !== null && latest[key] !== undefined && latest[key] !== '' ? `${babyImmEscape(latest[key])} ${unit}` : '—';
+            const visitTitle = nextVisit ? (nextVisit.doctor || 'Kontrol berikutnya') : 'Belum ada jadwal';
+            const visitDate = nextVisit ? babyImmFormatDate(nextVisit.nextVisit) : 'Tidak ada jadwal kontrol yang tercatat';
+            const vaxLine = nextVaccine ? `${babyImmEscape(nextVaccine.row.name)} · ${babyImmEscape(babyImmFormatDate(nextVaccine.due))}` : 'Belum ada agenda aktif yang memiliki tanggal';
+            const activity = [];
+            (Array.isArray(appState.babyMedicalRecords) ? appState.babyMedicalRecords : []).forEach(row => { if (row.date) activity.push({ date:row.date, title:row.category === 'Imunisasi' ? 'Imunisasi (riwayat lama)' : (row.category === 'Sakit' ? 'Catatan sakit / keluhan' : 'Kontrol / pemeriksaan'), detail:row.doctor || row.notes || 'Catatan medis', source:'legacy' }); });
+            (Array.isArray(appState.babyImmunizations) ? appState.babyImmunizations : []).filter(row => row.status === 'done' && row.administeredDate).forEach(row => activity.push({ date:row.administeredDate, title:`${row.name} ${row.dose || ''}`.trim(), detail:row.facility || 'Imunisasi diberikan', source:'vaccine' }));
+            (Array.isArray(appState.kmsData) ? appState.kmsData : []).filter(row => row.date).forEach(row => activity.push({ date:row.date, title:'Pengukuran pertumbuhan', detail:[row.bb != null ? `BB ${row.bb} kg` : '', row.tb != null ? `PB/TB ${row.tb} cm` : '', row.lk != null ? `LK ${row.lk} cm` : ''].filter(Boolean).join(' · ') || 'Catatan pengukuran', source:'growth' }));
+            activity.sort((a,b) => String(b.date).localeCompare(String(a.date)));
+            const activities = activity.slice(0,4);
+            container.innerHTML = `
+              <div class="medical-summary-card bg-white dark:bg-[#1e293b] rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm p-5">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 shrink-0 rounded-2xl bg-sky-50 dark:bg-sky-900/30 text-sky-600 dark:text-sky-300 flex items-center justify-center text-xl"><i class="fa-solid fa-baby"></i></div>
+                  <div class="min-w-0 flex-1"><div class="text-[10px] font-extrabold tracking-widest text-sky-600 dark:text-sky-300">RINGKASAN KESEHATAN</div><h3 class="text-lg font-extrabold text-slate-800 dark:text-white mt-0.5">${babyImmEscape(name)}</h3><p class="text-xs text-slate-500 dark:text-slate-400">${babyImmEscape(age)}${dob ? ` · Lahir ${babyImmFormatDate(dob)}` : ''}</p></div>
+                  <button type="button" onclick="editBabyProfile()" class="min-h-[40px] px-3 rounded-xl border border-slate-200 dark:border-slate-600 text-sky-700 dark:text-sky-300 text-xs font-bold">Edit Profil</button>
+                </div>
+                ${!dob ? '<div class="mt-4 rounded-xl bg-amber-50 dark:bg-amber-950/25 border border-amber-100 dark:border-amber-900/50 p-3 text-xs text-amber-800 dark:text-amber-200"><i class="fa-solid fa-circle-info mr-1"></i>Lengkapi tanggal lahir di Profil Bayi untuk menghitung usia dan tanggal target imunisasi. Semua submenu tetap dapat dibuka tanpa tanggal lahir.</div>' : ''}
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                <button type="button" onclick="switchBabyMedicalTab('kms')" class="medical-summary-card text-left bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-2xl p-4 shadow-sm hover:border-sky-200 transition">
+                  <div class="flex items-center justify-between"><span class="text-xs font-bold text-slate-500 dark:text-slate-400">Pertumbuhan</span><i class="fa-solid fa-chart-line text-sky-500"></i></div>
+                  <div class="grid grid-cols-3 gap-2 mt-3"><div><div class="text-[10px] text-slate-400">BB</div><div class="text-sm font-extrabold text-slate-800 dark:text-white">${growthValue('bb','kg')}</div></div><div><div class="text-[10px] text-slate-400">PB/TB</div><div class="text-sm font-extrabold text-slate-800 dark:text-white">${growthValue('tb','cm')}</div></div><div><div class="text-[10px] text-slate-400">LK</div><div class="text-sm font-extrabold text-slate-800 dark:text-white">${growthValue('lk','cm')}</div></div></div>
+                  <div class="text-[10px] text-slate-400 mt-3">${babyImmEscape(latestDate)} · Lihat grafik <i class="fa-solid fa-arrow-right ml-1"></i></div>
+                </button>
+                <button type="button" onclick="switchBabyMedicalTab('imunisasi')" class="medical-summary-card text-left bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-2xl p-4 shadow-sm hover:border-sky-200 transition">
+                  <div class="flex items-center justify-between"><span class="text-xs font-bold text-slate-500 dark:text-slate-400">Imunisasi Nasional</span><i class="fa-solid fa-syringe text-teal-500"></i></div>
+                  <div class="text-2xl font-extrabold text-slate-800 dark:text-white mt-3">${nationalDone}<span class="text-sm font-semibold text-slate-400">/${nationalItems.length}</span></div>
+                  <div class="text-[10px] text-slate-400 mt-1">Dosis tercatat sudah diberikan</div>
+                  <div class="text-[10px] text-sky-600 dark:text-sky-300 font-bold mt-3">${vaxLine}</div>
+                </button>
+                <button type="button" onclick="switchBabyMedicalTab('riwayat')" class="medical-summary-card text-left bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-2xl p-4 shadow-sm hover:border-sky-200 transition">
+                  <div class="flex items-center justify-between"><span class="text-xs font-bold text-slate-500 dark:text-slate-400">Kontrol berikutnya</span><i class="fa-solid fa-calendar-check text-amber-500"></i></div>
+                  <div class="text-sm font-extrabold text-slate-800 dark:text-white mt-3">${babyImmEscape(visitTitle)}</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">${babyImmEscape(visitDate)}</div>
+                  <div class="text-[10px] text-sky-600 dark:text-sky-300 font-bold mt-3">Lihat riwayat medis <i class="fa-solid fa-arrow-right ml-1"></i></div>
+                </button>
+                <div class="medical-summary-card bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-2xl p-4 shadow-sm">
+                  <div class="flex items-center justify-between"><span class="text-xs font-bold text-slate-500 dark:text-slate-400">Imunisasi terakhir</span><i class="fa-solid fa-shield-heart text-violet-500"></i></div>
+                  <div class="text-sm font-extrabold text-slate-800 dark:text-white mt-3">${latestVaccine ? babyImmEscape(latestVaccine.title) : 'Belum ada catatan'}</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">${latestVaccine ? babyImmEscape(babyImmFormatDate(latestVaccine.date)) : 'Catatan imunisasi akan tampil di sini.'}</div>
+                  <button type="button" onclick="openBabyImmunizationModal()" class="text-[10px] text-sky-600 dark:text-sky-300 font-bold mt-3">+ Catat imunisasi</button>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 lg:grid-cols-[.85fr_1.15fr] gap-3">
+                <div class="medical-summary-card bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-2xl p-4 sm:p-5 shadow-sm">
+                  <div class="flex items-center justify-between mb-3"><h3 class="font-extrabold text-sm text-slate-800 dark:text-white">Akses Cepat</h3><i class="fa-solid fa-bolt text-amber-500"></i></div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button type="button" onclick="switchBabyMedicalTab('kms'); setTimeout(() => openModalKms(), 80)" class="min-h-[48px] rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold px-2"><i class="fa-solid fa-ruler mr-1"></i>Catat Ukuran</button>
+                    <button type="button" onclick="openBabyImmunizationModal()" class="min-h-[48px] rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-2"><i class="fa-solid fa-syringe mr-1"></i>Catat Imunisasi</button>
+                    <button type="button" onclick="switchBabyMedicalTab('riwayat'); setTimeout(() => openBabyMedicalModal(), 80)" class="min-h-[48px] rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-100 text-xs font-bold px-2"><i class="fa-solid fa-notes-medical mr-1"></i>Catat Kontrol</button>
+                    <button type="button" onclick="editBabyProfile()" class="min-h-[48px] rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-100 text-xs font-bold px-2"><i class="fa-solid fa-user-pen mr-1"></i>Edit Profil</button>
+                  </div>
+                </div>
+                <div class="medical-summary-card bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-2xl p-4 sm:p-5 shadow-sm">
+                  <div class="flex items-center justify-between mb-3"><h3 class="font-extrabold text-sm text-slate-800 dark:text-white">Aktivitas Medis Terbaru</h3><button type="button" onclick="switchBabyMedicalTab('riwayat')" class="text-[10px] font-bold text-sky-600 dark:text-sky-300">Lihat riwayat <i class="fa-solid fa-arrow-right ml-1"></i></button></div>
+                  ${activities.length ? `<div class="space-y-3">${activities.map((entry,index) => `<div class="flex items-start gap-3"><div class="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center ${entry.source === 'vaccine' ? 'bg-teal-50 text-teal-600 dark:bg-teal-900/25 dark:text-teal-300' : (entry.source === 'growth' ? 'bg-sky-50 text-sky-600 dark:bg-sky-900/25 dark:text-sky-300' : 'bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-300')}"><i class="fa-solid ${entry.source === 'vaccine' ? 'fa-syringe' : (entry.source === 'growth' ? 'fa-ruler-combined' : 'fa-notes-medical')}"></i></div><div class="min-w-0 flex-1"><div class="text-xs font-bold text-slate-800 dark:text-white">${babyImmEscape(entry.title)}</div><div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">${babyImmEscape(entry.detail)}</div></div><div class="text-[10px] text-slate-400 whitespace-nowrap">${babyImmEscape(babyImmFormatDate(entry.date))}</div></div>${index < activities.length-1 ? '<div class="border-t border-slate-100 dark:border-slate-700"></div>' : ''}`).join('')}</div>` : '<div class="py-5 text-center text-slate-400"><i class="fa-solid fa-clipboard-list text-2xl mb-2 opacity-50"></i><p class="text-xs font-semibold">Belum ada aktivitas medis</p><p class="text-[10px] mt-1">Pengukuran, kontrol, dan imunisasi akan muncul di sini.</p></div>'}
+                </div>
+              </div>
+              <div class="rounded-2xl border border-sky-100 dark:border-sky-900/50 bg-sky-50 dark:bg-sky-950/25 px-4 py-3 text-[11px] leading-relaxed text-sky-900 dark:text-sky-200"><i class="fa-solid fa-circle-info mr-1"></i>Ringkasan hanya mengolah data yang dicatat keluarga. Ini bukan skor kesehatan, diagnosis, atau pengganti pemeriksaan tenaga kesehatan.</div>`;
+        }
+
+        // FUNGSI PENUKAR TAB MEDIS BAYI — Ringkasan, Pertumbuhan, Imunisasi, Riwayat Medis.
+        function switchBabyMedicalTab(tabName) {
+            const allowed = ['ringkasan','kms','imunisasi','riwayat'];
+            if (!allowed.includes(tabName)) tabName = 'ringkasan';
+            activeBabyMedicalTab = tabName;
+            const tabs = {
+                ringkasan: ['tab-btn-ringkasan','tab-content-ringkasan'],
+                kms: ['tab-btn-kms','tab-content-kms'],
+                imunisasi: ['tab-btn-imunisasi','tab-content-imunisasi'],
+                riwayat: ['tab-btn-riwayat','tab-content-riwayat']
+            };
+            Object.entries(tabs).forEach(([key, ids]) => {
+                const button = document.getElementById(ids[0]);
+                const content = document.getElementById(ids[1]);
+                const active = key === tabName;
+                if (button) button.classList.toggle('active', active);
+                if (content) { content.classList.toggle('hidden', !active); content.classList.toggle('block', active); }
+            });
+            updateBabyMedicalHero();
+            if (tabName === 'ringkasan') renderBabyMedicalSummary();
+            if (tabName === 'kms') { if (typeof renderKmsChart === 'function') renderKmsChart(); }
+            if (tabName === 'imunisasi') { ensureBabyImmunizations(); renderBabyImmunizations(); }
+            if (tabName === 'riwayat') { if (typeof renderBabyMedicalRecords === 'function') renderBabyMedicalRecords(); }
+        }
+
     </script>
     <div id="development-modal-root"></div>
 
@@ -12232,7 +12759,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.0. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.1. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
