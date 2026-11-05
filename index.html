@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.5: Skrining neonatal and comprehensive medical light-theme fixes -->
+    <!-- Keluarga Pohon Teduh 6.13.6: Skrining neonatal and comprehensive medical light-theme fixes -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.5">
+    <meta name="application-version" content="6.13.6">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -420,7 +420,38 @@
             #sec-dashboard .kpt-dash-card:hover, #sec-dashboard .kpt-dash-shortcut:hover { transform: none; }
         }
 
-    </style>
+    
+
+    /* Explicit light-mode fixes for the previously low-contrast Baby Medical quick actions and disclaimer */
+    body:not(.dark-mode) #sec-post-medis button[onclick*="openBabyMedicalModal"],
+    body:not(.dark-mode) #sec-post-medis button[onclick*="editBabyProfile"] {
+      background-color: #e2e8f0 !important;
+      color: #1e293b !important;
+      border: 1px solid #cbd5e1 !important;
+      opacity: 1 !important;
+    }
+    body:not(.dark-mode) #sec-post-medis .bg-sky-50 {
+      background-color: #eff6ff !important;
+      border-color: #bfdbfe !important;
+      color: #0c4a6e !important;
+    }
+    body:not(.dark-mode) #sec-post-medis .text-sky-200,
+    body:not(.dark-mode) #sec-post-medis .text-sky-100 { color: #075985 !important; }
+    body:not(.dark-mode) #sec-post-medis .text-sky-900 { color: #0c4a6e !important; }
+
+    /* Pregnancy medical responsive refinement 6.13.6 */
+    #sec-medis .preg-med-tab { min-height: 44px; line-height: 1.2; }
+    #sec-medis .preg-med-tab:focus-visible { outline: 3px solid rgba(14,165,233,.35); outline-offset: 2px; }
+    #sec-medis .preg-med-panel, #sec-medis canvas { max-width: 100%; }
+    @media (max-width: 640px) {
+      #sec-medis { gap: 1rem !important; }
+      #sec-medis .rounded-3xl { border-radius: 1.15rem !important; }
+      #sec-medis #contraction-time { font-size: 2.4rem; }
+      #sec-medis #contraction-logs > div { align-items: flex-start; gap: 8px; }
+      #sec-medis #contraction-logs > div > div:first-child { min-width: 0; overflow-wrap: anywhere; }
+    }
+
+</style>
 
     <style id="theme-and-header-653-fixes">
         /* ==========================================================
@@ -2236,9 +2267,32 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             </section>
 
             <!-- TAB 4 : MEDIS -->
-            <section id="sec-medis" class="hidden space-y-6">
+            <section id="sec-medis" class="hidden space-y-5">
+                <div class="bg-gradient-to-r from-sky-50 to-cyan-50 border border-sky-100 rounded-3xl p-4 sm:p-6 shadow-sm">
+                    <div class="text-[10px] uppercase tracking-[.18em] font-bold text-sky-600">Perawatan & Kesehatan Ibu</div>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800 mt-1">Medis Kehamilan</h2>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-1">Pantau kontraksi, pertumbuhan janin, dan riwayat pemeriksaan kehamilan.</p>
+                    <div class="grid grid-cols-2 gap-2 mt-4">
+                        <div class="bg-white/90 rounded-xl p-3 border border-white"><div class="text-[10px] text-slate-500">Catatan kontraksi</div><div id="medis-summary-contractions" class="font-bold text-slate-800 text-sm">0 catatan</div></div>
+                        <div class="bg-white/90 rounded-xl p-3 border border-white"><div class="text-[10px] text-slate-500">Riwayat kontrol</div><div id="medis-summary-records" class="font-bold text-slate-800 text-sm">0 pemeriksaan</div></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" role="tablist" aria-label="Menu Medis Kehamilan">
+                    <button type="button" onclick="switchPregnancyMedicalTab('overview')" data-med-tab="overview" class="preg-med-tab px-3 py-3 rounded-xl border text-xs sm:text-sm font-semibold bg-sky-100 border-sky-300 text-sky-800" aria-selected="true"> <i class="fa-solid fa-house-medical mr-1"></i> Ringkasan</button>
+                    <button type="button" onclick="switchPregnancyMedicalTab('contractions')" data-med-tab="contractions" class="preg-med-tab px-3 py-3 rounded-xl border text-xs sm:text-sm font-semibold bg-white border-slate-200 text-slate-600" aria-selected="false"><i class="fa-solid fa-stopwatch mr-1"></i> Kontraksi</button>
+                    <button type="button" onclick="switchPregnancyMedicalTab('growth')" data-med-tab="growth" class="preg-med-tab px-3 py-3 rounded-xl border text-xs sm:text-sm font-semibold bg-white border-slate-200 text-slate-600" aria-selected="false"><i class="fa-solid fa-chart-line mr-1"></i> Pertumbuhan Janin</button>
+                    <button type="button" onclick="switchPregnancyMedicalTab('records')" data-med-tab="records" class="preg-med-tab px-3 py-3 rounded-xl border text-xs sm:text-sm font-semibold bg-white border-slate-200 text-slate-600" aria-selected="false"><i class="fa-solid fa-notes-medical mr-1"></i> Riwayat Medis</button>
+                </div>
+                <div id="preg-med-panel-overview" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <button onclick="switchPregnancyMedicalTab('contractions')" class="text-left bg-white border border-slate-200 rounded-2xl p-4 shadow-sm"><div class="text-xs text-slate-500">Pemantauan persalinan</div><div class="font-bold text-slate-800 mt-1">Timer Kontraksi</div><div class="text-xs text-sky-700 mt-2">Buka pencatat kontraksi →</div></button>
+                        <button onclick="switchPregnancyMedicalTab('growth')" class="text-left bg-white border border-slate-200 rounded-2xl p-4 shadow-sm"><div class="text-xs text-slate-500">Hasil pemeriksaan USG</div><div class="font-bold text-slate-800 mt-1">Pertumbuhan Janin</div><div class="text-xs text-sky-700 mt-2">Lihat grafik →</div></button>
+                        <button onclick="switchPregnancyMedicalTab('records')" class="text-left bg-white border border-slate-200 rounded-2xl p-4 shadow-sm"><div class="text-xs text-slate-500">Dokumentasi kehamilan</div><div class="font-bold text-slate-800 mt-1">Riwayat Medis</div><div class="text-xs text-sky-700 mt-2">Buka catatan kontrol →</div></button>
+                    </div>
+                    <div class="rounded-2xl border border-sky-200 bg-sky-50 p-3 text-xs text-sky-900">Catatan aplikasi membantu keluarga mengelola informasi, bukan alat diagnosis atau pengganti arahan dokter/bidan. Timer kontraksi juga bukan penentu tunggal kapan harus berangkat ke fasilitas kesehatan.</div>
+                </div>
                 <!-- HITUNG KONTRAKSI PERSALINAN WIDGET -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+                <div id="preg-med-panel-contractions" class="hidden bg-white p-4 sm:p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                         <div>
                             <h2 class="font-bold text-slate-800 text-lg">⏱️ Hitung Kontraksi Persalinan</h2>
@@ -2253,16 +2307,9 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                             <div class="text-xs text-slate-500 mt-1">Durasi Kontraksi Berjalan</div>
                         </div>
 
-                        <div class="flex flex-wrap gap-3">
-                            <button id="btn-start-contraction" onclick="toggleContractionTimer()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-100 transition">
-                                <i class="fa-solid fa-play mr-1.5"></i> Mulai
-                            </button>
-                            <button id="btn-split-contraction" onclick="splitContraction()" disabled class="px-4 py-3 bg-sky-100 text-sky-400 font-semibold rounded-xl transition cursor-not-allowed">
-                                <i class="fa-solid fa-flag mr-1"></i> Split (Lap)
-                            </button>
-                            <button id="btn-reset-contraction" onclick="resetContractionTimer()" disabled class="px-4 py-3 bg-slate-200 text-slate-400 font-semibold rounded-xl transition cursor-not-allowed">
-                                Reset
-                            </button>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full sm:w-auto">
+                            <button id="btn-start-contraction" onclick="toggleContractionTimer()" class="min-h-[50px] px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-sm transition"><i class="fa-solid fa-play mr-1.5"></i> Mulai Kontraksi</button>
+                            <button id="btn-reset-contraction" onclick="resetContractionTimer()" disabled class="min-h-[50px] px-5 py-3 bg-slate-100 text-slate-400 font-semibold rounded-xl transition cursor-not-allowed">Batalkan</button>
                         </div>
                     </div>
 
@@ -2280,14 +2327,22 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 </div>
 
                 <!-- GRAFIK PERTUMBUHAN JANIN -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+                <div id="preg-med-panel-growth" class="hidden bg-white p-4 sm:p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
                     <div class="border-b border-slate-100 pb-3">
                         <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
                             <i class="fa-solid fa-chart-line text-sky-600"></i> Kurva Pertumbuhan Janin
                         </h3>
-                        <p class="text-xs text-slate-500">Pantau tren penambahan berat (BBJ) dan panjang (PBJ) berdasarkan usia kandungan</p>
+                        <p class="text-xs text-slate-500">Pilih satu indikator agar skala dan satuannya terbaca dengan tepat.</p>
+                        <div class="mt-3">
+                            <label for="medical-growth-indicator" class="block text-xs font-semibold text-slate-600 mb-1">Indikator grafik</label>
+                            <select id="medical-growth-indicator" onchange="renderMedicalChart()" class="w-full sm:max-w-xs min-h-[44px] rounded-xl border border-slate-200 bg-white text-slate-800 px-3 py-2 text-sm">
+                                <option value="bbj">Berat Badan Janin (BBJ) · gram</option>
+                                <option value="crl">Crown-Rump Length (CRL) · cm</option>
+                                <option value="fl">Femur Length (FL) · cm</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="w-full h-64 relative">
+                    <div class="w-full h-64 sm:h-80 relative">
                         <canvas id="medicalGrowthChart"></canvas>
                         <div id="medical-chart-empty" class="hidden absolute inset-0 flex justify-center items-center text-slate-400 italic text-xs bg-white/80 backdrop-blur-sm z-10 rounded-xl">
                             Belum ada data BBJ / Panjang Janin untuk ditampilkan.
@@ -2296,7 +2351,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 </div>
                 
                 <!-- CATATAN DOKTER & KONTROL ROUTINE -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+                <div id="preg-med-panel-records" class="hidden bg-white p-4 sm:p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                         <div>
                             <h3 class="font-bold text-slate-800 text-base">🩺 Catatan Medis & Kontrol Rutin (USG Vault & BBJ Tracker)</h3>
@@ -4439,7 +4494,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         </div>
     </div>
 
-    <!-- MODAL TAMBAH / EDIT PENGUKURAN PERTUMBUHAN 6.13.5 -->
+    <!-- MODAL TAMBAH / EDIT PENGUKURAN PERTUMBUHAN 6.13.6 -->
     <div id="modal-kms" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-3 sm:px-4">
         <div class="bg-white dark:bg-[#1e293b] w-full max-w-md rounded-3xl p-4 sm:p-6 shadow-xl max-h-[calc(100dvh-1.5rem)] overflow-y-auto">
             <div class="flex items-start justify-between gap-3 mb-4">
@@ -6096,106 +6151,120 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             });
         }
 
-        // CONTRACTION TIMER & SPLIT LOGIC
+        // PREGNANCY MEDICAL SUBTABS
+        function switchPregnancyMedicalTab(tab) {
+            const allowed = ['overview','contractions','growth','records'];
+            if (!allowed.includes(tab)) tab = 'overview';
+            allowed.forEach(key => {
+                const panel = document.getElementById(`preg-med-panel-${key}`);
+                if (panel) panel.classList.toggle('hidden', key !== tab);
+                const button = document.querySelector(`[data-med-tab="${key}"]`);
+                if (button) {
+                    button.classList.toggle('bg-sky-100', key === tab);
+                    button.classList.toggle('border-sky-300', key === tab);
+                    button.classList.toggle('text-sky-800', key === tab);
+                    button.classList.toggle('bg-white', key !== tab);
+                    button.classList.toggle('border-slate-200', key !== tab);
+                    button.classList.toggle('text-slate-600', key !== tab);
+                    button.setAttribute('aria-selected', key === tab ? 'true' : 'false');
+                }
+            });
+            if (tab === 'growth') renderMedicalChart();
+            if (tab === 'records') renderMedicalRecords();
+        }
+
+        function parseGestationToDays(value) {
+            const text = String(value || '').toLowerCase().trim();
+            if (!text) return null;
+            let m = text.match(/(\d+(?:[.,]\d+)?)\s*(?:minggu|mg|w)\s*(?:(\d+)\s*(?:hari|hr|d))?/i);
+            if (m) return Math.round(parseFloat(m[1].replace(',','.')) * 7) + (parseInt(m[2] || '0',10) || 0);
+            m = text.match(/^(\d+)\s*[+.]\s*(\d+)$/);
+            if (m) return parseInt(m[1],10)*7 + parseInt(m[2],10);
+            m = text.match(/(\d+(?:[.,]\d+)?)/);
+            return m ? Math.round(parseFloat(m[1].replace(',','.'))*7) : null;
+        }
+
+        function formatGestationLabel(value) {
+            const days = parseGestationToDays(value);
+            return days === null ? 'Usia kehamilan tidak tersedia' : `${Math.floor(days/7)} mgg ${days%7} hr`;
+        }
+
+        // CONTRACTION TIMER: START/END EACH CONTRACTION AS ONE EVENT
         function toggleContractionTimer() {
             const btn = document.getElementById('btn-start-contraction');
-            const splitBtn = document.getElementById('btn-split-contraction');
             const resetBtn = document.getElementById('btn-reset-contraction');
             const status = document.getElementById('timer-status');
-
+            if (!btn || !status) return;
             if (!isContractionRunning) {
                 isContractionRunning = true;
                 contractionStartTime = new Date();
                 contractionSeconds = 0;
-
-                status.innerText = "Kontraksi Berjalan...";
-                status.className = "px-2.5 py-1 bg-red-100 text-red-600 rounded-full text-xs font-semibold animate-pulse";
-                
-                btn.innerHTML = `<i class="fa-solid fa-stop mr-1.5"></i> Selesai (Finish)`;
-                btn.className = "px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-lg transition";
-
-                splitBtn.disabled = false;
-                splitBtn.className = "px-4 py-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl transition shadow-sm";
-
-                resetBtn.disabled = true;
-                resetBtn.className = "px-4 py-3 bg-slate-200 text-slate-400 font-semibold rounded-xl transition cursor-not-allowed";
-
-                contractionInterval = setInterval(() => {
-                    contractionSeconds++;
-                    const mins = String(Math.floor(contractionSeconds / 60)).padStart(2, '0');
-                    const secs = String(contractionSeconds % 60).padStart(2, '0');
-                    document.getElementById('contraction-time').innerText = `${mins}:${secs}`;
-                }, 1000);
-            } else {
+                status.innerText = 'Kontraksi berlangsung';
+                status.className = 'px-2.5 py-1 bg-rose-100 text-rose-700 rounded-full text-xs font-semibold animate-pulse';
+                btn.innerHTML = '<i class="fa-solid fa-stop mr-1.5"></i> Selesai Kontraksi';
+                btn.className = 'min-h-[50px] px-5 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl shadow-sm transition';
+                if (resetBtn) { resetBtn.disabled = false; resetBtn.className = 'min-h-[50px] px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition'; }
                 clearInterval(contractionInterval);
-                isContractionRunning = false;
-
-                const endTime = new Date();
-                const year = contractionStartTime.getFullYear();
-                const month = String(contractionStartTime.getMonth() + 1).padStart(2, '0');
-                const day = String(contractionStartTime.getDate()).padStart(2, '0');
-                const hours = String(contractionStartTime.getHours()).padStart(2, '0');
-                const mins = String(contractionStartTime.getMinutes()).padStart(2, '0');
-                const secs = String(contractionStartTime.getSeconds()).padStart(2, '0');
-                const dateStr = `${day}-${month}-${year} ${hours}:${mins}:${secs}`;
-
-                if (!appState.contractions) appState.contractions = [];
-                appState.contractions.unshift({
-                    id: Date.now(),
-                    timestamp: dateStr,
-                    durationSeconds: contractionSeconds,
-                    type: 'Full Contraction'
-                });
-
-                status.innerText = "Selesai";
-                status.className = "px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold";
-                
-                btn.innerHTML = `<i class="fa-solid fa-play mr-1.5"></i> Mulai`;
-                btn.className = "px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-100 transition";
-
-                splitBtn.disabled = true;
-                splitBtn.className = "px-4 py-3 bg-sky-100 text-sky-400 font-semibold rounded-xl transition cursor-not-allowed";
-
-                resetBtn.disabled = false;
-                resetBtn.className = "px-4 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl transition";
-
-                renderContractionLogs();
-                saveToLocalStorage();
+                contractionInterval = setInterval(() => {
+                    contractionSeconds = Math.max(0, Math.floor((Date.now() - contractionStartTime.getTime()) / 1000));
+                    const el = document.getElementById('contraction-time');
+                    if (el) el.innerText = `${String(Math.floor(contractionSeconds/60)).padStart(2,'0')}:${String(contractionSeconds%60).padStart(2,'0')}`;
+                }, 250);
+                return;
             }
+            clearInterval(contractionInterval);
+            const endedAt = new Date();
+            const durationSeconds = Math.max(0, Math.round((endedAt - contractionStartTime)/1000));
+            const previousStart = (appState.contractions || []).find(c => c.startedAt || c.startTime);
+            const previousStartMs = previousStart ? new Date(previousStart.startedAt || previousStart.startTime).getTime() : NaN;
+            const intervalSeconds = Number.isFinite(previousStartMs) ? Math.max(0, Math.round((contractionStartTime.getTime()-previousStartMs)/1000)) : null;
+            const pad = n => String(n).padStart(2,'0');
+            const timestamp = `${pad(contractionStartTime.getDate())}-${pad(contractionStartTime.getMonth()+1)}-${contractionStartTime.getFullYear()} ${pad(contractionStartTime.getHours())}:${pad(contractionStartTime.getMinutes())}:${pad(contractionStartTime.getSeconds())}`;
+            if (!appState.contractions) appState.contractions = [];
+            appState.contractions.unshift({
+                id: Date.now(), timestamp, durationSeconds, type: 'Full Contraction',
+                startedAt: contractionStartTime.toISOString(), endedAt: endedAt.toISOString(),
+                intervalSeconds, trackingVersion: 2
+            });
+            isContractionRunning = false;
+            contractionStartTime = null;
+            contractionSeconds = 0;
+            const timeEl = document.getElementById('contraction-time');
+            if (timeEl) timeEl.innerText = '00:00';
+            status.innerText = 'Tercatat';
+            status.className = 'px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold';
+            btn.innerHTML = '<i class="fa-solid fa-play mr-1.5"></i> Mulai Kontraksi';
+            btn.className = 'min-h-[50px] px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-sm transition';
+            if (resetBtn) { resetBtn.disabled = true; resetBtn.className = 'min-h-[50px] px-5 py-3 bg-slate-100 text-slate-400 font-semibold rounded-xl cursor-not-allowed'; }
+            renderContractionLogs();
+            saveToLocalStorage();
         }
 
+        // Legacy Split records remain readable; new entries use start/end events.
         function splitContraction() {
             if (!isContractionRunning) return;
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const mins = String(now.getMinutes()).padStart(2, '0');
-            const secs = String(now.getSeconds()).padStart(2, '0');
-
             if (!appState.contractions) appState.contractions = [];
-            appState.contractions.unshift({
-                id: Date.now(),
-                timestamp: `${hours}:${mins}:${secs} (Split)`,
-                durationSeconds: contractionSeconds,
-                type: 'Split Lap'
-            });
-
+            appState.contractions.unshift({ id: Date.now(), timestamp: now.toLocaleTimeString(), durationSeconds: contractionSeconds, type: 'Split Lap (legacy)' });
             renderContractionLogs();
             saveToLocalStorage();
         }
 
         function resetContractionTimer() {
-            if (isContractionRunning) return;
+            if (!isContractionRunning) return;
+            const confirmed = typeof confirm === 'function' ? confirm('Batalkan kontraksi yang sedang dihitung? Catatan belum akan disimpan.') : true;
+            if (!confirmed) return;
             clearInterval(contractionInterval);
+            isContractionRunning = false;
+            contractionStartTime = null;
             contractionSeconds = 0;
-            document.getElementById('contraction-time').innerText = "00:00";
-            
+            const timeEl = document.getElementById('contraction-time'); if (timeEl) timeEl.innerText = '00:00';
             const status = document.getElementById('timer-status');
-            status.innerText = "Siap";
-            status.className = "px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold";
-
+            if (status) { status.innerText = 'Siap'; status.className = 'px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold'; }
+            const btn = document.getElementById('btn-start-contraction');
+            if (btn) { btn.innerHTML = '<i class="fa-solid fa-play mr-1.5"></i> Mulai Kontraksi'; btn.className = 'min-h-[50px] px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-sm transition'; }
             const resetBtn = document.getElementById('btn-reset-contraction');
-            resetBtn.disabled = true;
-            resetBtn.className = "px-4 py-3 bg-slate-200 text-slate-400 font-semibold rounded-xl transition cursor-not-allowed";
+            if (resetBtn) { resetBtn.disabled = true; resetBtn.className = 'min-h-[50px] px-5 py-3 bg-slate-100 text-slate-400 font-semibold rounded-xl cursor-not-allowed'; }
         }
 
         function renderContractionLogs() {
@@ -6204,6 +6273,10 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             const contractions = appState.contractions || [];
 
             if (totalCountEl) totalCountEl.innerText = contractions.length;
+            const summaryCount = document.getElementById('medis-summary-contractions');
+            if (summaryCount) summaryCount.innerText = `${contractions.length} catatan`;
+            const summaryRecords = document.getElementById('medis-summary-records');
+            if (summaryRecords) summaryRecords.innerText = `${(appState.medicalRecords || []).length} pemeriksaan`;
 
             if (!container) return;
 
@@ -6214,12 +6287,12 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 
             const recent = contractions.slice(0, 5);
             container.innerHTML = recent.map(c => `
-                <div class="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100">
-                    <div>
-                        <span class="font-bold text-slate-700">${c.timestamp}</span>
-                        ${c.type === 'Split Lap' ? '<span class="ml-2 text-3xs bg-sky-100 text-sky-800 px-1.5 py-0.5 rounded font-semibold">Split</span>' : ''}
+                <div class="flex justify-between items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <div class="min-w-0">
+                        <span class="font-bold text-slate-700 block">${c.timestamp || 'Waktu tidak tersedia'}</span>
+                        ${c.type === 'Split Lap' || c.type === 'Split Lap (legacy)' ? '<span class="mt-1 inline-block text-3xs bg-sky-100 text-sky-800 px-1.5 py-0.5 rounded font-semibold">Catatan Split lama</span>' : ''}
                     </div>
-                    <span class="font-bold text-sky-700">Durasi: ${Math.floor(c.durationSeconds / 60)}m ${c.durationSeconds % 60}s (${c.durationSeconds} dtk)</span>
+                    <div class="text-right shrink-0"><span class="font-bold text-sky-700 block">Durasi ${Math.floor((c.durationSeconds || 0) / 60)}m ${(c.durationSeconds || 0) % 60}s</span>${Number.isFinite(c.intervalSeconds) ? `<span class="text-[10px] text-slate-500">Interval ${Math.floor(c.intervalSeconds/60)}m ${c.intervalSeconds%60}s</span>` : '<span class="text-[10px] text-slate-400">Interval belum tersedia</span>'}</div>
                 </div>
             `).join('');
         }
@@ -6241,7 +6314,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                             <span class="font-bold text-slate-800">${c.timestamp}</span>
                         </div>
                         <div class="flex items-center gap-3">
-                            <span class="font-bold text-sky-700">${Math.floor(c.durationSeconds / 60)}m ${c.durationSeconds % 60}s</span>
+                            <div class="text-right"><span class="font-bold text-sky-700 block">${Math.floor((c.durationSeconds || 0) / 60)}m ${(c.durationSeconds || 0) % 60}s</span>${Number.isFinite(c.intervalSeconds) ? `<span class="text-[10px] text-slate-500">Jarak ${Math.floor(c.intervalSeconds/60)}m ${c.intervalSeconds%60}s</span>` : ''}</div>
                             <button onclick="deleteContractionLog(${c.id})" class="text-rose-500 hover:text-rose-700 p-1">
                                 <i class="fa-solid fa-trash text-xs"></i>
                             </button>
@@ -6266,8 +6339,9 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 
         // MEDICAL RECORDS & USG VAULT LOGIC (UPGRADED WITH BBJ & PHOTO SLIDER)
         function renderMedicalRecords() {
-            renderMedicalChart(); //
             const container = document.getElementById('medical-records-container');
+            const summaryRecords = document.getElementById('medis-summary-records');
+            if (summaryRecords) summaryRecords.innerText = `${(appState.medicalRecords || []).length} pemeriksaan`;
             if (!container) return;
             if (!appState.medicalRecords) appState.medicalRecords = [];
 
@@ -6449,129 +6523,60 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             document.getElementById('modal-usg-zoom').classList.add('hidden');
         }
 
-        // FUNGSI RENDER GRAFIK PERTUMBUHAN JANIN
+        function parseMedicalMeasurement(value, indicator) {
+            const original = String(value ?? '').trim().toLowerCase();
+            let raw = original.replace(/\s/g, '').replace(/[^0-9.,-]/g, '');
+            if (!raw) return null;
+            if (indicator === 'bbj') {
+                // Indonesian BBJ commonly uses dot as thousands separator (e.g. 1.850 gram).
+                if (/^-?\d{1,3}(?:\.\d{3})+$/.test(raw)) raw = raw.replace(/\./g, '');
+                else if (/^-?\d{1,3}(?:,\d{3})+$/.test(raw)) raw = raw.replace(/,/g, '');
+                else raw = raw.replace(/,/g, '.');
+            } else {
+                // Normalize CRL/FL to cm so entries written in mm and cm share one axis.
+                if (raw.includes(',') && raw.includes('.')) raw = raw.replace(/\./g, '').replace(',', '.');
+                else raw = raw.replace(',', '.');
+            }
+            let n = Number(raw);
+            if (!Number.isFinite(n)) return null;
+            if (indicator !== 'bbj' && /mm\b/.test(original)) n /= 10;
+            return n;
+        }
+
+        // FUNGSI RENDER GRAFIK PERTUMBUHAN JANIN - ONE INDICATOR AT A TIME
         function renderMedicalChart() {
             if (!isUiSectionVisible('sec-medis')) return;
             const canvas = document.getElementById('medicalGrowthChart');
             const emptyState = document.getElementById('medical-chart-empty');
             if (!canvas) return;
-
-            // Ambil data rekam medis yang punya isian BBJ, CRL, atau FL
-            const records = (appState.medicalRecords || []).filter(r => r.bbj || r.crl || r.fl);
-            
-            records.sort((a, b) => {
-                const weekA = parseInt(String(a.gestation).replace(/\D/g, '')) || 0;
-                const weekB = parseInt(String(b.gestation).replace(/\D/g, '')) || 0;
-                if (weekA !== weekB) return weekA - weekB;
-                return parseLocalDateValue(a.date) - parseLocalDateValue(b.date);
-            });
-
-            if (records.length === 0) {
-                if (emptyState) emptyState.classList.remove('hidden');
-                if (medicalGrowthChartInstance) {
-                    medicalGrowthChartInstance.destroy();
-                    medicalGrowthChartInstance = null;
-                }
+            const indicatorEl = document.getElementById('medical-growth-indicator');
+            const indicator = indicatorEl ? indicatorEl.value : 'bbj';
+            const meta = {
+                bbj: { key: 'bbj', label: 'Berat Badan Janin (BBJ)', color: '#0284c7', unit: 'gram' },
+                crl: { key: 'crl', label: 'Crown-Rump Length (CRL)', color: '#10b981', unit: 'cm' },
+                fl: { key: 'fl', label: 'Femur Length (FL)', color: '#f59e0b', unit: 'cm' }
+            }[indicator] || { key: 'bbj', label: 'Berat Badan Janin (BBJ)', color: '#0284c7', unit: 'gram' };
+            const records = (appState.medicalRecords || []).map(r => ({...r, _gestationDays: parseGestationToDays(r.gestation)}))
+                .filter(r => r[meta.key] !== undefined && r[meta.key] !== null && String(r[meta.key]).trim() !== '' && r._gestationDays !== null)
+                .sort((a,b) => a._gestationDays - b._gestationDays || (parseLocalDateValue(a.date) - parseLocalDateValue(b.date)));
+            if (!records.length) {
+                if (emptyState) { emptyState.classList.remove('hidden'); emptyState.innerText = `Belum ada data ${meta.label} dengan usia kehamilan yang dapat dibaca.`; }
+                if (medicalGrowthChartInstance) { medicalGrowthChartInstance.destroy(); medicalGrowthChartInstance = null; }
                 return;
             }
-
             if (emptyState) emptyState.classList.add('hidden');
-
-            const labels = [];
-            const dataBBJ = [];
-            const dataCRL = [];
-            const dataFL = [];
-
-            records.forEach(r => {
-                const week = parseInt(String(r.gestation).replace(/\D/g, '')) || '?';
-                labels.push(`${week} Mgg`);
-                
-                // Hapus huruf, ambil angkanya saja
-                const bbjNum = parseInt(String(r.bbj).replace(/[^\d.]/g, '')) || null;
-                const crlNum = parseInt(String(r.crl).replace(/[^\d.]/g, '')) || null;
-                const flNum = parseInt(String(r.fl).replace(/[^\d.]/g, '')) || null;
-                
-                dataBBJ.push(bbjNum);
-                dataCRL.push(crlNum);
-                dataFL.push(flNum);
-            });
-
+            const labels = records.map(r => `${Math.floor(r._gestationDays/7)}mgg ${r._gestationDays%7}hr`);
+            const values = records.map(r => parseMedicalMeasurement(r[meta.key], indicator));
             const ctx = canvas.getContext('2d');
+            const data = { labels, datasets: [{ label: `${meta.label} (${meta.unit})`, data: values, borderColor: meta.color, backgroundColor: meta.color+'22', borderWidth: 2.5, pointBackgroundColor: meta.color, pointRadius: 4, pointHoverRadius: 6, tension: .25, fill: true, spanGaps: false }] };
+            const options = { responsive: true, maintainAspectRatio: false, interaction: { mode: 'nearest', intersect: false }, plugins: { legend: { display: true, labels: { boxWidth: 12, font: { size: 11 } } }, tooltip: { callbacks: { title: items => items.length ? `Usia kehamilan ${labels[items[0].dataIndex]}` : '' } } }, scales: { x: { title: { display: true, text: 'Usia kehamilan' }, grid: { display: false } }, y: { beginAtZero: true, title: { display: true, text: meta.unit } } } };
             if (medicalGrowthChartInstance) {
-                medicalGrowthChartInstance.data.labels = labels;
-                medicalGrowthChartInstance.data.datasets[0].data = dataBBJ;
-                medicalGrowthChartInstance.data.datasets[1].data = dataCRL;
-                medicalGrowthChartInstance.data.datasets[2].data = dataFL;
+                medicalGrowthChartInstance.data = data;
+                medicalGrowthChartInstance.options = options;
                 medicalGrowthChartInstance.update('none');
-                return;
-            }
-
-            medicalGrowthChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Berat Janin (gram)',
-                            data: dataBBJ,
-                            borderColor: '#0284c7', // Sky
-                            backgroundColor: 'rgba(2, 132, 199, 0.1)',
-                            borderWidth: 2,
-                            pointBackgroundColor: '#0284c7',
-                            pointRadius: 4,
-                            yAxisID: 'y',
-                            tension: 0.3,
-                            fill: true
-                        },
-                        {
-                            label: 'Panjang CRL (cm)',
-                            data: dataCRL,
-                            borderColor: '#10b981', // Emerald
-                            backgroundColor: 'transparent',
-                            borderWidth: 2,
-                            pointBackgroundColor: '#10b981',
-                            pointRadius: 4,
-                            yAxisID: 'y1',
-                            tension: 0.3,
-                            borderDash: [5, 5]
-                        },
-                        {
-                            label: 'Tulang Paha FL (cm)',
-                            data: dataFL,
-                            borderColor: '#f59e0b', // Amber
-                            backgroundColor: 'transparent',
-                            borderWidth: 2,
-                            pointBackgroundColor: '#f59e0b',
-                            pointRadius: 4,
-                            yAxisID: 'y1',
-                            tension: 0.3,
-                            borderDash: [2, 2]
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { mode: 'index', intersect: false },
-                    scales: {
-                        x: { grid: { display: false } },
-                        y: {
-                            type: 'linear', display: true, position: 'left',
-                            title: { display: true, text: 'Berat (gram)', font: {size: 10} },
-                            beginAtZero: true
-                        },
-                        y1: {
-                            type: 'linear', display: true, position: 'right',
-                            title: { display: true, text: 'Panjang/Tulang (cm)', font: {size: 10} },
-                            grid: { drawOnChartArea: false },
-                            beginAtZero: true
-                        }
-                    },
-                    plugins: { legend: { labels: { boxWidth: 12, font: {size: 10} } } }
-                }
-            });
+            } else medicalGrowthChartInstance = new Chart(ctx, { type: 'line', data, options });
         }
-        
+
         // WAKE WINDOW TIMER
         function setWakeWindowLimit(limit) {
             appState.wakeLimitMinutes = limit;
@@ -9161,7 +9166,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.5',
+                    appVersion: '6.13.6',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -10727,7 +10732,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         }
 
         // ==========================================================
-        // 6.13.5 — GROWTH TRACKER (WHO CHILD GROWTH STANDARDS + WHO 2007, 0–18 YEARS)
+        // 6.13.6 — GROWTH TRACKER (WHO CHILD GROWTH STANDARDS + WHO 2007, 0–18 YEARS)
         // Ages 0–60 months use WHO Child Growth Standards (daily LMS when available).
         // Ages 61–216 months use WHO Growth Reference 2007 (monthly LMS).
         // BB/U reference ends at 120 months; TB/U and IMT/U continue to 216.
@@ -11867,7 +11872,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         }
 
         // ============================================================
-        // SKRINING & PEMERIKSAAN AWAL BAYI BARU LAHIR — 6.13.5
+        // SKRINING & PEMERIKSAAN AWAL BAYI BARU LAHIR — 6.13.6
         // Catatan lokal keluarga; pelaksanaan dan interpretasi oleh nakes.
         // ============================================================
         const BABY_SCREENING_GUIDES = [
@@ -13493,7 +13498,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.5. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.6. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
