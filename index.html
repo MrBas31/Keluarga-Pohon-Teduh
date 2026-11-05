@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.12.2: Mobile Dashboard Layout & Navigation Fix; existing data IDs, Firebase sync and Drive backup core preserved -->
+    <!-- Keluarga Pohon Teduh 6.13.0: Birth Profile, Date-based Growth Records, WHO reference extension; sync and backup structure preserved -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.12.5">
+    <meta name="application-version" content="6.13.0">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -2350,8 +2350,8 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                                 <span class="kpt-post-eyebrow inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-white/15 border border-white/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-[0.13em]">
                                     <span aria-hidden="true">👶</span> Profil Si Kecil
                                 </span>
-                                <button type="button" onclick="toggleBabyGender()" class="kpt-post-gender-toggle w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 border border-white/20 backdrop-blur-md flex items-center justify-center text-white transition" title="Ganti Boy / Girl" aria-label="Ganti jenis kelamin tampilan bayi">
-                                    <i class="fa-solid fa-mars-and-venus"></i>
+                                <button type="button" onclick="editBabyProfile()" class="kpt-post-gender-toggle w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 border border-white/20 backdrop-blur-md flex items-center justify-center text-white transition" title="Edit profil dan data kelahiran" aria-label="Edit profil bayi">
+                                    <i class="fa-solid fa-pen"></i>
                                 </button>
                             </div>
 
@@ -2360,7 +2360,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                                     <h2 class="kpt-post-welcome-title text-2xl md:text-3xl font-extrabold font-brand tracking-tight leading-tight" id="display-welcome-title"><span class="kpt-post-welcome-text">Welcome to the World, Baby Boy</span><span class="kpt-post-welcome-heart" aria-hidden="true">🩵</span></h2>
                                     <div class="kpt-post-name-row mt-2 flex flex-wrap items-center gap-2">
                                         <span class="text-xs md:text-sm text-emerald-50/90"><i class="fa-solid fa-id-card mr-1.5"></i>Nama lengkap</span>
-                                        <button type="button" id="display-baby-full-name" onclick="editBabyProfile()" class="font-bold text-white border-b border-dashed border-white/60 pb-0.5 cursor-pointer hover:text-emerald-100 transition text-left" title="Klik untuk edit nama dan tanggal lahir">Belum diatur</button>
+                                        <button type="button" id="display-baby-full-name" onclick="editBabyProfile()" class="font-bold text-white border-b border-dashed border-white/60 pb-0.5 cursor-pointer hover:text-emerald-100 transition text-left" title="Klik untuk mengedit profil dan data kelahiran">Belum diatur</button>
                                         <i class="fa-solid fa-pen text-[9px] opacity-70" aria-hidden="true"></i>
                                     </div>
                                 </div>
@@ -2386,7 +2386,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                                 </div>
                                 <div class="kpt-post-metric rounded-2xl p-3 md:p-4 text-center">
                                     <div class="text-xl md:text-2xl font-extrabold tracking-tight tabular-nums" id="display-baby-length">--</div>
-                                    <div class="text-[10px] md:text-xs text-emerald-50/90 mt-1 leading-tight">Tinggi (cm)</div>
+                                    <div class="text-[10px] md:text-xs text-emerald-50/90 mt-1 leading-tight">Panjang/Tinggi (cm)</div>
                                 </div>
                             </div>
                         </div>
@@ -2768,10 +2768,10 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                         <p class="text-sm text-slate-500 dark:text-slate-400">Pantau Grafik Tumbuh Kembang (KMS)</p>
                     </div>
                     
-                    <!-- Toggle Gender KMS -->
-                    <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
-                        <button id="btn-gender-boy" onclick="setKmsGender('boy')" class="px-4 py-2 rounded-lg text-sm font-bold bg-blue-500 text-white shadow-md transition">Laki-laki</button>
-                        <button id="btn-gender-girl" onclick="setKmsGender('girl')" class="px-4 py-2 rounded-lg text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-pink-500 transition">Perempuan</button>
+                    <!-- Jenis kelamin KMS mengikuti satu sumber: Profil Si Kecil -->
+                    <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2">
+                        <span id="kms-gender-label" class="text-xs font-semibold text-slate-600 dark:text-slate-300">Standar mengikuti profil bayi</span>
+                        <button type="button" onclick="editBabyProfile()" class="min-h-[36px] px-3 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-sky-700 dark:text-sky-300 text-xs font-bold">Edit Profil</button>
                     </div>
                 </div>
             
@@ -2795,9 +2795,10 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                         
                         <!-- Wadah Rendering ApexCharts -->
                         <div id="kms-chart-container" class="w-full h-[350px]"></div>
+                        <p id="kms-reference-note" class="mt-1 text-[10px] leading-relaxed text-slate-400 dark:text-slate-500"></p>
                         
                         <button onclick="openModalKms()" class="w-full mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-2xl transition shadow-md shadow-blue-500/30">
-                            <i class="fa-solid fa-plus mr-1"></i> Catat Pertumbuhan Bulan Ini
+                            <i class="fa-solid fa-plus mr-1"></i> Catat Pengukuran
                         </button>
             
                         <!-- Daftar Riwayat Pertumbuhan -->
@@ -4001,37 +4002,45 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         </div>
     </div>
 
-    <!-- MODAL TAMBAH DATA KMS -->
-    <div id="modal-kms" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-[#1e293b] w-full max-w-sm rounded-3xl p-6 shadow-xl">
-            <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4">Catat Pertumbuhan</h3>
-            
-            <div class="space-y-4">
+    <!-- MODAL TAMBAH / EDIT PENGUKURAN KMS 6.13 -->
+    <div id="modal-kms" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-3 sm:px-4">
+        <div class="bg-white dark:bg-[#1e293b] w-full max-w-md rounded-3xl p-4 sm:p-6 shadow-xl max-h-[calc(100dvh-1.5rem)] overflow-y-auto">
+            <div class="flex items-start justify-between gap-3 mb-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Bulan Ke- (Usia) <span class="text-red-500">*</span></label>
-                    <input type="number" id="kms-bulan" min="0" max="24" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Contoh: 0 (Baru Lahir)">
+                    <h3 id="kms-modal-title" class="text-lg font-bold text-slate-800 dark:text-white">Catat Pengukuran</h3>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Tanggal menentukan posisi titik pada grafik pertumbuhan.</p>
                 </div>
-                
-                <div class="grid grid-cols-2 gap-3">
+                <button type="button" onclick="closeModalKms()" class="w-10 h-10 shrink-0 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-300" aria-label="Tutup">&times;</button>
+            </div>
+            <input type="hidden" id="kms-record-id">
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">Tanggal pengukuran <span class="text-rose-500">*</span></label>
+                    <input type="date" id="kms-date" onchange="updateKmsAgeFromDate()" class="w-full min-h-[46px] p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-base">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">Usia saat pengukuran (bulan)</label>
+                    <input type="number" id="kms-bulan" min="0" max="72" step="0.01" class="w-full min-h-[46px] p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-base" placeholder="Otomatis dari tanggal lahir">
+                    <p id="kms-age-hint" class="text-[10px] leading-relaxed text-slate-400 mt-1">Isi manual bila tanggal lahir belum diatur. Data lama tetap dapat diedit.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Berat Badan (kg)</label>
-                        <input type="number" step="0.1" id="kms-bb" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Misal: 3.2">
+                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">Berat badan (kg)</label>
+                        <input type="number" step="0.01" min="0.3" max="80" id="kms-bb" class="w-full min-h-[46px] p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-base" placeholder="Misal: 3.25">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Tinggi Badan (cm)</label>
-                        <input type="number" step="0.1" id="kms-tb" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Misal: 50">
+                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">Panjang / tinggi (cm)</label>
+                        <input type="number" step="0.1" min="20" max="200" id="kms-tb" class="w-full min-h-[46px] p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-base" placeholder="Misal: 50">
                     </div>
                 </div>
-                
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Lingkar Kepala (cm)</label>
-                    <input type="number" step="0.1" id="kms-lk" class="w-full p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm" placeholder="Misal: 34">
+                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">Lingkar kepala (cm)</label>
+                    <input type="number" step="0.1" min="20" max="70" id="kms-lk" class="w-full min-h-[46px] p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-base" placeholder="Misal: 34">
                 </div>
             </div>
-            
-            <div class="flex gap-3 mt-6">
-                <button onclick="closeModalKms()" class="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 py-3 rounded-xl font-bold hover:bg-slate-200 dark:hover:bg-slate-700">Batal</button>
-                <button onclick="saveKmsData()" class="flex-1 bg-blue-500 text-white py-3 rounded-xl font-bold hover:bg-blue-600">Simpan Data</button>
+            <div class="flex gap-2 sm:gap-3 mt-5">
+                <button type="button" onclick="closeModalKms()" class="flex-1 min-h-[46px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-bold">Batal</button>
+                <button type="button" onclick="saveKmsData()" class="flex-1 min-h-[46px] bg-blue-500 text-white rounded-xl font-bold hover:bg-blue-600">Simpan Data</button>
             </div>
         </div>
     </div>
@@ -4940,8 +4949,9 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         function proceedToPostnatalDashboard() {
             stopFireworks();
             document.getElementById('modal-celebration').classList.add('hidden');
+            // Konfirmasi kelahiran hanya menandai status; tanggal lahir tetap berasal
+            // dari isian profil orang tua, bukan waktu tombol ditekan.
             appState.babyBorn = true;
-            appState.babyBirthDate = new Date().toISOString();
             switchPhase('postnatal');
             saveToLocalStorage();
         }
@@ -4952,67 +4962,6 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             appState.babyBorn = false;
             switchPhase('prenatal');
             saveToLocalStorage();
-        }
-
-        // Modal otomatis mendeteksi dari dashboard mana ia dipanggil
-        function openGalleryModal(type = 'prenatal') {
-            activeGalleryType = type;
-            document.getElementById('gallery-form').reset();
-            document.getElementById('form-gallery-id').value = '';
-            document.getElementById('modal-gallery').classList.remove('hidden');
-        }
-
-        function closeGalleryModal() {
-            document.getElementById('modal-gallery').classList.add('hidden');
-        }
-
-        // Fungsi simpan otomatis memisah data berdasarkan fase yang sedang aktif
-        function saveGalleryForm(event) {
-            event.preventDefault();
-            const id = document.getElementById('form-gallery-id').value;
-            const title = document.getElementById('form-gallery-title-input').value.trim();
-            const url = document.getElementById('form-gallery-url').value.trim();
-            const caption = document.getElementById('form-gallery-caption').value.trim();
-
-            const newPhoto = { id: id ? Number(id) : Date.now(), title, url, caption };
-
-            if (activeGalleryType === 'prenatal') {
-                if (!appState.gallery) appState.gallery = [];
-                if (id) {
-                    const idx = appState.gallery.findIndex(g => g.id == id);
-                    if (idx !== -1) appState.gallery[idx] = newPhoto;
-                } else {
-                    appState.gallery.unshift(newPhoto);
-                }
-                currentGalleryIndex = 0;
-            } else {
-                if (!appState.postnatalGallery) appState.postnatalGallery = [];
-                if (id) {
-                    const idx = appState.postnatalGallery.findIndex(g => g.id == id);
-                    if (idx !== -1) appState.postnatalGallery[idx] = newPhoto;
-                } else {
-                    appState.postnatalGallery.unshift(newPhoto);
-                }
-                currentPostnatalGalleryIndex = 0;
-            }
-
-            renderGallery();
-            saveToLocalStorage();
-            closeGalleryModal();
-        }
-
-        function deleteGalleryPhoto(id, type) {
-            if (confirm("Hapus foto ini dari galeri?")) {
-                if (type === 'prenatal') {
-                    appState.gallery = appState.gallery.filter(g => g.id !== id);
-                    currentGalleryIndex = 0;
-                } else {
-                    appState.postnatalGallery = appState.postnatalGallery.filter(g => g.id !== id);
-                    currentPostnatalGalleryIndex = 0;
-                }
-                renderGallery();
-                saveToLocalStorage();
-            }
         }
 
         // MOBILE NAVIGATION (6.7): shortcuts follow the active family phase.
@@ -5207,140 +5156,254 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             }
         }
 
-        // LOGIKA PROFIL BAYI (NAMA & TANGGAL LAHIR)
-        function editBabyProfile() {
-            const currentName = appState.babyName || 'Si Kecil';
-            const newName = prompt("Masukkan Nama Panggilan Si Kecil:", currentName);
-            if (newName !== null && newName.trim() !== '') {
-                appState.babyName = newName.trim();
-                
-                const currentDob = appState.babyBirthDate || ''; 
-                const newDob = prompt("Masukkan Tanggal Lahir (Format: YYYY-MM-DD):", currentDob);
-                if (newDob !== null) {
-                    appState.babyBirthDate = newDob.trim();
-                }
-                saveToLocalStorage();
-                renderBabyProfile();
-            }
+        // ==========================================================
+        // 6.13.0 — PROFIL BAYI & DATA KELAHIRAN
+        // babyName, babyGender, and babyBirthDate remain the canonical
+        // fields to preserve compatibility with existing modules.
+        // Birth measurements are separate from postnatal KMS measurements.
+        // ==========================================================
+        function kptEscapeHtml(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[ch]);
         }
 
-        // LOGIKA PROFIL BAYI (NAMA & TANGGAL LAHIR)
-        function editBabyProfile() {
-            const currentName = appState.babyName || 'Si Kecil';
-            const newName = prompt("Masukkan Nama Lengkap Si Kecil:", currentName);
-            if (newName !== null && newName.trim() !== '') {
-                appState.babyName = newName.trim();
-                
-                const currentDob = appState.babyBirthDate || ''; 
-                const newDob = prompt("Masukkan Tanggal Lahir (Format: YYYY-MM-DD):", currentDob);
-                if (newDob !== null) {
-                    appState.babyBirthDate = newDob.trim();
-                }
-                saveToLocalStorage();
-                renderBabyProfile();
+        function getBabyBirthDetails() {
+            if (!appState.babyProfile || typeof appState.babyProfile !== 'object' || Array.isArray(appState.babyProfile)) {
+                appState.babyProfile = {};
             }
+            return appState.babyProfile;
         }
 
-        function toggleBabyGender() {
-            appState.babyGender = appState.babyGender === 'girl' ? 'boy' : 'girl';
+        function getBabyBirthDateKey() {
+            const raw = String(appState.babyBirthDate || appState.birthDate ||
+                (appState.babyProfile && appState.babyProfile.birthDate) ||
+                (appState.profile && appState.profile.birthDate) ||
+                (appState.postnatalProfile && appState.postnatalProfile.birthDate) || '').trim();
+            if (!raw) return '';
+            const parsed = parseLocalDateValue(raw);
+            return Number.isNaN(parsed.getTime()) ? '' : getLocalDateKey(parsed);
+        }
+
+        function openBabyProfileModal() {
+            const profile = getBabyBirthDetails();
+            const dateKey = getBabyBirthDateKey();
+            const modalId = 'kpt-baby-profile-modal';
+            let modal = document.getElementById(modalId);
+            if (!modal) {
+                document.body.insertAdjacentHTML('beforeend', `
+                <div id="${modalId}" class="fixed inset-0 z-[95] bg-slate-950/55 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="kpt-baby-profile-title">
+                    <div class="w-full max-w-2xl max-h-[calc(100dvh-1.5rem)] overflow-y-auto rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl p-4 sm:p-6">
+                        <div class="flex items-start justify-between gap-3 mb-4">
+                            <div><span class="text-[10px] font-extrabold tracking-[.15em] uppercase text-sky-600 dark:text-sky-300">Profil Si Kecil</span><h3 id="kpt-baby-profile-title" class="text-lg sm:text-xl font-extrabold text-slate-800 dark:text-white mt-1">Identitas & data kelahiran</h3><p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Fase Bayi Lahir tetap dapat dibuka meskipun data kelahiran belum lengkap.</p></div>
+                            <button type="button" onclick="closeBabyProfileModal()" class="w-10 h-10 shrink-0 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-200 text-xl" aria-label="Tutup">&times;</button>
+                        </div>
+                        <form id="kpt-baby-profile-form" class="space-y-4" onsubmit="saveBabyProfileForm(event)">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">Nama lengkap
+                                    <input name="babyName" maxlength="120" value="" class="mt-1 w-full min-h-[46px] rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 text-base" placeholder="Nama lengkap si kecil">
+                                </label>
+                                <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">Jenis kelamin
+                                    <select name="babyGender" class="mt-1 w-full min-h-[46px] rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 text-base">
+                                        <option value="">Belum ditentukan</option><option value="boy">Laki-laki</option><option value="girl">Perempuan</option>
+                                    </select>
+                                </label>
+                                <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">Tanggal lahir
+                                    <input name="babyBirthDate" type="date" value="" class="mt-1 w-full min-h-[46px] rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 text-base">
+                                </label>
+                                <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">Jam lahir
+                                    <input name="birthTime" type="time" value="" class="mt-1 w-full min-h-[46px] rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 text-base">
+                                </label>
+                            </div>
+                            <div class="rounded-2xl border border-sky-100 dark:border-sky-900/70 bg-sky-50/70 dark:bg-sky-950/30 p-3 sm:p-4 space-y-3">
+                                <div><h4 class="text-sm font-extrabold text-sky-900 dark:text-sky-200">Data saat lahir</h4><p class="text-[11px] text-sky-800/80 dark:text-sky-300/80 mt-0.5">Disimpan terpisah dari pengukuran pertumbuhan setelah lahir.</p></div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">Berat lahir (gram)
+                                        <input name="birthWeight" type="number" min="300" max="8000" step="1" value="" class="mt-1 w-full min-h-[46px] rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 text-base" placeholder="Contoh: 3200">
+                                    </label>
+                                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">Panjang lahir (cm)
+                                        <input name="birthLength" type="number" min="20" max="65" step="0.1" value="" class="mt-1 w-full min-h-[46px] rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 text-base" placeholder="Contoh: 49">
+                                    </label>
+                                    <div class="sm:col-span-2">
+                                        <span class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">Usia kehamilan saat lahir</span>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <label class="text-[11px] text-slate-500 dark:text-slate-400">Minggu
+                                                <input name="gestationalAgeWeeks" type="number" min="20" max="45" step="1" value="" class="mt-1 w-full min-h-[46px] rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 text-base" placeholder="Contoh: 39">
+                                            </label>
+                                            <label class="text-[11px] text-slate-500 dark:text-slate-400">Hari tambahan
+                                                <input name="gestationalAgeDays" type="number" min="0" max="6" step="1" value="" class="mt-1 w-full min-h-[46px] rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 text-base" placeholder="0–6">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">Tempat persalinan
+                                    <input name="birthFacility" maxlength="180" value="" class="mt-1 w-full min-h-[46px] rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 text-base" placeholder="Rumah sakit / klinik">
+                                </label>
+                                <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">Metode persalinan
+                                    <select name="deliveryMethod" class="mt-1 w-full min-h-[46px] rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 text-base">
+                                        <option value="">Belum diisi</option><option value="Spontan">Persalinan spontan</option><option value="SC">Operasi sesar (SC)</option><option value="Bantuan alat">Persalinan dengan bantuan alat</option><option value="Lainnya">Lainnya</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">Catatan kelahiran (opsional)
+                                <textarea name="birthNotes" rows="3" maxlength="3000" class="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white px-3 py-3 text-base" placeholder="Catatan singkat yang ingin disimpan tentang kelahiran si kecil..."></textarea>
+                            </label>
+                            <div class="flex flex-col sm:flex-row gap-2 pt-1">
+                                <button type="button" onclick="closeBabyProfileModal()" class="flex-1 min-h-[46px] rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 font-bold text-sm">Batal</button>
+                                <button type="submit" class="flex-1 min-h-[46px] rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-sm"><i class="fa-solid fa-floppy-disk mr-1"></i> Simpan profil</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>`);
+                modal = document.getElementById(modalId);
+            }
+            const form = modal.querySelector('#kpt-baby-profile-form');
+            form.elements.babyName.value = appState.babyName || '';
+            form.elements.babyGender.value = appState.babyGender || '';
+            form.elements.babyBirthDate.value = dateKey;
+            form.elements.birthTime.value = profile.birthTime || '';
+            form.elements.birthWeight.value = profile.birthWeight == null ? '' : profile.birthWeight;
+            form.elements.birthLength.value = profile.birthLength == null ? '' : profile.birthLength;
+            form.elements.gestationalAgeWeeks.value = profile.gestationalAgeWeeks == null ? '' : profile.gestationalAgeWeeks;
+            form.elements.gestationalAgeDays.value = profile.gestationalAgeDays == null ? '' : profile.gestationalAgeDays;
+            form.elements.birthFacility.value = profile.birthFacility || '';
+            form.elements.deliveryMethod.value = profile.deliveryMethod || '';
+            form.elements.birthNotes.value = profile.birthNotes || '';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeBabyProfileModal() {
+            const modal = document.getElementById('kpt-baby-profile-modal');
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+        }
+
+        function editBabyProfile() { openBabyProfileModal(); }
+        function toggleBabyGender() { openBabyProfileModal(); }
+
+        function saveBabyProfileForm(event) {
+            event.preventDefault();
+            const form = event.target;
+            const data = new FormData(form);
+            const dateValue = String(data.get('babyBirthDate') || '').trim();
+            if (dateValue) {
+                const parsedDate = parseLocalDateValue(dateValue);
+                if (Number.isNaN(parsedDate.getTime())) return alert('Tanggal lahir tidak valid.');
+            }
+            const toOptionalNumber = (value) => {
+                const raw = String(value == null ? '' : value).trim();
+                return raw === '' ? null : Number(raw);
+            };
+            const birthWeight = toOptionalNumber(data.get('birthWeight'));
+            const birthLength = toOptionalNumber(data.get('birthLength'));
+            const gaWeeks = toOptionalNumber(data.get('gestationalAgeWeeks'));
+            const gaDays = toOptionalNumber(data.get('gestationalAgeDays'));
+            if (birthWeight !== null && (!Number.isFinite(birthWeight) || birthWeight < 300 || birthWeight > 8000)) return alert('Berat lahir harus berada pada rentang 300–8.000 gram.');
+            if (birthLength !== null && (!Number.isFinite(birthLength) || birthLength < 20 || birthLength > 65)) return alert('Panjang lahir harus berada pada rentang 20–65 cm.');
+            if (gaWeeks !== null && (!Number.isInteger(gaWeeks) || gaWeeks < 20 || gaWeeks > 45)) return alert('Usia kehamilan (minggu) tidak valid.');
+            if (gaDays !== null && (!Number.isInteger(gaDays) || gaDays < 0 || gaDays > 6)) return alert('Hari tambahan usia kehamilan harus 0–6.');
+
+            appState.babyName = String(data.get('babyName') || '').trim();
+            appState.babyGender = String(data.get('babyGender') || '');
+            // Date-only field stays a local YYYY-MM-DD key, never an ISO timestamp.
+            appState.babyBirthDate = dateValue;
+            // Keep legacy DOB aliases synchronized so old modules do not fall back
+            // to a stale date after the canonical profile is edited or cleared.
+            appState.birthDate = dateValue;
+            if (appState.profile && typeof appState.profile === 'object') appState.profile.birthDate = dateValue;
+            if (appState.postnatalProfile && typeof appState.postnatalProfile === 'object') appState.postnatalProfile.birthDate = dateValue;
+            const profile = getBabyBirthDetails();
+            profile.birthTime = String(data.get('birthTime') || '');
+            profile.birthWeight = birthWeight;
+            profile.birthLength = birthLength;
+            profile.gestationalAgeWeeks = gaWeeks;
+            profile.gestationalAgeDays = gaDays;
+            profile.birthFacility = String(data.get('birthFacility') || '').trim();
+            profile.deliveryMethod = String(data.get('deliveryMethod') || '');
+            profile.birthNotes = String(data.get('birthNotes') || '').trim();
+            profile.birthDate = dateValue;
+            profile.updatedAt = new Date().toISOString();
+
             saveToLocalStorage();
+            closeBabyProfileModal();
             renderBabyProfile();
+            if (typeof renderKmsChart === 'function' && isUiSectionVisible('sec-post-medis')) renderKmsChart();
         }
 
         function renderBabyProfile() {
-            // Atur Judul Boy / Girl
+            const profile = getBabyBirthDetails();
             const titleEl = document.getElementById('display-welcome-title');
             if (titleEl) {
                 const isGirl = appState.babyGender === 'girl';
-                const babyLabel = isGirl ? 'Girl' : 'Boy';
-                const heart = isGirl ? '🩷' : '🩵';
-                titleEl.innerHTML = `<span class="kpt-post-welcome-text">Welcome to the World, Baby ${babyLabel}</span><span class="kpt-post-welcome-heart" aria-hidden="true">${heart}</span>`;
+                const isBoy = appState.babyGender === 'boy';
+                const babyLabel = isGirl ? 'Girl' : isBoy ? 'Boy' : 'Si Kecil';
+                const heart = isGirl ? '🩷' : isBoy ? '🩵' : '🤍';
+                titleEl.innerHTML = `<span class="kpt-post-welcome-text">Welcome to the World, ${babyLabel === 'Si Kecil' ? babyLabel : 'Baby ' + babyLabel}</span><span class="kpt-post-welcome-heart" aria-hidden="true">${heart}</span>`;
             }
-
-            // Nama Lengkap
             const nameEl = document.getElementById('display-baby-full-name');
             if (nameEl) nameEl.innerText = appState.babyName || 'Belum diatur';
-            
-            // Usia & Tanggal Lahir
+
             const dobEl = document.getElementById('display-baby-dob');
             const hijriEl = document.getElementById('display-baby-dob-hijri');
             const ageEl = document.getElementById('display-baby-age');
-            
-            if (appState.babyBirthDate) {
-                const dobDate = parseLocalDateValue(appState.babyBirthDate);
-                if (!isNaN(dobDate)) {
-                    const options = { day: 'numeric', month: 'long', year: 'numeric' };
-                    if (dobEl) dobEl.innerText = dobDate.toLocaleDateString('id-ID', options);
-                    
-                    // Konversi otomatis ke Kalender Hijriyah
-                    if (hijriEl) {
-                        try {
-                            const hijriFormatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' });
-                            let hijriText = hijriFormatter.format(dobDate);
-                            // Hapus embel-embel "AH" atau "H" bawaan browser agar tidak double
-                            hijriText = hijriText.replace(/\s*(AH|H)\s*$/i, ''); 
-                            hijriEl.innerText = hijriText + ' H';
-                        } catch (e) {
-                            hijriEl.innerText = ''; // Jaga-jaga kalau browser lama tidak support
-                        }
-                    }
-                    
-                    // Hitung Usia (Y M D)
-                    const today = new Date();
-                    let years = today.getFullYear() - dobDate.getFullYear();
-                    let months = today.getMonth() - dobDate.getMonth();
-                    let days = today.getDate() - dobDate.getDate();
-                    
-                    if (days < 0) {
-                        months--;
-                        const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-                        days += prevMonth.getDate();
-                    }
-                    if (months < 0) {
-                        years--;
-                        months += 12;
-                    }
-                    
-                    let ageString = "";
-                    if (years > 0) ageString += `${years}Y `;
-                    if (months > 0) ageString += `${months}M `;
-                    if (days > 0 || ageString === "") ageString += `${days}D`; 
-                    
-                    if (today < dobDate) {
-                        if (ageEl) ageEl.innerText = "Belum lahir";
-                    } else {
-                        if (ageEl) ageEl.innerText = ageString.trim();
-                    }
+            const dateKey = getBabyBirthDateKey();
+            if (dateKey) {
+                const dobDate = parseLocalDateValue(dateKey);
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                if (dobEl) dobEl.innerText = dobDate.toLocaleDateString('id-ID', options);
+                if (hijriEl) {
+                    try {
+                        const formatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' });
+                        hijriEl.innerText = formatter.format(dobDate).replace(/\s*(AH|H)\s*$/i, '') + ' H';
+                    } catch (_) { hijriEl.innerText = ''; }
+                }
+                const todayKey = getLocalDateKey();
+                if (todayKey < dateKey) {
+                    if (ageEl) ageEl.innerText = 'Belum lahir';
+                } else {
+                    let years = new Date().getFullYear() - dobDate.getFullYear();
+                    let months = new Date().getMonth() - dobDate.getMonth();
+                    let days = new Date().getDate() - dobDate.getDate();
+                    if (days < 0) { months--; days += new Date(new Date().getFullYear(), new Date().getMonth(), 0).getDate(); }
+                    if (months < 0) { years--; months += 12; }
+                    const parts = [];
+                    if (years > 0) parts.push(`${years} th`);
+                    if (months > 0) parts.push(`${months} bln`);
+                    if (days > 0 || parts.length === 0) parts.push(`${days} hr`);
+                    if (ageEl) ageEl.innerText = parts.join(' ');
                 }
             } else {
-                if (dobEl) dobEl.innerText = "Belum diatur";
-                if (hijriEl) hijriEl.innerText = "";
-                if (ageEl) ageEl.innerText = "--";
+                if (dobEl) dobEl.innerText = 'Belum diatur';
+                if (hijriEl) hijriEl.innerText = '';
+                if (ageEl) ageEl.innerText = '--';
             }
-            
-            // Tarik & Konversi Data BB (gr ke kg) / PB terakhir dari menu medis
+
+            // Current measurements are sourced only from postnatal KMS records.
+            // Birth measurements are a fallback; prenatal BBJ/CRL are never shown here.
             const weightEl = document.getElementById('display-baby-weight');
             const lengthEl = document.getElementById('display-baby-length');
-            
-            if (appState.medicalRecords && appState.medicalRecords.length > 0) {
-                const recordsWithData = appState.medicalRecords.filter(r => r.bbj || r.crl);
-                if (recordsWithData.length > 0) {
-                    const latest = recordsWithData[0];
-                    if (weightEl) {
-                        let bbjGram = parseInt(String(latest.bbj).replace(/\D/g, ''));
-                        if (!isNaN(bbjGram)) {
-                            let bbjKg = parseFloat((bbjGram / 1000).toFixed(2));
-                            weightEl.innerText = bbjKg;
-                        } else {
-                            weightEl.innerText = '--';
-                        }
-                    }
-                    if (lengthEl) lengthEl.innerText = latest.crl ? parseInt(String(latest.crl).replace(/\D/g, '')) || '--' : '--';
-                }
-            }
+            const records = Array.isArray(appState.kmsData) ? [...appState.kmsData] : [];
+            records.sort((a, b) => {
+                // Compare by the child's age so legacy month-only records and new
+                // date-based records can be ranked on the same scale.
+                const ageA = getKmsRecordAge(a);
+                const ageB = getKmsRecordAge(b);
+                if (Number.isFinite(ageA) && Number.isFinite(ageB) && ageA !== ageB) return ageB - ageA;
+                const dateA = a.date ? parseLocalDateValue(a.date).getTime() : -Infinity;
+                const dateB = b.date ? parseLocalDateValue(b.date).getTime() : -Infinity;
+                return dateB - dateA;
+            });
+            const latestWeight = records.find(r => Number.isFinite(Number(r.bb)) && Number(r.bb) > 0);
+            const latestLength = records.find(r => Number.isFinite(Number(r.tb)) && Number(r.tb) > 0);
+            const displayWeight = latestWeight ? Number(latestWeight.bb) : (Number(profile.birthWeight) > 0 ? Number(profile.birthWeight) / 1000 : null);
+            const displayLength = latestLength ? Number(latestLength.tb) : (Number(profile.birthLength) > 0 ? Number(profile.birthLength) : null);
+            if (weightEl) weightEl.innerText = displayWeight === null ? '--' : displayWeight.toFixed(2).replace(/\.00$/, '');
+            if (lengthEl) lengthEl.innerText = displayLength === null ? '--' : displayLength.toFixed(1).replace(/\.0$/, '');
             if (typeof renderPostnatalStimulationDashboardWidget === 'function') renderPostnatalStimulationDashboardWidget();
         }
-        
+
         // PREGNANCY CALCULATOR
         function calculatePregnancyData() {
             const hplTextEl = document.getElementById('hpl-display-text');
@@ -8300,7 +8363,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
           if (namesVisible && has('babyNames')) renderBabyNames();
           if (referencesVisible && has('references')) renderReferences();
 
-          if (postDashboardVisible && has('babyName', 'babyGender', 'babyBirthDate', 'babyBorn')) renderBabyProfile();
+          if (postDashboardVisible && has('babyName', 'babyGender', 'babyBirthDate', 'babyBorn', 'babyProfile', 'kmsData')) renderBabyProfile();
           if (postLogVisible && has('dailyLogs')) {
             renderDailyLogs();
             updateWakeWindow();
@@ -8650,7 +8713,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.11.0',
+                    appVersion: '6.13.0',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -8781,7 +8844,9 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 ['Checklist & persiapan', len('hospitalBag') + len('departureChecklist') + len('husbandRoles') + len('birthPlan')],
                 ['Nama & referensi', len('babyNames') + len('references')],
                 ['Galeri keluarga', len('gallery') + len('postnatalGallery')],
-                ['Data tumbuh kembang', len('kmsData')]
+                ['Data tumbuh kembang', len('kmsData')],
+                ['Profil dan data kelahiran', Object.keys(isSyncPlainObject(state.babyProfile) ? state.babyProfile : {}).length],
+                ['Stimulasi, milestone & jurnal', len('stimulationLibrary') + len('milestoneObservations') + len('milestoneObservationHistory') + len('developmentJournal')]
             ];
         }
 
@@ -9084,9 +9149,15 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             const endTime = document.getElementById('form-log-end-time').value;
             const notes = document.getElementById('form-log-notes').value.trim();
 
-            let logData = { 
-                id: id ? Number(id) : Date.now(), 
-                category, startDate, startTime, endDate, endTime, notes, createdAt: new Date().toISOString()
+            const existingLog = id && Array.isArray(appState.dailyLogs)
+                ? appState.dailyLogs.find(l => String(l.id) === String(id)) : null;
+            const nowIso = new Date().toISOString();
+            const logData = {
+                ...(existingLog || {}),
+                id: id ? (existingLog ? existingLog.id : Number(id)) : Date.now(),
+                category, startDate, startTime, endDate, endTime, notes,
+                createdAt: existingLog && existingLog.createdAt ? existingLog.createdAt : nowIso,
+                updatedAt: nowIso
             };
 
             if (category === 'Makan') {
@@ -10205,247 +10276,378 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             renderRsDsa();
         }
 
-        // 1. Inisialisasi State & Variabel Global
-        if (!appState.kmsData) appState.kmsData = [];
-        let currentKmsGender = 'boy';
+        // ==========================================================
+        // 6.13.0 — KMS / GROWTH TRACKER (DATE-BASED, HYBRID SUMMARY)
+        // WHO -2 SD / +2 SD anchors: 0–60 months (WHO Child Growth Standards,
+        // sampled every 6 months) and 61–72 months (WHO Reference 2007 monthly).
+        // Values between 6-month anchors are linearly interpolated for display.
+        // Head circumference reference is only available through 60 months.
+        // ==========================================================
+        if (!Array.isArray(appState.kmsData)) appState.kmsData = [];
+        let currentKmsGender = ['boy', 'girl'].includes(appState.babyGender) ? appState.babyGender : null;
         let currentKmsMetric = 'BB';
         let kmsChart = null;
-        
-        // 2. Database Standar WHO (0-12 Bulan) - Batas Bawah & Batas Atas
-        const standarWHO = {
+
+        const KMS_WHO_ANCHORS = {
             boy: {
-                BB: { min: [2.5, 3.4, 4.3, 5.0, 5.6, 6.0, 6.4, 6.7, 6.9, 7.1, 7.4, 7.6, 7.7], max: [4.4, 5.8, 7.1, 8.0, 8.7, 9.3, 9.8, 10.3, 10.7, 11.0, 11.4, 11.7, 12.0] },
-                TB: { min: [46.1, 50.8, 54.4, 57.3, 59.7, 61.7, 63.3, 64.8, 66.2, 67.5, 68.7, 69.9, 71.0], max: [53.7, 58.6, 62.4, 65.5, 68.0, 70.1, 71.9, 73.5, 75.0, 76.5, 77.9, 79.2, 80.5] },
-                LK: { min: [31.9, 34.9, 36.8, 38.1, 39.2, 40.1, 40.8, 41.5, 42.0, 42.5, 43.0, 43.4, 43.8], max: [37.0, 39.6, 41.5, 42.9, 44.0, 45.0, 45.8, 46.4, 47.0, 47.5, 48.0, 48.4, 48.8] }
+                BB: [[0,2.5,4.4],[6,6.4,9.8],[12,7.7,12.0],[18,8.8,13.7],[24,9.7,15.3],[30,10.5,16.9],[36,11.3,18.3],[42,12.0,19.7],[48,12.7,21.2],[54,13.4,22.7],[60,14.1,24.2],
+                    [61,14.4,24.2],[62,14.5,24.4],[63,14.6,24.7],[64,14.8,24.9],[65,14.9,25.2],[66,15.0,25.5],[67,15.2,25.7],[68,15.3,26.0],[69,15.4,26.3],[70,15.6,26.6],[71,15.7,26.8],[72,15.9,27.1]],
+                TB: [[0,46.1,53.7],[6,63.3,71.9],[12,71.0,80.5],[18,76.9,87.7],[24,81.7,93.9],[30,85.1,98.7],[36,88.7,103.5],[42,91.9,107.8],[48,94.9,111.7],[54,97.8,115.5],[60,100.7,119.2],
+                    [61,101.1,119.4],[62,101.6,120.0],[63,102.0,120.6],[64,102.5,121.2],[65,103.0,121.8],[66,103.4,122.4],[67,103.9,123.0],[68,104.3,123.6],[69,104.8,124.1],[70,105.2,124.7],[71,105.7,125.2],[72,106.1,125.8]],
+                LK: [[0,31.9,37.0],[6,40.9,45.8],[12,43.5,48.6],[18,44.7,50.0],[24,45.5,51.0],[30,46.1,51.7],[36,46.6,52.3],[42,47.0,52.8],[48,47.3,53.1],[54,47.5,53.5],[60,47.7,53.7]]
             },
             girl: {
-                BB: { min: [2.4, 3.2, 4.0, 4.5, 5.0, 5.4, 5.7, 6.0, 6.3, 6.5, 6.7, 6.9, 7.0], max: [4.2, 5.5, 6.6, 7.5, 8.2, 8.8, 9.3, 9.8, 10.2, 10.5, 10.9, 11.2, 11.5] },
-                TB: { min: [45.4, 49.8, 53.0, 55.6, 57.8, 59.6, 61.2, 62.7, 64.0, 65.3, 66.5, 67.7, 68.9], max: [52.9, 57.6, 61.1, 64.0, 66.4, 68.5, 70.3, 71.9, 73.5, 75.0, 76.4, 77.8, 79.2] },
-                LK: { min: [31.5, 34.3, 36.0, 37.2, 38.2, 39.0, 39.7, 40.4, 40.9, 41.4, 41.9, 42.3, 42.7], max: [36.2, 38.8, 40.5, 41.8, 42.9, 43.8, 44.6, 45.3, 45.9, 46.4, 46.9, 47.3, 47.7] }
+                BB: [[0,2.4,4.2],[6,5.7,9.3],[12,7.0,11.5],[18,8.1,13.2],[24,9.0,14.8],[30,10.0,16.5],[36,10.8,18.1],[42,11.6,19.8],[48,12.3,21.5],[54,13.0,23.2],[60,13.7,24.9],
+                    [61,14.0,24.8],[62,14.1,25.1],[63,14.2,25.4],[64,14.3,25.6],[65,14.4,25.9],[66,14.6,26.2],[67,14.7,26.5],[68,14.8,26.7],[69,14.9,27.0],[70,15.0,27.3],[71,15.2,27.6],[72,15.3,27.8]],
+                TB: [[0,45.4,52.9],[6,61.2,70.3],[12,68.9,79.2],[18,74.9,86.5],[24,80.0,92.9],[30,83.6,97.7],[36,87.4,102.7],[42,90.9,107.2],[48,94.1,111.3],[54,97.1,115.2],[60,99.9,118.9],
+                    [61,100.1,119.1],[62,100.5,119.7],[63,101.0,120.3],[64,101.4,120.9],[65,101.9,121.5],[66,102.3,122.0],[67,102.7,122.6],[68,103.2,123.2],[69,103.6,123.7],[70,104.0,124.3],[71,104.5,124.8],[72,104.9,125.4]],
+                LK: [[0,31.5,36.2],[6,39.6,44.8],[12,42.2,47.6],[18,43.5,49.0],[24,44.4,50.0],[30,45.1,50.7],[36,45.7,51.3],[42,46.1,51.8],[48,46.5,52.2],[54,46.8,52.5],[60,47.1,52.8]]
             }
         };
-        
+
+        function ensureKmsRecordIds() {
+            if (!Array.isArray(appState.kmsData)) appState.kmsData = [];
+            let changed = false;
+            appState.kmsData.forEach((record, index) => {
+                if (!record || typeof record !== 'object') return;
+                if (record.id === undefined || record.id === null || record.id === '') {
+                    record.id = `legacy-kms-${String(record.bulan ?? 'x')}-${index}`;
+                    changed = true;
+                }
+                if (record.ageMonths === undefined && Number.isFinite(Number(record.bulan))) {
+                    record.ageMonths = Number(record.bulan);
+                    changed = true;
+                }
+            });
+            if (changed) saveToLocalStorage();
+        }
+
+        function kmsPreciseAgeMonths(birthDateKey, measurementDateKey) {
+            if (!birthDateKey || !measurementDateKey) return null;
+            const birth = parseLocalDateValue(birthDateKey);
+            const measured = parseLocalDateValue(measurementDateKey);
+            if (Number.isNaN(birth.getTime()) || Number.isNaN(measured.getTime()) || measured < birth) return null;
+            const days = (measured.getTime() - birth.getTime()) / 86400000;
+            return Number((days / (365.2425 / 12)).toFixed(4));
+        }
+
+        function kmsReferenceAtAge(metric, ageMonths, gender = currentKmsGender) {
+            const anchors = KMS_WHO_ANCHORS[gender] && KMS_WHO_ANCHORS[gender][metric];
+            if (!anchors || !anchors.length || ageMonths < 0) return null;
+            if (metric === 'LK' && ageMonths > 60) return null;
+            if (ageMonths > 72) return null;
+            if (ageMonths <= anchors[0][0]) return { min: anchors[0][1], max: anchors[0][2] };
+            for (let i = 1; i < anchors.length; i++) {
+                const left = anchors[i - 1], right = anchors[i];
+                if (ageMonths <= right[0]) {
+                    const ratio = (ageMonths - left[0]) / (right[0] - left[0]);
+                    return {
+                        min: Number((left[1] + (right[1] - left[1]) * ratio).toFixed(2)),
+                        max: Number((left[2] + (right[2] - left[2]) * ratio).toFixed(2))
+                    };
+                }
+            }
+            const last = anchors[anchors.length - 1];
+            return ageMonths === last[0] ? { min: last[1], max: last[2] } : null;
+        }
+
+        function getKmsRecordAge(record) {
+            const dob = getBabyBirthDateKey();
+            if (record && record.date && dob) {
+                const exact = kmsPreciseAgeMonths(dob, record.date);
+                if (exact !== null) return exact;
+            }
+            if (record && Number.isFinite(Number(record.ageMonths))) return Number(record.ageMonths);
+            if (record && Number.isFinite(Number(record.bulan))) return Number(record.bulan);
+            return null;
+        }
+
+        function formatKmsAge(ageMonths) {
+            if (!Number.isFinite(ageMonths)) return 'Usia tidak diketahui';
+            const months = Math.max(0, ageMonths);
+            const wholeYears = Math.floor(months / 12);
+            const remMonths = Math.floor(months - wholeYears * 12);
+            const days = Math.round((months - Math.floor(months)) * 30.4375);
+            if (wholeYears > 0) return `${wholeYears} th ${remMonths} bln`;
+            if (months < 1) return `${Math.max(0, Math.round(months * 30.4375))} hari`;
+            return `${Math.floor(months)} bln${days ? ` + ${days} hr` : ''}`;
+        }
+
         function renderKmsChart() {
             if (!isUiSectionVisible('sec-post-medis')) return;
-            const container = document.querySelector("#kms-chart-container");
+            const container = document.querySelector('#kms-chart-container');
             if (!container) return;
-        
-            // PENGAMAN: Pastikan wadah data KMS tidak kosong
-            if (!appState.kmsData) appState.kmsData = [];
-        
-            // Siapkan data anak (Miqdad)
-            const sortedData = [...appState.kmsData].sort((a, b) => a.bulan - b.bulan);
-            const dataAnak = Array.from({ length: 13 }, (_, i) => {
-                const record = sortedData.find(d => d.bulan === i);
-                return record ? record[currentKmsMetric.toLowerCase()] : null;
+            ensureKmsRecordIds();
+            currentKmsGender = ['boy', 'girl'].includes(appState.babyGender) ? appState.babyGender : null;
+
+            const field = currentKmsMetric.toLowerCase();
+            const sortedData = [...appState.kmsData].sort((a, b) => {
+                const aDate = a.date ? parseLocalDateValue(a.date).getTime() : -Infinity;
+                const bDate = b.date ? parseLocalDateValue(b.date).getTime() : -Infinity;
+                if (aDate !== bDate) return bDate - aDate;
+                return Number(getKmsRecordAge(b) ?? -1) - Number(getKmsRecordAge(a) ?? -1);
             });
-        
-            // Ambil batas WHO sesuai gender & metrik saat ini
-            const std = standarWHO[currentKmsGender][currentKmsMetric];
-            const warnaTema = currentKmsGender === 'boy' ? '#2563eb' : '#db2777';
-            const warnaBatasAtas = '#059669';
-            const warnaBatasBawah = '#ea580c';
+
+            const childPoints = sortedData.map(record => ({
+                x: getKmsRecordAge(record),
+                y: Number.isFinite(Number(record[field])) && Number(record[field]) > 0 ? Number(record[field]) : null,
+                record
+            })).filter(point => Number.isFinite(point.x) && point.x >= 0 && point.x <= 72 && point.y !== null);
+
+            // Birth measurements provide an initial point without being copied into KMS storage.
+            const birthDate = getBabyBirthDateKey();
+            const birthProfile = getBabyBirthDetails();
+            const birthValue = currentKmsMetric === 'BB'
+                ? (Number(birthProfile.birthWeight) > 0 ? Number(birthProfile.birthWeight) / 1000 : null)
+                : currentKmsMetric === 'TB'
+                    ? (Number(birthProfile.birthLength) > 0 ? Number(birthProfile.birthLength) : null)
+                    : null;
+            const hasActualBirthDatePoint = childPoints.some(point => point.record && point.record.date === birthDate);
+            if (birthDate && birthValue !== null && !hasActualBirthDatePoint) {
+                childPoints.push({ x: 0, y: birthValue, record: { date: birthDate, isBirthProfile: true } });
+            }
+            childPoints.sort((a, b) => a.x - b.x);
+
+            const anchors = currentKmsGender ? KMS_WHO_ANCHORS[currentKmsGender][currentKmsMetric] : [];
+            const referenceMin = anchors.map(point => ({ x: point[0], y: point[1] }));
+            const referenceMax = anchors.map(point => ({ x: point[0], y: point[2] }));
             const isDarkMode = document.body.classList.contains('dark-mode');
             const isMobileChart = window.matchMedia('(max-width: 640px)').matches;
             const chartTextColor = isDarkMode ? '#e2e8f0' : '#334155';
             const chartMutedColor = isDarkMode ? '#cbd5e1' : '#475569';
             const chartGridColor = isDarkMode ? '#475569' : '#cbd5e1';
-            const namaMetrik = currentKmsMetric === 'BB' ? 'Berat (kg)' : currentKmsMetric === 'TB' ? 'Tinggi (cm)' : 'Lingkar Kepala (cm)';
+            const metricLabel = currentKmsMetric === 'BB' ? 'Berat badan (kg)' : currentKmsMetric === 'TB' ? 'Panjang / tinggi (cm)' : 'Lingkar kepala (cm)';
+            const refSource = !currentKmsGender
+                ? 'Pilih jenis kelamin pada profil bayi untuk menampilkan referensi WHO yang sesuai.'
+                : currentKmsMetric === 'LK'
+                    ? 'WHO Child Growth Standards · 0–60 bulan'
+                    : 'WHO Child Growth Standards · 0–60 bulan; WHO Reference 2007 · 61–72 bulan';
+            const noteEl = document.getElementById('kms-reference-note');
+            if (noteEl) noteEl.textContent = `${refSource} Garis ±2 SD adalah referensi pemantauan, bukan diagnosis. Titik acuan 0–60 bulan pada grafik disederhanakan dari titik tabel WHO enam bulanan dan diinterpolasi di antaranya; ini visualisasi pemantauan, bukan penilaian klinis. Untuk penilaian klinis, ikuti interpretasi tenaga kesehatan.` +
+                (currentKmsMetric === 'TB' ? ' Untuk usia di bawah 2 tahun gunakan panjang badan telentang; mulai 2 tahun gunakan tinggi badan berdiri sesuai prosedur pengukuran.' : '') +
+                (currentKmsMetric === 'LK' ? ' Setelah 60 bulan, data anak tetap dapat dicatat tetapi tidak ditampilkan terhadap garis referensi WHO.' : '');
 
             const options = {
-                // Garis data anak dibuat tegas; standar WHO ditampilkan sebagai garis referensi putus-putus.
                 series: [
-                    { name: "Anak Saya", data: dataAnak, type: 'line' },
-                    { name: "Batas Atas WHO", data: std.max, type: 'line' },
-                    { name: "Batas Bawah WHO", data: std.min, type: 'line' }
+                    { name: 'Pengukuran anak', data: childPoints.map(point => ({ x: point.x, y: point.y })) },
+                    ...(currentKmsGender ? [
+                        { name: 'WHO +2 SD', data: referenceMax },
+                        { name: 'WHO -2 SD', data: referenceMin }
+                    ] : [])
                 ],
                 chart: {
-                    type: 'line',
-                    height: isMobileChart ? 300 : 360,
-                    toolbar: { show: false },
-                    zoom: { enabled: false },
-                    fontFamily: 'Plus Jakarta Sans, sans-serif',
-                    background: 'transparent',
-                    foreColor: chartTextColor,
-                    parentHeightOffset: 0,
-                    animations: { enabled: true, easing: 'easeinout', speed: 250, dynamicAnimation: { enabled: true, speed: 250 } }
+                    type: 'line', height: isMobileChart ? 300 : 360, toolbar: { show: false }, zoom: { enabled: false },
+                    fontFamily: 'Plus Jakarta Sans, sans-serif', background: 'transparent', foreColor: chartTextColor,
+                    parentHeightOffset: 0, animations: { enabled: true, easing: 'easeinout', speed: 250, dynamicAnimation: { enabled: true, speed: 250 } }
                 },
-                colors: [warnaTema, warnaBatasAtas, warnaBatasBawah],
-                stroke: { width: [4, 2.5, 2.5], curve: 'smooth', dashArray: [0, 7, 7], lineCap: 'round' },
-                fill: { type: 'solid', opacity: [1, 1, 1] },
-                markers: {
-                    size: [6, 0, 0],
-                    strokeWidth: 2,
-                    strokeColors: isDarkMode ? '#0f172a' : '#ffffff',
-                    hover: { sizeOffset: 2 }
-                },
+                colors: [currentKmsGender === 'girl' ? '#db2777' : '#2563eb', '#059669', '#ea580c'],
+                stroke: { width: [4, 2.5, 2.5], curve: ['straight', 'straight', 'straight'], dashArray: [0, 7, 7], lineCap: 'round' },
+                markers: { size: [isMobileChart ? 5 : 6, 0, 0], strokeWidth: 2, strokeColors: isDarkMode ? '#0f172a' : '#ffffff', hover: { sizeOffset: 2 } },
                 dataLabels: { enabled: false },
                 xaxis: {
-                    categories: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                    type: 'numeric', min: 0, max: 72, tickAmount: 6,
                     title: { text: 'Usia (bulan)', style: { color: chartMutedColor, fontSize: isMobileChart ? '10px' : '12px', fontWeight: 600 } },
-                    labels: { style: { colors: chartMutedColor, fontSize: isMobileChart ? '10px' : '11px' }, rotate: 0, hideOverlappingLabels: true },
-                    axisBorder: { color: chartGridColor },
-                    axisTicks: { color: chartGridColor },
-                    tooltip: { enabled: false }
+                    labels: { formatter: value => `${Math.round(Number(value))}`, style: { colors: chartMutedColor, fontSize: isMobileChart ? '9px' : '11px' }, rotate: 0, hideOverlappingLabels: true },
+                    axisBorder: { color: chartGridColor }, axisTicks: { color: chartGridColor }, tooltip: { enabled: false }
                 },
                 yaxis: {
-                    title: { text: namaMetrik, style: { color: chartMutedColor, fontSize: isMobileChart ? '10px' : '12px', fontWeight: 600 } },
+                    title: { text: metricLabel, style: { color: chartMutedColor, fontSize: isMobileChart ? '10px' : '12px', fontWeight: 600 } },
                     labels: { style: { colors: chartMutedColor, fontSize: isMobileChart ? '10px' : '11px' }, minWidth: 34, maxWidth: 48 }
                 },
-                grid: {
-                    borderColor: chartGridColor,
-                    strokeDashArray: 4,
-                    padding: { left: 4, right: isMobileChart ? 8 : 16, top: 4, bottom: 0 },
-                    xaxis: { lines: { show: false } }
-                },
+                grid: { borderColor: chartGridColor, strokeDashArray: 4, padding: { left: 4, right: isMobileChart ? 8 : 16, top: 4, bottom: 0 }, xaxis: { lines: { show: false } } },
                 tooltip: {
-                    theme: isDarkMode ? 'dark' : 'light',
-                    shared: true,
-                    intersect: false,
-                    y: { formatter: value => value == null ? '-' : `${value} ${currentKmsMetric === 'BB' ? 'kg' : 'cm'}` }
+                    theme: isDarkMode ? 'dark' : 'light', shared: false, intersect: false,
+                    x: { formatter: value => `${Number(value).toFixed(2)} bulan` },
+                    y: { formatter: value => value == null ? '-' : `${Number(value).toFixed(1)} ${currentKmsMetric === 'BB' ? 'kg' : 'cm'}` }
                 },
                 theme: { mode: isDarkMode ? 'dark' : 'light' },
-                legend: {
-                    show: true,
-                    position: isMobileChart ? 'bottom' : 'top',
-                    horizontalAlign: 'center',
-                    fontSize: isMobileChart ? '10px' : '12px',
-                    labels: { colors: chartTextColor },
-                    markers: { width: 9, height: 9, radius: 8 },
-                    itemMargin: { horizontal: isMobileChart ? 7 : 12, vertical: 3 }
-                },
-                noData: {
-                    text: 'Belum ada data pertumbuhan',
-                    align: 'center',
-                    verticalAlign: 'middle',
-                    style: { color: chartMutedColor, fontSize: '13px' }
-                },
-                states: {
-                    hover: { filter: { type: 'lighten', value: 0.08 } },
-                    active: { filter: { type: 'none' } }
-                }
+                legend: { show: true, position: isMobileChart ? 'bottom' : 'top', horizontalAlign: 'center', fontSize: isMobileChart ? '10px' : '12px', labels: { colors: chartTextColor }, markers: { width: 9, height: 9, radius: 8 }, itemMargin: { horizontal: isMobileChart ? 7 : 12, vertical: 3 } },
+                noData: { text: 'Belum ada data pertumbuhan', align: 'center', verticalAlign: 'middle', style: { color: chartMutedColor, fontSize: '13px' } },
+                states: { hover: { filter: { type: 'lighten', value: 0.08 } }, active: { filter: { type: 'none' } } }
             };
-
-            if (kmsChart) {
-                // Update existing SVG chart in place; no destroy/render cycle.
-                kmsChart.updateOptions(options, false, false, false);
-            } else {
-                kmsChart = new ApexCharts(container, options);
-                kmsChart.render();
-            }
+            if (kmsChart) kmsChart.updateOptions(options, false, false, false);
+            else { kmsChart = new ApexCharts(container, options); kmsChart.render(); }
             updateKmsUi();
-        
-            // RENDER RIWAYAT KE DALAM HTML (Sekarang menyatu dengan aman di sini)
+
             const historyContainer = document.getElementById('kms-history-list');
             if (historyContainer) {
-                let historyHtml = '';
-                if (sortedData.length === 0) {
-                    historyHtml = '<div class="text-xs text-slate-500 italic">Belum ada riwayat pencatatan.</div>';
+                if (!sortedData.length) {
+                    historyContainer.innerHTML = '<div class="text-xs text-slate-500 italic">Belum ada riwayat pengukuran. Data kelahiran pada profil akan tetap tampil sebagai titik awal grafik jika tersedia.</div>';
                 } else {
-                    sortedData.forEach(d => {
-                        historyHtml += `
-                        <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700 mb-2">
-                            <div>
-                                <p class="text-sm font-bold text-slate-700 dark:text-white">Bulan ke-${d.bulan}</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">BB: ${d.bb || '-'} kg | TB: ${d.tb || '-'} cm | LK: ${d.lk || '-'} cm</p>
-                            </div>
-                            <div class="flex gap-2">
-                                <button onclick="editKmsData(${d.bulan})" class="w-8 h-8 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 flex items-center justify-center transition"><i class="fa-solid fa-pen text-xs"></i></button>
-                                <button onclick="deleteKmsData(${d.bulan})" class="w-8 h-8 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
-                            </div>
+                    const validAges = sortedData.map(getKmsRecordAge).filter(Number.isFinite);
+                    const grouped = {};
+                    validAges.forEach(age => { const month = Math.floor(age); grouped[month] = (grouped[month] || 0) + 1; });
+                    const monthSummary = Object.keys(grouped).map(month => `<span class="inline-flex items-center rounded-full bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-200 px-2 py-1 text-[10px] font-bold">Bln ${month}: ${grouped[month]}×</span>`).join('');
+                    const rows = sortedData.map(record => {
+                        const age = getKmsRecordAge(record);
+                        const dateLabel = record.date ? parseLocalDateValue(record.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : `Data lama · Bulan ke-${record.bulan}`;
+                        const ageLabel = Number.isFinite(age) ? formatKmsAge(age) : 'Usia tidak diketahui';
+                        const recId = String(record.id).replace(/[^a-zA-Z0-9_-]/g, '');
+                        const birthTag = record.isBirthProfile ? ' · Data lahir' : '';
+                        return `<div class="flex items-center justify-between gap-2 bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700">
+                            <div class="min-w-0 flex-1"><p class="text-xs font-bold text-slate-700 dark:text-white">${kptEscapeHtml(dateLabel)} <span class="font-medium text-slate-400">· ${kptEscapeHtml(ageLabel)}${birthTag}</span></p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">BB: ${record.bb ?? '-'} kg · PB/TB: ${record.tb ?? '-'} cm · LK: ${record.lk ?? '-'} cm</p></div>
+                            <div class="flex gap-1 shrink-0"><button onclick="editKmsData('${recId}')" aria-label="Edit pengukuran" class="w-10 h-10 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl flex items-center justify-center"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="deleteKmsData('${recId}')" aria-label="Hapus pengukuran" class="w-10 h-10 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-xl flex items-center justify-center"><i class="fa-solid fa-trash text-xs"></i></button></div>
                         </div>`;
-                    });
+                    }).join('');
+                    historyContainer.innerHTML = `<div class="mb-2"><p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide mb-2">Ringkasan per bulan usia</p><div class="flex flex-wrap gap-1.5">${monthSummary}</div></div>${rows}`;
                 }
-                historyContainer.innerHTML = historyHtml;
             }
         }
-        
-        // 4. Pengendali Tombol UI
-        function setKmsGender(gender) { currentKmsGender = gender; renderKmsChart(); }
-        function setKmsMetric(metric) { currentKmsMetric = metric; renderKmsChart(); }
-        
-        function updateKmsUi() {
-            ['boy', 'girl'].forEach(g => {
-                const btn = document.getElementById(`btn-gender-${g}`);
-                if(btn) {
-                    btn.className = currentKmsGender === g 
-                        ? (g === 'boy' ? 'px-4 py-2 rounded-lg text-sm font-bold bg-blue-500 text-white shadow-md' : 'px-4 py-2 rounded-lg text-sm font-bold bg-pink-500 text-white shadow-md')
-                        : 'px-4 py-2 rounded-lg text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition';
-                }
-            });
-            ['bb', 'tb', 'lk'].forEach(m => {
-                const btn = document.getElementById(`btn-metric-${m}`);
-                if(btn) {
-                    btn.className = currentKmsMetric === m.toUpperCase()
-                        ? 'px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-white shadow-sm'
-                        : 'px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition';
-                }
-            });
-        }
-        
-        // 5. Fungsi Modal & Simpan Data
-        function openModalKms() {
-            document.getElementById('modal-kms').classList.remove('hidden');
-            document.getElementById('modal-kms').classList.add('flex');
-            
-            const inputBulan = document.getElementById('kms-bulan');
-            inputBulan.value = '';
-            inputBulan.readOnly = false;
-            inputBulan.classList.remove('opacity-50', 'cursor-not-allowed');
-            
-            document.getElementById('kms-bb').value = '';
-            document.getElementById('kms-tb').value = '';
-            document.getElementById('kms-lk').value = '';
-        }
-        function closeModalKms() {
-            document.getElementById('modal-kms').classList.add('hidden');
-            document.getElementById('modal-kms').classList.remove('flex');
-        }
-        function saveKmsData() {
-            // PENGAMAN: Pastikan wadah data KMS tidak kosong
-            if (!appState.kmsData) appState.kmsData = [];
-        
-            const bulan = parseInt(document.getElementById('kms-bulan').value);
-            if (isNaN(bulan) || bulan < 0 || bulan > 12) return alert('Masukkan bulan antara 0 sampai 12!');
-            
-            const data = {
-                bulan: bulan,
-                bb: parseFloat(document.getElementById('kms-bb').value) || null,
-                tb: parseFloat(document.getElementById('kms-tb').value) || null,
-                lk: parseFloat(document.getElementById('kms-lk').value) || null
-            };
-        
-            const idx = appState.kmsData.findIndex(d => d.bulan === bulan);
-            if (idx !== -1) appState.kmsData[idx] = data;
-            else appState.kmsData.push(data);
-        
+
+        function setKmsGender(gender) {
+            if (!['boy', 'girl'].includes(gender)) return;
+            appState.babyGender = gender;
+            currentKmsGender = gender;
             saveToLocalStorage();
-            closeModalKms();
+            renderBabyProfile();
+            renderKmsChart();
+        }
+        function setKmsMetric(metric) {
+            if (!['BB', 'TB', 'LK'].includes(metric)) return;
+            currentKmsMetric = metric;
             renderKmsChart();
         }
 
-        function editKmsData(bulan) {
-            const data = appState.kmsData.find(d => d.bulan === bulan);
-            if (!data) return;
-            
-            document.getElementById('modal-kms').classList.remove('hidden');
-            document.getElementById('modal-kms').classList.add('flex');
-            
-            const inputBulan = document.getElementById('kms-bulan');
-            inputBulan.value = data.bulan;
-            inputBulan.readOnly = true; 
-            inputBulan.classList.add('opacity-50', 'cursor-not-allowed'); // Kunci agar bulan tidak terubah saat edit
-            
-            document.getElementById('kms-bb').value = data.bb || '';
-            document.getElementById('kms-tb').value = data.tb || '';
-            document.getElementById('kms-lk').value = data.lk || '';
+        function updateKmsUi() {
+            ['bb', 'tb', 'lk'].forEach(m => {
+                const btn = document.getElementById(`btn-metric-${m}`);
+                if (btn) btn.className = currentKmsMetric === m.toUpperCase()
+                    ? 'px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-white shadow-sm'
+                    : 'px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition';
+            });
+            const genderLabel = document.getElementById('kms-gender-label');
+            if (genderLabel) genderLabel.textContent = appState.babyGender === 'girl' ? 'Standar perempuan' : appState.babyGender === 'boy' ? 'Standar laki-laki' : 'Pilih jenis kelamin pada profil bayi';
         }
-        
-        function deleteKmsData(bulan) {
-            if(confirm(`Yakin ingin menghapus data bulan ke-${bulan}?`)) {
-                appState.kmsData = appState.kmsData.filter(d => d.bulan !== bulan);
+
+        function updateKmsAgeFromDate() {
+            const date = document.getElementById('kms-date')?.value || '';
+            const ageInput = document.getElementById('kms-bulan');
+            const hint = document.getElementById('kms-age-hint');
+            const dob = getBabyBirthDateKey();
+            if (date && dob) {
+                const age = kmsPreciseAgeMonths(dob, date);
+                if (age === null) {
+                    ageInput.value = '';
+                    ageInput.readOnly = false;
+                    if (hint) hint.textContent = 'Tanggal pengukuran tidak boleh sebelum tanggal lahir. Periksa kembali tanggal.';
+                    return;
+                }
+                ageInput.value = age.toFixed(2);
+                ageInput.readOnly = true;
+                if (hint) hint.textContent = 'Usia dihitung otomatis dari tanggal lahir pada profil bayi.';
+            } else {
+                ageInput.readOnly = false;
+                if (hint) hint.textContent = 'Tanggal lahir belum tersedia; isi usia dalam bulan secara manual. Data lama juga menggunakan cara ini.';
+            }
+        }
+
+        function openModalKms() {
+            const modal = document.getElementById('modal-kms');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            document.getElementById('kms-modal-title').textContent = 'Catat Pengukuran';
+            document.getElementById('kms-record-id').value = '';
+            document.getElementById('kms-date').value = getLocalDateKey();
+            document.getElementById('kms-bulan').value = '';
+            document.getElementById('kms-bulan').readOnly = false;
+            document.getElementById('kms-bb').value = '';
+            document.getElementById('kms-tb').value = '';
+            document.getElementById('kms-lk').value = '';
+            updateKmsAgeFromDate();
+        }
+
+        function closeModalKms() {
+            const modal = document.getElementById('modal-kms');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+        }
+
+        function saveKmsData() {
+            ensureKmsRecordIds();
+            const recordId = String(document.getElementById('kms-record-id').value || '');
+            const date = String(document.getElementById('kms-date').value || '').trim();
+            const ageInput = document.getElementById('kms-bulan').value;
+            const existing = recordId ? appState.kmsData.find(r => String(r.id) === recordId) : null;
+            let ageMonths = null;
+            if (date) {
+                const parsedDate = parseLocalDateValue(date);
+                if (Number.isNaN(parsedDate.getTime())) return alert('Tanggal pengukuran tidak valid.');
+                const dob = getBabyBirthDateKey();
+                if (dob) {
+                    ageMonths = kmsPreciseAgeMonths(dob, date);
+                    if (ageMonths === null) return alert('Tanggal pengukuran tidak boleh sebelum tanggal lahir bayi.');
+                }
+            }
+            if (ageMonths === null && ageInput !== '') ageMonths = Number(ageInput);
+            if (!date && !(existing && existing.date === undefined)) return alert('Tanggal pengukuran wajib diisi.');
+            if (!Number.isFinite(ageMonths) || ageMonths < 0 || ageMonths > 72) return alert('Usia pengukuran harus berada pada rentang 0 sampai 72 bulan. Jika tanggal lahir belum diatur, isi usia secara manual.');
+
+            const parseMeasurement = (id, label, min, max) => {
+                const raw = String(document.getElementById(id).value || '').trim();
+                if (!raw) return null;
+                const value = Number(raw);
+                if (!Number.isFinite(value) || value < min || value > max) throw new Error(`${label} tidak berada pada rentang yang valid.`);
+                return value;
+            };
+            let bb, tb, lk;
+            try {
+                bb = parseMeasurement('kms-bb', 'Berat badan', 0.3, 80);
+                tb = parseMeasurement('kms-tb', 'Panjang/tinggi badan', 20, 200);
+                lk = parseMeasurement('kms-lk', 'Lingkar kepala', 20, 70);
+            } catch (error) { return alert(error.message); }
+            if (bb === null && tb === null && lk === null) return alert('Isi setidaknya satu hasil pengukuran.');
+
+            const now = new Date().toISOString();
+            const record = {
+                ...(existing || {}),
+                id: existing ? existing.id : `kms-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+                date: date || (existing ? existing.date || '' : ''),
+                ageMonths: Number(ageMonths.toFixed(4)),
+                bulan: Math.floor(ageMonths),
+                bb, tb, lk,
+                createdAt: existing && existing.createdAt ? existing.createdAt : now,
+                updatedAt: now
+            };
+            if (existing) {
+                const index = appState.kmsData.findIndex(r => String(r.id) === String(existing.id));
+                if (index >= 0) appState.kmsData[index] = record;
+            } else {
+                appState.kmsData.push(record);
+            }
+            saveToLocalStorage();
+            closeModalKms();
+            renderKmsChart();
+            renderBabyProfile();
+        }
+
+        function editKmsData(recordId) {
+            ensureKmsRecordIds();
+            const data = appState.kmsData.find(r => String(r.id) === String(recordId));
+            if (!data) return;
+            const modal = document.getElementById('modal-kms');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            document.getElementById('kms-modal-title').textContent = 'Edit Pengukuran';
+            document.getElementById('kms-record-id').value = String(data.id);
+            document.getElementById('kms-date').value = data.date || '';
+            document.getElementById('kms-bulan').value = Number.isFinite(Number(data.ageMonths ?? data.bulan)) ? Number(data.ageMonths ?? data.bulan).toFixed(2) : '';
+            document.getElementById('kms-bb').value = data.bb ?? '';
+            document.getElementById('kms-tb').value = data.tb ?? '';
+            document.getElementById('kms-lk').value = data.lk ?? '';
+            updateKmsAgeFromDate();
+            if (!data.date) {
+                document.getElementById('kms-bulan').readOnly = false;
+                const hint = document.getElementById('kms-age-hint');
+                if (hint) hint.textContent = 'Catatan lama belum memiliki tanggal aktual. Usia bulan dipertahankan sampai tanggal pengukuran dilengkapi.';
+            }
+        }
+
+        function deleteKmsData(recordId) {
+            const data = appState.kmsData.find(r => String(r.id) === String(recordId));
+            if (!data) return;
+            if (confirm('Hapus satu catatan pengukuran ini? Catatan pengukuran lainnya tidak akan terpengaruh.')) {
+                appState.kmsData = appState.kmsData.filter(r => String(r.id) !== String(recordId));
                 saveToLocalStorage();
                 renderKmsChart();
+                renderBabyProfile();
             }
         }
 
@@ -12030,7 +12232,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.11.0. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.0. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
