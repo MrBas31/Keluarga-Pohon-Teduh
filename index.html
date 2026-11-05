@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.2: WHO daily LMS growth references, 0–60 month chart scope, expanded SD guide -->
+    <!-- Keluarga Pohon Teduh 6.13.4: WHO growth references 0–18 years, LMS curves, light-mode contrast -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.2">
+    <meta name="application-version" content="6.13.4">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1591,6 +1591,75 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         #modal-baby-immunization > div { max-height:94dvh; border-bottom-left-radius:0; border-bottom-right-radius:0; }
       }
     </style>
+
+    <style id="kpt-medical-6134-light-theme-fix">
+      /* Light-theme contrast fixes for Tailwind dark-opacity classes that escaped
+         the legacy light-mode fallback selectors. Night mode is intentionally untouched. */
+      body:not(.dark-mode) #sec-post-medis .medical-hero > div:nth-child(2) {
+        background:rgba(255,255,255,.94) !important; color:#334155 !important;
+        border-color:#bae6fd !important; box-shadow:0 2px 8px rgba(2,132,199,.06);
+      }
+      body:not(.dark-mode) #sec-post-medis .medical-hero #kms-gender-label { color:#475569 !important; }
+      body:not(.dark-mode) #sec-post-medis .medical-hero #medical-age-pill {
+        background:rgba(255,255,255,.88) !important; color:#075985 !important; border-color:#bae6fd !important;
+      }
+      body:not(.dark-mode) #sec-post-medis .medical-hero > div:nth-child(2) button {
+        background:#fff !important; color:#0369a1 !important; border-color:#cbd5e1 !important;
+      }
+      body:not(.dark-mode) #baby-immunization-stats > div:nth-child(1) { background:#f0f9ff !important; border-color:#bae6fd !important; }
+      body:not(.dark-mode) #baby-immunization-stats > div:nth-child(2) { background:#f5f3ff !important; border-color:#ddd6fe !important; }
+      body:not(.dark-mode) #baby-immunization-stats > div:nth-child(3) { background:#fffbeb !important; border-color:#fde68a !important; }
+      body:not(.dark-mode) #baby-immunization-stats > div:nth-child(4) { background:#f0fdfa !important; border-color:#99f6e4 !important; }
+      body:not(.dark-mode) #baby-immunization-stats > div:nth-child(1) .text-sky-700 { color:#0369a1 !important; }
+      body:not(.dark-mode) #baby-immunization-stats > div:nth-child(2) .text-violet-700 { color:#6d28d9 !important; }
+      body:not(.dark-mode) #baby-immunization-stats > div:nth-child(3) .text-amber-700 { color:#b45309 !important; }
+      body:not(.dark-mode) #baby-immunization-stats > div:nth-child(4) .text-teal-700 { color:#0f766e !important; }
+      body:not(.dark-mode) #baby-immunization-stats .text-slate-500 { color:#475569 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-800/75"],
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-800/80"] { background-color:rgba(255,255,255,.9) !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-sky-900/30"],
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-sky-900/25"] { background-color:#e0f2fe !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-violet-900/30"],
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-violet-900/25"] { background-color:#ede9fe !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-emerald-900/25"] { background-color:#dcfce7 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-rose-900/20"] { background-color:#ffe4e6 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-amber-900/25"],
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-amber-950/30"] { background-color:#fef3c7 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-teal-900/30"] { background-color:#ccfbf1 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-700"] { background-color:#e2e8f0 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:text-sky-200"],
+      body:not(.dark-mode) #sec-post-medis [class~="dark:text-sky-300"] { color:#075985 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:text-violet-300"] { color:#6d28d9 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:text-amber-300"] { color:#92400e !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:text-teal-300"] { color:#0f766e !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:text-violet-200"] { color:#5b21b6 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:text-emerald-200"] { color:#047857 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:text-rose-200"] { color:#be123c !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:text-amber-200"] { color:#92400e !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:text-slate-300"] { color:#475569 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:border-sky-800"] { border-color:#bae6fd !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:border-violet-800"] { border-color:#ddd6fe !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:border-emerald-800"] { border-color:#a7f3d0 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:border-rose-800"] { border-color:#fecdd3 !important; }
+      body:not(.dark-mode) #sec-post-medis [class~="dark:border-amber-800"] { border-color:#fde68a !important; }
+      body:not(.dark-mode) #sec-post-medis .baby-imm-card { background:#fff !important; color:#1e293b !important; border-color:#e2e8f0 !important; }
+      body:not(.dark-mode) #sec-post-medis .baby-imm-card h4 { color:#0f172a !important; }
+      body:not(.dark-mode) #sec-post-medis .baby-imm-card .text-slate-400 { color:#64748b !important; }
+      body:not(.dark-mode) #sec-post-medis .baby-imm-card .text-slate-500 { color:#475569 !important; }
+      body:not(.dark-mode) #sec-post-medis .baby-imm-card .text-slate-600 { color:#334155 !important; }
+      body:not(.dark-mode) #sec-post-medis .baby-imm-card button { box-shadow:0 1px 2px rgba(15,23,42,.06); }
+      body:not(.dark-mode) #sec-post-medis .baby-imm-card button[onclick^="markBabyImmunizationDone"] { background:#dcfce7 !important; color:#166534 !important; }
+      body:not(.dark-mode) #sec-post-medis .baby-imm-card button[onclick^="editBabyImmunization"] { background:#e0f2fe !important; color:#075985 !important; }
+      body:not(.dark-mode) #sec-post-medis .baby-imm-card button[onclick^="deleteBabyImmunization"] { background:#ffe4e6 !important; color:#9f1239 !important; }
+      #kms-metric-controls, #kms-age-range-controls { -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; scrollbar-width:none; }
+      #kms-metric-controls::-webkit-scrollbar, #kms-age-range-controls::-webkit-scrollbar { display:none; }
+      .kms-range-btn { flex:0 0 auto; min-height:40px; padding:.55rem .8rem; border-radius:.7rem; font-size:.72rem; font-weight:800; color:#64748b; white-space:nowrap; }
+      .kms-range-btn.active { background:#e0f2fe; color:#0369a1; box-shadow:0 1px 4px rgba(2,132,199,.12); }
+      body.dark-mode .kms-range-btn { color:#cbd5e1; }
+      body.dark-mode .kms-range-btn.active { background:rgba(2,132,199,.22); color:#7dd3fc; }
+      @media(max-width:640px) { #kms-metric-controls, #kms-age-range-controls { width:100%; max-width:100%; overflow-x:auto; } .kms-range-btn { min-height:44px; } }
+    </style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -2824,15 +2893,29 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 <div id="tab-content-kms" class="hidden">
                     <div class="flex items-center justify-between gap-3 mb-3 px-1">
                         <div><h3 class="text-base font-bold text-slate-800 dark:text-white">Pemantauan Pertumbuhan</h3><p class="text-xs text-slate-500 dark:text-slate-400">Grafik dan riwayat pengukuran berdasarkan usia si kecil.</p></div>
-                        <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300">WHO · 0–5 TH</span>
+                        <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300">WHO · 0–18 TH</span>
                     </div>
                     <!-- Area Grafik KMS -->
                     <div class="bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-700 rounded-3xl p-5 shadow-lg">
                         <!-- Tipe Grafik (BB/TB/LK) -->
-                        <div id="kms-metric-controls" class="flex gap-2 mb-6 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-xl w-max border border-slate-200 dark:border-slate-700">
-                            <button onclick="setKmsMetric('BB')" id="btn-metric-bb" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-white transition">Berat (BB)</button>
-                            <button onclick="setKmsMetric('TB')" id="btn-metric-tb" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">Tinggi (TB)</button>
-                            <button onclick="setKmsMetric('LK')" id="btn-metric-lk" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">Lingkar Kepala</button>
+                        <div class="flex flex-col gap-3 mb-5">
+                          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                            <span class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400">Indikator pertumbuhan</span>
+                            <div id="kms-metric-controls" class="flex gap-1.5 bg-slate-50 dark:bg-slate-800 p-1.5 rounded-xl w-max max-w-full border border-slate-200 dark:border-slate-700 overflow-x-auto">
+                                <button onclick="setKmsMetric('BB')" id="btn-metric-bb" class="px-3 py-2 rounded-lg text-xs font-bold bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-white transition">Berat (BB)</button>
+                                <button onclick="setKmsMetric('TB')" id="btn-metric-tb" class="px-3 py-2 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">Tinggi (TB)</button>
+                                <button onclick="setKmsMetric('LK')" id="btn-metric-lk" class="px-3 py-2 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">Lingkar Kepala</button>
+                                <button onclick="setKmsMetric('IMT')" id="btn-metric-imt" class="px-3 py-2 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">IMT/U</button>
+                            </div>
+                          </div>
+                          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                            <span class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400">Rentang usia grafik</span>
+                            <div id="kms-age-range-controls" class="flex gap-1 bg-slate-50 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
+                              <button type="button" class="kms-range-btn active" data-kms-age-range="0-5" onclick="setKmsAgeRange('0-5')">0–5 tahun</button>
+                              <button type="button" class="kms-range-btn" data-kms-age-range="5-10" onclick="setKmsAgeRange('5-10')">5–10 tahun</button>
+                              <button type="button" class="kms-range-btn" data-kms-age-range="10-18" onclick="setKmsAgeRange('10-18')">10–18 tahun</button>
+                            </div>
+                          </div>
                         </div>
                         
                         <!-- Wadah Rendering ApexCharts -->
@@ -2844,14 +2927,20 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                                 <i class="fa-solid fa-chevron-down text-[10px] text-sky-600 dark:text-sky-300"></i>
                             </summary>
                             <div class="px-3 pb-3 space-y-2 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
-                                <p><b>SD (simpangan baku)</b> menunjukkan jarak hasil pengukuran dari median standar WHO (0 SD). Garis −2 SD dan +2 SD adalah batas referensi pemantauan, bukan diagnosis.</p>
+                                <p><b>SD (simpangan baku)</b> menunjukkan jarak hasil pengukuran dari median standar WHO (0 SD). Garis −2 SD dan +2 SD adalah batas referensi pemantauan; arti klinisnya bergantung pada indikator dan usia.</p>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                    <div class="rounded-xl bg-white/80 dark:bg-slate-900/60 p-2.5"><b class="text-rose-600 dark:text-rose-300">Di bawah −2 SD</b><p class="mt-1">BB/U: berat badan kurang. PB/TB/U: pendek (stunting). Lingkar kepala yang berada di luar rentang perlu dinilai bersama tenaga kesehatan.</p></div>
-                                    <div class="rounded-xl bg-white/80 dark:bg-slate-900/60 p-2.5"><b class="text-amber-700 dark:text-amber-300">Di atas +2 SD</b><p class="mt-1">BB/U yang tinggi tidak otomatis berarti berat berlebih. TB/U berarti relatif lebih tinggi dari median. Penilaian berat berlebih memerlukan BB/PB, BB/TB, atau IMT/U.</p></div>
+                                    <div class="rounded-xl bg-white/80 dark:bg-slate-900/60 p-2.5"><b class="text-rose-600 dark:text-rose-300">Di bawah −2 SD</b><p class="mt-1">BB/U: berat badan kurang. PB/TB/U: pendek (stunting). IMT/U usia 5–18: kurus. Lingkar kepala di luar rentang perlu dinilai tenaga kesehatan.</p></div>
+                                    <div class="rounded-xl bg-white/80 dark:bg-slate-900/60 p-2.5"><b class="text-amber-700 dark:text-amber-300">Di atas +2 SD</b><p class="mt-1">BB/U yang tinggi tidak otomatis berarti berat berlebih. TB/U berarti relatif lebih tinggi. IMT/U perlu dibaca dengan batas usia: pada 5–18 tahun, +1 SD menandai overweight dan +2 SD obesitas menurut rujukan WHO.</p></div>
                                 </div>
-                                <p>Perhatikan tren beberapa kali pengukuran, bukan satu titik saja. Grafik ini hanya alat bantu pencatatan dan pemantauan; interpretasi kondisi anak tetap mengikuti dokter atau tenaga kesehatan.</p>
+                                <p><b>Rentang indikator:</b> WHO 0–5 tahun menyediakan BB/U, TB/U, LK/U, dan IMT/U. WHO Reference 2007 menyediakan TB/U dan IMT/U sampai 19 tahun serta BB/U sampai 10 tahun. Aplikasi membatasi tampilan grafik lanjutan sampai 18 tahun.</p>
+                                <p>IMT dihitung dari BB (kg) ÷ [TB (m) × TB (m)] dan hanya diplot bila BB serta PB/TB ada pada catatan tanggal yang sama. Perhatikan tren beberapa kali pengukuran, bukan satu titik saja.</p>
+                                <p>Grafik ini merupakan alat bantu pencatatan dan pemantauan, bukan diagnosis. Interpretasi kondisi anak tetap mengikuti dokter atau tenaga kesehatan.</p>
                                 <p class="text-[10px]">Bayi yang lahir prematur mungkin memerlukan pertimbangan usia koreksi. Aplikasi ini tidak menerapkan koreksi prematuritas secara otomatis; konsultasikan cara membaca grafik dengan dokter anak.</p>
-                                <a href="https://www.who.int/tools/child-growth-standards/standards" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 font-bold text-sky-700 dark:text-sky-300">Sumber: WHO Child Growth Standards <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                                <div class="flex flex-wrap gap-x-3 gap-y-1">
+                                  <a href="https://www.who.int/tools/child-growth-standards/standards" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 font-bold text-sky-700 dark:text-sky-300">WHO Child Growth Standards <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                                  <a href="https://www.who.int/tools/growth-reference-data-for-5to19-years" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 font-bold text-sky-700 dark:text-sky-300">WHO Reference 2007 <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                                  <a href="https://github.com/rcpch/growth-references/blob/main/who2006/WHO2007.csv" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 font-bold text-sky-700 dark:text-sky-300">Tabel LMS digital (repositori data) <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                                </div>
                             </div>
                         </details>
                         
@@ -4125,7 +4214,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         </div>
     </div>
 
-    <!-- MODAL TAMBAH / EDIT PENGUKURAN PERTUMBUHAN 6.13.2 -->
+    <!-- MODAL TAMBAH / EDIT PENGUKURAN PERTUMBUHAN 6.13.4 -->
     <div id="modal-kms" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-3 sm:px-4">
         <div class="bg-white dark:bg-[#1e293b] w-full max-w-md rounded-3xl p-4 sm:p-6 shadow-xl max-h-[calc(100dvh-1.5rem)] overflow-y-auto">
             <div class="flex items-start justify-between gap-3 mb-4">
@@ -4144,7 +4233,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 <div>
                     <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">Usia saat pengukuran (bulan)</label>
                     <input type="number" id="kms-bulan" min="0" max="216" step="0.01" class="w-full min-h-[46px] p-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-base" placeholder="Otomatis dari tanggal lahir">
-                    <p id="kms-age-hint" class="text-[10px] leading-relaxed text-slate-400 mt-1">Usia dapat dicatat sampai 18 tahun. Grafik WHO utama ditampilkan sampai 5 tahun; data lebih besar tetap tersimpan di riwayat.</p>
+                    <p id="kms-age-hint" class="text-[10px] leading-relaxed text-slate-400 mt-1">Usia dapat dicatat sampai 18 tahun. Grafik menggunakan standar WHO 0–5 tahun dan WHO Reference 2007 untuk usia 5–18 tahun sesuai indikatornya.</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
@@ -8845,7 +8934,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.2',
+                    appVersion: '6.13.4',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -10410,24 +10499,110 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         }
 
         // ==========================================================
-        // 6.13.2 — KMS / GROWTH TRACKER (WHO DAILY LMS, 0–60 MONTHS)
-        // WHO Child Growth Standards expanded LMS tables are loaded from a
-        // pinned, zero-dependency reference module and evaluated locally.
-        // No child measurement or profile data is sent to that module.
-        // A six-month WHO anchor fallback remains available if the CDN fails.
-        // Data after 60 months remains in history but is not plotted against
-        // the WHO 0–5 year standard in this chart.
+        // 6.13.4 — GROWTH TRACKER (WHO CHILD GROWTH STANDARDS + WHO 2007, 0–18 YEARS)
+        // Ages 0–60 months use WHO Child Growth Standards (daily LMS when available).
+        // Ages 61–216 months use WHO Growth Reference 2007 (monthly LMS).
+        // BB/U reference ends at 120 months; TB/U and IMT/U continue to 216.
+        // LK/U remains limited to 60 months. Measurements are evaluated locally.
+        // A six-month WHO anchor fallback remains available if the daily module fails.
         // ==========================================================
         if (!Array.isArray(appState.kmsData)) appState.kmsData = [];
         let currentKmsGender = ['boy', 'girl'].includes(appState.babyGender) ? appState.babyGender : null;
         let currentKmsMetric = 'BB';
+        let currentKmsAgeRange = '0-5';
+        let kmsAgeRangeManuallySelected = false;
         let kmsChart = null;
         let kmsWhoLmsModule = null;
         let kmsWhoLmsState = 'idle';
         let kmsWhoLmsPromise = null;
+        let kmsWho2007Data = null;
+        let kmsWho2007State = 'idle';
+        let kmsWho2007Promise = null;
         const KMS_WHO_LMS_MODULE_URL = 'https://cdn.jsdelivr.net/npm/who-growth-standards@1.0.1/dist/index.js';
-        const KMS_WHO_MAX_AGE_DAYS = 1826; // 60 completed months on the chart's mean-month axis
+        const KMS_WHO2007_CSV_URL = 'https://cdn.jsdelivr.net/gh/rcpch/growth-references@main/who2006/WHO2007.csv';
+        const KMS_WHO2007_CACHE_KEY = 'kptWho2007LmsCache_v1';
+        const KMS_WHO_MAX_AGE_DAYS = 1856; // WHO 0–5 expanded tables extend to day 1856
         const KMS_MEAN_MONTH_DAYS = 365.2425 / 12;
+        const KMS_MAX_CHART_AGE_MONTHS = 216; // application scope stops at 18 years
+
+        function loadKmsWho2007Data() {
+            if (kmsWho2007Promise) return kmsWho2007Promise;
+            // Reuse a previously downloaded public reference table; no child data is stored here.
+            try {
+                const cached = localStorage.getItem(KMS_WHO2007_CACHE_KEY);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (parsed && Object.keys(parsed).length >= 150 && parsed[61]?.boy?.TB && parsed[61]?.girl?.TB && parsed[120]?.boy?.BB && parsed[216]?.boy?.TB && parsed[216]?.girl?.IMT) {
+                        kmsWho2007Data = parsed;
+                        kmsWho2007State = 'ready';
+                        kmsWho2007Promise = Promise.resolve(parsed).then(table => {
+                            Promise.resolve().then(() => {
+                                if (isUiSectionVisible('sec-post-medis') && document.getElementById('tab-content-kms') && !document.getElementById('tab-content-kms').classList.contains('hidden')) renderKmsChart();
+                            });
+                            return table;
+                        });
+                        return kmsWho2007Promise;
+                    }
+                }
+            } catch (error) { console.warn('WHO 2007 local reference cache could not be read.', error); }
+            kmsWho2007State = 'loading';
+            kmsWho2007Promise = fetch(KMS_WHO2007_CSV_URL, { mode:'cors', cache:'force-cache', credentials:'omit' })
+                .then(response => { if (!response.ok) throw new Error(`WHO 2007 table HTTP ${response.status}`); return response.text(); })
+                .then(csv => {
+                    const table = {};
+                    const lines = String(csv || '').split(/\r?\n/);
+                    for (let i = 4; i < lines.length; i++) {
+                        const cells = lines[i].trim().split(',');
+                        const month = Number(cells[0]);
+                        if (!Number.isInteger(month) || month < 61 || month > 228 || cells.length < 20) continue;
+                        const triple = start => {
+                            const L = Number(cells[start]), M = Number(cells[start + 1]), S = Number(cells[start + 2]);
+                            return [L, M, S].every(Number.isFinite) && M > 0 && S > 0 ? { L, M, S } : null;
+                        };
+                        table[month] = {
+                            boy: { TB:triple(2), BB:triple(8), IMT:triple(14) },
+                            girl: { TB:triple(5), BB:triple(11), IMT:triple(17) }
+                        };
+                    }
+                    if (Object.keys(table).length < 150 || !table[61] || !table[216]) throw new Error('WHO 2007 CSV is incomplete or has an unexpected format.');
+                    kmsWho2007Data = table;
+                    kmsWho2007State = 'ready';
+                    try { localStorage.setItem(KMS_WHO2007_CACHE_KEY, JSON.stringify(table)); } catch (error) { console.warn('WHO 2007 reference could not be cached locally.', error); }
+                    if (isUiSectionVisible('sec-post-medis') && document.getElementById('tab-content-kms') && !document.getElementById('tab-content-kms').classList.contains('hidden')) renderKmsChart();
+                    return table;
+                })
+                .catch(error => {
+                    kmsWho2007State = 'fallback';
+                    console.warn('WHO 2007 reference table could not be loaded; older-age reference lines will be unavailable.', error);
+                    if (isUiSectionVisible('sec-post-medis') && document.getElementById('tab-content-kms') && !document.getElementById('tab-content-kms').classList.contains('hidden')) renderKmsChart();
+                    return null;
+                });
+            return kmsWho2007Promise;
+        }
+
+        function kmsLmsValueAtZ(lms, zScore) {
+            if (!lms || !Number.isFinite(lms.L) || !Number.isFinite(lms.M) || !Number.isFinite(lms.S)) return null;
+            let value;
+            if (Math.abs(lms.L) < 1e-8) value = lms.M * Math.exp(lms.S * zScore);
+            else {
+                const base = 1 + lms.L * lms.S * zScore;
+                if (base <= 0) return null;
+                value = lms.M * Math.pow(base, 1 / lms.L);
+            }
+            return Number.isFinite(value) && value > 0 ? value : null;
+        }
+
+        function kmsWho2007ValueAtMonth(metric, zScore, ageMonths, gender = currentKmsGender) {
+            if (!kmsWho2007Data || !['BB','TB','IMT'].includes(metric) || !['boy','girl'].includes(gender) || !Number.isFinite(ageMonths) || ageMonths < 61 || ageMonths > 216) return null;
+            const low = Math.floor(ageMonths), high = Math.ceil(ageMonths);
+            const left = kmsWho2007Data[low]?.[gender]?.[metric];
+            const right = kmsWho2007Data[high]?.[gender]?.[metric];
+            if (!left || !right) return null;
+            const t = ageMonths - low;
+            const lms = { L:left.L+(right.L-left.L)*t, M:left.M+(right.M-left.M)*t, S:left.S+(right.S-left.S)*t };
+            return kmsLmsValueAtZ(lms, zScore);
+        }
+
 
         function loadKmsWhoLmsModule() {
             if (kmsWhoLmsPromise) return kmsWhoLmsPromise;
@@ -10492,7 +10667,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         }
 
         function kmsWhoIndicator(metric) {
-            return metric === 'BB' ? 'wfa' : metric === 'TB' ? 'lhfa' : metric === 'LK' ? 'hcfa' : null;
+            return metric === 'BB' ? 'wfa' : metric === 'TB' ? 'lhfa' : metric === 'LK' ? 'hcfa' : metric === 'IMT' ? 'bfa' : null;
         }
 
         function kmsWhoValueAtAge(metric, zScore, ageDays, gender = currentKmsGender) {
@@ -10508,48 +10683,82 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             }
         }
 
-        function buildKmsWhoReferenceSeries(metric, zScore, gender = currentKmsGender) {
-            if (kmsWhoLmsModule) {
-                const points = [];
-                // The WHO reference is daily. Plot every day so the curve is
-                // generated from the expanded LMS table, not six-month anchors.
+        function getKmsAgeRangeBounds(range = currentKmsAgeRange) {
+            if (range === '5-10') return { min:60, max:120, tickAmount:5 };
+            if (range === '10-18') return { min:120, max:216, tickAmount:8 };
+            return { min:0, max:60, tickAmount:6 };
+        }
+
+        function syncKmsAgeRangeToChildAge() {
+            if (kmsAgeRangeManuallySelected) return;
+            const dob = getBabyBirthDateKey();
+            if (!dob) { currentKmsAgeRange = '0-5'; return; }
+            const age = kmsPreciseAgeMonths(dob, getLocalDateKey());
+            if (age === null) return;
+            currentKmsAgeRange = age >= 120 ? '10-18' : age >= 60 ? '5-10' : '0-5';
+        }
+
+        function buildKmsWhoReferenceSeries(metric, zScore, gender = currentKmsGender, range = currentKmsAgeRange) {
+            if (!['BB','TB','LK','IMT'].includes(metric) || !['boy','girl'].includes(gender)) return [];
+            if (metric === 'BB' && range === '10-18') return []; // WHO WFA ends at 10 years; avoid an isolated endpoint.
+            const bounds = getKmsAgeRangeBounds(range);
+            const points = [];
+            // WHO Child Growth Standards: daily expanded LMS values for ages 0–5 years.
+            if (kmsWhoLmsModule && range !== '10-18') {
                 for (let day = 0; day <= KMS_WHO_MAX_AGE_DAYS; day++) {
+                    const x = day / KMS_MEAN_MONTH_DAYS;
+                    if (x < bounds.min || x > bounds.max || x > 60) continue;
                     const value = kmsWhoValueAtAge(metric, zScore, day, gender);
-                    if (value !== null) points.push({ x: Number((day / KMS_MEAN_MONTH_DAYS).toFixed(4)), y: Number(value.toFixed(3)) });
+                    if (value !== null) points.push({ x:Number(x.toFixed(4)), y:Number(value.toFixed(3)) });
                 }
-                if (points.length > 1500) return points;
+            } else if (range === '0-5' && metric !== 'IMT') {
+                // Clearly labelled fallback if the daily WHO module is unavailable.
+                const anchors = KMS_WHO_ANCHORS[gender] && KMS_WHO_ANCHORS[gender][metric];
+                if (anchors) anchors.filter(point => point[0] <= 60).forEach(point => points.push({ x:point[0], y:point[zScore < 0 ? 1 : 2] }));
             }
-            // Clearly marked visual fallback, retained for CDN/offline failure.
-            const anchors = KMS_WHO_ANCHORS[gender] && KMS_WHO_ANCHORS[gender][metric];
-            if (!anchors) return [];
-            return anchors.filter(point => point[0] >= 0 && point[0] <= 60).map(point => ({ x: point[0], y: point[zScore < 0 ? 1 : 2] }));
+
+            // WHO Reference 2007: monthly LMS for school-age children/adolescents.
+            if (range !== '0-5' && kmsWho2007Data && ['BB','TB','IMT'].includes(metric)) {
+                const start = range === '5-10' ? 61 : 120;
+                const end = range === '5-10' ? 120 : 216;
+                for (let month = start; month <= end; month++) {
+                    if (metric === 'BB' && month > 120) break; // WHO WFA ends at 10 years.
+                    const value = kmsWho2007ValueAtMonth(metric, zScore, month, gender);
+                    if (value !== null) points.push({ x:month, y:Number(value.toFixed(3)) });
+                }
+            }
+            return points.sort((a,b) => a.x-b.x);
         }
 
         function kmsReferenceAtAge(metric, ageMonths, gender = currentKmsGender) {
-            if (!['BB', 'TB', 'LK'].includes(metric) || !['boy', 'girl'].includes(gender) || !Number.isFinite(ageMonths) || ageMonths < 0 || ageMonths > 60) return null;
-            if (kmsWhoLmsModule) {
+            if (!['BB','TB','LK','IMT'].includes(metric) || !['boy','girl'].includes(gender) || !Number.isFinite(ageMonths) || ageMonths < 0 || ageMonths > 216) return null;
+            if (metric === 'LK' && ageMonths > 60) return null;
+            let min = null, max = null, source = '';
+            if (ageMonths <= 60 && kmsWhoLmsModule) {
                 const ageDays = Math.min(KMS_WHO_MAX_AGE_DAYS, ageMonths * KMS_MEAN_MONTH_DAYS);
-                const min = kmsWhoValueAtAge(metric, -2, ageDays, gender);
-                const max = kmsWhoValueAtAge(metric, 2, ageDays, gender);
-                if (min !== null && max !== null) return { min: Number(min.toFixed(2)), max: Number(max.toFixed(2)), source: 'WHO daily LMS' };
+                min = kmsWhoValueAtAge(metric, -2, ageDays, gender);
+                max = kmsWhoValueAtAge(metric, 2, ageDays, gender);
+                source = 'WHO Child Growth Standards · LMS harian';
+            } else if (kmsWho2007Data && ageMonths >= 61 && ageMonths <= 216 && ['BB','TB','IMT'].includes(metric) && !(metric === 'BB' && ageMonths > 120)) {
+                min = kmsWho2007ValueAtMonth(metric, -2, ageMonths, gender);
+                max = kmsWho2007ValueAtMonth(metric, 2, ageMonths, gender);
+                source = 'WHO Reference 2007 · LMS bulanan';
             }
+            if (min !== null && min !== undefined && max !== null && max !== undefined) return { min:Number(min.toFixed(2)), max:Number(max.toFixed(2)), source };
+            if (ageMonths > 60 || metric === 'IMT') return null;
             const anchors = KMS_WHO_ANCHORS[gender] && KMS_WHO_ANCHORS[gender][metric];
             if (!anchors || !anchors.length) return null;
             const usable = anchors.filter(point => point[0] <= 60);
-            if (ageMonths <= usable[0][0]) return { min: usable[0][1], max: usable[0][2], source: 'fallback anchors' };
+            if (ageMonths <= usable[0][0]) return { min:usable[0][1], max:usable[0][2], source:'fallback anchors' };
             for (let i = 1; i < usable.length; i++) {
-                const left = usable[i - 1], right = usable[i];
+                const left = usable[i-1], right = usable[i];
                 if (ageMonths <= right[0]) {
-                    const ratio = (ageMonths - left[0]) / (right[0] - left[0]);
-                    return {
-                        min: Number((left[1] + (right[1] - left[1]) * ratio).toFixed(2)),
-                        max: Number((left[2] + (right[2] - left[2]) * ratio).toFixed(2)),
-                        source: 'fallback anchors'
-                    };
+                    const ratio = (ageMonths-left[0])/(right[0]-left[0]);
+                    return { min:Number((left[1]+(right[1]-left[1])*ratio).toFixed(2)), max:Number((left[2]+(right[2]-left[2])*ratio).toFixed(2)), source:'fallback anchors' };
                 }
             }
-            const last = usable[usable.length - 1];
-            return ageMonths === last[0] ? { min: last[1], max: last[2], source: 'fallback anchors' } : null;
+            const last = usable[usable.length-1];
+            return ageMonths === last[0] ? { min:last[1], max:last[2], source:'fallback anchors' } : null;
         }
 
         function getKmsRecordAge(record) {
@@ -10582,33 +10791,41 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             ensureKmsRecordIds();
             currentKmsGender = ['boy', 'girl'].includes(appState.babyGender) ? appState.babyGender : null;
 
-            const field = currentKmsMetric.toLowerCase();
+            syncKmsAgeRangeToChildAge();
+            if (currentKmsAgeRange !== '0-5' && kmsWho2007State === 'idle') loadKmsWho2007Data();
+            const bounds = getKmsAgeRangeBounds();
             const sortedData = [...appState.kmsData].sort((a, b) => {
                 const aDate = a.date ? parseLocalDateValue(a.date).getTime() : -Infinity;
                 const bDate = b.date ? parseLocalDateValue(b.date).getTime() : -Infinity;
                 if (aDate !== bDate) return bDate - aDate;
                 return Number(getKmsRecordAge(b) ?? -1) - Number(getKmsRecordAge(a) ?? -1);
             });
-
-            const childPoints = sortedData.map(record => ({
-                x: getKmsRecordAge(record),
-                y: Number.isFinite(Number(record[field])) && Number(record[field]) > 0 ? Number(record[field]) : null,
-                record
-            })).filter(point => Number.isFinite(point.x) && point.x >= 0 && point.x <= 60 && point.y !== null);
+            const readMetric = record => {
+                if (currentKmsMetric === 'IMT') {
+                    const weight = Number(record.bb), heightCm = Number(record.tb);
+                    return Number.isFinite(weight) && weight > 0 && Number.isFinite(heightCm) && heightCm > 0
+                        ? weight / Math.pow(heightCm / 100, 2) : null;
+                }
+                const raw = record[currentKmsMetric.toLowerCase()];
+                return Number.isFinite(Number(raw)) && Number(raw) > 0 ? Number(raw) : null;
+            };
+            const childPoints = sortedData.map(record => ({ x:getKmsRecordAge(record), y:readMetric(record), record }))
+                .filter(point => Number.isFinite(point.x) && point.x >= bounds.min && point.x <= bounds.max && point.y !== null);
 
             // Birth measurements provide an initial point without being copied into KMS storage.
             const birthDate = getBabyBirthDateKey();
             const birthProfile = getBabyBirthDetails();
-            const birthValue = currentKmsMetric === 'BB'
-                ? (Number(birthProfile.birthWeight) > 0 ? Number(birthProfile.birthWeight) / 1000 : null)
-                : currentKmsMetric === 'TB'
-                    ? (Number(birthProfile.birthLength) > 0 ? Number(birthProfile.birthLength) : null)
-                    : null;
+            const birthWeightKg = Number(birthProfile.birthWeight) > 0 ? Number(birthProfile.birthWeight) / 1000 : null;
+            const birthLengthCm = Number(birthProfile.birthLength) > 0 ? Number(birthProfile.birthLength) : null;
+            const birthValue = currentKmsMetric === 'BB' ? birthWeightKg
+                : currentKmsMetric === 'TB' ? birthLengthCm
+                : currentKmsMetric === 'IMT' && birthWeightKg && birthLengthCm ? birthWeightKg / Math.pow(birthLengthCm / 100, 2)
+                : null;
             const hasActualBirthDatePoint = childPoints.some(point => point.record && point.record.date === birthDate);
-            if (birthDate && birthValue !== null && !hasActualBirthDatePoint) {
-                childPoints.push({ x: 0, y: birthValue, record: { date: birthDate, isBirthProfile: true } });
+            if (birthDate && birthValue !== null && bounds.min === 0 && !hasActualBirthDatePoint) {
+                childPoints.push({ x:0, y:birthValue, record:{ date:birthDate, isBirthProfile:true } });
             }
-            childPoints.sort((a, b) => a.x - b.x);
+            childPoints.sort((a,b) => a.x-b.x);
 
             const referenceMin = currentKmsGender ? buildKmsWhoReferenceSeries(currentKmsMetric, -2, currentKmsGender) : [];
             const referenceMax = currentKmsGender ? buildKmsWhoReferenceSeries(currentKmsMetric, 2, currentKmsGender) : [];
@@ -10617,24 +10834,28 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             const chartTextColor = isDarkMode ? '#e2e8f0' : '#334155';
             const chartMutedColor = isDarkMode ? '#cbd5e1' : '#475569';
             const chartGridColor = isDarkMode ? '#475569' : '#cbd5e1';
-            const metricLabel = currentKmsMetric === 'BB' ? 'Berat badan (kg)' : currentKmsMetric === 'TB' ? 'Panjang / tinggi (cm)' : 'Lingkar kepala (cm)';
-            const refSource = !currentKmsGender
-                ? 'Pilih jenis kelamin pada profil bayi untuk menampilkan referensi WHO yang sesuai.'
-                : kmsWhoLmsState === 'ready'
-                    ? 'WHO Child Growth Standards · expanded LMS harian · usia 0–1.826 hari (0–60 bulan).'
-                    : kmsWhoLmsState === 'loading'
-                        ? 'Memuat tabel LMS harian WHO. Sementara itu, kurva cadangan ditampilkan.'
-                        : 'Mode cadangan: titik acuan WHO 0–60 bulan setiap 6 bulan, diinterpolasi untuk visualisasi.';
+            const metricLabel = currentKmsMetric === 'BB' ? 'Berat badan (kg)' : currentKmsMetric === 'TB' ? 'Panjang / tinggi (cm)' : currentKmsMetric === 'LK' ? 'Lingkar kepala (cm)' : 'Indeks Massa Tubuh (kg/m²)';
+            const metricRangeNote = currentKmsMetric === 'BB'
+                ? 'WHO BB/U tersedia sampai usia 10 tahun; setelah itu titik berat tetap dapat dilihat tanpa garis referensi BB/U.'
+                : currentKmsMetric === 'TB'
+                    ? 'WHO TB/U tersedia sampai usia 18 tahun pada grafik aplikasi.'
+                    : currentKmsMetric === 'LK'
+                        ? 'WHO LK/U hanya tersedia sampai 60 bulan (5 tahun). Setelah itu pengukuran tetap tersimpan, tanpa garis referensi.'
+                        : 'IMT dihitung otomatis dari berat dan tinggi pada catatan pengukuran yang sama. WHO IMT/U tersedia sampai usia 18 tahun.';
+            const rangeSource = currentKmsAgeRange === '0-5'
+                ? (kmsWhoLmsState === 'ready' ? 'WHO Child Growth Standards · LMS harian · 0–5 tahun.' : 'Mode cadangan WHO 0–5 tahun; tabel LMS harian sedang dimuat atau tidak tersedia.')
+                : (kmsWho2007State === 'ready' ? 'WHO Growth Reference 2007 · LMS bulanan · 5–18 tahun.' : 'Memuat tabel WHO Growth Reference 2007. Garis referensi usia sekolah/remaja akan muncul setelah tabel tersedia.');
             const noteEl = document.getElementById('kms-reference-note');
-            if (noteEl) noteEl.textContent = `${refSource} Posisi pengukuran dihitung dari tanggal lahir dan tanggal pengukuran dalam hari, lalu ditampilkan dalam bulan. Pengukuran setelah 60 bulan tetap tersimpan di riwayat, tetapi tidak diplot pada grafik standar WHO 0–5 tahun. Garis ±2 SD adalah referensi pemantauan, bukan diagnosis.` +
+            if (noteEl) noteEl.textContent = `${rangeSource} Rentang grafik: ${bounds.min}–${bounds.max} bulan. Pengukuran anak dihitung dari tanggal lahir dan tanggal pengukuran; pengukuran IMT harus memiliki BB dan PB/TB pada catatan yang sama. ${metricRangeNote} Garis ±2 SD merupakan referensi pemantauan, bukan diagnosis.` +
                 (currentKmsMetric === 'TB' ? ' Untuk usia di bawah 2 tahun gunakan panjang badan telentang; mulai 2 tahun gunakan tinggi badan berdiri sesuai prosedur pengukuran.' : '') +
-                (currentKmsMetric === 'LK' ? ' Referensi lingkar kepala WHO pada grafik ini tersedia sampai 60 bulan.' : '') +
-                (kmsWhoLmsState === 'fallback' ? ' Koneksi ke pustaka tabel harian tidak tersedia; kurva cadangan tidak seteliti tabel LMS harian.' : '');
+                (currentKmsMetric === 'IMT' ? ' Untuk interpretasi IMT/U, ambang kurus, berat badan berlebih, dan obesitas berbeda menurut kelompok usia; konsultasikan dengan tenaga kesehatan.' : '') +
+                (currentKmsAgeRange !== '0-5' && kmsWho2007State === 'fallback' ? ' Tabel WHO 2007 tidak berhasil dimuat; pengukuran anak tetap tampil, tetapi garis referensi usia ini tidak tersedia.' : '') +
+                (currentKmsAgeRange === '0-5' && kmsWhoLmsState === 'fallback' ? ' Koneksi tabel LMS harian tidak tersedia; kurva cadangan 6-bulanan digunakan untuk usia balita.' : '');
 
             const options = {
                 series: [
                     { name: 'Pengukuran anak', data: childPoints.map(point => ({ x: point.x, y: point.y })) },
-                    ...(currentKmsGender ? [
+                    ...(currentKmsGender && referenceMax.length && referenceMin.length ? [
                         { name: 'WHO +2 SD', data: referenceMax },
                         { name: 'WHO -2 SD', data: referenceMin }
                     ] : [])
@@ -10649,9 +10870,9 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 markers: { size: [isMobileChart ? 5 : 6, 0, 0], strokeWidth: 2, strokeColors: isDarkMode ? '#0f172a' : '#ffffff', hover: { sizeOffset: 2 } },
                 dataLabels: { enabled: false },
                 xaxis: {
-                    type: 'numeric', min: 0, max: 60, tickAmount: 6,
-                    title: { text: 'Usia (bulan)', style: { color: chartMutedColor, fontSize: isMobileChart ? '10px' : '12px', fontWeight: 600 } },
-                    labels: { formatter: value => `${Math.round(Number(value))}`, style: { colors: chartMutedColor, fontSize: isMobileChart ? '9px' : '11px' }, rotate: 0, hideOverlappingLabels: true },
+                    type: 'numeric', min: bounds.min, max: bounds.max, tickAmount: bounds.tickAmount,
+                    title: { text: bounds.max <= 60 ? 'Usia (bulan)' : 'Usia (tahun)', style: { color: chartMutedColor, fontSize: isMobileChart ? '10px' : '12px', fontWeight: 600 } },
+                    labels: { formatter: value => bounds.max <= 60 ? `${Math.round(Number(value))}` : `${Math.round(Number(value) / 12)}`, style: { colors: chartMutedColor, fontSize: isMobileChart ? '9px' : '11px' }, rotate: 0, hideOverlappingLabels: true },
                     axisBorder: { color: chartGridColor }, axisTicks: { color: chartGridColor }, tooltip: { enabled: false }
                 },
                 yaxis: {
@@ -10662,7 +10883,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 tooltip: {
                     theme: isDarkMode ? 'dark' : 'light', shared: false, intersect: false,
                     x: { formatter: value => `${formatKmsAge(Number(value))} (${Number(value).toFixed(2)} bln)` },
-                    y: { formatter: value => value == null ? '-' : `${Number(value).toFixed(1)} ${currentKmsMetric === 'BB' ? 'kg' : 'cm'}` }
+                    y: { formatter: value => value == null ? '-' : `${Number(value).toFixed(1)} ${currentKmsMetric === 'BB' ? 'kg' : currentKmsMetric === 'IMT' ? 'kg/m²' : 'cm'}` }
                 },
                 theme: { mode: isDarkMode ? 'dark' : 'light' },
                 legend: { show: true, position: isMobileChart ? 'bottom' : 'top', horizontalAlign: 'center', fontSize: isMobileChart ? '10px' : '12px', labels: { colors: chartTextColor }, markers: { width: 9, height: 9, radius: 8 }, itemMargin: { horizontal: isMobileChart ? 7 : 12, vertical: 3 } },
@@ -10708,18 +10929,28 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             renderKmsChart();
         }
         function setKmsMetric(metric) {
-            if (!['BB', 'TB', 'LK'].includes(metric)) return;
+            if (!['BB','TB','LK','IMT'].includes(metric)) return;
             currentKmsMetric = metric;
+            if (currentKmsAgeRange !== '0-5' && kmsWho2007State === 'idle') loadKmsWho2007Data();
+            renderKmsChart();
+        }
+
+        function setKmsAgeRange(range) {
+            if (!['0-5','5-10','10-18'].includes(range)) return;
+            currentKmsAgeRange = range;
+            kmsAgeRangeManuallySelected = true;
+            if (range !== '0-5' && kmsWho2007State === 'idle') loadKmsWho2007Data();
             renderKmsChart();
         }
 
         function updateKmsUi() {
-            ['bb', 'tb', 'lk'].forEach(m => {
+            ['bb','tb','lk','imt'].forEach(m => {
                 const btn = document.getElementById(`btn-metric-${m}`);
                 if (btn) btn.className = currentKmsMetric === m.toUpperCase()
-                    ? 'px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-white shadow-sm'
-                    : 'px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition';
+                    ? 'px-3 py-2 rounded-lg text-xs font-bold bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-white shadow-sm transition'
+                    : 'px-3 py-2 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition';
             });
+            document.querySelectorAll('[data-kms-age-range]').forEach(btn => btn.classList.toggle('active', btn.dataset.kmsAgeRange === currentKmsAgeRange));
             const genderLabel = document.getElementById('kms-gender-label');
             if (genderLabel) genderLabel.textContent = appState.babyGender === 'girl' ? 'Standar perempuan' : appState.babyGender === 'boy' ? 'Standar laki-laki' : 'Pilih jenis kelamin pada profil bayi';
         }
@@ -10783,7 +11014,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             }
             if (ageMonths === null && ageInput !== '') ageMonths = Number(ageInput);
             if (!date && !(existing && existing.date === undefined)) return alert('Tanggal pengukuran wajib diisi.');
-            if (!Number.isFinite(ageMonths) || ageMonths < 0 || ageMonths > 216) return alert('Usia pengukuran harus berada pada rentang 0 sampai 216 bulan (18 tahun). Grafik referensi WHO pada aplikasi ditampilkan sampai 60 bulan; data setelahnya tetap tersimpan di riwayat.');
+            if (!Number.isFinite(ageMonths) || ageMonths < 0 || ageMonths > 216) return alert('Usia pengukuran harus berada pada rentang 0 sampai 216 bulan (18 tahun). Referensi WHO yang tersedia mengikuti rentang indikator pada grafik; seluruh pengukuran tetap tersimpan di riwayat.');
 
             const parseMeasurement = (id, label, min, max) => {
                 const raw = String(document.getElementById(id).value || '').trim();
@@ -12846,7 +13077,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.2. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.4. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
