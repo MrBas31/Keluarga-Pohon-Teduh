@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.4: WHO growth references 0–18 years, LMS curves, light-mode contrast -->
+    <!-- Keluarga Pohon Teduh 6.13.5: Skrining neonatal and comprehensive medical light-theme fixes -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.4">
+    <meta name="application-version" content="6.13.5">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1584,7 +1584,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
       @media(max-width:640px) {
         #baby-medical-subtabs { gap:.4rem; }
         #baby-medical-subtabs .medical-tab { min-height:44px; padding:.58rem .78rem; font-size:.72rem; }
-        #tab-content-ringkasan, #tab-content-imunisasi, #tab-content-kms, #tab-content-riwayat { min-width:0; }
+        #tab-content-ringkasan, #tab-content-imunisasi, #tab-content-kms, #tab-content-skrining, #tab-content-riwayat { min-width:0; }
         #tab-content-ringkasan .medical-summary-card { padding:.85rem !important; }
         #baby-immunization-list .baby-imm-card { padding:.9rem !important; }
         #modal-baby-immunization { align-items:flex-end; }
@@ -1659,6 +1659,117 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
       body.dark-mode .kms-range-btn.active { background:rgba(2,132,199,.22); color:#7dd3fc; }
       @media(max-width:640px) { #kms-metric-controls, #kms-age-range-controls { width:100%; max-width:100%; overflow-x:auto; } .kms-range-btn { min-height:44px; } }
     </style>
+
+
+<style id="kpt-medical-6135-light-theme-comprehensive">
+  /* Strong explicit light palette for the entire medical module. The app can
+     retain a stale Tailwind .dark root during theme restore; these body-scoped
+     rules keep light mode readable without changing dark mode. */
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-800/60"] { background-color:#eff6ff !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-900/60"] { background-color:#ffffff !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-800/75"],
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-800/80"] { background-color:rgba(255,255,255,.96) !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-800"] { background-color:#f8fafc !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-700"] { background-color:#f1f5f9 !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-slate-600"] { background-color:#e2e8f0 !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-[#1e293b]"] { background-color:#ffffff !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-[#1e293b]/95"] { background-color:rgba(255,255,255,.97) !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-sky-950/30"] { background-color:#e0f2fe !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:bg-sky-900/30"] { background-color:#e0f2fe !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:hover:bg-slate-700"]:hover { background-color:#e2e8f0 !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:hover:text-white"]:hover { color:#1e293b !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:text-white"] { color:#0f172a !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:text-slate-200"] { color:#334155 !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:text-slate-300"] { color:#475569 !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:text-slate-400"],
+  body:not(.dark-mode) #sec-post-medis [class~="dark:text-slate-500"] { color:#64748b !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:text-sky-200/70"],
+  body:not(.dark-mode) #sec-post-medis [class~="dark:text-sky-200/80"] { color:#075985 !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:text-rose-300"] { color:#be123c !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:border-slate-600"],
+  body:not(.dark-mode) #sec-post-medis [class~="dark:border-slate-700"] { border-color:#e2e8f0 !important; }
+  body:not(.dark-mode) #sec-post-medis [class~="dark:border-sky-900/60"] { border-color:#bae6fd !important; }
+  body:not(.dark-mode) #sec-post-medis #kms-sd-guide { background:#eff6ff !important; border-color:#bfdbfe !important; color:#334155 !important; }
+  body:not(.dark-mode) #sec-post-medis #kms-sd-guide > div { color:#334155 !important; }
+  body:not(.dark-mode) #sec-post-medis #kms-sd-guide p { color:#475569 !important; }
+  body:not(.dark-mode) #sec-post-medis #kms-sd-guide b { color:#1e293b !important; }
+  body:not(.dark-mode) #sec-post-medis #kms-sd-guide a { color:#0369a1 !important; }
+  body:not(.dark-mode) #sec-post-medis #kms-sd-guide [class~="dark:bg-slate-900/60"] { background:#ffffff !important; border:1px solid #dbeafe !important; }
+  body:not(.dark-mode) #sec-post-medis #kms-sd-guide [class~="dark:text-rose-300"] { color:#be123c !important; }
+  body:not(.dark-mode) #sec-post-medis #kms-sd-guide [class~="dark:text-amber-300"] { color:#92400e !important; }
+  body:not(.dark-mode) #sec-post-medis #kms-sd-guide [class~="dark:text-sky-200"] { color:#075985 !important; }
+  body:not(.dark-mode) #sec-post-medis .medical-summary-card { background:#ffffff !important; color:#0f172a !important; border-color:#dbe4ef !important; }
+  body:not(.dark-mode) #sec-post-medis .medical-summary-card [class~="text-slate-400"] { color:#64748b !important; }
+  body:not(.dark-mode) #sec-post-medis button:disabled,
+  body:not(.dark-mode) #sec-post-medis button[disabled] { background:#e2e8f0 !important; color:#64748b !important; border-color:#cbd5e1 !important; opacity:1 !important; }
+  body:not(.dark-mode) #sec-post-medis button:disabled i,
+  body:not(.dark-mode) #sec-post-medis button[disabled] i { color:#64748b !important; }
+
+  .baby-screening-panel,.baby-screening-card,.baby-screening-visit,.baby-screening-modal { background:#ffffff; color:#0f172a; border:1px solid #dbe4ef; }
+  .baby-screening-eyebrow { color:#0369a1; font-size:10px; font-weight:900; letter-spacing:.12em; }
+  .baby-screening-muted { color:#64748b; }
+  .baby-screening-notice { background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; }
+  .baby-screening-alert { background:#fff7ed; color:#9a3412; border:1px solid #fed7aa; }
+  .baby-screening-stat { padding:.75rem .85rem; border-radius:1rem; border:1px solid #dbeafe; background:#f8fbff; }
+  .baby-screening-stat span { display:block; color:#0369a1; font-size:9px; font-weight:900; letter-spacing:.08em; }
+  .baby-screening-stat b { display:block; margin-top:.2rem; color:#0f172a; font-size:1.35rem; line-height:1.3; }
+  .baby-screening-stat small { display:block; margin-top:.1rem; color:#64748b; font-size:10px; }
+  .baby-screening-icon { display:flex; align-items:center; justify-content:center; flex:0 0 42px; width:42px; height:42px; border-radius:14px; background:#e0f2fe; color:#0369a1; font-size:18px; }
+  .baby-screening-window { color:#075985; font-size:11px; font-weight:800; }
+  .baby-screening-record { background:#f8fafc; border:1px solid #e2e8f0; }
+  .baby-screening-record-date,.baby-screening-record-text { color:#475569; }
+  .baby-screening-status { display:inline-flex; align-items:center; max-width:100%; border-radius:999px; padding:.25rem .55rem; font-size:10px; line-height:1.35; font-weight:800; white-space:normal; }
+  .baby-screening-status.empty { background:#f1f5f9; color:#475569; }
+  .baby-screening-status.planned { background:#e0f2fe; color:#075985; }
+  .baby-screening-status.waiting { background:#fef3c7; color:#92400e; }
+  .baby-screening-status.done { background:#dcfce7; color:#166534; }
+  .baby-screening-status.followup { background:#ffe4e6; color:#9f1239; }
+  .baby-screening-primary { background:#0284c7; color:#ffffff; border:1px solid #0284c7; }
+  .baby-screening-primary:hover { background:#0369a1; }
+  .baby-screening-secondary { background:#e0f2fe; color:#075985; border:1px solid #bae6fd; }
+  .baby-screening-secondary:hover { background:#bae6fd; }
+  .baby-screening-cancel { background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; }
+  .baby-screening-link { color:#0369a1; font-weight:800; text-decoration:underline; text-underline-offset:2px; }
+  .baby-screening-action { min-height:34px; padding:.35rem .6rem; border-radius:.65rem; font-size:10px; font-weight:800; }
+  .baby-screening-action.edit { background:#e0f2fe; color:#075985; }
+  .baby-screening-action.delete { background:#ffe4e6; color:#9f1239; }
+  .baby-screening-modal { max-height:94dvh; overflow-y:auto; }
+  .baby-screening-modal-head { background:rgba(255,255,255,.97); border-bottom:1px solid #e2e8f0; }
+  .baby-screening-close { background:#f1f5f9; color:#334155; }
+  .baby-screening-label { display:block; margin-bottom:.35rem; color:#475569; font-size:.72rem; font-weight:800; }
+  .baby-screening-input { display:block; width:100%; min-height:46px; padding:.7rem .8rem; border:1px solid #cbd5e1; border-radius:.85rem; background:#ffffff; color:#0f172a; font-size:.85rem; outline:none; }
+  .baby-screening-input:focus { border-color:#0284c7; box-shadow:0 0 0 3px rgba(2,132,199,.12); }
+  .baby-screening-input.is-readonly { background:#f8fafc; color:#475569; }
+  @media(max-width:640px) { #tab-content-skrining .baby-screening-panel { padding:.9rem !important; } #tab-content-skrining .baby-screening-card { padding:.85rem !important; } #modal-baby-screening { align-items:flex-end; } #modal-baby-screening > div { max-height:94dvh; border-bottom-left-radius:0; border-bottom-right-radius:0; } }
+
+  body.dark-mode .baby-screening-panel,body.dark-mode .baby-screening-card,body.dark-mode .baby-screening-visit,body.dark-mode .baby-screening-modal { background:#1e293b; color:#f8fafc; border-color:#334155; }
+  body.dark-mode .baby-screening-eyebrow { color:#7dd3fc; }
+  body.dark-mode .baby-screening-muted { color:#cbd5e1; }
+  body.dark-mode .baby-screening-notice { background:#082f49; color:#bae6fd; border-color:#075985; }
+  body.dark-mode .baby-screening-alert { background:#431407; color:#fed7aa; border-color:#9a3412; }
+  body.dark-mode .baby-screening-stat { background:#0f2a3b; border-color:#164e63; }
+  body.dark-mode .baby-screening-stat span { color:#7dd3fc; }
+  body.dark-mode .baby-screening-stat b { color:#f8fafc; }
+  body.dark-mode .baby-screening-stat small,body.dark-mode .baby-screening-record-date,body.dark-mode .baby-screening-record-text { color:#cbd5e1; }
+  body.dark-mode .baby-screening-icon { background:#0c4a6e; color:#bae6fd; }
+  body.dark-mode .baby-screening-window,body.dark-mode .baby-screening-link { color:#7dd3fc; }
+  body.dark-mode .baby-screening-record { background:#0f172a; border-color:#334155; }
+  body.dark-mode .baby-screening-status.empty { background:#334155; color:#e2e8f0; }
+  body.dark-mode .baby-screening-status.planned { background:#0c4a6e; color:#bae6fd; }
+  body.dark-mode .baby-screening-status.waiting { background:#78350f; color:#fde68a; }
+  body.dark-mode .baby-screening-status.done { background:#14532d; color:#bbf7d0; }
+  body.dark-mode .baby-screening-status.followup { background:#881337; color:#fecdd3; }
+  body.dark-mode .baby-screening-primary { background:#0369a1; border-color:#0284c7; color:#ffffff; }
+  body.dark-mode .baby-screening-secondary { background:#0c4a6e; color:#bae6fd; border-color:#075985; }
+  body.dark-mode .baby-screening-cancel { background:#334155; color:#e2e8f0; border-color:#475569; }
+  body.dark-mode .baby-screening-action.edit { background:#0c4a6e; color:#bae6fd; }
+  body.dark-mode .baby-screening-action.delete { background:#881337; color:#fecdd3; }
+  body.dark-mode .baby-screening-modal-head { background:rgba(30,41,59,.97); border-color:#334155; }
+  body.dark-mode .baby-screening-close { background:#334155; color:#e2e8f0; }
+  body.dark-mode .baby-screening-label { color:#cbd5e1; }
+  body.dark-mode .baby-screening-input { background:#0f172a; color:#f8fafc; border-color:#475569; }
+  body.dark-mode .baby-screening-input.is-readonly { background:#1e293b; color:#cbd5e1; }
+</style>
 
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
@@ -2881,6 +2992,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                     <button type="button" id="tab-btn-ringkasan" onclick="switchBabyMedicalTab('ringkasan')" class="medical-tab active px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition"><i class="fa-solid fa-house-medical mr-1.5"></i>Ringkasan</button>
                     <button type="button" id="tab-btn-kms" onclick="switchBabyMedicalTab('kms')" class="medical-tab px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition"><i class="fa-solid fa-chart-line mr-1.5"></i>Pertumbuhan</button>
                     <button type="button" id="tab-btn-imunisasi" onclick="switchBabyMedicalTab('imunisasi')" class="medical-tab px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition"><i class="fa-solid fa-syringe mr-1.5"></i>Imunisasi</button>
+                    <button type="button" id="tab-btn-skrining" onclick="switchBabyMedicalTab('skrining')" class="medical-tab px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition"><i class="fa-solid fa-clipboard-check mr-1.5"></i>Skrining</button>
                     <button type="button" id="tab-btn-riwayat" onclick="switchBabyMedicalTab('riwayat')" class="medical-tab px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition"><i class="fa-solid fa-notes-medical mr-1.5"></i>Riwayat Medis</button>
                 </div>
 
@@ -2987,6 +3099,119 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                             <a href="https://doi.org/10.14238/sp26.5.2025.328-36" target="_blank" rel="noopener" class="min-h-[40px] flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-2 text-sky-700 dark:text-sky-300 font-semibold border border-sky-100 dark:border-slate-700 sm:col-span-2"><i class="fa-solid fa-file-lines"></i>Kajian Jadwal IDAI 2024 · Sari Pediatri 2025</a>
                         </div>
                         <p class="text-[11px] leading-relaxed text-sky-900/75 dark:text-sky-200/70">Catatan: kolom biaya tidak diisi otomatis. Isi sendiri biaya aktual atau perkiraan dari fasilitas kesehatan. Untuk imunisasi kejar, vaksin kombinasi, batas usia produk, kontraindikasi, dan interval dosis, konsultasikan dengan dokter anak/petugas imunisasi.</p>
+                    </div>
+                </div>
+
+                <!-- KONTEN TAB: SKRINING & PEMERIKSAAN AWAL BAYI BARU LAHIR -->
+                <div id="tab-content-skrining" class="hidden space-y-4">
+                    <div class="baby-screening-panel p-4 sm:p-5 rounded-3xl shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                            <div class="min-w-0">
+                                <div class="baby-screening-eyebrow">PEMANTAUAN NEONATAL</div>
+                                <h3 class="text-lg font-extrabold mt-1">Skrining & Pemeriksaan Awal</h3>
+                                <p class="baby-screening-muted text-xs mt-1 leading-relaxed">Catat pemeriksaan bayi baru lahir, hasil dari fasilitas kesehatan, dan tindak lanjutnya dalam satu tempat.</p>
+                            </div>
+                            <button type="button" onclick="openBabyScreeningModal('custom')" class="baby-screening-primary min-h-[44px] px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap"><i class="fa-solid fa-plus mr-1"></i>Tambah Catatan</button>
+                        </div>
+                        <div id="baby-screening-stats" class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-4"></div>
+                        <div class="baby-screening-notice mt-4 rounded-xl p-3 text-xs leading-relaxed"><i class="fa-solid fa-circle-info mr-1.5"></i>Daftar ini adalah pengingat dan tempat pencatatan keluarga. Pemeriksaan serta interpretasi hasil dilakukan oleh tenaga kesehatan. Waktu dapat disesuaikan oleh dokter/bidan dengan kondisi bayi.</div>
+                    </div>
+
+                    <div class="baby-screening-panel p-4 sm:p-5 rounded-3xl shadow-sm">
+                        <div class="mb-3">
+                            <h3 class="font-extrabold text-sm">Skrining Bayi Baru Lahir</h3>
+                            <p class="baby-screening-muted text-xs mt-1">Jenis pemeriksaan yang tercantum dalam panduan Kemenkes. Setiap hasil dan tindak lanjut dapat dicatat lebih dari satu kali.</p>
+                        </div>
+                        <div id="baby-screening-list" class="grid grid-cols-1 lg:grid-cols-2 gap-3"></div>
+                    </div>
+
+                    <div class="baby-screening-panel p-4 sm:p-5 rounded-3xl shadow-sm">
+                        <div class="mb-3">
+                            <h3 class="font-extrabold text-sm">Pemeriksaan Rutin Usia 0–28 Hari</h3>
+                            <p class="baby-screening-muted text-xs mt-1">Mengikuti empat periode pemeriksaan dalam Buku KIA 2024.</p>
+                        </div>
+                        <div id="baby-newborn-visits-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                    </div>
+
+                    <div class="baby-screening-panel p-4 sm:p-5 rounded-3xl shadow-sm">
+                        <div class="flex items-start gap-3">
+                            <div class="baby-screening-icon" aria-hidden="true"><i class="fa-solid fa-ear-listen"></i></div>
+                            <div class="min-w-0 flex-1">
+                                <h3 class="font-extrabold text-sm">Skrining Pendengaran</h3>
+                                <p class="baby-screening-muted text-xs mt-1 leading-relaxed">Target EHDI 1–3–6: skrining sebelum usia 1 bulan, diagnosis paling lambat usia 3 bulan bila diperlukan, dan intervensi dimulai sebelum usia 6 bulan. Pedoman nasional juga menyebut konsep 1–2–3 bulan sebagai target yang lebih awal.</p>
+                                <div id="baby-hearing-screening-records" class="mt-3"></div>
+                                <button type="button" onclick="openBabyScreeningModal('hearing')" class="baby-screening-secondary min-h-[42px] px-3 py-2 rounded-xl text-xs font-bold mt-3"><i class="fa-solid fa-plus mr-1"></i>Catat Skrining Pendengaran</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="baby-screening-panel p-4 sm:p-5 rounded-3xl shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                            <div>
+                                <h3 class="font-extrabold text-sm">Pemantauan Warna Tinja</h3>
+                                <p class="baby-screening-muted text-xs mt-1 leading-relaxed">Kemenkes menganjurkan pemantauan warna tinja setiap hari sampai usia 4 bulan menggunakan kartu warna tinja pada Buku KIA.</p>
+                            </div>
+                            <button type="button" onclick="openBabyScreeningModal('stool')" class="baby-screening-secondary min-h-[42px] px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-solid fa-plus mr-1"></i>Catat Pemantauan</button>
+                        </div>
+                        <div id="baby-stool-monitoring-records" class="mt-3"></div>
+                        <div class="baby-screening-alert mt-3 rounded-xl p-3 text-xs leading-relaxed"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i>Jika warna tinja tampak pucat sesuai kartu warna tinja, atau orang tua ragu dengan hasil pengamatan, segera hubungi fasilitas kesehatan untuk pemeriksaan. Jangan menunggu aplikasi memberi penilaian.</div>
+                    </div>
+
+                    <div class="baby-screening-panel p-4 sm:p-5 rounded-3xl shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <div class="min-w-0">
+                                <h3 class="font-extrabold text-sm">Pengukuran Pertumbuhan Awal</h3>
+                                <p class="baby-screening-muted text-xs mt-1 leading-relaxed">Kemenkes juga memasukkan pengukuran berat badan dalam pemeriksaan bayi baru lahir. Catat angka pengukuran di menu Pertumbuhan agar tidak ada data ganda.</p>
+                            </div>
+                            <button type="button" onclick="switchBabyMedicalTab('kms'); setTimeout(() => openModalKms(), 80)" class="baby-screening-secondary min-h-[42px] px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-solid fa-ruler mr-1"></i>Buka Pertumbuhan</button>
+                        </div>
+                    </div>
+
+                    <div class="baby-screening-panel p-4 sm:p-5 rounded-3xl shadow-sm">
+                        <h3 class="font-extrabold text-sm">Sumber Panduan</h3>
+                        <p class="baby-screening-muted text-xs mt-1 mb-3">Buka dokumen resmi untuk membaca detail metode, rentang waktu, serta tindak lanjut pemeriksaan.</p>
+                        <div class="flex flex-wrap gap-x-4 gap-y-2 text-xs">
+                            <a class="baby-screening-link" href="https://jdih.kemkes.go.id/common/dokumen/2025kepmenkes033.pdf" target="_blank" rel="noopener">Juknis CKG · KMK 33/2025 <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                            <a class="baby-screening-link" href="https://kesprimkom.kemkes.go.id/assets/uploads/contents/others/Buku_KIA_2024.pdf" target="_blank" rel="noopener">Buku KIA 2024 <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                            <a class="baby-screening-link" href="https://ayosehat.kemkes.go.id/skrining-bayi-baru-lahir" target="_blank" rel="noopener">Panduan Skrining Bayi Baru Lahir <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                            <a class="baby-screening-link" href="https://ayosehat.kemkes.go.id/skrining-hipotiroid-kongenital-shk" target="_blank" rel="noopener">Panduan SHK <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                            <a class="baby-screening-link" href="https://ayosehat.kemkes.go.id/topik-non-penyakit/skrining-bayi-baru-lahir/skrining-g6pd" target="_blank" rel="noopener">Panduan G6PD <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                            <a class="baby-screening-link" href="https://ayosehat.kemkes.go.id/topik-non-penyakit/skrining-bayi-baru-lahir/skrining-hiperlasia-adrenal-kongenital-s-hak" target="_blank" rel="noopener">Panduan S-HAK <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                            <a class="baby-screening-link" href="https://ayosehat.kemkes.go.id/skrining-penyakit-jantung-bawaan-pjb-kritis" target="_blank" rel="noopener">Panduan PJB Kritis <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                            <a class="baby-screening-link" href="https://www.kemkes.go.id/app_asset/file_content_download/17000957756555671f5a24a4.07748915.pdf" target="_blank" rel="noopener">PNPK Tuli Sensorineural Kongenital · KMK 1989/2022 <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                        </div>
+                        <p class="baby-screening-muted text-[10px] mt-3">Jadwal pada aplikasi merupakan panduan pengingat, bukan pengganti Buku KIA atau instruksi dokter/bidan. Untuk bayi prematur, BBLR, atau yang dirawat di NICU, waktu dan tindak lanjut dapat berbeda.</p>
+                    </div>
+                </div>
+
+                <!-- MODAL CATAT SKRINING / KUNJUNGAN / PEMANTAUAN -->
+                <div id="modal-baby-screening" class="fixed inset-0 hidden items-center justify-center z-[75] bg-slate-900/60 backdrop-blur-sm p-3 sm:p-4">
+                    <div class="baby-screening-modal w-full max-w-xl rounded-3xl shadow-2xl max-h-[94dvh] overflow-y-auto">
+                        <div class="baby-screening-modal-head sticky top-0 z-10 flex items-start justify-between gap-3 p-5 rounded-t-3xl">
+                            <div><h3 id="baby-screening-modal-title" class="text-lg font-extrabold">Catat Pemeriksaan</h3><p class="baby-screening-muted text-xs mt-1">Simpan informasi sesuai catatan dari tenaga kesehatan.</p></div>
+                            <button type="button" onclick="closeBabyScreeningModal()" aria-label="Tutup" class="baby-screening-close w-10 h-10 rounded-xl"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form id="baby-screening-form" class="p-5 space-y-3" onsubmit="event.preventDefault(); saveBabyScreeningRecord();">
+                            <input type="hidden" id="baby-screening-id">
+                            <input type="hidden" id="baby-screening-key">
+                            <input type="hidden" id="baby-screening-type">
+                            <div><label for="baby-screening-name" class="baby-screening-label">Nama pemeriksaan / kunjungan *</label><input id="baby-screening-name" class="baby-screening-input" maxlength="120" required></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div><label for="baby-screening-date" class="baby-screening-label">Tanggal pemeriksaan / pemantauan</label><input id="baby-screening-date" type="date" class="baby-screening-input"></div>
+                                <div><label for="baby-screening-status" class="baby-screening-label">Status</label><select id="baby-screening-status" class="baby-screening-input"><option value="planned">Direncanakan</option><option value="waiting">Menunggu hasil</option><option value="done">Selesai / sudah diperiksa</option><option value="followup">Perlu tindak lanjut</option></select></div>
+                            </div>
+                            <div><label for="baby-screening-result" class="baby-screening-label">Hasil / ringkasan dari tenaga kesehatan</label><textarea id="baby-screening-result" class="baby-screening-input" rows="2" maxlength="1200" placeholder="Salin ringkasan dari buku KIA atau hasil pemeriksaan"></textarea></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div><label for="baby-screening-facility" class="baby-screening-label">Fasilitas kesehatan</label><input id="baby-screening-facility" class="baby-screening-input" maxlength="120" placeholder="Puskesmas / klinik / RS"></div>
+                                <div><label for="baby-screening-provider" class="baby-screening-label">Dokter / bidan / petugas</label><input id="baby-screening-provider" class="baby-screening-input" maxlength="120"></div>
+                            </div>
+                            <div><label for="baby-screening-next" class="baby-screening-label">Tindak lanjut / jadwal berikutnya</label><input id="baby-screening-next" class="baby-screening-input" maxlength="240" placeholder="Sesuai arahan tenaga kesehatan"></div>
+                            <div><label for="baby-screening-notes" class="baby-screening-label">Catatan tambahan</label><textarea id="baby-screening-notes" class="baby-screening-input" rows="2" maxlength="1500"></textarea></div>
+                            <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-2">
+                                <button type="button" onclick="closeBabyScreeningModal()" class="baby-screening-cancel min-h-[46px] px-4 rounded-xl text-sm font-bold">Batal</button>
+                                <button type="submit" class="baby-screening-primary min-h-[46px] px-5 rounded-xl text-sm font-bold"><i class="fa-solid fa-floppy-disk mr-1"></i>Simpan Catatan</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -4214,7 +4439,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         </div>
     </div>
 
-    <!-- MODAL TAMBAH / EDIT PENGUKURAN PERTUMBUHAN 6.13.4 -->
+    <!-- MODAL TAMBAH / EDIT PENGUKURAN PERTUMBUHAN 6.13.5 -->
     <div id="modal-kms" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-3 sm:px-4">
         <div class="bg-white dark:bg-[#1e293b] w-full max-w-md rounded-3xl p-4 sm:p-6 shadow-xl max-h-[calc(100dvh-1.5rem)] overflow-y-auto">
             <div class="flex items-start justify-between gap-3 mb-4">
@@ -4399,6 +4624,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 kmsData: [],
                 rsDsa: [],
                 babyMedicalRecords: [],
+                babyScreeningRecords: [],
                 babyImmunizations: [],
                 babyImmunizationsInitialized: false,
                 stimulationFavorites: [],
@@ -8586,12 +8812,13 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
           if (postShoppingVisible && has('postnatalBudgets', 'postnatalShopping')) renderPostShopping();
           if (rsDsaVisible && has('rsDsa')) renderRsDsa();
           if (postMedicalVisible) {
-            const medicalKeysChanged = has('babyName', 'babyGender', 'babyBirthDate', 'babyProfile', 'kmsData', 'babyMedicalRecords', 'babyImmunizations', 'babyImmunizationsInitialized');
+            const medicalKeysChanged = has('babyName', 'babyGender', 'babyBirthDate', 'babyProfile', 'kmsData', 'babyMedicalRecords', 'babyImmunizations', 'babyImmunizationsInitialized', 'babyScreeningRecords');
             if (medicalKeysChanged) {
               if ((activeBabyMedicalTab || 'ringkasan') === 'ringkasan') renderBabyMedicalSummary();
               if (activeBabyMedicalTab === 'kms' && has('kmsData', 'babyGender', 'babyBirthDate', 'babyProfile')) renderKmsChart();
               if (activeBabyMedicalTab === 'riwayat' && has('babyMedicalRecords')) renderBabyMedicalRecords();
               if (activeBabyMedicalTab === 'imunisasi' && has('babyImmunizations', 'babyBirthDate')) renderBabyImmunizations();
+              if (activeBabyMedicalTab === 'skrining' && has('babyScreeningRecords', 'babyBirthDate', 'babyProfile')) renderBabyScreening();
               if (has('babyName', 'babyGender', 'babyBirthDate', 'babyProfile')) updateBabyMedicalHero();
             }
           }
@@ -8934,7 +9161,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.4',
+                    appVersion: '6.13.5',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -9062,6 +9289,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 ['Rumah sakit & dokter', len('hospitals') + len('rsDsa')],
                 ['Riwayat medis & kontraksi', len('medicalRecords') + len('babyMedicalRecords') + len('contractions')],
                 ['Jadwal & catatan imunisasi', len('babyImmunizations')],
+                ['Skrining & pemeriksaan awal', len('babyScreeningRecords')],
                 ['Log harian bayi', len('dailyLogs')],
                 ['Checklist & persiapan', len('hospitalBag') + len('departureChecklist') + len('husbandRoles') + len('birthPlan')],
                 ['Nama & referensi', len('babyNames') + len('references')],
@@ -10499,7 +10727,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
         }
 
         // ==========================================================
-        // 6.13.4 — GROWTH TRACKER (WHO CHILD GROWTH STANDARDS + WHO 2007, 0–18 YEARS)
+        // 6.13.5 — GROWTH TRACKER (WHO CHILD GROWTH STANDARDS + WHO 2007, 0–18 YEARS)
         // Ages 0–60 months use WHO Child Growth Standards (daily LMS when available).
         // Ages 61–216 months use WHO Growth Reference 2007 (monthly LMS).
         // BB/U reference ends at 120 months; TB/U and IMT/U continue to 216.
@@ -11638,15 +11866,202 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
               <div class="rounded-2xl border border-sky-100 dark:border-sky-900/50 bg-sky-50 dark:bg-sky-950/25 px-4 py-3 text-[11px] leading-relaxed text-sky-900 dark:text-sky-200"><i class="fa-solid fa-circle-info mr-1"></i>Ringkasan hanya mengolah data yang dicatat keluarga. Ini bukan skor kesehatan, diagnosis, atau pengganti pemeriksaan tenaga kesehatan.</div>`;
         }
 
+        // ============================================================
+        // SKRINING & PEMERIKSAAN AWAL BAYI BARU LAHIR — 6.13.5
+        // Catatan lokal keluarga; pelaksanaan dan interpretasi oleh nakes.
+        // ============================================================
+        const BABY_SCREENING_GUIDES = [
+            { key:'shk', type:'screening', name:'Skrining Hipotiroid Kongenital (SHK)', window:'48–72 jam setelah lahir', target:'Hari ke-2 sampai ke-3', detail:'Sampel darah tumit (heel prick) dikirim ke laboratorium untuk pemeriksaan hormon tiroid. Bila belum dilakukan, tanyakan petugas kesehatan tentang waktu pengambilan susulan.', source:'KMK 33/2025 · Buku KIA 2024' },
+            { key:'g6pd', type:'screening', name:'Skrining Defisiensi G6PD', window:'48–72 jam setelah lahir', target:'Hari ke-2 sampai ke-3', detail:'Sampel darah tumit untuk pemeriksaan aktivitas enzim G6PD. Dalam kondisi tertentu, Kemenkes menyebut pemeriksaan dapat dilakukan setelah 24 jam dan sebelum usia 14 hari.', source:'KMK 33/2025 · Ayo Sehat Kemenkes' },
+            { key:'hak', type:'screening', name:'Skrining Hiperplasia Adrenal Kongenital (S-HAK)', window:'48–72 jam setelah lahir', target:'Hari ke-2 sampai ke-3', detail:'Sampel darah tumit diperiksa di laboratorium (17-OHP). Waktu pengambilan ulang atau tindak lanjut harus mengikuti arahan tenaga kesehatan.', source:'KMK 33/2025 · Ayo Sehat Kemenkes' },
+            { key:'pjbk', type:'screening', name:'Skrining Penyakit Jantung Bawaan Kritis (PJB)', window:'Usia >24–48 jam', target:'Setelah 24 jam hingga 48 jam', detail:'Menggunakan pulse oximetry pada tangan kanan dan salah satu kaki oleh tenaga kesehatan terlatih. Jika bayi dipulangkan sebelum 24 jam, tanyakan petugas tentang pemeriksaan sebelum pulang.', source:'KMK 33/2025 · Ayo Sehat Kemenkes' }
+        ];
+        const BABY_NEWBORN_VISIT_GUIDES = [
+            { key:'visit_0_6h', name:'Pemeriksaan 0–6 jam setelah lahir', window:'0–6 jam setelah lahir', detail:'Periksa dan catat pelayanan awal bayi baru lahir sesuai Buku KIA.' },
+            { key:'visit_6_48h', name:'Pemeriksaan 6–48 jam', window:'6–48 jam setelah lahir', detail:'Catat pemeriksaan dan pelayanan kesehatan pada periode ini.' },
+            { key:'visit_day_3_7', name:'Pemeriksaan hari ke-3 sampai ke-7', window:'Hari ke-3–7', detail:'Catat kunjungan neonatal lanjutan dan arahan petugas.' },
+            { key:'visit_day_8_28', name:'Pemeriksaan hari ke-8 sampai ke-28', window:'Hari ke-8–28', detail:'Catat kunjungan neonatal lanjutan dan rencana pemantauan berikutnya.' }
+        ];
+
+        function ensureBabyScreeningStorage() {
+            if (!Array.isArray(appState.babyScreeningRecords)) appState.babyScreeningRecords = [];
+        }
+        function babyScreeningStatusLabel(status) {
+            return ({ planned:'Direncanakan', waiting:'Menunggu hasil', done:'Selesai / sudah diperiksa', followup:'Perlu tindak lanjut' })[status] || 'Belum dicatat';
+        }
+        function babyScreeningStatusClass(status) {
+            return ({ planned:'planned', waiting:'waiting', done:'done', followup:'followup' })[status] || 'empty';
+        }
+        function babyScreeningSort(rows) {
+            return [...rows].sort((a,b) => String(b.date || b.updatedAt || b.createdAt || '').localeCompare(String(a.date || a.updatedAt || a.createdAt || '')));
+        }
+        function babyScreeningDateAfterBirth(days) {
+            const dob = getBabyBirthDateKey();
+            if (!dob) return '';
+            const d = parseLocalDateValue(dob);
+            if (Number.isNaN(d.getTime())) return '';
+            d.setDate(d.getDate() + Number(days || 0));
+            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        }
+        function babyScreeningRecordMarkup(row, typeLabel) {
+            const id = babyImmEscape(row.id);
+            const status = babyScreeningStatusClass(row.status);
+            const date = row.date ? babyImmEscape(babyImmFormatDate(row.date)) : 'Tanggal belum dicatat';
+            const details = [row.facility, row.provider].filter(Boolean).map(babyImmEscape).join(' · ');
+            return `<div class="baby-screening-record mt-2 rounded-xl p-3">
+                <div class="flex items-start justify-between gap-2"><div class="min-w-0"><span class="baby-screening-status ${status}">${babyScreeningStatusLabel(row.status)}</span><div class="baby-screening-record-date mt-1 text-[11px]">${date}${details ? ` · ${details}` : ''}</div></div><span class="baby-screening-muted text-[10px] whitespace-nowrap">${typeLabel}</span></div>
+                ${row.result ? `<p class="baby-screening-record-text text-xs mt-2 whitespace-pre-wrap"><b>Hasil:</b> ${babyImmEscape(row.result)}</p>` : ''}
+                ${row.nextAction ? `<p class="baby-screening-record-text text-xs mt-1"><b>Tindak lanjut:</b> ${babyImmEscape(row.nextAction)}</p>` : ''}
+                ${row.notes ? `<p class="baby-screening-muted text-xs mt-1 whitespace-pre-wrap">${babyImmEscape(row.notes)}</p>` : ''}
+                <div class="flex flex-wrap gap-2 mt-2"><button type="button" onclick="editBabyScreeningRecord('${id}')" class="baby-screening-action edit"><i class="fa-solid fa-pen mr-1"></i>Edit</button><button type="button" onclick="deleteBabyScreeningRecord('${id}')" class="baby-screening-action delete"><i class="fa-solid fa-trash mr-1"></i>Hapus</button></div>
+            </div>`;
+        }
+        function babyScreeningCardMarkup(guide, rows) {
+            const latest = rows[0] || null;
+            const suggested = guide.targetDays !== undefined ? babyScreeningDateAfterBirth(guide.targetDays) : '';
+            const dueText = suggested ? `Perkiraan tanggal target: ${babyImmEscape(babyImmFormatDate(suggested))}` : '';
+            return `<article class="baby-screening-card rounded-2xl p-3 sm:p-4">
+                <div class="flex items-start justify-between gap-2"><div class="min-w-0"><div class="baby-screening-eyebrow">${babyImmEscape(guide.source || 'Pemeriksaan neonatal')}</div><h4 class="font-extrabold text-sm mt-1">${babyImmEscape(guide.name)}</h4></div><span class="baby-screening-status ${latest ? babyScreeningStatusClass(latest.status) : 'empty'}">${latest ? babyScreeningStatusLabel(latest.status) : 'Belum dicatat'}</span></div>
+                <div class="baby-screening-window mt-2"><i class="fa-regular fa-clock mr-1"></i>${babyImmEscape(guide.window)}</div>
+                ${dueText ? `<div class="baby-screening-muted text-[10px] mt-1">${dueText}</div>` : ''}
+                <p class="baby-screening-muted text-xs leading-relaxed mt-2">${babyImmEscape(guide.detail)}</p>
+                ${latest ? babyScreeningRecordMarkup(latest, 'Catatan terbaru') : ''}
+                ${rows.length > 1 ? `<details class="mt-2"><summary class="baby-screening-link text-xs cursor-pointer">Lihat ${rows.length-1} catatan sebelumnya</summary>${rows.slice(1).map(row => babyScreeningRecordMarkup(row, 'Riwayat')).join('')}</details>` : ''}
+                <button type="button" onclick="openBabyScreeningModal('${babyImmEscape(guide.key)}')" class="baby-screening-secondary min-h-[42px] px-3 py-2 rounded-xl text-xs font-bold mt-3"><i class="fa-solid fa-plus mr-1"></i>${latest ? 'Tambah catatan' : 'Catat pemeriksaan'}</button>
+            </article>`;
+        }
+        function renderBabyScreening() {
+            const list = document.getElementById('baby-screening-list');
+            const visits = document.getElementById('baby-newborn-visits-list');
+            if (!list || !visits) return;
+            ensureBabyScreeningStorage();
+            const records = babyScreeningSort(appState.babyScreeningRecords);
+            const coreGuides = BABY_SCREENING_GUIDES.map(guide => ({...guide, targetDays:2}));
+            const allCoreRows = coreGuides.flatMap(guide => records.filter(row => row.key === guide.key));
+            const done = new Set(allCoreRows.filter(row => row.status === 'done').map(row => row.key)).size;
+            const screeningRows = records.filter(row => row.type !== 'visit');
+            const waiting = screeningRows.filter(row => row.status === 'waiting').length;
+            const followup = screeningRows.filter(row => row.status === 'followup').length;
+            const stats = document.getElementById('baby-screening-stats');
+            if (stats) stats.innerHTML = `
+                <div class="baby-screening-stat"><span>CATATAN 4 SKRINING UTAMA</span><b>${allCoreRows.length}</b><small>${allCoreRows.length} catatan tersimpan</small></div>
+                <div class="baby-screening-stat"><span>MENUNGGU HASIL</span><b>${waiting}</b><small>Catatan yang menunggu hasil</small></div>
+                <div class="baby-screening-stat"><span>PERLU TINDAK LANJUT</span><b>${followup}</b><small>Sesuai catatan tenaga kesehatan</small></div>`;
+            list.innerHTML = coreGuides.map(guide => babyScreeningCardMarkup(guide, records.filter(row => row.key === guide.key))).join('');
+            visits.innerHTML = BABY_NEWBORN_VISIT_GUIDES.map(guide => {
+                const rows = records.filter(row => row.key === guide.key);
+                const latest = rows[0] || null;
+                return `<article class="baby-screening-visit rounded-2xl p-3">
+                    <div class="flex items-start justify-between gap-2"><div class="min-w-0"><h4 class="font-extrabold text-xs">${babyImmEscape(guide.name)}</h4><div class="baby-screening-window mt-1">${babyImmEscape(guide.window)}</div></div><span class="baby-screening-status ${latest ? babyScreeningStatusClass(latest.status) : 'empty'}">${latest ? babyScreeningStatusLabel(latest.status) : 'Belum dicatat'}</span></div>
+                    ${latest ? babyScreeningRecordMarkup(latest, 'Kunjungan terbaru') : `<p class="baby-screening-muted text-[11px] mt-2">${babyImmEscape(guide.detail)}</p>`}
+                    <button type="button" onclick="openBabyScreeningModal('${babyImmEscape(guide.key)}')" class="baby-screening-secondary min-h-[40px] px-3 py-2 rounded-xl text-xs font-bold mt-2"><i class="fa-solid fa-plus mr-1"></i>Catat kunjungan</button>
+                </article>`;
+            }).join('');
+            const hearing = document.getElementById('baby-hearing-screening-records');
+            const hearingRows = records.filter(row => row.key === 'hearing');
+            if (hearing) hearing.innerHTML = hearingRows.length ? babyScreeningRecordMarkup(hearingRows[0], 'Catatan terbaru') + (hearingRows.length > 1 ? `<details class="mt-2"><summary class="baby-screening-link text-xs cursor-pointer">Lihat ${hearingRows.length-1} catatan sebelumnya</summary>${hearingRows.slice(1).map(row=>babyScreeningRecordMarkup(row,'Riwayat')).join('')}</details>` : '') : '<p class="baby-screening-muted text-xs">Belum ada catatan skrining pendengaran.</p>';
+            const stool = document.getElementById('baby-stool-monitoring-records');
+            const stoolRows = records.filter(row => row.key === 'stool');
+            if (stool) stool.innerHTML = stoolRows.length ? `<p class="baby-screening-muted text-xs">${stoolRows.length} catatan pemantauan tersimpan. Catatan terbaru:</p>${babyScreeningRecordMarkup(stoolRows[0], 'Pemantauan terbaru')}${stoolRows.length > 1 ? `<details class="mt-2"><summary class="baby-screening-link text-xs cursor-pointer">Lihat ${stoolRows.length-1} catatan sebelumnya</summary>${stoolRows.slice(1).map(row=>babyScreeningRecordMarkup(row,'Riwayat')).join('')}</details>` : ''}` : '<p class="baby-screening-muted text-xs">Belum ada catatan pemantauan warna tinja.</p>';
+            const custom = records.filter(row => row.key === 'custom');
+            let customWrap = document.getElementById('baby-screening-custom-list');
+            if (!customWrap && custom.length) {
+                const host = document.getElementById('tab-content-skrining');
+                customWrap = document.createElement('div'); customWrap.id = 'baby-screening-custom-list'; customWrap.className = 'baby-screening-panel p-4 sm:p-5 rounded-3xl shadow-sm';
+                host.insertBefore(customWrap, host.lastElementChild);
+            }
+            if (customWrap && custom.length) customWrap.innerHTML = `<h3 class="font-extrabold text-sm">Catatan Pemeriksaan Tambahan</h3>${custom.map(row => `<div class="baby-screening-card rounded-xl p-3 mt-2"><div class="font-bold text-sm">${babyImmEscape(row.name)}</div>${babyScreeningRecordMarkup(row,'Tambahan keluarga')}</div>`).join('')}`;
+            else if (customWrap && !custom.length) customWrap.remove();
+        }
+        function openBabyScreeningModal(key, id) {
+            ensureBabyScreeningStorage();
+            const modal = document.getElementById('modal-baby-screening');
+            if (!modal) return;
+            const existing = id ? appState.babyScreeningRecords.find(row => String(row.id) === String(id)) : null;
+            const guide = BABY_SCREENING_GUIDES.find(row => row.key === key);
+            const visit = BABY_NEWBORN_VISIT_GUIDES.find(row => row.key === key);
+            const type = existing ? (existing.type || 'screening') : (visit ? 'visit' : (key === 'stool' ? 'monitoring' : 'screening'));
+            const name = existing ? existing.name : (guide ? guide.name : (visit ? visit.name : (key === 'hearing' ? 'Skrining Pendengaran' : (key === 'stool' ? 'Pemantauan Warna Tinja' : ''))));
+            document.getElementById('baby-screening-modal-title').textContent = existing ? 'Edit Catatan Pemeriksaan' : (type === 'visit' ? 'Catat Kunjungan Neonatal' : (type === 'monitoring' ? 'Catat Pemantauan Warna Tinja' : 'Catat Skrining Bayi'));
+            document.getElementById('baby-screening-id').value = existing ? existing.id : '';
+            document.getElementById('baby-screening-key').value = existing ? existing.key : (key || 'custom');
+            document.getElementById('baby-screening-type').value = type;
+            document.getElementById('baby-screening-name').value = name;
+            document.getElementById('baby-screening-name').readOnly = !!(guide || visit || (key === 'hearing' || key === 'stool')) && !existing;
+            document.getElementById('baby-screening-name').classList.toggle('is-readonly', document.getElementById('baby-screening-name').readOnly);
+            const targetDays = key === 'pjbk' ? 1 : (['shk','g6pd','hak'].includes(key) ? 2 : (key === 'hearing' ? 30 : (visit && key === 'visit_0_6h' ? 0 : (visit && key === 'visit_6_48h' ? 1 : (visit && key === 'visit_day_3_7' ? 3 : (visit && key === 'visit_day_8_28' ? 8 : null))))));
+            const suggestedDate = targetDays === null ? getLocalDateKey() : babyScreeningDateAfterBirth(targetDays);
+            document.getElementById('baby-screening-date').value = existing ? existing.date || '' : suggestedDate;
+            document.getElementById('baby-screening-status').value = existing ? existing.status || 'planned' : 'planned';
+            document.getElementById('baby-screening-result').value = existing ? existing.result || '' : '';
+            document.getElementById('baby-screening-result').placeholder = key === 'stool' ? 'Catat pengamatan sesuai kartu warna tinja Buku KIA.' : (key === 'hearing' ? 'Contoh: ringkasan hasil OAE / AABR menurut petugas.' : 'Salin ringkasan dari Buku KIA atau hasil pemeriksaan.');
+            document.getElementById('baby-screening-facility').value = existing ? existing.facility || '' : '';
+            document.getElementById('baby-screening-provider').value = existing ? existing.provider || '' : '';
+            document.getElementById('baby-screening-next').value = existing ? existing.nextAction || '' : '';
+            document.getElementById('baby-screening-notes').value = existing ? existing.notes || '' : '';
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => document.getElementById('baby-screening-date')?.focus(), 50);
+        }
+        function closeBabyScreeningModal() {
+            const modal = document.getElementById('modal-baby-screening');
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+        }
+        function saveBabyScreeningRecord() {
+            ensureBabyScreeningStorage();
+            const id = String(document.getElementById('baby-screening-id').value || '').trim();
+            const name = String(document.getElementById('baby-screening-name').value || '').trim();
+            const date = String(document.getElementById('baby-screening-date').value || '').trim();
+            const status = String(document.getElementById('baby-screening-status').value || 'planned');
+            if (!name) return alert('Nama pemeriksaan wajib diisi.');
+            if (date && Number.isNaN(parseLocalDateValue(date).getTime())) return alert('Tanggal pemeriksaan tidak valid.');
+            if (status === 'done' && !date) return alert('Isi tanggal pemeriksaan untuk catatan yang sudah selesai.');
+            const existing = id ? appState.babyScreeningRecords.find(row => String(row.id) === id) : null;
+            const now = new Date().toISOString();
+            const key = String(document.getElementById('baby-screening-key').value || 'custom');
+            const record = {
+                ...(existing || {}),
+                id: existing ? existing.id : `screen-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,
+                key,
+                type: String(document.getElementById('baby-screening-type').value || 'screening'),
+                name,
+                date,
+                status,
+                result: String(document.getElementById('baby-screening-result').value || '').trim(),
+                facility: String(document.getElementById('baby-screening-facility').value || '').trim(),
+                provider: String(document.getElementById('baby-screening-provider').value || '').trim(),
+                nextAction: String(document.getElementById('baby-screening-next').value || '').trim(),
+                notes: String(document.getElementById('baby-screening-notes').value || '').trim(),
+                updatedAt: now,
+                createdAt: existing && existing.createdAt ? existing.createdAt : now
+            };
+            if (existing) {
+                const index = appState.babyScreeningRecords.findIndex(row => String(row.id) === id);
+                if (index >= 0) appState.babyScreeningRecords[index] = record;
+            } else appState.babyScreeningRecords.push(record);
+            saveToLocalStorage();
+            closeBabyScreeningModal();
+            renderBabyScreening();
+        }
+        function editBabyScreeningRecord(id) { openBabyScreeningModal('', id); }
+        function deleteBabyScreeningRecord(id) {
+            ensureBabyScreeningStorage();
+            const row = appState.babyScreeningRecords.find(item => String(item.id) === String(id));
+            if (!row) return;
+            if (!confirm(`Hapus catatan "${row.name || 'pemeriksaan'}" tanggal ${row.date || 'tanpa tanggal'}?`)) return;
+            appState.babyScreeningRecords = appState.babyScreeningRecords.filter(item => String(item.id) !== String(id));
+            saveToLocalStorage(); renderBabyScreening();
+        }
+
         // FUNGSI PENUKAR TAB MEDIS BAYI — Ringkasan, Pertumbuhan, Imunisasi, Riwayat Medis.
         function switchBabyMedicalTab(tabName) {
-            const allowed = ['ringkasan','kms','imunisasi','riwayat'];
+            const allowed = ['ringkasan','kms','imunisasi','skrining','riwayat'];
             if (!allowed.includes(tabName)) tabName = 'ringkasan';
             activeBabyMedicalTab = tabName;
             const tabs = {
                 ringkasan: ['tab-btn-ringkasan','tab-content-ringkasan'],
                 kms: ['tab-btn-kms','tab-content-kms'],
                 imunisasi: ['tab-btn-imunisasi','tab-content-imunisasi'],
+                skrining: ['tab-btn-skrining','tab-content-skrining'],
                 riwayat: ['tab-btn-riwayat','tab-content-riwayat']
             };
             Object.entries(tabs).forEach(([key, ids]) => {
@@ -11660,6 +12075,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
             if (tabName === 'ringkasan') renderBabyMedicalSummary();
             if (tabName === 'kms') { if (typeof renderKmsChart === 'function') renderKmsChart(); }
             if (tabName === 'imunisasi') { ensureBabyImmunizations(); renderBabyImmunizations(); }
+            if (tabName === 'skrining') { ensureBabyScreeningStorage(); renderBabyScreening(); }
             if (tabName === 'riwayat') { if (typeof renderBabyMedicalRecords === 'function') renderBabyMedicalRecords(); }
         }
 
@@ -13077,7 +13493,7 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.4. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.5. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
