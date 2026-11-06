@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.9: shopping alternatives, budget progress and safer category removal -->
+    <!-- Keluarga Pohon Teduh 6.13.7: one-page pregnancy medical layout and night-mode refinement -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.9">
+    <meta name="application-version" content="6.13.7">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1848,94 +1848,6 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
   body.dark-mode #sec-medis #medical-chart-empty { background-color:rgba(15,23,42,.92) !important; color:#cbd5e1 !important; }
   body.dark-mode #sec-medis .text-slate-400.italic { color:#94a3b8 !important; }
 </style>
-
-<style id="budget-shopping-6138">
-/* KPT 6.13.9 — compact budgeting, candidate comparison and touch-friendly editor */
-#budget-overview-card { min-width:0; }
-#budget-overview-card .tabular-nums { overflow-wrap:anywhere; }
-.budget-alt-details { min-width:0; }
-.budget-alt-details > summary { display:inline-flex; align-items:center; gap:5px; min-height:32px; padding:5px 9px; border:1px solid #bae6fd; border-radius:9px; background:#f0f9ff; color:#0369a1; font-size:.68rem; font-weight:750; cursor:pointer; list-style:none; }
-.budget-alt-details > summary::-webkit-details-marker { display:none; }
-.budget-alt-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:7px; margin-top:7px; min-width:0; }
-.budget-alt-card { min-width:0; padding:9px; border:1px solid #e2e8f0; border-radius:12px; background:#fff; }
-.budget-alt-card.is-preferred { border-color:#38bdf8; background:#f0f9ff; box-shadow:inset 0 0 0 1px rgba(56,189,248,.12); }
-.budget-alt-preferred { display:inline-flex; align-items:center; padding:3px 6px; border-radius:99px; background:#dbeafe; color:#1d4ed8; font-size:.58rem; font-weight:800; white-space:nowrap; }
-.budget-alt-select { min-height:30px; padding:5px 8px; border:1px solid #cbd5e1; border-radius:8px; color:#475569; background:#fff; font-size:.6rem; font-weight:750; }
-.budget-alt-select:hover { background:#f1f5f9; }
-.budget-alt-editor-card { min-width:0; padding:11px; border:1px solid #dbeafe; border-radius:13px; background:#fff; }
-.budget-alt-editor-card input, .budget-alt-editor-card textarea { width:100%; min-width:0; color:#1e293b; background:#fff; }
-.budget-alt-editor-card input:focus, .budget-alt-editor-card textarea:focus { outline:2px solid rgba(14,165,233,.22); border-color:#38bdf8; }
-@media (max-width:767px) {
-  #budget-overview-card { padding:11px 12px !important; border-radius:15px !important; }
-  #budget-overview-card .grid-cols-3 { gap:6px !important; }
-  #budget-overview-card .text-sm { font-size:.72rem !important; line-height:1.25 !important; }
-  #budget-overview-card .text-base { font-size:.78rem !important; line-height:1.25 !important; }
-  .budget-alt-list { grid-template-columns:minmax(0,1fr); }
-  .budget-alt-card { padding:10px; }
-  .budget-alt-editor-card { padding:10px; }
-  #shopping-alternatives-editor input, #shopping-alternatives-editor textarea { min-height:43px; font-size:16px; }
-  #modal-shopping-item .max-w-lg { max-height:92dvh; padding:16px !important; }
-  #modal-shopping-item button, #modal-shopping-item select { min-height:40px; }
-}
-@media (max-width:390px) {
-  #budget-overview-card .text-2xs { font-size:.56rem !important; }
-  #budget-overview-card .text-sm { font-size:.67rem !important; }
-}
-body.dark-mode #budget-overview-card { background:#172b45 !important; border-color:#24547a !important; }
-body.dark-mode #budget-overview-card .text-slate-500 { color:#9fb3ca !important; }
-body.dark-mode #budget-overview-card .text-slate-800 { color:#f1f5f9 !important; }
-body.dark-mode #budget-overview-card .text-emerald-700 { color:#6ee7b7 !important; }
-body.dark-mode #budget-overview-progress { background:#38bdf8 !important; }
-body.dark-mode .budget-alt-details > summary { background:#082f49; border-color:#075985; color:#bae6fd; }
-body.dark-mode .budget-alt-card { background:#172337; border-color:#334155; }
-body.dark-mode .budget-alt-card.is-preferred { background:#102d43; border-color:#0ea5e9; }
-body.dark-mode .budget-alt-card .text-slate-800 { color:#f1f5f9 !important; }
-body.dark-mode .budget-alt-card .text-slate-500 { color:#a9bacd !important; }
-body.dark-mode .budget-alt-preferred { background:#164e63; color:#bae6fd; }
-body.dark-mode .budget-alt-select { background:#26364b; border-color:#475569; color:#e2e8f0; }
-body.dark-mode .budget-alt-editor-card { background:#172337; border-color:#334155; }
-body.dark-mode .budget-alt-editor-card input, body.dark-mode .budget-alt-editor-card textarea { background:#0f1b2c !important; border-color:#475569 !important; color:#f1f5f9 !important; }
-body.dark-mode #shopping-item-form label { color:#e2e8f0 !important; }
-</style>
-
-
-<style id="budget-shopping-6139">
-/* 6.13.9 — clearer candidate comparison and mobile touch targets */
-.budget-alt-details > summary { min-height:38px; padding:7px 11px; }
-.budget-alt-card { overflow-wrap:anywhere; }
-.budget-alt-card a { min-height:32px; }
-.budget-alt-editor-card { overflow:hidden; }
-.budget-alt-editor-card label { display:block; line-height:1.35; }
-.budget-alt-editor-card input[type="radio"] { width:17px; height:17px; }
-#budget-overview-card { scroll-margin-top:90px; }
-@media (max-width:767px) {
-  #budget-overview-card { padding:10px 11px !important; }
-  #budget-overview-card .grid-cols-3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
-  #budget-overview-card .text-2xs { line-height:1.25; }
-  .budget-alt-details { display:block; }
-  .budget-alt-details > summary { display:flex; width:100%; justify-content:center; min-height:40px; }
-  .budget-alt-list { gap:8px; }
-  .budget-alt-card { padding:12px; border-radius:13px; }
-  .budget-alt-card .budget-alt-select { min-height:38px; padding:7px 10px; font-size:.68rem; }
-  .budget-alt-editor-card { padding:12px; }
-  .budget-alt-editor-card input:not([type="radio"]), .budget-alt-editor-card textarea { min-height:46px; font-size:16px; }
-  #shopping-alternatives-editor { gap:10px; }
-  #modal-shopping-item { align-items:flex-end !important; padding:8px !important; }
-  #modal-shopping-item > div { width:100%; max-height:94dvh; border-radius:22px 22px 14px 14px; padding:16px !important; }
-  #modal-shopping-item .grid-cols-2 { grid-template-columns:minmax(0,1fr); }
-  #modal-shopping-item button[type="submit"], #modal-shopping-item button[type="button"] { min-height:44px; }
-}
-@media (max-width:390px) {
-  #budget-overview-card .grid-cols-3 { gap:5px !important; }
-  #budget-overview-card .text-2xs { font-size:.58rem !important; }
-  #budget-overview-card .text-sm { font-size:.68rem !important; }
-}
-body.dark-mode .budget-alt-editor-card { background:#172337; border-color:#334155; }
-body.dark-mode .budget-alt-editor-card input,
-body.dark-mode .budget-alt-editor-card textarea { background:#0f172a !important; color:#f1f5f9 !important; border-color:#475569 !important; }
-body.dark-mode .budget-alt-editor-card label { color:#cbd5e1 !important; }
-body.dark-mode #modal-shopping-item { color:#e2e8f0; }
-</style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -2290,22 +2202,6 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
             <!-- TAB 2: BUDGET & BELANJA -->
             <section id="sec-budget" class="hidden space-y-6">
-                <!-- 6.13.9: Compact budget + purchase progress overview -->
-                <div id="budget-overview-card" class="rounded-2xl border border-sky-100 bg-sky-50/70 px-4 py-3 shadow-sm space-y-2.5">
-                    <div class="flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 min-w-0"><i class="fa-solid fa-wallet text-sky-600"></i><h3 class="font-bold text-sm text-slate-800">Ringkasan Anggaran</h3></div>
-                        <span id="budget-overview-count" class="text-2xs font-semibold text-sky-700 whitespace-nowrap">0/0 item selesai</span>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="min-w-0"><div class="text-2xs text-slate-500">Total estimasi</div><div id="budget-overview-estimate" class="text-sm sm:text-base font-extrabold text-slate-800 tabular-nums break-words">Rp 0</div></div>
-                        <div class="min-w-0"><div class="text-2xs text-slate-500">Realisasi</div><div id="budget-overview-actual" class="text-sm sm:text-base font-extrabold text-emerald-700 tabular-nums break-words">Rp 0</div></div>
-                        <div class="min-w-0"><div class="text-2xs text-slate-500">Estimasi belum dibeli</div><div id="budget-overview-remaining" class="text-sm sm:text-base font-extrabold text-slate-800 tabular-nums break-words">Rp 0</div></div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="flex-1 h-2 rounded-full bg-sky-100 overflow-hidden"><div id="budget-overview-progress" class="h-full rounded-full bg-sky-600 transition-all" style="width:0%"></div></div>
-                        <span id="budget-overview-percent" class="text-2xs font-bold text-sky-700 tabular-nums">0%</span>
-                    </div>
-                </div>
                 <!-- VISUALISASI BUDGETING PIE CHART CARD -->
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
                     <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 border-b border-slate-100 pb-3">
@@ -4030,39 +3926,37 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                     <input type="text" id="form-item-name" required placeholder="misal: Baju Kurung Newborn" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
                 </div>
 
-                <div>
-                    <label class="font-semibold text-slate-700">Jumlah (Qty)</label>
-                    <input type="text" id="form-item-qty" placeholder="misal: 3 set / 1 pcs" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="font-semibold text-slate-700">Jumlah (Qty)</label>
+                        <input type="text" id="form-item-qty" placeholder="misal: 3 set / 1 pcs" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-700">Brand / Merek</label>
+                        <input type="text" id="form-item-brand" placeholder="misal: Velvet Junior" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                    </div>
                 </div>
 
-                <div class="rounded-2xl border border-sky-100 bg-sky-50/50 p-3 space-y-3">
-                    <div class="flex items-start justify-between gap-2">
-                        <div class="min-w-0"><h3 class="font-bold text-slate-800 text-sm">Pilihan Merek / Produk</h3><p class="text-2xs text-slate-500 mt-0.5">Tambahkan beberapa merek. Setiap pilihan memiliki harga estimasi dan tautan toko sendiri.</p></div>
-                        <span class="text-sky-600 text-lg"><i class="fa-solid fa-scale-balanced"></i></span>
-                    </div>
-                    <div id="shopping-alternatives-editor" class="space-y-3"></div>
-                    <button type="button" onclick="addShoppingAlternativeRow()" class="w-full min-h-[42px] rounded-xl border border-dashed border-sky-300 bg-white px-3 py-2 text-xs font-bold text-sky-700 hover:bg-sky-50 transition"><i class="fa-solid fa-plus mr-1"></i> Tambah Merek / Alternatif</button>
-                    <p class="text-2xs text-slate-500">Setiap merek punya harga dan tautan sendiri. Pilih satu sebagai pilihan utama agar hanya satu estimasi yang dihitung dalam Ringkasan Anggaran. Alternatif lain hanya untuk perbandingan.</p>
+                <div>
+                    <label class="font-semibold text-slate-700">Link Online Shop & Alamat Toko (Bisa Lebih Dari Satu)</label>
+                    <textarea id="form-item-link" rows="3" placeholder="Gunakan Enter atau koma untuk beberapa item:&#10;https://shopee.co.id/...&#10;https://tokopedia.com/...&#10;Toko Ibu & Anak (Jl. Pahlawan Madiun)" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-mono text-2xs"></textarea>
+                    <p class="text-2xs text-slate-400 mt-0.5">Sistem otomatis mendeteksi link online (Shopee/Tokopedia/dll) dan alamat toko fisik.</p>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="font-semibold text-slate-700">Pengeluaran Aktual (Rp)</label>
-                        <input type="number" id="form-item-actual" min="0" step="1" placeholder="0" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                        <label class="font-semibold text-slate-700">Estimasi Budget (Rp)</label>
+                        <input type="number" id="form-item-budget" placeholder="0" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
                     </div>
                     <div>
-                        <label class="font-semibold text-slate-700">Tanggal Pembelian <span class="text-slate-400 font-normal">(opsional)</span></label>
-                        <input type="date" id="form-item-purchase-date" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                        <label class="font-semibold text-slate-700">Pengeluaran Real / Aktual (Rp)</label>
+                        <input type="number" id="form-item-actual" placeholder="0" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
                     </div>
                 </div>
 
-                <div>
-                    <label class="font-semibold text-slate-700">Status Item</label>
-                    <select id="form-item-status" class="w-full mt-1 p-2.5 min-h-[44px] border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none bg-white font-semibold">
-                        <option value="Prioritas">🚨 Prioritas</option>
-                        <option value="Opsional">⏳ Opsional</option>
-                        <option value="Selesai">✅ Selesai dibeli</option>
-                    </select>
+                <div class="pt-1 flex items-center gap-2">
+                    <input type="checkbox" id="form-item-done" class="w-4 h-4 text-sky-600 rounded">
+                    <label for="form-item-done" class="font-semibold text-slate-700">Sudah Selesai Dibeli (Ceklis Status)</label>
                 </div>
 
                 <div class="pt-3 flex justify-end gap-2">
@@ -5170,7 +5064,6 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             renderGallery();
             startGalleryAutoSlide();
             renderDashboardWidgets();
-            renderBudgetOverview();
             renderBudgetPieChart(appState.activePieSubMenu || 'ALL');
             renderBudgetSubTabs();
             renderShoppingItems();
@@ -6811,30 +6704,37 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
         // BUDGET SUB-MENU LOGIC
         function renderBudgetSubTabs() {
-            if (!appState.budgetCategories) appState.budgetCategories = ['Keperluan Baby', 'Keperluan Ibu'];
-            const hasUnassigned = (appState.shoppingItems || []).some(i => i.mainCategory === 'Tanpa Submenu');
-            if (hasUnassigned && !appState.budgetCategories.includes('Tanpa Submenu')) appState.budgetCategories.push('Tanpa Submenu');
-            if (!appState.activeBudgetSubCategory || (!appState.budgetCategories.includes(appState.activeBudgetSubCategory) && appState.activeBudgetSubCategory !== 'Tanpa Submenu')) {
-                appState.activeBudgetSubCategory = appState.budgetCategories[0] || 'Keperluan Baby';
+            if (!appState.budgetCategories) {
+                appState.budgetCategories = ['Keperluan Baby', 'Keperluan Ibu'];
+            }
+            if (!appState.activeBudgetSubCategory) {
+                appState.activeBudgetSubCategory = appState.budgetCategories[0];
             }
 
             const container = document.getElementById('budget-subtabs-container');
             if (!container) return;
+
             let html = appState.budgetCategories.map(cat => `
-                <button onclick="switchBudgetSubCategory(${kptEscapeHtml(JSON.stringify(cat))})" class="budget-subtab ${cat === appState.activeBudgetSubCategory ? 'active' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'} px-4 py-2 rounded-xl text-xs font-semibold transition">
-                    ${cat === 'Keperluan Baby' ? '👶 ' : cat === 'Keperluan Ibu' ? '🤰 ' : cat === 'Tanpa Submenu' ? '📦 ' : '📁 '}${kptEscapeHtml(cat)}
+                <button onclick="switchBudgetSubCategory('${cat}')" class="budget-subtab ${cat === appState.activeBudgetSubCategory ? 'active' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'} px-4 py-2 rounded-xl text-xs font-semibold transition">
+                    ${cat === 'Keperluan Baby' ? '👶 ' : cat === 'Keperluan Ibu' ? '🤰 ' : '📁 '}${cat}
                 </button>
             `).join('');
+
             html += `
-                <button onclick="addBudgetSubCategory()" class="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl text-xs font-semibold transition border border-dashed border-sky-300 min-h-[40px]">
+                <button onclick="addBudgetSubCategory()" class="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl text-xs font-semibold transition border border-dashed border-sky-300">
                     <i class="fa-solid fa-plus mr-1"></i> Sub-Menu Baru
                 </button>
             `;
+
             container.innerHTML = html;
+
             const btnDelete = document.getElementById('btn-delete-subcategory');
             if (btnDelete) {
-                const locked = ['Keperluan Baby', 'Keperluan Ibu', 'Tanpa Submenu'].includes(appState.activeBudgetSubCategory);
-                btnDelete.classList.toggle('hidden', locked);
+                if (['Keperluan Baby', 'Keperluan Ibu'].includes(appState.activeBudgetSubCategory)) {
+                    btnDelete.classList.add('hidden');
+                } else {
+                    btnDelete.classList.remove('hidden');
+                }
             }
         }
 
@@ -6863,197 +6763,24 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
         function removeCurrentBudgetSubCategory() {
             const current = appState.activeBudgetSubCategory;
-            if (['Keperluan Baby', 'Keperluan Ibu', 'Tanpa Submenu'].includes(current)) {
-                alert('Sub-menu bawaan tidak bisa dihapus.');
+            if (['Keperluan Baby', 'Keperluan Ibu'].includes(current)) {
+                alert("Sub-menu bawaan tidak bisa dihapus.");
                 return;
             }
-            const affected = (appState.shoppingItems || []).filter(i => (i.mainCategory || 'Keperluan Baby') === current);
-            const message = affected.length
-                ? `Sub-menu "${current}" berisi ${affected.length} item. Semua item akan dipindahkan ke "Tanpa Submenu" dan tetap bisa diedit. Lanjutkan?`
-                : `Hapus sub-menu kosong "${current}"?`;
-            if (!confirm(message)) return;
 
-            if (affected.length) {
-                appState.shoppingItems.forEach(item => {
-                    if ((item.mainCategory || 'Keperluan Baby') === current) item.mainCategory = 'Tanpa Submenu';
-                });
-                if (!appState.budgetCategories.includes('Tanpa Submenu')) appState.budgetCategories.push('Tanpa Submenu');
-                appState.activeBudgetSubCategory = 'Tanpa Submenu';
-            } else {
-                appState.activeBudgetSubCategory = appState.budgetCategories.find(c => c !== current && c !== 'Tanpa Submenu') || 'Keperluan Baby';
+            if (confirm(`Apakah kamu yakin ingin menghapus sub-menu "${current}" beserta semua item belanjanya?`)) {
+                appState.budgetCategories = appState.budgetCategories.filter(c => c !== current);
+                appState.shoppingItems = appState.shoppingItems.filter(i => (i.mainCategory || 'Keperluan Baby') !== current);
+                appState.activeBudgetSubCategory = appState.budgetCategories[0];
+
+                renderBudgetSubTabs();
+                renderShoppingItems();
+                renderBudgetPieChart('ALL');
+                saveToLocalStorage();
             }
-            appState.budgetCategories = appState.budgetCategories.filter(c => c !== current);
-            renderBudgetSubTabs();
-            renderShoppingItems();
-            renderBudgetPieChart('ALL');
-            saveToLocalStorage();
         }
 
-        // 6.13.9 — Shopping alternatives, preferred option and compact overview.
-        function splitLegacyShoppingValues(raw) {
-            return String(raw || '').split(/\\s*\\n+\\s*|\\s*,\\s*/).map(v => v.trim()).filter(Boolean);
-        }
-
-        function getShoppingAlternatives(item) {
-            if (Array.isArray(item?.alternatives) && item.alternatives.length) return item.alternatives;
-            if (item && (item.brand || item.link || Number(item.budget || 0) > 0)) {
-                // Migrate the old "Brand A // Brand B" workaround into separate candidates.
-                // The single legacy estimate is retained only on the first candidate; other
-                // candidates remain blank so we never invent or duplicate a price.
-                const brands = String(item.brand || '').split(/\\s+\\/\\/\\s+/).map(v => v.trim()).filter(Boolean);
-                const links = splitLegacyShoppingValues(item.link || '');
-                const count = Math.max(brands.length, links.length, 1);
-                return Array.from({ length: count }, (_, idx) => ({
-                    id: `legacy-${item.id}-${idx + 1}`,
-                    brand: brands[idx] || (count === 1 ? item.brand || '' : ''),
-                    model: '',
-                    budget: idx === 0 ? Number(item.budget || 0) : 0,
-                    link: links[idx] || (count === 1 ? item.link || '' : ''),
-                    note: '',
-                    legacy: true,
-                    isPreferred: idx === 0
-                }));
-            }
-            return [];
-        }
-
-        function getPreferredShoppingAlternative(item) {
-            const alternatives = getShoppingAlternatives(item);
-            return alternatives.find(a => String(a.id) === String(item.selectedAlternativeId)) || alternatives.find(a => a.isPreferred) || alternatives[0] || null;
-        }
-
-        function getShoppingItemEstimate(item) {
-            const preferred = getPreferredShoppingAlternative(item);
-            return Number(preferred ? preferred.budget : item.budget || 0) || 0;
-        }
-
-        function renderBudgetOverview() {
-            const items = appState.shoppingItems || [];
-            let planned = 0, actual = 0, pending = 0, doneCount = 0;
-            items.forEach(item => {
-                const estimate = getShoppingItemEstimate(item);
-                planned += estimate;
-                if (item.done || item.status === 'Selesai') { actual += Number(item.actual || 0); doneCount++; }
-                else pending += estimate;
-            });
-            const pct = items.length ? Math.round(doneCount / items.length * 100) : 0;
-            const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
-            set('budget-overview-estimate', `Rp ${planned.toLocaleString('id-ID')}`);
-            set('budget-overview-actual', `Rp ${actual.toLocaleString('id-ID')}`);
-            set('budget-overview-remaining', `Rp ${pending.toLocaleString('id-ID')}`);
-            set('budget-overview-count', `${doneCount}/${items.length} item selesai`);
-            set('budget-overview-percent', `${pct}%`);
-            const bar = document.getElementById('budget-overview-progress');
-            if (bar) bar.style.width = `${pct}%`;
-        }
-
-        function renderShoppingLinks(rawLinks) {
-            const entries = String(rawLinks || '').split(/[\n,]+/).map(v => v.trim()).filter(Boolean);
-            if (!entries.length) return '<span class="text-slate-400 italic text-2xs">Tautan/toko belum diisi</span>';
-            return `<div class="flex flex-wrap gap-1.5">${entries.map((entry, idx) => {
-                const escaped = kptEscapeHtml(entry);
-                if (/^https?:\/\//i.test(entry)) {
-                    let valid = false; try { const u = new URL(entry); valid = ['http:', 'https:'].includes(u.protocol); } catch (_) {}
-                    if (!valid) return `<span class="text-2xs text-slate-500">${escaped}</span>`;
-                    const lower = entry.toLowerCase();
-                    const label = lower.includes('shopee') ? 'Shopee' : lower.includes('tokopedia') ? 'Tokopedia' : lower.includes('tiktok') ? 'TikTok Shop' : lower.includes('lazada') ? 'Lazada' : `Link ${idx + 1}`;
-                    return `<a href="${escaped}" target="_blank" rel="noopener noreferrer" class="inline-flex min-h-[30px] items-center gap-1 text-sky-700 hover:text-sky-900 font-semibold underline text-2xs bg-sky-50 px-2 py-1 rounded-lg border border-sky-100"><i class="fa-solid fa-arrow-up-right-from-square"></i>${label}</a>`;
-                }
-                return `<span class="inline-flex items-center gap-1 text-slate-600 font-medium text-2xs bg-slate-100 px-2 py-1 rounded-lg border border-slate-200"><i class="fa-solid fa-store text-slate-400"></i>${escaped}</span>`;
-            }).join('')}</div>`;
-        }
-
-        function renderShoppingAlternatives(item) {
-            const alternatives = getShoppingAlternatives(item);
-            if (!alternatives.length) return '<span class="text-slate-400 italic">-</span>';
-            const preferred = getPreferredShoppingAlternative(item);
-            const cards = alternatives.map((alt, idx) => {
-                const selected = preferred && String(preferred.id) === String(alt.id);
-                return `<div class="budget-alt-card ${selected ? 'is-preferred' : ''}">
-                    <div class="flex items-start justify-between gap-2">
-                        <div class="min-w-0"><div class="font-bold text-slate-800 text-xs">${kptEscapeHtml(alt.brand || `Alternatif ${idx + 1}`)}</div>${alt.model ? `<div class="text-2xs text-slate-500">${kptEscapeHtml(alt.model)}</div>` : ''}</div>
-                        ${selected ? '<span class="budget-alt-preferred">Pilihan utama</span>' : `<button type="button" onclick="setShoppingPreferredAlternative(${Number(item.id)}, ${kptEscapeHtml(JSON.stringify(String(alt.id)))})" class="budget-alt-select">Jadikan pilihan</button>`}
-                    </div>
-                    <div class="font-extrabold text-sky-700 text-sm mt-1">${Number(alt.budget || 0) ? `Rp ${Number(alt.budget).toLocaleString('id-ID')}` : 'Harga belum diisi'}</div>
-                    ${alt.note ? `<div class="text-2xs text-slate-500 mt-1">${kptEscapeHtml(alt.note)}</div>` : ''}
-                    <div class="mt-2">${renderShoppingLinks(alt.link)}</div>
-                </div>`;
-            }).join('');
-            return `<details class="budget-alt-details"><summary><i class="fa-solid fa-scale-balanced mr-1"></i> Bandingkan ${alternatives.length} pilihan <span class="text-2xs opacity-70">· buka detail</span></summary><div class="budget-alt-list">${cards}</div></details>`;
-        }
-
-        function setShoppingPreferredAlternative(itemId, alternativeId) {
-            const item = (appState.shoppingItems || []).find(i => String(i.id) === String(itemId));
-            if (!item) return;
-            const alternatives = getShoppingAlternatives(item).map(a => ({ ...a, id: String(a.id || `alt-${Date.now()}`) }));
-            const chosen = alternatives.find(a => String(a.id) === String(alternativeId));
-            if (!chosen) return;
-            alternatives.forEach(a => a.isPreferred = String(a.id) === String(chosen.id));
-            item.alternatives = alternatives;
-            item.selectedAlternativeId = String(chosen.id);
-            item.brand = chosen.brand || '';
-            item.link = chosen.link || '';
-            item.budget = Number(chosen.budget || 0);
-            renderShoppingItems();
-            saveToLocalStorage();
-        }
-
-        function renderShoppingAlternativeEditor(alternatives) {
-            const host = document.getElementById('shopping-alternatives-editor');
-            if (!host) return;
-            const list = Array.isArray(alternatives) && alternatives.length ? alternatives : [{ id: `alt-${Date.now()}-1`, brand: '', model: '', budget: 0, link: '', note: '', isPreferred: true }];
-            host.innerHTML = list.map((alt, idx) => `
-                <div class="budget-alt-editor-card" data-alt-card data-alt-id="${kptEscapeHtml(String(alt.id || `alt-${Date.now()}-${idx + 1}`))}">
-                    <div class="flex items-center justify-between gap-2 mb-2">
-                        <span class="budget-alt-editor-title font-bold text-slate-700 text-xs">Pilihan ${idx + 1}</span>
-                        <div class="flex items-center gap-2">
-                            <label class="inline-flex items-center gap-1 text-2xs font-semibold text-sky-700"><input type="radio" name="shopping-preferred-alt" data-alt-preferred ${alt.isPreferred || idx === 0 ? 'checked' : ''} class="accent-sky-600"> Utama</label>
-                            ${list.length > 1 ? '<button type="button" onclick="this.closest(&quot;[data-alt-card]&quot;).remove(); renumberShoppingAlternativeEditor()" class="min-h-[34px] min-w-[34px] rounded-lg bg-rose-50 text-rose-600" aria-label="Hapus pilihan"><i class="fa-solid fa-trash"></i></button>' : ''}
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <div><label class="text-2xs font-semibold text-slate-600">Merek / Brand</label><input data-alt-field="brand" value="${kptEscapeHtml(alt.brand || '')}" placeholder="misal: Joie" class="w-full mt-1 p-2.5 min-h-[42px] border border-slate-200 rounded-xl bg-white text-slate-800"></div>
-                        <div><label class="text-2xs font-semibold text-slate-600">Model / Tipe</label><input data-alt-field="model" value="${kptEscapeHtml(alt.model || '')}" placeholder="misal: Pact Pro" class="w-full mt-1 p-2.5 min-h-[42px] border border-slate-200 rounded-xl bg-white text-slate-800"></div>
-                    </div>
-                    <div class="mt-2"><label class="text-2xs font-semibold text-slate-600">Harga estimasi (Rp)</label><input data-alt-field="budget" type="number" min="0" step="1" value="${Number(alt.budget || 0) || ''}" placeholder="Masukkan harga" class="w-full mt-1 p-2.5 min-h-[42px] border border-slate-200 rounded-xl bg-white text-slate-800"></div>
-                    <div class="mt-2"><label class="text-2xs font-semibold text-slate-600">Link toko / alamat toko</label><textarea data-alt-field="link" rows="2" placeholder="Satu link atau alamat per baris" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl bg-white text-slate-800 font-mono text-2xs">${kptEscapeHtml(alt.link || '')}</textarea></div>
-                    <div class="mt-2"><label class="text-2xs font-semibold text-slate-600">Catatan singkat <span class="font-normal text-slate-400">(opsional)</span></label><input data-alt-field="note" value="${kptEscapeHtml(alt.note || '')}" placeholder="Misalnya: lebih ringan, garansi 2 tahun" class="w-full mt-1 p-2.5 min-h-[42px] border border-slate-200 rounded-xl bg-white text-slate-800"></div>
-                </div>
-            `).join('');
-            const first = host.querySelector('[data-alt-preferred]');
-            if (first && !host.querySelector('[data-alt-preferred]:checked')) first.checked = true;
-        }
-
-        function addShoppingAlternativeRow() {
-            const host = document.getElementById('shopping-alternatives-editor');
-            if (!host) return;
-            const alternatives = collectShoppingAlternativeEditor();
-            if (alternatives.length) alternatives.forEach(a => a.isPreferred = !!a.isPreferred);
-            alternatives.push({ id: `alt-${Date.now()}-${alternatives.length + 1}`, brand: '', model: '', budget: 0, link: '', note: '', isPreferred: alternatives.length === 0 });
-            renderShoppingAlternativeEditor(alternatives);
-        }
-
-        function collectShoppingAlternativeEditor() {
-            const host = document.getElementById('shopping-alternatives-editor');
-            if (!host) return [];
-            return Array.from(host.querySelectorAll('[data-alt-card]')).map((card, idx) => {
-                const get = key => card.querySelector(`[data-alt-field="${key}"]`)?.value?.trim() || '';
-                return { id: card.dataset.altId || `alt-${Date.now()}-${idx + 1}`, brand: get('brand'), model: get('model'), budget: Number(get('budget')) || 0, link: get('link'), note: get('note'), isPreferred: !!card.querySelector('[data-alt-preferred]')?.checked };
-            });
-        }
-
-        function renumberShoppingAlternativeEditor() {
-            const host = document.getElementById('shopping-alternatives-editor');
-            if (!host) return;
-            Array.from(host.querySelectorAll('[data-alt-card]')).forEach((card, idx) => {
-                const title = card.querySelector('.budget-alt-editor-title');
-                if (title) title.textContent = `Pilihan ${idx + 1}`;
-                const deleteBtn = card.querySelector('button[aria-label="Hapus pilihan"]');
-                if (deleteBtn && host.querySelectorAll('[data-alt-card]').length === 1) deleteBtn.remove();
-            });
-            if (!host.querySelector('[data-alt-preferred]:checked')) { const r = host.querySelector('[data-alt-preferred]'); if (r) r.checked = true; }
-        }
-
+        // RENDER SHOPPING ITEMS
         function renderShoppingItems() {
             const tbody = document.getElementById('baby-shopping-tbody');
             if (!tbody) return;
@@ -7076,7 +6803,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             const categories = [...new Set(itemsInSub.map(i => i.category || 'Umum'))];
             if (filterDropdown) {
                 filterDropdown.innerHTML = `<option value="ALL">Semua Kategori (${categories.length})</option>` +
-                    categories.map(c => `<option value="${kptEscapeHtml(c)}" ${c === selectedFilter ? 'selected' : ''}>${kptEscapeHtml(c)}</option>`).join('');
+                    categories.map(c => `<option value="${c}" ${c === selectedFilter ? 'selected' : ''}>${c}</option>`).join('');
             }
 
             const displayItems = selectedFilter === 'ALL' ? itemsInSub : itemsInSub.filter(i => (i.category || 'Umum') === selectedFilter);
@@ -7094,14 +6821,13 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             if (totSpendEl) totSpendEl.innerText = `Rp ${totalSpendOverall.toLocaleString('id-ID')}`;
 
             renderDashboardWidgets();
-            renderBudgetOverview();
             renderBudgetPieChart(appState.activePieSubMenu || 'ALL');
 
             if (displayItems.length === 0) {
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="7" class="p-8 text-center text-slate-400 italic">
-                            Belum ada item belanja di sub-menu "${kptEscapeHtml(activeSub)}".
+                            Belum ada item belanja di sub-menu "${activeSub}".
                         </td>
                     </tr>
                 `;
@@ -7121,7 +6847,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 let groupRealizedSpend = 0;
                 let groupBudget = 0;
                 groupItems.forEach(gi => {
-                    groupBudget += getShoppingItemEstimate(gi);
+                    groupBudget += Number(gi.budget || 0);
                     if (gi.done) {
                         groupRealizedSpend += Number(gi.actual || 0);
                     }
@@ -7130,7 +6856,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 html += `
                     <tr class="bg-slate-100/80 font-bold text-slate-700">
                         <td colspan="4" class="p-2.5 px-3 text-xs uppercase tracking-wider text-sky-800">
-                            <i class="fa-solid fa-layer-group mr-1.5 text-sky-600"></i> Kategori: ${kptEscapeHtml(catName)} (${groupItems.length} item)
+                            <i class="fa-solid fa-layer-group mr-1.5 text-sky-600"></i> Kategori: ${catName} (${groupItems.length} item)
                         </td>
                         <td class="p-2.5 text-xs text-slate-500">
                             Est: Rp ${groupBudget.toLocaleString('id-ID')}
@@ -7142,13 +6868,37 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 `;
 
                 groupItems.forEach(item => {
-                    const alternatives = getShoppingAlternatives(item);
-                    const preferred = getPreferredShoppingAlternative(item);
-                    const linksContainerHtml = alternatives.length
-                        ? renderShoppingAlternatives(item)
-                        : renderShoppingLinks(item.link || '');
-                    const shownBrand = preferred ? [preferred.brand, preferred.model].filter(Boolean).join(' · ') : (item.brand || '');
-                    const optionCountLabel = alternatives.length > 1 ? `${alternatives.length} alternatif` : (alternatives.length === 1 ? '1 pilihan produk' : '');
+                    let linksContainerHtml = '<span class="text-slate-400 italic">-</span>';
+                    
+                    if (item.link && item.link.trim() !== '') {
+                        const rawEntries = item.link.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+                        if (rawEntries.length > 0) {
+                            const badges = rawEntries.map((entry, idx) => {
+                                if (entry.startsWith('http://') || entry.startsWith('https://')) {
+                                    let label = 'Link Online';
+                                    const lower = entry.toLowerCase();
+                                    if (lower.includes('shopee')) label = 'Shopee';
+                                    else if (lower.includes('tokopedia')) label = 'Tokopedia';
+                                    else if (lower.includes('tiktok')) label = 'TikTok Shop';
+                                    else if (lower.includes('lazada')) label = 'Lazada';
+                                    else if (rawEntries.length > 1) label = `Link #${idx + 1}`;
+
+                                    return `
+                                        <a href="${entry}" target="_blank" class="inline-flex items-center gap-1 text-sky-600 hover:text-sky-800 font-semibold underline text-2xs bg-sky-50 hover:bg-sky-100 px-2 py-0.5 rounded-md border border-sky-100 transition">
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i> ${label}
+                                        </a>
+                                    `;
+                                } else {
+                                    return `
+                                        <span class="inline-flex items-center gap-1 text-slate-600 font-medium text-2xs bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200" title="${entry}">
+                                            <i class="fa-solid fa-store text-slate-400"></i> ${entry}
+                                        </span>
+                                    `;
+                                }
+                            });
+                            linksContainerHtml = `<div class="flex flex-wrap gap-1">${badges.join('')}</div>`;
+                        }
+                    }
 
                     html += `
                         <tr class="hover:bg-slate-50/80 transition">
@@ -7166,18 +6916,16 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                                         <button onclick="moveShoppingItem(${item.id}, 'down')" class="text-slate-400 hover:text-sky-600 transition px-1" title="Geser ke Bawah"><i class="fa-solid fa-chevron-down text-3xs"></i></button>
                                     </div>
                                     <div>
-                                        <div class="font-semibold ${item.done ? 'line-through text-slate-400' : 'text-slate-800'}">${kptEscapeHtml(item.name)}</div>
-                                        ${shownBrand ? `<div class="text-2xs text-slate-400">Pilihan utama: ${kptEscapeHtml(shownBrand)}</div>` : ''}
-                                        ${optionCountLabel ? `<div class="text-2xs text-sky-600 font-semibold mt-0.5"><i class="fa-solid fa-scale-balanced mr-1"></i>${optionCountLabel}</div>` : ''}
+                                        <div class="font-semibold ${item.done ? 'line-through text-slate-400' : 'text-slate-800'}">${item.name}</div>
+                                        ${item.brand ? `<div class="text-2xs text-slate-400">Brand: ${item.brand}</div>` : ''}
                                     </div>
                                 </div>
                             </td>
-                            <td class="p-3 text-center font-medium text-slate-600">${kptEscapeHtml(item.qty || '1')}</td>
+                            <td class="p-3 text-center font-medium text-slate-600">${item.qty || '1'}</td>
                             <td class="p-3">${linksContainerHtml}</td>
-                            <td class="p-3 text-slate-500">${getShoppingItemEstimate(item) ? `Rp ${getShoppingItemEstimate(item).toLocaleString('id-ID')}` : '<span class="italic text-slate-400">Belum diisi</span>'}</td>
+                            <td class="p-3 text-slate-500">Rp ${Number(item.budget || 0).toLocaleString('id-ID')}</td>
                             <td class="p-3 font-bold ${item.done ? 'text-emerald-700' : 'text-slate-300'}">
                                 Rp ${Number(item.actual || 0).toLocaleString('id-ID')}
-                                ${item.done && item.purchaseDate ? `<div class="text-2xs font-normal text-slate-400 mt-0.5">${kptEscapeHtml(item.purchaseDate)}</div>` : ''}
                             </td>
                             <td class="p-3 text-center space-x-1">
                                 <button onclick="openShoppingItemModal(${item.id})" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs transition">
@@ -7238,7 +6986,8 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             if (item) {
                 // Simpan status teks yang baru dipilih
                 item.status = statusBaru;
-                item.done = (statusBaru === 'Selesai');
+                // Trik ajaib: Tetap update data 'done' lama agar rumus total harga otomatis ikut menyesuaikan tanpa perlu diubah!
+                item.done = (statusBaru === 'Selesai'); 
             }
             renderShoppingItems();
             saveToLocalStorage();
@@ -7247,38 +6996,42 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
         function openShoppingItemModal(id = null) {
             const form = document.getElementById('shopping-item-form');
             form.reset();
-            const mainSelect = document.getElementById('form-item-main-category');
-            const availableCategories = [...(appState.budgetCategories || ['Keperluan Baby', 'Keperluan Ibu'])];
-            if (!availableCategories.includes('Tanpa Submenu')) availableCategories.push('Tanpa Submenu');
-            mainSelect.innerHTML = availableCategories.map(c => `<option value="${kptEscapeHtml(c)}">${kptEscapeHtml(c)}</option>`).join('');
 
+            const mainSelect = document.getElementById('form-item-main-category');
+            mainSelect.innerHTML = appState.budgetCategories.map(c => `
+                <option value="${c}">${c}</option>
+            `).join('');
+
+            // --- TAMBAHAN LOGIKA DATALIST KATEGORI BELANJA ---
             const datalist = document.getElementById('shopping-category-list');
             if (datalist) {
+                // Kumpulkan semua kategori yang sudah ada di database belanja dan buang duplikatnya
                 const uniqueCats = [...new Set((appState.shoppingItems || []).map(i => i.category).filter(Boolean))];
-                datalist.innerHTML = uniqueCats.map(cat => `<option value="${kptEscapeHtml(cat)}">`).join('');
+                datalist.innerHTML = uniqueCats.map(cat => `<option value="${cat}">`).join('');
             }
+            // -------------------------------------------------
 
-            let editorAlternatives = [];
             if (id) {
-                const item = appState.shoppingItems.find(i => String(i.id) === String(id));
+                const item = appState.shoppingItems.find(i => i.id === id);
                 if (item) {
-                    document.getElementById('modal-shopping-title').innerText = 'Edit Item Belanja';
+                    document.getElementById('modal-shopping-title').innerText = "Edit Item Belanja";
                     document.getElementById('form-item-id').value = item.id;
-                    document.getElementById('form-item-main-category').value = item.mainCategory || appState.activeBudgetSubCategory || 'Keperluan Baby';
+                    document.getElementById('form-item-main-category').value = item.mainCategory || appState.activeBudgetSubCategory;
                     document.getElementById('form-item-category').value = item.category || '';
                     document.getElementById('form-item-name').value = item.name || '';
                     document.getElementById('form-item-qty').value = item.qty || '';
+                    document.getElementById('form-item-brand').value = item.brand || '';
+                    document.getElementById('form-item-link').value = item.link || '';
+                    document.getElementById('form-item-budget').value = item.budget || 0;
                     document.getElementById('form-item-actual').value = item.actual || 0;
-                    document.getElementById('form-item-purchase-date').value = item.purchaseDate || '';
-                    document.getElementById('form-item-status').value = item.status || (item.done ? 'Selesai' : 'Prioritas');
-                    editorAlternatives = getShoppingAlternatives(item).map((a, idx) => ({ ...a, id: a.id || `alt-${Date.now()}-${idx + 1}`, isPreferred: String(a.id) === String(item.selectedAlternativeId) || (!item.selectedAlternativeId && (a.isPreferred || idx === 0)) }));
+                    document.getElementById('form-item-done').checked = !!item.done;
                 }
             } else {
-                document.getElementById('modal-shopping-title').innerText = 'Tambah Item Belanja Baru';
-                document.getElementById('form-item-id').value = '';
-                document.getElementById('form-item-main-category').value = appState.activeBudgetSubCategory || 'Keperluan Baby';
+                document.getElementById('modal-shopping-title').innerText = "Tambah Item Belanja Baru";
+                document.getElementById('form-item-id').value = "";
+                document.getElementById('form-item-main-category').value = appState.activeBudgetSubCategory;
             }
-            renderShoppingAlternativeEditor(editorAlternatives);
+
             document.getElementById('modal-shopping-item').classList.remove('hidden');
         }
 
@@ -7293,32 +7046,20 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             const category = document.getElementById('form-item-category').value.trim() || 'Umum';
             const name = document.getElementById('form-item-name').value.trim();
             const qty = document.getElementById('form-item-qty').value.trim() || '1';
+            const brand = document.getElementById('form-item-brand').value.trim();
+            const link = document.getElementById('form-item-link').value.trim();
+            const budget = Number(document.getElementById('form-item-budget').value) || 0;
             const actual = Number(document.getElementById('form-item-actual').value) || 0;
-            const purchaseDate = document.getElementById('form-item-purchase-date').value || '';
-            const base = id ? (appState.shoppingItems || []).find(i => String(i.id) === String(id)) : null;
-            const statusInput = document.getElementById('form-item-status');
-            const validStatuses = ['Prioritas', 'Opsional', 'Selesai'];
-            const status = (statusInput && validStatuses.includes(statusInput.value))
-                ? statusInput.value
-                : (validStatuses.includes(base?.status) ? base.status : (base?.done ? 'Selesai' : 'Prioritas'));
-            const done = status === 'Selesai';
-            const alternatives = collectShoppingAlternativeEditor().map((a, idx) => ({ ...a, id: a.id || `alt-${Date.now()}-${idx + 1}` }));
-            if (!alternatives.length) { alert('Tambahkan minimal satu pilihan merek/produk.'); return; }
-            let preferred = alternatives.find(a => a.isPreferred) || alternatives[0];
-            alternatives.forEach(a => a.isPreferred = String(a.id) === String(preferred.id));
+            const done = document.getElementById('form-item-done').checked;
 
-            const itemId = base ? base.id : Date.now();
-            const updated = {
-                ...(base || {}), id: itemId, mainCategory, category, name, qty,
-                // Legacy aliases retained so older dashboard, chart and backup code stay compatible.
-                brand: preferred.brand || '', link: preferred.link || '', budget: Number(preferred.budget || 0),
-                alternatives, selectedAlternativeId: String(preferred.id),
-                actual, done, status, purchaseDate
-            };
-            if (base) {
-                const index = appState.shoppingItems.findIndex(i => String(i.id) === String(id));
-                if (index >= 0) appState.shoppingItems[index] = updated;
-            } else { appState.shoppingItems.push(updated); }
+            if (id) {
+                const index = appState.shoppingItems.findIndex(i => i.id == id);
+                if (index !== -1) {
+                    appState.shoppingItems[index] = { id: Number(id), mainCategory, category, name, qty, brand, link, budget, actual, done };
+                }
+            } else {
+                appState.shoppingItems.push({ id: Date.now(), mainCategory, category, name, qty, brand, link, budget, actual, done });
+            }
 
             renderShoppingItems();
             saveToLocalStorage();
@@ -9520,7 +9261,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.9',
+                    appVersion: '6.13.7',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -13852,7 +13593,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.9. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.7. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
