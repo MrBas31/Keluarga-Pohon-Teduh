@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.9: shopping alternatives, budget progress and safer category removal -->
+    <!-- Keluarga Pohon Teduh 6.13.10: shopping alternatives, budget progress and safer category removal -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.9">
+    <meta name="application-version" content="6.13.10">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1851,8 +1851,8 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 </style>
 
 <style id="budget-shopping-6138">
-/* KPT 6.13.9 — compact budget, alternatives and mobile touch targets */
-/* KPT 6.13.9 — compact budgeting, candidate comparison and touch-friendly editor */
+/* KPT 6.13.10 — compact budget, alternatives and mobile touch targets */
+/* KPT 6.13.10 — compact budgeting, candidate comparison and touch-friendly editor */
 #budget-overview-card { min-width:0; }
 #budget-overview-card .tabular-nums { overflow-wrap:anywhere; }
 .budget-alt-details { min-width:0; }
@@ -1899,7 +1899,7 @@ body.dark-mode .budget-alt-editor-card { background:#172337; border-color:#33415
 body.dark-mode .budget-alt-editor-card input, body.dark-mode .budget-alt-editor-card textarea { background:#0f1b2c !important; border-color:#475569 !important; color:#f1f5f9 !important; }
 body.dark-mode #shopping-item-form label { color:#e2e8f0 !important; }
 
-/* 6.13.9 — clearer candidate comparison and mobile touch targets */
+/* 6.13.10 — clearer candidate comparison and mobile touch targets */
 .budget-alt-details > summary { min-height:38px; padding:7px 11px; }
 .budget-alt-card { overflow-wrap:anywhere; }
 .budget-alt-card a { min-height:32px; }
@@ -1939,6 +1939,66 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
 
 
+
+<style id="budget-mobile-type-61310">
+/* KPT 6.13.10 — more readable shopping cards on narrow screens */
+@media (max-width: 767px) {
+  table.mobile-card-table--shopping .kpt-shopping-summary {
+    gap: 10px !important;
+    padding: 13px 12px 14px !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-summary-title {
+    font-size: 1rem !important;
+    line-height: 1.4 !important;
+    letter-spacing: -.01em;
+    font-weight: 800 !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-summary-main { gap: 10px !important; }
+  table.mobile-card-table--shopping .kpt-shopping-summary-main > div:first-child { flex-basis: 22px !important; }
+  table.mobile-card-table--shopping .kpt-shopping-summary-main > div:first-child button {
+    min-width: 28px !important; min-height: 25px !important; height: 25px !important;
+    font-size: .7rem !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-summary-price {
+    font-size: .8rem !important;
+    line-height: 1.3 !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-summary-price::before {
+    font-size: .58rem !important;
+    margin-bottom: 3px !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-summary-status select {
+    min-width: 96px !important; width: 96px !important; max-width: 96px !important;
+    min-height: 39px !important; font-size: .69rem !important; padding: 6px 6px !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-expand {
+    flex-basis: 36px !important; width: 36px !important; height: 39px !important;
+    font-size: .82rem !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-details-panel {
+    gap: 9px !important; padding: 12px !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-detail-block {
+    padding: 10px 11px !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-detail-label {
+    font-size: .63rem !important; line-height: 1.25 !important; margin-bottom: 5px !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-detail-value {
+    font-size: .8rem !important; line-height: 1.5 !important;
+  }
+  table.mobile-card-table--shopping tbody tr.kpt-shopping-category-header td:first-child {
+    font-size: .75rem !important; line-height: 1.4 !important;
+  }
+}
+@media (max-width: 390px) {
+  table.mobile-card-table--shopping .kpt-shopping-summary-title { font-size: .94rem !important; }
+  table.mobile-card-table--shopping .kpt-shopping-summary-status select {
+    min-width: 88px !important; width: 88px !important; max-width: 88px !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-summary { gap: 7px !important; }
+}
+</style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -2293,7 +2353,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
             <!-- TAB 2: BUDGET & BELANJA -->
             <section id="sec-budget" class="hidden space-y-6">
-                <!-- 6.13.9: Compact budget + purchase progress overview -->
+                <!-- 6.13.10: Compact budget + purchase progress overview -->
                 <div id="budget-overview-card" class="rounded-2xl border border-sky-100 bg-sky-50/70 px-4 py-3 shadow-sm space-y-2.5">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2 min-w-0"><i class="fa-solid fa-wallet text-sky-600"></i><h3 class="font-bold text-sm text-slate-800">Ringkasan Anggaran</h3></div>
@@ -6173,14 +6233,15 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
         }
 
         // RENDER BUDGET PIE CHART IN BUDGET TAB
-        // Keseluruhan = proporsi realisasi per sub-menu; sub-menu terpilih = per kategori.
+        // Keseluruhan = semua kategori tetap tampil; warna satu keluarga menandai asal sub-menu.
+        // Sub-menu terpilih = rincian kategori seperti perilaku sebelumnya.
         function renderBudgetPieChart(selectedSub = 'ALL') {
             appState.activePieSubMenu = selectedSub;
             if (!isUiSectionVisible('sec-budget')) return;
             const filterContainer = document.getElementById('pie-chart-subtabs');
             if (!filterContainer) return;
 
-            const items = appState.shoppingItems || [];
+            const items = Array.isArray(appState.shoppingItems) ? appState.shoppingItems : [];
             const itemSubmenus = items.map(item => item.mainCategory || 'Keperluan Baby');
             const allSubMenus = ['ALL', ...new Set([...(appState.budgetCategories || ['Keperluan Baby', 'Keperluan Ibu']), ...itemSubmenus])];
             if (selectedSub !== 'ALL' && !allSubMenus.includes(selectedSub)) selectedSub = 'ALL';
@@ -6202,29 +6263,36 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 ? items
                 : items.filter(i => (i.mainCategory || 'Keperluan Baby') === selectedSub);
 
-            const totals = {};
+            // Keep categories separate by their parent sub-menu in the overall view.
+            // The same category name in two sub-menus must remain two separate slices.
+            const totals = new Map();
             filteredItems.forEach(item => {
-                if (item.done || item.status === 'Selesai') {
-                    const key = isOverall
-                        ? (item.mainCategory || 'Keperluan Baby')
-                        : (item.category || 'Lain-lain');
-                    const value = Number(item.actual || 0);
-                    if (Number.isFinite(value) && value > 0) totals[key] = (totals[key] || 0) + value;
-                }
+                if (!(item.done || item.status === 'Selesai')) return;
+                const amount = Number(item.actual || 0);
+                if (!Number.isFinite(amount) || amount <= 0) return;
+                const subMenu = item.mainCategory || 'Keperluan Baby';
+                const category = item.category || 'Lain-lain';
+                const key = isOverall ? `${subMenu}\u0000${category}` : category;
+                const current = totals.get(key) || { label: category, subMenu, category, value: 0 };
+                current.value += amount;
+                totals.set(key, current);
             });
 
-            const labels = Object.keys(totals);
-            const data = Object.values(totals);
+            const entries = Array.from(totals.values());
+            const labels = entries.map(entry => entry.label);
+            const data = entries.map(entry => entry.value);
+            const submenuLabels = entries.map(entry => entry.subMenu);
             const chartCanvas = document.getElementById('budgetPieChart');
             const emptyState = document.getElementById('pie-chart-empty');
             const legendContainer = document.getElementById('pie-chart-legend');
             const description = filterContainer.parentElement?.querySelector('p');
             if (description) description.textContent = isOverall
-                ? 'Keseluruhan: setiap warna mewakili satu sub-menu berdasarkan total realisasi.'
+                ? 'Keseluruhan: seluruh kategori tetap ditampilkan. Warna senada menandai sub-menu asal setiap kategori.'
                 : `Rincian ${selectedSub}: setiap warna mewakili kategori barang yang sudah dibeli.`;
 
             if (!chartCanvas) return;
-            if (labels.length === 0 || data.reduce((a, b) => a + b, 0) === 0) {
+            const totalSpent = data.reduce((sum, value) => sum + value, 0);
+            if (!entries.length || totalSpent <= 0) {
                 chartCanvas.classList.add('hidden');
                 if (emptyState) emptyState.classList.remove('hidden');
                 if (legendContainer) legendContainer.innerHTML = `<div class="text-xs text-slate-400 italic py-2">Belum ada pengeluaran terealisasi di pilihan ini.</div>`;
@@ -6238,42 +6306,80 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             chartCanvas.classList.remove('hidden');
             if (emptyState) emptyState.classList.add('hidden');
 
-            const colors = [
-                '#0284c7', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6',
-                '#06b6d4', '#ec4899', '#84cc16', '#6366f1', '#14b8a6',
-                '#a16207', '#64748b', '#db2777', '#059669', '#7c3aed'
+            const palettes = {
+                'Keperluan Baby': ['#075985', '#0284c7', '#0ea5e9', '#38bdf8', '#7dd3fc', '#0369a1', '#0891b2'],
+                'Keperluan Ibu': ['#9f1239', '#be123c', '#e11d48', '#f43f5e', '#fb7185', '#fda4af', '#881337'],
+                'Tanpa Submenu': ['#334155', '#475569', '#64748b', '#94a3b8', '#a1a1aa', '#52525b']
+            };
+            const customPalettes = [
+                ['#5b21b6', '#7c3aed', '#8b5cf6', '#a78bfa', '#c4b5fd'],
+                ['#065f46', '#047857', '#059669', '#10b981', '#6ee7b7'],
+                ['#92400e', '#b45309', '#d97706', '#f59e0b', '#fcd34d'],
+                ['#9a3412', '#c2410c', '#ea580c', '#f97316', '#fdba74']
             ];
-            const bgColors = labels.map((_, i) => colors[i % colors.length]);
-            const totalSpent = data.reduce((a, b) => a + b, 0);
+            const paletteFor = (name) => {
+                if (palettes[name]) return palettes[name];
+                let hash = 0;
+                for (let i = 0; i < String(name).length; i++) hash = (hash * 31 + String(name).charCodeAt(i)) >>> 0;
+                return customPalettes[hash % customPalettes.length];
+            };
+            const categoryIndices = {};
+            const bgColors = entries.map(entry => {
+                const group = isOverall ? entry.subMenu : selectedSub;
+                const palette = paletteFor(group);
+                const idx = categoryIndices[group] || 0;
+                categoryIndices[group] = idx + 1;
+                return palette[idx % palette.length];
+            });
 
             if (legendContainer) {
-                legendContainer.innerHTML = labels.map((label, idx) => {
-                    const val = data[idx];
-                    const pct = Math.round((val / totalSpent) * 100);
+                // Group the legend by sub-menu so users can read category proportions and their origin.
+                const legendGroups = new Map();
+                entries.forEach((entry, idx) => {
+                    const groupName = isOverall ? entry.subMenu : selectedSub;
+                    if (!legendGroups.has(groupName)) legendGroups.set(groupName, []);
+                    legendGroups.get(groupName).push({ ...entry, color: bgColors[idx], index: idx });
+                });
+                const groupOrder = isOverall
+                    ? [...new Set([...(appState.budgetCategories || []), ...Array.from(legendGroups.keys())])].filter(name => legendGroups.has(name))
+                    : [selectedSub];
+                legendContainer.innerHTML = groupOrder.map(groupName => {
+                    const groupItems = legendGroups.get(groupName) || [];
+                    const groupTotal = groupItems.reduce((sum, entry) => sum + entry.value, 0);
+                    const groupPct = totalSpent > 0 ? Math.round(groupTotal / totalSpent * 100) : 0;
+                    const rows = groupItems.map(entry => {
+                        const pct = Math.round(entry.value / totalSpent * 100);
+                        return `
+                            <div class="flex items-center justify-between gap-2 text-xs p-2 rounded-lg border border-slate-100/80 bg-slate-50">
+                                <div class="flex items-center gap-2 min-w-0 pr-2">
+                                    <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color:${entry.color}"></span>
+                                    <span class="font-semibold text-slate-700 truncate">${kptEscapeHtml(entry.category)}</span>
+                                </div>
+                                <div class="font-bold text-slate-800 whitespace-nowrap">Rp ${entry.value.toLocaleString('id-ID')} <span class="text-slate-400 font-normal">(${pct}%)</span></div>
+                            </div>
+                        `;
+                    }).join('');
                     return `
-                        <div class="flex items-center justify-between gap-2 text-2xs p-2 bg-slate-50 rounded-xl border border-slate-100/80">
-                            <div class="flex items-center gap-2 min-w-0 pr-2">
-                                <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color: ${bgColors[idx]}"></span>
-                                <span class="font-semibold text-slate-700 truncate">${kptEscapeHtml(label)}</span>
-                            </div>
-                            <div class="font-bold text-slate-800 whitespace-nowrap">
-                                Rp ${val.toLocaleString('id-ID')} <span class="text-slate-400 font-normal">(${pct}%)</span>
-                            </div>
+                        <div class="space-y-1.5 mb-2">
+                            ${isOverall ? `<div class="flex items-center justify-between gap-2 px-1 pt-1"><span class="text-xs font-extrabold text-slate-600">${kptEscapeHtml(groupName)}</span><span class="text-2xs font-bold text-slate-500">${groupPct}% dari total</span></div>` : ''}
+                            ${rows}
                         </div>
                     `;
                 }).join('');
             }
 
-            const ctx = chartCanvas.getContext('2d');
             if (budgetPieChartInstance) {
                 budgetPieChartInstance.data.labels = labels;
                 budgetPieChartInstance.data.datasets[0].data = data;
                 budgetPieChartInstance.data.datasets[0].backgroundColor = bgColors;
+                budgetPieChartInstance.$kptSubmenus = submenuLabels;
+                budgetPieChartInstance.$kptCategories = entries.map(entry => entry.category);
+                budgetPieChartInstance.$kptOverall = isOverall;
                 budgetPieChartInstance.update('none');
                 return;
             }
 
-            budgetPieChartInstance = new Chart(ctx, {
+            budgetPieChartInstance = new Chart(chartCanvas.getContext('2d'), {
                 type: 'doughnut',
                 data: {
                     labels,
@@ -6284,11 +6390,23 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        tooltip: { callbacks: { label: context => ` Rp ${(context.parsed || 0).toLocaleString('id-ID')}` } }
+                        tooltip: { callbacks: {
+                            label: context => {
+                                const chart = context.chart;
+                                const idx = context.dataIndex;
+                                const category = chart.$kptCategories?.[idx] || context.label || '';
+                                const subMenu = chart.$kptSubmenus?.[idx] || '';
+                                const amount = Number(context.parsed || 0).toLocaleString('id-ID');
+                                return chart.$kptOverall ? ` ${category} · ${subMenu}: Rp ${amount}` : ` ${category}: Rp ${amount}`;
+                            }
+                        } }
                     },
                     cutout: '65%'
                 }
             });
+            budgetPieChartInstance.$kptSubmenus = submenuLabels;
+            budgetPieChartInstance.$kptCategories = entries.map(entry => entry.category);
+            budgetPieChartInstance.$kptOverall = isOverall;
         }
 
         // PREGNANCY MEDICAL ONE-PAGE NAVIGATION (6.13.7)
@@ -6890,7 +7008,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             saveToLocalStorage();
         }
 
-        // 6.13.9 — Shopping alternatives, preferred option and compact overview.
+        // 6.13.10 — Shopping alternatives, preferred option and compact overview.
         function splitLegacyShoppingValues(raw) {
             return String(raw || '').split(/\s*\n+\s*|\s*,\s*|\s+\/\/\s+/).map(v => v.trim()).filter(Boolean);
         }
@@ -9526,7 +9644,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.9',
+                    appVersion: '6.13.10',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -13864,7 +13982,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.9. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.10. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
