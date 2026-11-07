@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.10: shopping alternatives, budget progress and safer category removal -->
+    <!-- Keluarga Pohon Teduh 6.13.11: shopping alternatives, budget progress and safer category removal -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.10">
+    <meta name="application-version" content="6.13.11">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1851,8 +1851,8 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 </style>
 
 <style id="budget-shopping-6138">
-/* KPT 6.13.10 — compact budget, alternatives and mobile touch targets */
-/* KPT 6.13.10 — compact budgeting, candidate comparison and touch-friendly editor */
+/* KPT 6.13.11 — compact budget, alternatives and mobile touch targets */
+/* KPT 6.13.11 — compact budgeting, candidate comparison and touch-friendly editor */
 #budget-overview-card { min-width:0; }
 #budget-overview-card .tabular-nums { overflow-wrap:anywhere; }
 .budget-alt-details { min-width:0; }
@@ -1899,7 +1899,7 @@ body.dark-mode .budget-alt-editor-card { background:#172337; border-color:#33415
 body.dark-mode .budget-alt-editor-card input, body.dark-mode .budget-alt-editor-card textarea { background:#0f1b2c !important; border-color:#475569 !important; color:#f1f5f9 !important; }
 body.dark-mode #shopping-item-form label { color:#e2e8f0 !important; }
 
-/* 6.13.10 — clearer candidate comparison and mobile touch targets */
+/* 6.13.11 — clearer candidate comparison and mobile touch targets */
 .budget-alt-details > summary { min-height:38px; padding:7px 11px; }
 .budget-alt-card { overflow-wrap:anywhere; }
 .budget-alt-card a { min-height:32px; }
@@ -1941,7 +1941,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
 
 <style id="budget-mobile-type-61310">
-/* KPT 6.13.10 — more readable shopping cards on narrow screens */
+/* KPT 6.13.11 — more readable shopping cards on narrow screens */
 @media (max-width: 767px) {
   table.mobile-card-table--shopping .kpt-shopping-summary {
     gap: 10px !important;
@@ -2353,7 +2353,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
             <!-- TAB 2: BUDGET & BELANJA -->
             <section id="sec-budget" class="hidden space-y-6">
-                <!-- 6.13.10: Compact budget + purchase progress overview -->
+                <!-- 6.13.11: Compact budget + purchase progress overview -->
                 <div id="budget-overview-card" class="rounded-2xl border border-sky-100 bg-sky-50/70 px-4 py-3 shadow-sm space-y-2.5">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2 min-w-0"><i class="fa-solid fa-wallet text-sky-600"></i><h3 class="font-bold text-sm text-slate-800">Ringkasan Anggaran</h3></div>
@@ -6306,31 +6306,16 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             chartCanvas.classList.remove('hidden');
             if (emptyState) emptyState.classList.add('hidden');
 
-            const palettes = {
-                'Keperluan Baby': ['#075985', '#0284c7', '#0ea5e9', '#38bdf8', '#7dd3fc', '#0369a1', '#0891b2'],
-                'Keperluan Ibu': ['#9f1239', '#be123c', '#e11d48', '#f43f5e', '#fb7185', '#fda4af', '#881337'],
-                'Tanpa Submenu': ['#334155', '#475569', '#64748b', '#94a3b8', '#a1a1aa', '#52525b']
-            };
-            const customPalettes = [
-                ['#5b21b6', '#7c3aed', '#8b5cf6', '#a78bfa', '#c4b5fd'],
-                ['#065f46', '#047857', '#059669', '#10b981', '#6ee7b7'],
-                ['#92400e', '#b45309', '#d97706', '#f59e0b', '#fcd34d'],
-                ['#9a3412', '#c2410c', '#ea580c', '#f97316', '#fdba74']
+            // Keep the original vivid multi-colour doughnut palette.
+            // The adjacent legend still groups entries by parent sub-menu and
+            // shows each sub-menu's share, while every category remains a slice.
+            const vividCategoryPalette = [
+                '#0284c7', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6',
+                '#06b6d4', '#ec4899', '#84cc16', '#6366f1', '#14b8a6',
+                '#d946ef', '#ea580c', '#2563eb', '#65a30d', '#db2777',
+                '#0d9488', '#ca8a04', '#7c3aed', '#0891b2', '#e11d48'
             ];
-            const paletteFor = (name) => {
-                if (palettes[name]) return palettes[name];
-                let hash = 0;
-                for (let i = 0; i < String(name).length; i++) hash = (hash * 31 + String(name).charCodeAt(i)) >>> 0;
-                return customPalettes[hash % customPalettes.length];
-            };
-            const categoryIndices = {};
-            const bgColors = entries.map(entry => {
-                const group = isOverall ? entry.subMenu : selectedSub;
-                const palette = paletteFor(group);
-                const idx = categoryIndices[group] || 0;
-                categoryIndices[group] = idx + 1;
-                return palette[idx % palette.length];
-            });
+            const bgColors = entries.map((entry, idx) => vividCategoryPalette[idx % vividCategoryPalette.length]);
 
             if (legendContainer) {
                 // Group the legend by sub-menu so users can read category proportions and their origin.
@@ -7008,7 +6993,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             saveToLocalStorage();
         }
 
-        // 6.13.10 — Shopping alternatives, preferred option and compact overview.
+        // 6.13.11 — Shopping alternatives, preferred option and compact overview.
         function splitLegacyShoppingValues(raw) {
             return String(raw || '').split(/\s*\n+\s*|\s*,\s*|\s+\/\/\s+/).map(v => v.trim()).filter(Boolean);
         }
@@ -9644,7 +9629,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.10',
+                    appVersion: '6.13.11',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -13982,7 +13967,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.10. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.11. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
