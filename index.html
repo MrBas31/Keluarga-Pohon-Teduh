@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.8: shopping alternatives, budget progress and safer category removal -->
+    <!-- Keluarga Pohon Teduh 6.13.9: shopping alternatives, budget progress and safer category removal -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.8">
+    <meta name="application-version" content="6.13.9">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1169,6 +1169,14 @@
         display: block !important; width: 100% !important; padding: 0 !important;
         background: transparent !important; border-radius: 0 !important;
     }
+    table.mobile-card-table--shopping tbody tr.kpt-shopping-row > td:nth-child(2)::before {
+        display: none !important; content: none !important;
+    }
+    .kpt-shopping-summary-title {
+        display: block; min-width: 0; flex: 1; color: #1e293b; font-size: .86rem;
+        font-weight: 800; line-height: 1.3; overflow-wrap: anywhere;
+    }
+    body.dark-mode .kpt-shopping-summary-title { color: #f1f5f9 !important; }
     table.mobile-card-table--shopping .kpt-shopping-original-content { display: none !important; }
     table.mobile-card-table--shopping .kpt-shopping-summary {
         display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center;
@@ -1185,13 +1193,6 @@
         padding: 0 !important; line-height: 1 !important; font-size: .62rem !important;
     }
     .kpt-shopping-summary-main > div:last-child { min-width: 0; flex: 1; }
-    .kpt-shopping-summary-main > div:last-child > div:first-child {
-        color: #1e293b; font-size: .82rem; font-weight: 750; line-height: 1.25;
-        overflow-wrap: anywhere;
-    }
-    .kpt-shopping-summary-main > div:last-child > div:nth-child(2) {
-        display: none !important; /* Ringkasan awal hanya menampilkan nama barang */
-    }
     .kpt-shopping-summary-meta { display: flex; align-items: center; gap: 6px; min-width: 0; }
     .kpt-shopping-summary-price {
         color: #0f766e; font-size: .73rem; font-weight: 850; white-space: nowrap;
@@ -1850,8 +1851,8 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 </style>
 
 <style id="budget-shopping-6138">
-/* KPT 6.13.8 — compact budget, alternatives and mobile touch targets */
-/* KPT 6.13.8 — compact budgeting, candidate comparison and touch-friendly editor */
+/* KPT 6.13.9 — compact budget, alternatives and mobile touch targets */
+/* KPT 6.13.9 — compact budgeting, candidate comparison and touch-friendly editor */
 #budget-overview-card { min-width:0; }
 #budget-overview-card .tabular-nums { overflow-wrap:anywhere; }
 .budget-alt-details { min-width:0; }
@@ -1898,7 +1899,7 @@ body.dark-mode .budget-alt-editor-card { background:#172337; border-color:#33415
 body.dark-mode .budget-alt-editor-card input, body.dark-mode .budget-alt-editor-card textarea { background:#0f1b2c !important; border-color:#475569 !important; color:#f1f5f9 !important; }
 body.dark-mode #shopping-item-form label { color:#e2e8f0 !important; }
 
-/* 6.13.8 — clearer candidate comparison and mobile touch targets */
+/* 6.13.9 — clearer candidate comparison and mobile touch targets */
 .budget-alt-details > summary { min-height:38px; padding:7px 11px; }
 .budget-alt-card { overflow-wrap:anywhere; }
 .budget-alt-card a { min-height:32px; }
@@ -2292,7 +2293,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
             <!-- TAB 2: BUDGET & BELANJA -->
             <section id="sec-budget" class="hidden space-y-6">
-                <!-- 6.13.8: Compact budget + purchase progress overview -->
+                <!-- 6.13.9: Compact budget + purchase progress overview -->
                 <div id="budget-overview-card" class="rounded-2xl border border-sky-100 bg-sky-50/70 px-4 py-3 shadow-sm space-y-2.5">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2 min-w-0"><i class="fa-solid fa-wallet text-sky-600"></i><h3 class="font-bold text-sm text-slate-800">Ringkasan Anggaran</h3></div>
@@ -2313,9 +2314,9 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                     <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 border-b border-slate-100 pb-3">
                         <div>
                             <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
-                                <i class="fa-solid fa-chart-pie text-sky-600"></i> Visualisasi Pengeluaran Realisasi Per Kategori
+                                <i class="fa-solid fa-chart-pie text-sky-600"></i> Visualisasi Pengeluaran Realisasi
                             </h3>
-                            <p class="text-xs text-slate-500">Pilih sub-menu untuk melihat proporsi pengeluaran yang telah dibeli</p>
+                            <p class="text-xs text-slate-500">Pada Keseluruhan, warna membedakan realisasi tiap sub-menu. Pilih satu sub-menu untuk melihat rincian per kategori.</p>
                         </div>
 
                         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 max-w-full" id="pie-chart-subtabs">
@@ -3063,8 +3064,8 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                         <div>
-                            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2"><i class="fa-solid fa-chart-pie text-sky-500"></i> Visualisasi Pengeluaran Realisasi Per Kategori</h3>
-                            <p class="text-xs text-slate-500 mt-1">Pilih sub-menu untuk melihat proporsi pengeluaran yang telah dibeli</p>
+                            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2"><i class="fa-solid fa-chart-pie text-sky-500"></i> Visualisasi Pengeluaran Realisasi</h3>
+                            <p class="text-xs text-slate-500 mt-1">Pada Keseluruhan, warna membedakan realisasi tiap sub-menu. Pilih satu sub-menu untuk melihat rincian per kategori.</p>
                         </div>
                         <div id="post-chart-submenus" class="flex flex-wrap gap-2"></div>
                     </div>
@@ -6172,46 +6173,57 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
         }
 
         // RENDER BUDGET PIE CHART IN BUDGET TAB
+        // Keseluruhan = proporsi realisasi per sub-menu; sub-menu terpilih = per kategori.
         function renderBudgetPieChart(selectedSub = 'ALL') {
             appState.activePieSubMenu = selectedSub;
             if (!isUiSectionVisible('sec-budget')) return;
             const filterContainer = document.getElementById('pie-chart-subtabs');
             if (!filterContainer) return;
-            
-            const allSubMenus = ['ALL', ...(appState.budgetCategories || ['Keperluan Baby', 'Keperluan Ibu'])];
+
+            const items = appState.shoppingItems || [];
+            const itemSubmenus = items.map(item => item.mainCategory || 'Keperluan Baby');
+            const allSubMenus = ['ALL', ...new Set([...(appState.budgetCategories || ['Keperluan Baby', 'Keperluan Ibu']), ...itemSubmenus])];
+            if (selectedSub !== 'ALL' && !allSubMenus.includes(selectedSub)) selectedSub = 'ALL';
+            appState.activePieSubMenu = selectedSub;
+
             filterContainer.innerHTML = allSubMenus.map(sub => {
-                const label = sub === 'ALL' ? '📊 Keseluruhan' : (sub === 'Keperluan Baby' ? '👶 Keperluan Baby' : (sub === 'Keperluan Ibu' ? '🤰 Keperluan Ibu' : `📁 ${sub}`));
+                const label = sub === 'ALL' ? '📊 Keseluruhan' : (sub === 'Keperluan Baby' ? '👶 Keperluan Baby' : (sub === 'Keperluan Ibu' ? '🤰 Keperluan Ibu' : (sub === 'Tanpa Submenu' ? '📦 Tanpa Submenu' : `📁 ${sub}`)));
                 const isActive = sub === selectedSub;
+                const safeArg = kptEscapeHtml(JSON.stringify(sub));
                 return `
-                    <button onclick="renderBudgetPieChart('${sub}')" class="px-3 py-1.5 rounded-xl text-2xs font-semibold whitespace-nowrap transition-all duration-200 ${isActive ? 'bg-sky-600 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
-                        ${label}
+                    <button type="button" onclick="renderBudgetPieChart(${safeArg})" class="px-3 py-1.5 rounded-xl text-2xs font-semibold whitespace-nowrap transition-all duration-200 ${isActive ? 'bg-sky-600 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                        ${kptEscapeHtml(label)}
                     </button>
                 `;
             }).join('');
 
-            const items = appState.shoppingItems || [];
-            const filteredItems = selectedSub === 'ALL' 
-                ? items 
+            const isOverall = selectedSub === 'ALL';
+            const filteredItems = isOverall
+                ? items
                 : items.filter(i => (i.mainCategory || 'Keperluan Baby') === selectedSub);
 
-            const categoryTotals = {};
+            const totals = {};
             filteredItems.forEach(item => {
-                if (item.done) {
-                    const cat = item.category || 'Lain-lain';
-                    const val = Number(item.actual || 0);
-                    categoryTotals[cat] = (categoryTotals[cat] || 0) + val;
+                if (item.done || item.status === 'Selesai') {
+                    const key = isOverall
+                        ? (item.mainCategory || 'Keperluan Baby')
+                        : (item.category || 'Lain-lain');
+                    const value = Number(item.actual || 0);
+                    if (Number.isFinite(value) && value > 0) totals[key] = (totals[key] || 0) + value;
                 }
             });
 
-            const labels = Object.keys(categoryTotals);
-            const data = Object.values(categoryTotals);
-
+            const labels = Object.keys(totals);
+            const data = Object.values(totals);
             const chartCanvas = document.getElementById('budgetPieChart');
             const emptyState = document.getElementById('pie-chart-empty');
             const legendContainer = document.getElementById('pie-chart-legend');
+            const description = filterContainer.parentElement?.querySelector('p');
+            if (description) description.textContent = isOverall
+                ? 'Keseluruhan: setiap warna mewakili satu sub-menu berdasarkan total realisasi.'
+                : `Rincian ${selectedSub}: setiap warna mewakili kategori barang yang sudah dibeli.`;
 
             if (!chartCanvas) return;
-
             if (labels.length === 0 || data.reduce((a, b) => a + b, 0) === 0) {
                 chartCanvas.classList.add('hidden');
                 if (emptyState) emptyState.classList.remove('hidden');
@@ -6227,10 +6239,10 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             if (emptyState) emptyState.classList.add('hidden');
 
             const colors = [
-                '#0284c7', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', 
-                '#06b6d4', '#ec4899', '#84cc16', '#6366f1', '#14b8a6'
+                '#0284c7', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6',
+                '#06b6d4', '#ec4899', '#84cc16', '#6366f1', '#14b8a6',
+                '#a16207', '#64748b', '#db2777', '#059669', '#7c3aed'
             ];
-
             const bgColors = labels.map((_, i) => colors[i % colors.length]);
             const totalSpent = data.reduce((a, b) => a + b, 0);
 
@@ -6239,10 +6251,10 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                     const val = data[idx];
                     const pct = Math.round((val / totalSpent) * 100);
                     return `
-                        <div class="flex items-center justify-between text-2xs p-2 bg-slate-50 rounded-xl border border-slate-100/80">
-                            <div class="flex items-center gap-2 truncate pr-2">
+                        <div class="flex items-center justify-between gap-2 text-2xs p-2 bg-slate-50 rounded-xl border border-slate-100/80">
+                            <div class="flex items-center gap-2 min-w-0 pr-2">
                                 <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color: ${bgColors[idx]}"></span>
-                                <span class="font-semibold text-slate-700 truncate">${label}</span>
+                                <span class="font-semibold text-slate-700 truncate">${kptEscapeHtml(label)}</span>
                             </div>
                             <div class="font-bold text-slate-800 whitespace-nowrap">
                                 Rp ${val.toLocaleString('id-ID')} <span class="text-slate-400 font-normal">(${pct}%)</span>
@@ -6264,27 +6276,15 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             budgetPieChartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: bgColors,
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
-                    }]
+                    labels,
+                    datasets: [{ data, backgroundColor: bgColors, borderWidth: 2, borderColor: '#ffffff' }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const val = context.parsed || 0;
-                                    return ` Rp ${val.toLocaleString('id-ID')}`;
-                                }
-                            }
-                        }
+                        tooltip: { callbacks: { label: context => ` Rp ${(context.parsed || 0).toLocaleString('id-ID')}` } }
                     },
                     cutout: '65%'
                 }
@@ -6890,7 +6890,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             saveToLocalStorage();
         }
 
-        // 6.13.8 — Shopping alternatives, preferred option and compact overview.
+        // 6.13.9 — Shopping alternatives, preferred option and compact overview.
         function splitLegacyShoppingValues(raw) {
             return String(raw || '').split(/\s*\n+\s*|\s*,\s*|\s+\/\/\s+/).map(v => v.trim()).filter(Boolean);
         }
@@ -7153,7 +7153,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                     const optionCountLabel = alternatives.length > 1 ? `${alternatives.length} alternatif` : (alternatives.length === 1 ? '1 pilihan produk' : '');
 
                     html += `
-                        <tr class="hover:bg-slate-50/80 transition">
+                        <tr class="hover:bg-slate-50/80 transition" data-shopping-item-name="${kptEscapeHtml(item.name || 'Item tanpa nama')}">
                             <td class="p-3 text-center">
                                 <select onchange="updateStatusBelanja(${item.id}, this.value)" class="p-1.5 rounded-lg text-2xs font-bold border border-slate-200 cursor-pointer outline-none focus:ring-2 focus:ring-sky-500 ${item.status === 'Selesai' || (!item.status && item.done) ? 'text-emerald-700 bg-emerald-50' : (item.status === 'Opsional' ? 'text-slate-500 bg-slate-100' : 'text-rose-700 bg-rose-50')} transition">
                                     <option value="Prioritas" ${item.status === 'Prioritas' || (!item.status && !item.done) ? 'selected' : ''} class="text-rose-600 font-bold">🚨 Prioritas</option>
@@ -9526,7 +9526,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.8',
+                    appVersion: '6.13.9',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -13065,7 +13065,13 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
             summary.className = 'kpt-shopping-summary';
             const main = document.createElement('div');
             main.className = 'kpt-shopping-summary-main';
-            Array.from(original.childNodes).forEach(node => main.appendChild(node.cloneNode(true)));
+            const originalLayout = original.firstElementChild;
+            const reorderControls = originalLayout?.firstElementChild;
+            if (reorderControls) main.appendChild(reorderControls.cloneNode(true));
+            const itemTitle = document.createElement('div');
+            itemTitle.className = 'kpt-shopping-summary-title';
+            itemTitle.textContent = row.dataset.shoppingItemName || nameCell.querySelector('.font-semibold')?.textContent?.trim() || 'Item tanpa nama';
+            main.appendChild(itemTitle);
 
             const meta = document.createElement('div');
             meta.className = 'kpt-shopping-summary-meta';
@@ -13858,7 +13864,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.8. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.9. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
