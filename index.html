@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.15: shopping alternatives, budget progress and safer category removal -->
+    <!-- Keluarga Pohon Teduh 6.13.16: shopping alternatives, budget progress and safer category removal -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.15">
+    <meta name="application-version" content="6.13.16">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1851,8 +1851,8 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 </style>
 
 <style id="budget-shopping-6138">
-/* KPT 6.13.15 — compact budget, alternatives and mobile touch targets */
-/* KPT 6.13.15 — compact budgeting, candidate comparison and touch-friendly editor */
+/* KPT 6.13.16 — compact budget, alternatives and mobile touch targets */
+/* KPT 6.13.16 — compact budgeting, candidate comparison and touch-friendly editor */
 #budget-overview-card { min-width:0; }
 #budget-overview-card .tabular-nums { overflow-wrap:anywhere; }
 .budget-alt-details { min-width:0; }
@@ -1899,7 +1899,7 @@ body.dark-mode .budget-alt-editor-card { background:#172337; border-color:#33415
 body.dark-mode .budget-alt-editor-card input, body.dark-mode .budget-alt-editor-card textarea { background:#0f1b2c !important; border-color:#475569 !important; color:#f1f5f9 !important; }
 body.dark-mode #shopping-item-form label { color:#e2e8f0 !important; }
 
-/* 6.13.15 — clearer candidate comparison and mobile touch targets */
+/* 6.13.16 — clearer candidate comparison and mobile touch targets */
 .budget-alt-details > summary { min-height:38px; padding:7px 11px; }
 .budget-alt-card { overflow-wrap:anywhere; }
 .budget-alt-card a { min-height:32px; }
@@ -1941,7 +1941,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
 
 <style id="budget-mobile-type-61310">
-/* KPT 6.13.15 — more readable shopping cards on narrow screens */
+/* KPT 6.13.16 — more readable shopping cards on narrow screens */
 @media (max-width: 767px) {
   table.mobile-card-table--shopping .kpt-shopping-summary {
     gap: 10px !important;
@@ -2001,7 +2001,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 </style>
 
 <style id="kpt-log-daily-mobile-61312">
-/* Log Harian 6.13.15 — single-tap sleep timer, concise forms and readable summaries. */
+/* Log Harian 6.13.16 — single-tap sleep timer, concise forms and readable summaries. */
 #modal-daily-log > div { width:min(100%, 520px); }
 #daily-log-form input:not([type="hidden"]), #daily-log-form select, #daily-log-form textarea { min-height:44px; font-size:16px; }
 #daily-log-form label { display:block; line-height:1.35; }
@@ -2299,6 +2299,161 @@ body.dark-mode .siaga-bag-desktop-actions button.delete{background:#4c1d26;color
 body.dark-mode .siaga-bag-empty{color:#94a3b8}
 
 @media(prefers-reduced-motion:no-preference){.siaga-contact-footer .siaga-location-link,.siaga-contact-management .siaga-contact-manage-btn,.siaga-bag-desktop-actions button{transition:background-color .15s ease,transform .15s ease}.siaga-contact-footer .siaga-location-link:active,.siaga-contact-management .siaga-contact-manage-btn:active,.siaga-bag-desktop-actions button:active{transform:scale(.97)}}
+</style>
+
+<style id="kpt-61316-contact-and-budget-modal-fixes">
+/* 6.13.16 — contact actions: location + icon-only edit/delete on one row. */
+#emergency-contacts-container .siaga-contact-footer {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  flex-wrap: nowrap !important;
+}
+#emergency-contacts-container .siaga-contact-footer .siaga-location-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  min-height: 44px !important;
+  margin: 0 !important;
+  padding: 9px 14px !important;
+  white-space: nowrap !important;
+}
+#emergency-contacts-container .siaga-contact-footer-spacer {
+  display: block !important;
+  min-width: 0 !important;
+}
+#emergency-contacts-container .siaga-contact-management {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  flex-wrap: nowrap !important;
+  gap: 7px !important;
+  width: auto !important;
+  min-width: max-content !important;
+  margin: 0 !important;
+}
+#emergency-contacts-container .siaga-contact-management .siaga-contact-manage-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 44px !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  padding: 0 !important;
+  gap: 0 !important;
+}
+#emergency-contacts-container .siaga-contact-management .siaga-action-label {
+  display: none !important;
+}
+#emergency-contacts-container .siaga-contact-management .siaga-contact-manage-btn i {
+  font-size: 1rem !important;
+  line-height: 1 !important;
+}
+@media (max-width: 767px) {
+  #emergency-contacts-container .siaga-contact-footer {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 7px !important;
+  }
+  #emergency-contacts-container .siaga-contact-footer .siaga-location-link {
+    min-height: 44px !important;
+    padding-inline: 12px !important;
+  }
+  #emergency-contacts-container .siaga-contact-management {
+    gap: 6px !important;
+  }
+  #emergency-contacts-container .siaga-contact-management .siaga-contact-manage-btn {
+    flex-basis: 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+  }
+}
+
+/* Budget item add/edit modal: explicit dark surfaces and readable controls. */
+body.dark-mode #modal-shopping-item > div {
+  background: #172337 !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #334155 !important;
+  color-scheme: dark;
+}
+body.dark-mode #modal-shopping-item #modal-shopping-title {
+  color: #f8fafc !important;
+}
+body.dark-mode #modal-shopping-item label,
+body.dark-mode #modal-shopping-item .font-semibold,
+body.dark-mode #modal-shopping-item .font-medium {
+  color: #dbeafe !important;
+}
+body.dark-mode #modal-shopping-item .text-slate-800,
+body.dark-mode #modal-shopping-item .text-slate-700 {
+  color: #e2e8f0 !important;
+}
+body.dark-mode #modal-shopping-item .text-slate-600,
+body.dark-mode #modal-shopping-item .text-slate-500,
+body.dark-mode #modal-shopping-item .text-slate-400 {
+  color: #aebed0 !important;
+}
+body.dark-mode #modal-shopping-item input:not([type="radio"]),
+body.dark-mode #modal-shopping-item select,
+body.dark-mode #modal-shopping-item textarea {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+  border-color: #475569 !important;
+  color-scheme: dark;
+}
+body.dark-mode #modal-shopping-item input::placeholder,
+body.dark-mode #modal-shopping-item textarea::placeholder {
+  color: #8294aa !important;
+  opacity: 1 !important;
+}
+body.dark-mode #modal-shopping-item input:focus,
+body.dark-mode #modal-shopping-item select:focus,
+body.dark-mode #modal-shopping-item textarea:focus {
+  border-color: #38bdf8 !important;
+  outline-color: rgba(56,189,248,.35) !important;
+}
+body.dark-mode #modal-shopping-item .rounded-2xl.border.border-sky-100.bg-sky-50\/50 {
+  background: #102a42 !important;
+  border-color: #24547a !important;
+}
+body.dark-mode #modal-shopping-item .budget-alt-editor-card {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+}
+body.dark-mode #modal-shopping-item .budget-alt-editor-card .budget-alt-editor-title {
+  color: #f1f5f9 !important;
+}
+body.dark-mode #modal-shopping-item .budget-alt-editor-card label {
+  color: #cbd5e1 !important;
+}
+body.dark-mode #modal-shopping-item #shopping-alternatives-editor + button,
+body.dark-mode #modal-shopping-item button[onclick="addShoppingAlternativeRow()"] {
+  background: #123b56 !important;
+  color: #bae6fd !important;
+  border-color: #28739b !important;
+}
+body.dark-mode #modal-shopping-item #shopping-item-form > div.pt-3 button[type="button"] {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+}
+body.dark-mode #modal-shopping-item #shopping-item-form > div.pt-3 button[type="submit"] {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+}
+body.dark-mode #modal-shopping-item button[aria-label="Hapus pilihan"] {
+  background: #4c1d26 !important;
+  color: #fecdd3 !important;
+}
+body.dark-mode #modal-shopping-item input[type="radio"] {
+  accent-color: #38bdf8 !important;
+}
 </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
@@ -2654,7 +2809,7 @@ body.dark-mode .siaga-bag-empty{color:#94a3b8}
 
             <!-- TAB 2: BUDGET & BELANJA -->
             <section id="sec-budget" class="hidden space-y-6">
-                <!-- 6.13.15: Compact budget + purchase progress overview -->
+                <!-- 6.13.16: Compact budget + purchase progress overview -->
                 <div id="budget-overview-card" class="rounded-2xl border border-sky-100 bg-sky-50/70 px-4 py-3 shadow-sm space-y-2.5">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2 min-w-0"><i class="fa-solid fa-wallet text-sky-600"></i><h3 class="font-bold text-sm text-slate-800">Ringkasan Anggaran</h3></div>
@@ -7372,7 +7527,7 @@ body.dark-mode .siaga-bag-empty{color:#94a3b8}
             saveToLocalStorage();
         }
 
-        // 6.13.15 — Shopping alternatives, preferred option and compact overview.
+        // 6.13.16 — Shopping alternatives, preferred option and compact overview.
         function splitLegacyShoppingValues(raw) {
             return String(raw || '').split(/\s*\n+\s*|\s*,\s*|\s+\/\/\s+/).map(v => v.trim()).filter(Boolean);
         }
@@ -10151,7 +10306,7 @@ body.dark-mode .siaga-bag-empty{color:#94a3b8}
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.15',
+                    appVersion: '6.13.16',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -14681,7 +14836,7 @@ body.dark-mode .siaga-bag-empty{color:#94a3b8}
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.15. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.16. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
