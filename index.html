@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.13: shopping alternatives, budget progress and safer category removal -->
+    <!-- Keluarga Pohon Teduh 6.13.14: shopping alternatives, budget progress and safer category removal -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.13">
+    <meta name="application-version" content="6.13.14">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1851,8 +1851,8 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 </style>
 
 <style id="budget-shopping-6138">
-/* KPT 6.13.13 — compact budget, alternatives and mobile touch targets */
-/* KPT 6.13.13 — compact budgeting, candidate comparison and touch-friendly editor */
+/* KPT 6.13.14 — compact budget, alternatives and mobile touch targets */
+/* KPT 6.13.14 — compact budgeting, candidate comparison and touch-friendly editor */
 #budget-overview-card { min-width:0; }
 #budget-overview-card .tabular-nums { overflow-wrap:anywhere; }
 .budget-alt-details { min-width:0; }
@@ -1899,7 +1899,7 @@ body.dark-mode .budget-alt-editor-card { background:#172337; border-color:#33415
 body.dark-mode .budget-alt-editor-card input, body.dark-mode .budget-alt-editor-card textarea { background:#0f1b2c !important; border-color:#475569 !important; color:#f1f5f9 !important; }
 body.dark-mode #shopping-item-form label { color:#e2e8f0 !important; }
 
-/* 6.13.13 — clearer candidate comparison and mobile touch targets */
+/* 6.13.14 — clearer candidate comparison and mobile touch targets */
 .budget-alt-details > summary { min-height:38px; padding:7px 11px; }
 .budget-alt-card { overflow-wrap:anywhere; }
 .budget-alt-card a { min-height:32px; }
@@ -1941,7 +1941,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
 
 <style id="budget-mobile-type-61310">
-/* KPT 6.13.13 — more readable shopping cards on narrow screens */
+/* KPT 6.13.14 — more readable shopping cards on narrow screens */
 @media (max-width: 767px) {
   table.mobile-card-table--shopping .kpt-shopping-summary {
     gap: 10px !important;
@@ -2001,7 +2001,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 </style>
 
 <style id="kpt-log-daily-mobile-61312">
-/* Log Harian 6.13.13 — single-tap sleep timer, concise forms and readable summaries. */
+/* Log Harian 6.13.14 — single-tap sleep timer, concise forms and readable summaries. */
 #modal-daily-log > div { width:min(100%, 520px); }
 #daily-log-form input:not([type="hidden"]), #daily-log-form select, #daily-log-form textarea { min-height:44px; font-size:16px; }
 #daily-log-form label { display:block; line-height:1.35; }
@@ -2090,7 +2090,7 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
 body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-shopping-options { background:#1e293b; border-color:#334155; }
 </style>
 
-<style id="suami-siaga-61313">
+<style id="suami-siaga-61314">
 .siaga-panel{background:#fff;border:1px solid #e2e8f0;border-radius:1.5rem;padding:1rem;box-shadow:0 2px 8px rgba(15,23,42,.035)}
 .siaga-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;border-bottom:1px solid #e2e8f0;padding-bottom:.85rem;margin-bottom:.25rem}
 .siaga-title{font-size:1rem;font-weight:800;color:#1e293b;line-height:1.35}
@@ -2156,6 +2156,86 @@ body.dark-mode #siaga-discharge .bg-amber-50{background:#422f16;border-color:#75
 body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
 @media(prefers-reduced-motion:no-preference){.siaga-quick-link,.siaga-add-button,.siaga-small-add{transition:background-color .15s ease,transform .15s ease}.siaga-quick-link:active,.siaga-add-button:active,.siaga-small-add:active{transform:scale(.98)}}
 </style>
+
+<style id="suami-siaga-61314-refinement">
+/* Suami SIAGA: compact information hierarchy and responsive PC layout */
+#sec-siaga > .siaga-panel { min-width:0; }
+#sec-siaga .siaga-panel-heading .siaga-subtitle { display:none !important; }
+.siaga-location-link { width:max-content; min-width:116px; max-width:100%; margin-right:auto; }
+.siaga-contact-manage-btn { display:inline-flex; align-items:center; justify-content:center; gap:.35rem; }
+.siaga-contact-manage-btn i { font-size:.8rem; }
+.siaga-contact-action { text-decoration:none; }
+.siaga-contact-action i { font-size:1rem; }
+.siaga-contact-action:focus-visible,
+.siaga-location-link:focus-visible,
+.siaga-contact-manage-btn:focus-visible { outline:3px solid #38bdf8; outline-offset:2px; }
+
+@media (min-width: 1024px) {
+  #sec-siaga:not(.hidden) { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.2rem; }
+  #sec-siaga:not(.hidden) > * { margin-top:0 !important; }
+  #siaga-overview, #siaga-contacts, #siaga-bag, #siaga-roles { grid-column:1 / -1; }
+  #siaga-departure { grid-column:1; grid-row:5; align-self:stretch; }
+  #siaga-discharge { grid-column:2; grid-row:5; align-self:stretch; }
+  #emergency-contacts-container { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  #siaga-discharge .grid.grid-cols-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+@media (max-width: 767px) {
+  #emergency-contacts-container { grid-template-columns:minmax(0,1fr) !important; }
+  #emergency-contacts-container article { padding:13px; gap:10px; }
+  .siaga-contact-actions { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .siaga-contact-action { min-height:46px !important; width:100%; padding:8px !important; }
+  .siaga-contact-action span { display:none !important; }
+  .siaga-contact-action i { font-size:1.25rem; }
+  .siaga-location-link { min-width:108px; min-height:40px !important; padding:8px 12px !important; margin-left:0; margin-right:auto; }
+  .siaga-contact-management { justify-content:flex-end; gap:8px; }
+  .siaga-contact-manage-btn { width:44px; height:44px; min-height:44px !important; min-width:44px !important; padding:0 !important; }
+  .siaga-contact-manage-btn .siaga-action-label { display:none !important; }
+  .siaga-contact-manage-btn i { font-size:1rem; }
+}
+
+/* Dark mode: the labour guide panel and Buku KIA visit cards must not remain pale/white. */
+body.dark-mode #siaga-roles .siaga-guide-panel {
+  background:#132b40 !important;
+  border-color:#31536d !important;
+}
+body.dark-mode #siaga-roles .siaga-guide-intro,
+body.dark-mode #siaga-roles .siaga-guide-intro p { color:#dbeafe !important; }
+body.dark-mode #siaga-roles .siaga-guide-intro i { color:#7dd3fc !important; }
+body.dark-mode #siaga-roles .siaga-guide-step { background:#172337 !important; border-color:#3b526b !important; }
+body.dark-mode #siaga-roles .siaga-guide-step summary strong { color:#f1f5f9 !important; }
+body.dark-mode #siaga-roles .siaga-guide-step summary small { color:#a8bacd !important; }
+body.dark-mode #siaga-roles .siaga-guide-content { color:#d1dbe7 !important; }
+body.dark-mode #siaga-roles .siaga-guide-content strong { color:#f1f5f9 !important; }
+body.dark-mode #siaga-roles .siaga-note { background:#0c354e !important; color:#dbeafe !important; border-color:#38bdf8 !important; }
+body.dark-mode #siaga-roles .text-sky-700 { color:#7dd3fc !important; }
+body.dark-mode #siaga-discharge .siaga-kia-schedule {
+  background:#132b40 !important;
+  border-color:#31536d !important;
+}
+body.dark-mode #siaga-discharge .siaga-kia-title { color:#e0f2fe !important; }
+body.dark-mode #siaga-discharge .siaga-kia-schedule p { color:#bfdbfe !important; }
+body.dark-mode #siaga-discharge .siaga-kia-visit-card {
+  background:#1e293b !important;
+  border:1px solid #3b526b !important;
+}
+body.dark-mode #siaga-discharge .siaga-kia-visit-card strong { color:#f1f5f9 !important; }
+body.dark-mode #siaga-discharge .siaga-kia-visit-card span { color:#b7c5d5 !important; }
+body.dark-mode #siaga-discharge .siaga-kia-schedule a { color:#7dd3fc !important; }
+body.dark-mode #siaga-discharge .siaga-kia-schedule a:hover { color:#bae6fd !important; }
+body.dark-mode #siaga-contacts-container .siaga-contact-card { background:#172337 !important; border-color:#334155 !important; }
+body.dark-mode #siaga-contacts-container .siaga-contact-card h3 { color:#f1f5f9 !important; }
+body.dark-mode #siaga-contacts-container .siaga-contact-card > div > p { color:#cbd5e1 !important; }
+body.dark-mode #siaga-contacts-container .siaga-location-link { background:#123b56 !important; color:#bae6fd !important; }
+body.dark-mode #siaga-contacts-container .siaga-contact-manage-btn { background:#334155 !important; color:#e2e8f0 !important; border-color:#475569 !important; }
+body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1d26 !important; color:#fecdd3 !important; border-color:#71303c !important; }
+
+@media (prefers-reduced-motion:no-preference) {
+  .siaga-contact-action, .siaga-location-link, .siaga-contact-manage-btn { transition:background-color .15s ease,transform .15s ease; }
+  .siaga-contact-action:active, .siaga-location-link:active, .siaga-contact-manage-btn:active { transform:scale(.97); }
+}
+</style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -2510,7 +2590,7 @@ body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
 
             <!-- TAB 2: BUDGET & BELANJA -->
             <section id="sec-budget" class="hidden space-y-6">
-                <!-- 6.13.13: Compact budget + purchase progress overview -->
+                <!-- 6.13.14: Compact budget + purchase progress overview -->
                 <div id="budget-overview-card" class="rounded-2xl border border-sky-100 bg-sky-50/70 px-4 py-3 shadow-sm space-y-2.5">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2 min-w-0"><i class="fa-solid fa-wallet text-sky-600"></i><h3 class="font-bold text-sm text-slate-800">Ringkasan Anggaran</h3></div>
@@ -2756,7 +2836,7 @@ body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
                 <!-- EMERGENCY CONTACTS -->
                 <div id="siaga-contacts" class="siaga-panel scroll-mt-24">
                     <div class="siaga-panel-heading">
-                        <div><h2 class="siaga-title">🚨 Kontak Darurat & Navigasi UGD</h2><p class="siaga-subtitle">Satu nomor dapat digunakan untuk Telepon maupun WhatsApp. Tambahkan beberapa kontak sesuai kebutuhan.</p></div>
+                        <div><h2 class="siaga-title">🚨 Kontak Darurat & Navigasi UGD</h2></div>
                         <button onclick="openEmergencyContactModal()" class="siaga-add-button"><i class="fa-solid fa-plus"></i><span>Tambah Kontak</span></button>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3" id="emergency-contacts-container"></div>
@@ -2765,7 +2845,7 @@ body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
                 <!-- HOSPITAL BAG + ZIPLOCK GROUPING -->
                 <div id="siaga-bag" class="siaga-panel scroll-mt-24 space-y-3">
                     <div class="siaga-panel-heading">
-                        <div><h2 class="siaga-title">🎒 Hospital Bag Organizer</h2><p class="siaga-subtitle">Kelompokkan barang berdasarkan pemilik dan label paket/ziplock agar mudah ditemukan.</p></div>
+                        <div><h2 class="siaga-title">🎒 Hospital Bag Organizer</h2></div>
                         <button onclick="openHospitalBagModal()" class="siaga-add-button"><i class="fa-solid fa-plus"></i><span>Tambah Barang</span></button>
                     </div>
                     <div class="flex flex-wrap gap-2 text-[11px]">
@@ -2786,7 +2866,7 @@ body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
                 <!-- HOUSE CHECKLIST -->
                 <div id="siaga-departure" class="siaga-panel scroll-mt-24">
                     <div class="siaga-panel-heading">
-                        <div><h2 class="siaga-title">🔑 Checklist Rumah Sebelum Berangkat</h2><p class="siaga-subtitle">Persiapan bisa dicicil, lalu lakukan cek singkat ketika akan meninggalkan rumah.</p></div>
+                        <div><h2 class="siaga-title">🔑 Checklist Rumah Sebelum Berangkat</h2></div>
                     </div>
                     <div id="departure-checklist-container" class="space-y-4"></div>
                 </div>
@@ -2794,10 +2874,10 @@ body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
                 <!-- HUSBAND ROLE + LABOUR GUIDE (MERGED) -->
                 <div id="siaga-roles" class="siaga-panel scroll-mt-24 space-y-4">
                     <div class="siaga-panel-heading">
-                        <div><h2 class="siaga-title">🛡️ Peran Suami Saat Persalinan</h2><p class="siaga-subtitle">Panduan berurutan dari pembukaan awal hingga bayi lahir dan pemantauan awal setelah persalinan.</p></div>
+                        <div><h2 class="siaga-title">🛡️ Peran Suami Saat Persalinan</h2></div>
                     </div>
-                    <div class="rounded-2xl border border-sky-100 bg-sky-50/80 p-3 sm:p-4 space-y-3">
-                        <div class="flex items-start gap-2"><i class="fa-solid fa-circle-info text-sky-700 mt-0.5"></i><p class="text-xs text-sky-900 leading-relaxed">Panduan ini membantu pendamping memberi dukungan dan berkomunikasi dengan tenaga kesehatan. Penilaian pembukaan, kondisi ibu-bayi, tindakan, dan keputusan klinis tetap dilakukan oleh dokter/bidan. Ikuti instruksi fasilitas kesehatan serta keinginan ibu.</p></div>
+                    <div class="siaga-guide-panel rounded-2xl border border-sky-100 bg-sky-50/80 p-3 sm:p-4 space-y-3">
+                        <div class="siaga-guide-intro flex items-start gap-2"><i class="fa-solid fa-circle-info text-sky-700 mt-0.5"></i><p class="text-xs text-sky-900 leading-relaxed">Panduan ini membantu pendamping memberi dukungan dan berkomunikasi dengan tenaga kesehatan. Penilaian pembukaan, kondisi ibu-bayi, tindakan, dan keputusan klinis tetap dilakukan oleh dokter/bidan. Ikuti instruksi fasilitas kesehatan serta keinginan ibu.</p></div>
                         <details class="siaga-guide-step" open>
                             <summary><span class="siaga-step-number">1</span><span><strong>Kala I — Pembukaan awal sampai lengkap (0–10 cm)</strong><small>Fase laten dan fase aktif</small></span></summary>
                             <div class="siaga-guide-content">
@@ -2864,17 +2944,17 @@ body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
                 <!-- POSTPARTUM DISCHARGE CHECKLIST REPLACES BIRTH PLAN & AFFIRMATIONS -->
                 <div id="siaga-discharge" class="siaga-panel scroll-mt-24 space-y-3">
                     <div class="siaga-panel-heading">
-                        <div><h2 class="siaga-title">🏡 Checklist Kepulangan Ibu & Bayi</h2><p class="siaga-subtitle">Pastikan ringkasan medis, instruksi perawatan, jadwal kontrol, dan dokumen sudah jelas sebelum meninggalkan rumah sakit.</p></div>
+                        <div><h2 class="siaga-title">🏡 Checklist Kepulangan Ibu & Bayi</h2></div>
                         <button onclick="openPostpartumChecklistModal()" class="siaga-add-button"><i class="fa-solid fa-plus"></i><span>Tambah Poin</span></button>
                     </div>
                     <div class="rounded-xl bg-amber-50 border border-amber-100 p-3 text-xs text-amber-900"><i class="fa-solid fa-circle-info mr-1"></i> Checklist ini membantu keluarga bertanya dan mengingat, bukan menggantikan instruksi pulang dari dokter/bidan. Alur dokumen kelahiran dan pembiayaan dapat berbeda menurut rumah sakit, Dukcapil, dan penjamin.</div>
-                    <div class="rounded-2xl border border-sky-100 bg-sky-50/80 p-3 sm:p-4 space-y-2">
-                        <div><strong class="text-xs sm:text-sm text-sky-900">Jadwal kunjungan setelah persalinan — Buku KIA 2024</strong><p class="text-[10px] text-sky-800 mt-0.5">Gunakan sebagai pengingat awal; jadwal final mengikuti instruksi fasilitas kesehatan.</p></div>
+                    <div class="siaga-kia-schedule rounded-2xl border border-sky-100 bg-sky-50/80 p-3 sm:p-4 space-y-2">
+                        <div><strong class="siaga-kia-title text-xs sm:text-sm text-sky-900">Jadwal kunjungan setelah persalinan — Buku KIA 2024</strong><p class="text-[10px] text-sky-800 mt-0.5">Gunakan sebagai pengingat awal; jadwal final mengikuti instruksi fasilitas kesehatan.</p></div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                            <div class="rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">6–48 jam</strong><span class="text-[10px] text-slate-500">Ibu & bayi</span></div>
-                            <div class="rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">3–7 hari</strong><span class="text-[10px] text-slate-500">Ibu & bayi</span></div>
-                            <div class="rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">8–28 hari</strong><span class="text-[10px] text-slate-500">Ibu & bayi</span></div>
-                            <div class="rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">29–42 hari</strong><span class="text-[10px] text-slate-500">Ibu</span></div>
+                            <div class="siaga-kia-visit-card rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">6–48 jam</strong><span class="text-[10px] text-slate-500">Ibu & bayi</span></div>
+                            <div class="siaga-kia-visit-card rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">3–7 hari</strong><span class="text-[10px] text-slate-500">Ibu & bayi</span></div>
+                            <div class="siaga-kia-visit-card rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">8–28 hari</strong><span class="text-[10px] text-slate-500">Ibu & bayi</span></div>
+                            <div class="siaga-kia-visit-card rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">29–42 hari</strong><span class="text-[10px] text-slate-500">Ibu</span></div>
                         </div>
                         <a class="inline-flex items-center gap-1 text-[10px] font-bold text-sky-800 underline" href="https://kesprimkom.kemkes.go.id/assets/uploads/contents/others/Buku_KIA_2024.pdf" target="_blank" rel="noopener">Buka Buku KIA Kemenkes 2024 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
@@ -7233,7 +7313,7 @@ body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
             saveToLocalStorage();
         }
 
-        // 6.13.13 — Shopping alternatives, preferred option and compact overview.
+        // 6.13.14 — Shopping alternatives, preferred option and compact overview.
         function splitLegacyShoppingValues(raw) {
             return String(raw || '').split(/\s*\n+\s*|\s*,\s*|\s+\/\/\s+/).map(v => v.trim()).filter(Boolean);
         }
@@ -7708,14 +7788,14 @@ body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
                 const safePhone = siagaEscapeHtml(c.phone || '');
                 const maps = /^https?:\/\//i.test(String(c.mapsUrl || '')) ? c.mapsUrl : '';
                 return `
-                    <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3 min-w-0">
+                    <article class="siaga-contact-card rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3 min-w-0">
                         <div class="min-w-0"><span class="inline-flex px-2 py-1 bg-sky-100 text-sky-800 text-[10px] font-bold rounded-lg uppercase tracking-wide mb-1">${safeRole}</span><h3 class="font-bold text-slate-800 text-sm break-words">${safeName}</h3><p class="text-xs font-mono font-semibold text-slate-600 mt-1 break-all">${safePhone}</p></div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <a href="tel:${cleanPhone}" class="min-h-[44px] px-2 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"><i class="fa-solid fa-phone"></i> Telepon</a>
-                            <a href="https://wa.me/${waPhone}" target="_blank" rel="noopener" class="min-h-[44px] px-2 py-2 bg-green-100 hover:bg-green-200 text-green-800 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"><i class="fa-brands fa-whatsapp text-base"></i> WhatsApp</a>
+                        <div class="siaga-contact-actions grid grid-cols-2 gap-2">
+                            <a href="tel:${cleanPhone}" aria-label="Telepon ${safeName}" title="Telepon ${safeName}" class="siaga-contact-action siaga-call-action min-h-[44px] px-2 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"><i class="fa-solid fa-phone" aria-hidden="true"></i><span>Telepon</span></a>
+                            <a href="https://wa.me/${waPhone}" target="_blank" rel="noopener" aria-label="WhatsApp ${safeName}" title="WhatsApp ${safeName}" class="siaga-contact-action siaga-wa-action min-h-[44px] px-2 py-2 bg-green-100 hover:bg-green-200 text-green-800 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"><i class="fa-brands fa-whatsapp text-base" aria-hidden="true"></i><span>WhatsApp</span></a>
                         </div>
-                        ${maps ? `<a href="${siagaEscapeHtml(maps)}" target="_blank" rel="noopener" class="min-h-[40px] px-3 py-2 bg-sky-100 hover:bg-sky-200 text-sky-800 font-semibold rounded-xl text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-location-dot"></i> Buka Lokasi</a>` : ''}
-                        <div class="flex justify-end gap-2 border-t border-slate-200 pt-2"><button onclick="openEmergencyContactModal(${Number(c.id)})" class="min-h-[36px] px-3 rounded-lg bg-white text-slate-600 border border-slate-200 text-xs"><i class="fa-solid fa-pen mr-1"></i>Edit</button><button onclick="deleteEmergencyContact(${Number(c.id)})" class="min-h-[36px] px-3 rounded-lg bg-rose-50 text-rose-600 text-xs"><i class="fa-solid fa-trash mr-1"></i>Hapus</button></div>
+                        ${maps ? `<a href="${siagaEscapeHtml(maps)}" target="_blank" rel="noopener" aria-label="Buka lokasi ${safeName}" title="Lokasi ${safeName}" class="siaga-location-link min-h-[40px] px-3 py-2 bg-sky-100 hover:bg-sky-200 text-sky-800 font-semibold rounded-xl text-xs inline-flex items-center justify-start gap-2"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>Lokasi</span></a>` : ''}
+                        <div class="siaga-contact-management flex justify-end gap-2 border-t border-slate-200 pt-2"><button type="button" onclick="openEmergencyContactModal(${Number(c.id)})" aria-label="Edit kontak ${safeName}" title="Edit kontak" class="siaga-contact-manage-btn min-h-[44px] min-w-[44px] px-3 rounded-lg bg-white text-slate-600 border border-slate-200 text-xs"><i class="fa-solid fa-pen" aria-hidden="true"></i><span class="siaga-action-label">Edit</span></button><button type="button" onclick="deleteEmergencyContact(${Number(c.id)})" aria-label="Hapus kontak ${safeName}" title="Hapus kontak" class="siaga-contact-manage-btn siaga-contact-delete min-h-[44px] min-w-[44px] px-3 rounded-lg bg-rose-50 text-rose-600 text-xs"><i class="fa-solid fa-trash" aria-hidden="true"></i><span class="siaga-action-label">Hapus</span></button></div>
                     </article>`;
             }).join('');
         }
@@ -9976,7 +10056,7 @@ body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.13',
+                    appVersion: '6.13.14',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -14506,7 +14586,7 @@ body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.13. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.14. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
