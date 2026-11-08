@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.12: shopping alternatives, budget progress and safer category removal -->
+    <!-- Keluarga Pohon Teduh 6.13.13: shopping alternatives, budget progress and safer category removal -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.12">
+    <meta name="application-version" content="6.13.13">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1851,8 +1851,8 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 </style>
 
 <style id="budget-shopping-6138">
-/* KPT 6.13.12 — compact budget, alternatives and mobile touch targets */
-/* KPT 6.13.12 — compact budgeting, candidate comparison and touch-friendly editor */
+/* KPT 6.13.13 — compact budget, alternatives and mobile touch targets */
+/* KPT 6.13.13 — compact budgeting, candidate comparison and touch-friendly editor */
 #budget-overview-card { min-width:0; }
 #budget-overview-card .tabular-nums { overflow-wrap:anywhere; }
 .budget-alt-details { min-width:0; }
@@ -1899,7 +1899,7 @@ body.dark-mode .budget-alt-editor-card { background:#172337; border-color:#33415
 body.dark-mode .budget-alt-editor-card input, body.dark-mode .budget-alt-editor-card textarea { background:#0f1b2c !important; border-color:#475569 !important; color:#f1f5f9 !important; }
 body.dark-mode #shopping-item-form label { color:#e2e8f0 !important; }
 
-/* 6.13.12 — clearer candidate comparison and mobile touch targets */
+/* 6.13.13 — clearer candidate comparison and mobile touch targets */
 .budget-alt-details > summary { min-height:38px; padding:7px 11px; }
 .budget-alt-card { overflow-wrap:anywhere; }
 .budget-alt-card a { min-height:32px; }
@@ -1941,7 +1941,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
 
 <style id="budget-mobile-type-61310">
-/* KPT 6.13.12 — more readable shopping cards on narrow screens */
+/* KPT 6.13.13 — more readable shopping cards on narrow screens */
 @media (max-width: 767px) {
   table.mobile-card-table--shopping .kpt-shopping-summary {
     gap: 10px !important;
@@ -2001,7 +2001,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 </style>
 
 <style id="kpt-log-daily-mobile-61312">
-/* Log Harian 6.13.12 — single-tap sleep timer, concise forms and readable summaries. */
+/* Log Harian 6.13.13 — single-tap sleep timer, concise forms and readable summaries. */
 #modal-daily-log > div { width:min(100%, 520px); }
 #daily-log-form input:not([type="hidden"]), #daily-log-form select, #daily-log-form textarea { min-height:44px; font-size:16px; }
 #daily-log-form label { display:block; line-height:1.35; }
@@ -2088,6 +2088,73 @@ body.dark-mode #btn-quick-sleep-main.is-sleep-active > div { background:#312e81;
 body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-shopping-qty,
 body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-shopping-estimate,
 body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-shopping-options { background:#1e293b; border-color:#334155; }
+</style>
+
+<style id="suami-siaga-61313">
+.siaga-panel{background:#fff;border:1px solid #e2e8f0;border-radius:1.5rem;padding:1rem;box-shadow:0 2px 8px rgba(15,23,42,.035)}
+.siaga-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;border-bottom:1px solid #e2e8f0;padding-bottom:.85rem;margin-bottom:.25rem}
+.siaga-title{font-size:1rem;font-weight:800;color:#1e293b;line-height:1.35}
+.siaga-subtitle{font-size:.75rem;color:#64748b;line-height:1.5;margin-top:.2rem;max-width:45rem}
+.siaga-add-button{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:42px;padding:.6rem .85rem;border-radius:.8rem;background:#0284c7;color:#fff;font-size:.72rem;font-weight:700;white-space:nowrap;flex-shrink:0}
+.siaga-small-add{min-height:36px;padding:.45rem .7rem;border-radius:.7rem;background:#e0f2fe;color:#075985;font-size:.68rem;font-weight:700;white-space:nowrap}
+.siaga-quick-link{display:inline-flex;align-items:center;gap:.45rem;min-height:40px;padding:.55rem .8rem;border-radius:999px;background:#fff;border:1px solid #dbeafe;color:#075985;font-size:.72rem;font-weight:700}
+.siaga-helper-chip{display:inline-flex;align-items:center;gap:.35rem;padding:.4rem .65rem;border-radius:999px;background:#f1f5f9;color:#475569;font-weight:600}
+.siaga-guide-step{border:1px solid #dbeafe;border-radius:1rem;background:#fff;overflow:hidden}
+.siaga-guide-step summary{display:flex;align-items:center;gap:.7rem;list-style:none;cursor:pointer;padding:.8rem .9rem;min-height:62px}
+.siaga-guide-step summary::-webkit-details-marker{display:none}
+.siaga-guide-step summary:after{content:'+';margin-left:auto;color:#0284c7;font-size:1.2rem;font-weight:700}
+.siaga-guide-step[open] summary:after{content:'−'}
+.siaga-guide-step summary strong{display:block;color:#0f172a;font-size:.78rem;line-height:1.35}
+.siaga-guide-step summary small{display:block;color:#64748b;font-size:.68rem;margin-top:.15rem}
+.siaga-step-number{display:flex;align-items:center;justify-content:center;flex:0 0 30px;height:30px;border-radius:999px;background:#e0f2fe;color:#0369a1;font-weight:800;font-size:.8rem}
+.siaga-guide-content{padding:.1rem .95rem .95rem 3.35rem;color:#475569;font-size:.75rem;line-height:1.65}
+.siaga-guide-content ul{padding-left:1rem;list-style:disc;display:grid;gap:.45rem;margin:.4rem 0}
+.siaga-guide-content li::marker{color:#0284c7}
+.siaga-note{padding:.6rem .7rem;border-left:3px solid #0ea5e9;background:#f0f9ff;border-radius:.3rem .6rem .6rem .3rem;color:#075985;font-size:.7rem;line-height:1.5;margin-top:.6rem}
+.siaga-icon-button{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:.65rem;background:#f1f5f9;color:#475569;flex-shrink:0}
+.siaga-icon-button.danger{background:#fff1f2;color:#e11d48}
+@media(min-width:640px){.siaga-panel{padding:1.35rem}.siaga-title{font-size:1.08rem}}
+@media(max-width:639px){
+  #sec-siaga{gap:1rem}
+  #siaga-overview{padding:1rem}
+  #siaga-overview .grid.grid-cols-3>div{padding:.65rem .6rem;min-width:0}
+  #siaga-overview .grid.grid-cols-3 strong{font-size:1rem}
+  .siaga-panel{padding:.9rem;border-radius:1.15rem}
+  .siaga-panel-heading{align-items:center}
+  .siaga-title{font-size:.94rem}
+  .siaga-subtitle{font-size:.68rem}
+  .siaga-add-button{min-height:44px;padding:.55rem .7rem;font-size:.68rem}
+  .siaga-add-button span{display:inline}
+  .siaga-guide-step summary{padding:.75rem;gap:.55rem}
+  .siaga-guide-step summary strong{font-size:.74rem}
+  .siaga-guide-content{padding:.1rem .8rem .85rem 2.8rem;font-size:.72rem}
+  .siaga-guide-content ul{padding-left:.9rem}
+  .siaga-quick-link{min-height:42px;padding:.55rem .72rem;font-size:.68rem}
+  #modal-postpartum-checklist>div{max-height:92dvh}
+}
+body.dark-mode .siaga-panel{background:#1e293b;border-color:#334155;box-shadow:none}
+body.dark-mode .siaga-title,body.dark-mode .siaga-guide-step summary strong{color:#f1f5f9}
+body.dark-mode .siaga-subtitle,body.dark-mode .siaga-guide-step summary small{color:#94a3b8}
+body.dark-mode .siaga-guide-step{background:#172337;border-color:#334155}
+body.dark-mode .siaga-guide-content{color:#cbd5e1}
+body.dark-mode .siaga-guide-step summary:after{color:#7dd3fc}
+body.dark-mode .siaga-helper-chip{background:#334155;color:#cbd5e1}
+body.dark-mode .siaga-icon-button{background:#334155;color:#e2e8f0}
+body.dark-mode .siaga-icon-button.danger{background:#4c1d26;color:#fecdd3}
+body.dark-mode .siaga-note{background:#082f49;border-color:#38bdf8;color:#bae6fd}
+body.dark-mode #siaga-overview{background:linear-gradient(135deg,#12342e,#172b3b 70%,#1e293b);border-color:#24594e}
+body.dark-mode #siaga-overview h2{color:#f0fdfa}
+body.dark-mode #siaga-overview p{color:#cbd5e1}
+body.dark-mode #siaga-overview .bg-white\/85,body.dark-mode #siaga-overview .bg-white\/90{background:#243449;border-color:#3b526b}
+body.dark-mode #siaga-overview .text-slate-800{color:#f1f5f9}
+body.dark-mode #siaga-overview .text-slate-500,body.dark-mode #siaga-overview .text-slate-400{color:#94a3b8}
+body.dark-mode .siaga-quick-link{background:#243449;border-color:#3b526b;color:#bae6fd}
+body.dark-mode #siaga-contacts-container article,body.dark-mode #hospital-bag-mobile article{background:#172337;border-color:#334155}
+body.dark-mode #departure-checklist-container section,body.dark-mode #postpartum-checklist-container section{background:#172337;border-color:#334155}
+body.dark-mode #departure-checklist-container .bg-white,body.dark-mode #postpartum-checklist-container .bg-white{background:#1e293b}
+body.dark-mode #siaga-discharge .bg-amber-50{background:#422f16;border-color:#75511f;color:#fde68a}
+body.dark-mode #siaga-discharge .text-amber-900{color:#fde68a}
+@media(prefers-reduced-motion:no-preference){.siaga-quick-link,.siaga-add-button,.siaga-small-add{transition:background-color .15s ease,transform .15s ease}.siaga-quick-link:active,.siaga-add-button:active,.siaga-small-add:active{transform:scale(.98)}}
 </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
@@ -2443,7 +2510,7 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
 
             <!-- TAB 2: BUDGET & BELANJA -->
             <section id="sec-budget" class="hidden space-y-6">
-                <!-- 6.13.12: Compact budget + purchase progress overview -->
+                <!-- 6.13.13: Compact budget + purchase progress overview -->
                 <div id="budget-overview-card" class="rounded-2xl border border-sky-100 bg-sky-50/70 px-4 py-3 shadow-sm space-y-2.5">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2 min-w-0"><i class="fa-solid fa-wallet text-sky-600"></i><h3 class="font-bold text-sm text-slate-800">Ringkasan Anggaran</h3></div>
@@ -2658,121 +2725,160 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
             </section>
 
             <!-- TAB 4: SUAMI SIAGA -->
-            <section id="sec-siaga" class="hidden space-y-6">
-                <!-- 1. FAST DIAL EMERGENCY CONTACTS -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
-                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                        <div>
-                            <h2 class="text-lg font-bold text-slate-800">🚨 Kontak Darurat & Navigasi Cepat UGD</h2>
-                            <p class="text-xs text-slate-500">Panggil cepat & rute navigasi instan di hari persalinan</p>
+            <section id="sec-siaga" class="hidden space-y-5">
+                <!-- SUAMI SIAGA HERO & PROGRESS -->
+                <div id="siaga-overview" class="rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-sky-50 p-4 sm:p-6 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                        <div class="space-y-1">
+                            <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-700"><i class="fa-solid fa-shield-heart"></i> Persiapan persalinan keluarga</span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">Suami SIAGA</h2>
+                            <p class="text-sm text-slate-600 max-w-2xl">Siapkan kebutuhan, dokumen, kontak, dan dukungan untuk mendampingi ibu hingga menyambut si kecil.</p>
                         </div>
-                        <button onclick="openEmergencyContactModal()" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1 shadow-sm">
-                            <i class="fa-solid fa-plus"></i> Tambah Kontak
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="emergency-contacts-container">
-                        <!-- Populated via JS -->
-                    </div>
-                </div>
-
-                <!-- 2. CHECKLIST DEPARTURE & HOSPITAL BAG TABLE -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div class="lg:col-span-7 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
-                        <div class="flex justify-between items-center gap-2 border-b border-slate-100 pb-3">
-                            <div>
-                                <h2 class="text-lg font-bold text-slate-800">🎒 Checklist Tas Melahirkan</h2>
-                                <p class="text-xs text-slate-500">Barang bawaan di RS (Minggu ke-35)</p>
-                            </div>
-                            <button onclick="openHospitalBagModal()" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1 shadow-sm whitespace-nowrap">
-                                <i class="fa-solid fa-plus"></i> Tambah Barang
-                            </button>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs text-slate-600">
-                                <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider border-y border-slate-200/60">
-                                    <tr>
-                                        <th class="p-2.5 w-10 text-center">Status</th>
-                                        <th class="p-2.5">Nama Barang / Detail</th>
-                                        <th class="p-2.5 w-24 text-center">Jumlah</th>
-                                        <th class="p-2.5 text-center w-20">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="hospital-bag-tbody" class="divide-y divide-slate-100">
-                                    <!-- Populated via JS -->
-                                </tbody>
-                            </table>
+                        <div class="shrink-0 rounded-2xl bg-white/85 border border-emerald-100 px-4 py-3 sm:min-w-[170px]">
+                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-500">Kesiapan persalinan</p>
+                            <div class="flex items-baseline gap-1"><strong id="siaga-total-progress" class="text-3xl text-emerald-700">0%</strong><span class="text-xs text-slate-500">selesai</span></div>
+                            <div class="h-2 bg-slate-100 rounded-full overflow-hidden mt-2"><div id="siaga-progress-bar" class="h-full bg-emerald-500 rounded-full" style="width:0%"></div></div>
                         </div>
                     </div>
-
-                    <div class="lg:col-span-5 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
-                        <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
-                            <div>
-                                <h2 class="text-lg font-bold text-slate-800">🔑 Ceklis 1 Menit Sebelum Berangkat</h2>
-                                <p class="text-xs text-slate-500">Pastikan rumah aman saat ditinggal panik ke RS</p>
-                            </div>
-                            <button onclick="addDepartureItem()" class="px-2.5 py-1.5 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-2xs rounded-xl transition flex items-center gap-1 shadow-sm whitespace-nowrap">
-                                <i class="fa-solid fa-plus"></i> Tambah Poin
-                            </button>
-                        </div>
-
-                        <div class="space-y-2 text-xs" id="departure-checklist-container">
-                            <!-- Populated via JS -->
-                        </div>
+                    <div class="grid grid-cols-3 gap-2 sm:gap-3">
+                        <div class="rounded-xl bg-white/90 border border-slate-100 p-3"><p class="text-[10px] text-slate-500">Hospital Bag</p><strong id="siaga-bag-progress" class="text-base sm:text-lg text-slate-800">0/0</strong><p class="text-[10px] text-slate-400">barang siap</p></div>
+                        <div class="rounded-xl bg-white/90 border border-slate-100 p-3"><p class="text-[10px] text-slate-500">Rumah</p><strong id="siaga-departure-progress" class="text-base sm:text-lg text-slate-800">0/0</strong><p class="text-[10px] text-slate-400">ceklist selesai</p></div>
+                        <div class="rounded-xl bg-white/90 border border-slate-100 p-3"><p class="text-[10px] text-slate-500">Pulang RS</p><strong id="siaga-discharge-progress" class="text-base sm:text-lg text-slate-800">0/0</strong><p class="text-[10px] text-slate-400">hal terkonfirmasi</p></div>
+                    </div>
+                    <div class="flex flex-wrap gap-2" aria-label="Akses cepat Suami SIAGA">
+                        <button type="button" onclick="scrollToSiagaSection('siaga-contacts')" class="siaga-quick-link"><i class="fa-solid fa-phone-volume"></i> Kontak</button>
+                        <button type="button" onclick="scrollToSiagaSection('siaga-bag')" class="siaga-quick-link"><i class="fa-solid fa-suitcase"></i> Hospital Bag</button>
+                        <button type="button" onclick="scrollToSiagaSection('siaga-roles')" class="siaga-quick-link"><i class="fa-solid fa-hands-holding-child"></i> Panduan Persalinan</button>
+                        <button type="button" onclick="scrollToSiagaSection('siaga-discharge')" class="siaga-quick-link"><i class="fa-solid fa-house-medical"></i> Pulang RS</button>
                     </div>
                 </div>
 
-                <!-- 3. PERAN SUAMI & BIRTH PLAN RINGKASAN -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div class="lg:col-span-6 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
-                        <div class="flex justify-between items-center gap-2 border-b border-slate-100 pb-3">
-                            <div>
-                                <h2 class="text-lg font-bold text-slate-800">🛡️ Peran Suami Saat Persalinan</h2>
-                                <p class="text-xs text-slate-500">Panduan tindakan konkret untuk Fikri</p>
-                            </div>
-                            <button onclick="openHusbandRoleModal()" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1 shadow-sm whitespace-nowrap">
-                                <i class="fa-solid fa-plus"></i> Catatan Baru
-                            </button>
-                        </div>
-
-                        <div class="space-y-3 text-xs" id="husband-roles-container">
-                            <!-- Populated via JS -->
-                        </div>
+                <!-- EMERGENCY CONTACTS -->
+                <div id="siaga-contacts" class="siaga-panel scroll-mt-24">
+                    <div class="siaga-panel-heading">
+                        <div><h2 class="siaga-title">🚨 Kontak Darurat & Navigasi UGD</h2><p class="siaga-subtitle">Satu nomor dapat digunakan untuk Telepon maupun WhatsApp. Tambahkan beberapa kontak sesuai kebutuhan.</p></div>
+                        <button onclick="openEmergencyContactModal()" class="siaga-add-button"><i class="fa-solid fa-plus"></i><span>Tambah Kontak</span></button>
                     </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3" id="emergency-contacts-container"></div>
+                </div>
 
-                    <div class="lg:col-span-6 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
-                        <div class="flex justify-between items-center gap-2 border-b border-slate-100 pb-3">
-                            <div>
-                                <h2 class="text-lg font-bold text-slate-800">📋 Ringkasan Birth Plan (Keinginan Persalinan)</h2>
-                                <p class="text-xs text-slate-500">Preferensi medis Fikri & Ollyl untuk dikonfirmasi ke dokter</p>
+                <!-- HOSPITAL BAG + ZIPLOCK GROUPING -->
+                <div id="siaga-bag" class="siaga-panel scroll-mt-24 space-y-3">
+                    <div class="siaga-panel-heading">
+                        <div><h2 class="siaga-title">🎒 Hospital Bag Organizer</h2><p class="siaga-subtitle">Kelompokkan barang berdasarkan pemilik dan label paket/ziplock agar mudah ditemukan.</p></div>
+                        <button onclick="openHospitalBagModal()" class="siaga-add-button"><i class="fa-solid fa-plus"></i><span>Tambah Barang</span></button>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-[11px]">
+                        <span class="siaga-helper-chip"><i class="fa-solid fa-file-lines"></i> Dokumen</span>
+                        <span class="siaga-helper-chip"><i class="fa-solid fa-person-dress"></i> Ibu</span>
+                        <span class="siaga-helper-chip"><i class="fa-solid fa-person"></i> Pendamping</span>
+                        <span class="siaga-helper-chip"><i class="fa-solid fa-baby"></i> Bayi</span>
+                    </div>
+                    <div class="hidden sm:block overflow-x-auto rounded-xl border border-slate-100">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider border-y border-slate-200/60"><tr><th class="p-2.5 w-10 text-center">Siap</th><th class="p-2.5">Nama Barang / Paket</th><th class="p-2.5 w-24 text-center">Jumlah</th><th class="p-2.5 text-center w-20">Aksi</th></tr></thead>
+                            <tbody id="hospital-bag-tbody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                    <div class="sm:hidden space-y-3" id="hospital-bag-mobile"></div>
+                </div>
+
+                <!-- HOUSE CHECKLIST -->
+                <div id="siaga-departure" class="siaga-panel scroll-mt-24">
+                    <div class="siaga-panel-heading">
+                        <div><h2 class="siaga-title">🔑 Checklist Rumah Sebelum Berangkat</h2><p class="siaga-subtitle">Persiapan bisa dicicil, lalu lakukan cek singkat ketika akan meninggalkan rumah.</p></div>
+                    </div>
+                    <div id="departure-checklist-container" class="space-y-4"></div>
+                </div>
+
+                <!-- HUSBAND ROLE + LABOUR GUIDE (MERGED) -->
+                <div id="siaga-roles" class="siaga-panel scroll-mt-24 space-y-4">
+                    <div class="siaga-panel-heading">
+                        <div><h2 class="siaga-title">🛡️ Peran Suami Saat Persalinan</h2><p class="siaga-subtitle">Panduan berurutan dari pembukaan awal hingga bayi lahir dan pemantauan awal setelah persalinan.</p></div>
+                    </div>
+                    <div class="rounded-2xl border border-sky-100 bg-sky-50/80 p-3 sm:p-4 space-y-3">
+                        <div class="flex items-start gap-2"><i class="fa-solid fa-circle-info text-sky-700 mt-0.5"></i><p class="text-xs text-sky-900 leading-relaxed">Panduan ini membantu pendamping memberi dukungan dan berkomunikasi dengan tenaga kesehatan. Penilaian pembukaan, kondisi ibu-bayi, tindakan, dan keputusan klinis tetap dilakukan oleh dokter/bidan. Ikuti instruksi fasilitas kesehatan serta keinginan ibu.</p></div>
+                        <details class="siaga-guide-step" open>
+                            <summary><span class="siaga-step-number">1</span><span><strong>Kala I — Pembukaan awal sampai lengkap (0–10 cm)</strong><small>Fase laten dan fase aktif</small></span></summary>
+                            <div class="siaga-guide-content">
+                                <p><strong>Yang dilakukan suami:</strong></p>
+                                <ul>
+                                    <li>Tetap tenang, dengarkan keluhan ibu, dan tanyakan bentuk bantuan yang ia inginkan. Jangan meremehkan rasa sakit atau memaksakan teknik tertentu.</li>
+                                    <li>Hubungi dokter/bidan atau fasilitas persalinan sesuai rencana. Sampaikan pola kontraksi, ketuban pecah atau tidak, perdarahan, gerakan bayi, dan kondisi ibu yang terlihat.</li>
+                                    <li>Bantu mencatat waktu mulai kontraksi dan durasinya bila berguna bagi tenaga kesehatan. Jangan menggunakan satu aturan interval kontraksi sebagai satu-satunya penentu kapan harus berangkat.</li>
+                                    <li>Siapkan dokumen, hospital bag, dan kebutuhan perjalanan. Bila tenaga kesehatan meminta segera datang atau muncul tanda bahaya, jangan menunda untuk menyelesaikan checklist rumah.</li>
+                                    <li>Berikan dukungan fisik sesuai kenyamanan ibu: genggam tangan, bantu posisi yang nyaman, ajak berjalan atau berganti posisi bila diizinkan, bantu relaksasi/napas, atau pijat ringan/counter-pressure bila diminta.</li>
+                                    <li>Bantu kebutuhan sederhana seperti minum, ke toilet, menjaga privasi, dan menyampaikan pertanyaan ibu kepada petugas—sesuai kebijakan fasilitas dan kondisi klinis.</li>
+                                    <li>Catat informasi penting dari bidan/dokter. Jangan menilai sendiri pembukaan, melakukan pemeriksaan dalam, memberi obat, atau memaksa ibu mengejan.</li>
+                                </ul>
+                                <p class="siaga-note">Pembukaan dan kemajuan persalinan tidak bisa dipastikan dari frekuensi kontraksi saja. Pemeriksaan tenaga kesehatan tetap diperlukan.</p>
                             </div>
-                            <button onclick="openBirthPlanModal()" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1 shadow-sm whitespace-nowrap">
-                                <i class="fa-solid fa-plus"></i> Poin Baru
-                            </button>
+                        </details>
+                        <details class="siaga-guide-step">
+                            <summary><span class="siaga-step-number">2</span><span><strong>Kala II — Pembukaan lengkap hingga bayi lahir</strong><small>Fase meneran dan kelahiran bayi</small></span></summary>
+                            <div class="siaga-guide-content">
+                                <ul>
+                                    <li>Tetap berada di sisi ibu sebagai pendamping pilihan, sepanjang diizinkan fasilitas. Tanyakan apakah ia ingin digenggam tangannya, dibantu mengatur napas, atau diberi ruang.</li>
+                                    <li>Dengarkan instruksi bidan/dokter tentang kapan dan bagaimana meneran. Jangan memaksa ibu mengejan sebelum diarahkan atau menahan/mengejan dengan cara tertentu atas inisiatif sendiri.</li>
+                                    <li>Bantu ibu mempertahankan posisi yang nyaman dan aman sesuai arahan petugas. Bila posisi perlu diubah untuk pemantauan atau tindakan, bantu jelaskan dengan tenang.</li>
+                                    <li>Berikan dukungan singkat dan menenangkan, jaga privasi, serta bantu komunikasi jika ibu kesulitan menyampaikan kebutuhan.</li>
+                                    <li>Jangan menekan perut/fundus, menarik bayi atau tali pusat, maupun melakukan tindakan medis. Serahkan seluruh tindakan kelahiran kepada tenaga kesehatan.</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <details class="siaga-guide-step">
+                            <summary><span class="siaga-step-number">3</span><span><strong>Kala III — Setelah bayi lahir hingga plasenta keluar</strong><small>Pemantauan ibu dan penanganan plasenta oleh petugas</small></span></summary>
+                            <div class="siaga-guide-content">
+                                <ul>
+                                    <li>Tetap dampingi ibu dan ikuti arahan petugas. Penanganan plasenta dan pemantauan perdarahan merupakan tugas tenaga kesehatan.</li>
+                                    <li>Jangan menarik tali pusat atau mencoba mengeluarkan plasenta sendiri.</li>
+                                    <li>Bila ibu dan bayi stabil serta fasilitas memungkinkan, dukung kontak kulit ke kulit dan Inisiasi Menyusu Dini (IMD) sesuai arahan petugas dan keinginan ibu.</li>
+                                    <li>Jika bayi membutuhkan pemeriksaan atau bantuan segera, beri ruang kepada tim kesehatan dan ikuti informasi yang mereka sampaikan.</li>
+                                    <li>Catat informasi kelahiran yang disampaikan petugas untuk keperluan administrasi dan catatan keluarga.</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <details class="siaga-guide-step">
+                            <summary><span class="siaga-step-number">4</span><span><strong>Kala IV — Pemantauan awal setelah persalinan</strong><small>Dua jam awal dan masa observasi di fasilitas kesehatan</small></span></summary>
+                            <div class="siaga-guide-content">
+                                <ul>
+                                    <li>Dampingi ibu selama pemantauan. Petugas akan memeriksa kondisi ibu, perdarahan, kontraksi rahim, tekanan darah, dan kondisi bayi sesuai kebutuhan.</li>
+                                    <li>Bantu ibu merasa nyaman, menjaga kehangatan bayi, dan mendukung proses menyusui bila ibu dan bayi memungkinkan.</li>
+                                    <li>Tanyakan kepada petugas hasil pemeriksaan awal, kondisi yang perlu dipantau, obat atau perawatan yang diberikan, dan kapan harus segera meminta bantuan.</li>
+                                    <li>Jangan terburu-buru meninggalkan fasilitas sebelum petugas menyatakan ibu dan bayi boleh pulang serta instruksi pulang sudah dipahami.</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <div class="rounded-xl border border-rose-200 bg-rose-50 p-3 space-y-1">
+                            <strong class="text-sm text-rose-800"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Tanda bahaya saat proses melahirkan</strong>
+                            <p class="text-xs text-rose-800 leading-relaxed">Air ketuban hijau dan berbau, kejang, perdarahan, nyeri/kesakitan hebat, ibu tidak kuat mengejan, atau tali pusat/tangan bayi tampak keluar dari jalan lahir memerlukan pertolongan segera. Hubungi tenaga kesehatan dan ikuti arahan untuk ke fasilitas rujukan; jangan menunggu checklist selesai.</p>
                         </div>
-
-                        <div class="space-y-3 text-xs" id="birth-plan-container">
-                            <!-- Populated via JS -->
-                        </div>
+                        <div class="flex flex-wrap gap-3 text-[11px]"><a class="font-semibold text-sky-700 underline" href="https://kesprimkom.kemkes.go.id/assets/uploads/contents/others/Buku_KIA_2024.pdf" target="_blank" rel="noopener">Buku KIA Kemenkes 2024</a><a class="font-semibold text-sky-700 underline" href="https://www.ncbi.nlm.nih.gov/books/NBK513805/" target="_blank" rel="noopener">WHO: Intrapartum care</a></div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><div><h3 class="font-bold text-slate-800 text-sm">Catatan Peran Suami & Instruksi Khusus</h3><p class="text-xs text-slate-500">Pertahankan catatan pribadi yang sudah pernah dibuat; tambahkan hal khusus dari dokter/bidan.</p></div><button onclick="openHusbandRoleModal()" class="siaga-add-button"><i class="fa-solid fa-plus"></i><span>Tambah Catatan</span></button></div>
+                        <div class="space-y-3" id="husband-roles-container"></div>
                     </div>
                 </div>
 
-                <!-- 4. SKRIP AFIRMASI POSITIF & HYPNOBIRTHING -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
-                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                        <div>
-                            <h2 class="text-lg font-bold text-slate-800">💬 Skrip Afirmasi Positif & Hypnobirthing</h2>
-                            <p class="text-xs text-slate-500">Bisikkan atau katakan dengan tenang kepada Ollyl di sela puncak gelombang kontraksi</p>
+                <!-- POSTPARTUM DISCHARGE CHECKLIST REPLACES BIRTH PLAN & AFFIRMATIONS -->
+                <div id="siaga-discharge" class="siaga-panel scroll-mt-24 space-y-3">
+                    <div class="siaga-panel-heading">
+                        <div><h2 class="siaga-title">🏡 Checklist Kepulangan Ibu & Bayi</h2><p class="siaga-subtitle">Pastikan ringkasan medis, instruksi perawatan, jadwal kontrol, dan dokumen sudah jelas sebelum meninggalkan rumah sakit.</p></div>
+                        <button onclick="openPostpartumChecklistModal()" class="siaga-add-button"><i class="fa-solid fa-plus"></i><span>Tambah Poin</span></button>
+                    </div>
+                    <div class="rounded-xl bg-amber-50 border border-amber-100 p-3 text-xs text-amber-900"><i class="fa-solid fa-circle-info mr-1"></i> Checklist ini membantu keluarga bertanya dan mengingat, bukan menggantikan instruksi pulang dari dokter/bidan. Alur dokumen kelahiran dan pembiayaan dapat berbeda menurut rumah sakit, Dukcapil, dan penjamin.</div>
+                    <div class="rounded-2xl border border-sky-100 bg-sky-50/80 p-3 sm:p-4 space-y-2">
+                        <div><strong class="text-xs sm:text-sm text-sky-900">Jadwal kunjungan setelah persalinan — Buku KIA 2024</strong><p class="text-[10px] text-sky-800 mt-0.5">Gunakan sebagai pengingat awal; jadwal final mengikuti instruksi fasilitas kesehatan.</p></div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            <div class="rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">6–48 jam</strong><span class="text-[10px] text-slate-500">Ibu & bayi</span></div>
+                            <div class="rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">3–7 hari</strong><span class="text-[10px] text-slate-500">Ibu & bayi</span></div>
+                            <div class="rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">8–28 hari</strong><span class="text-[10px] text-slate-500">Ibu & bayi</span></div>
+                            <div class="rounded-xl bg-white p-2"><strong class="block text-xs text-slate-800">29–42 hari</strong><span class="text-[10px] text-slate-500">Ibu</span></div>
                         </div>
-                        <button onclick="openAffirmationModal()" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1 shadow-sm">
-                            <i class="fa-solid fa-plus"></i> Afirmasi Baru
-                        </button>
+                        <a class="inline-flex items-center gap-1 text-[10px] font-bold text-sky-800 underline" href="https://kesprimkom.kemkes.go.id/assets/uploads/contents/others/Buku_KIA_2024.pdf" target="_blank" rel="noopener">Buka Buku KIA Kemenkes 2024 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="affirmations-container">
-                        <!-- Populated via JS -->
-                    </div>
+                    <div id="postpartum-checklist-container" class="space-y-4"></div>
                 </div>
             </section>
 
@@ -4020,8 +4126,9 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
                     <input type="text" id="form-contact-role" required placeholder="misal: Rumah Sakit Utama / Driver / Bidan" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
                 </div>
                 <div>
-                    <label class="font-semibold text-slate-700">Nomor Telepon / WA</label>
-                    <input type="text" id="form-contact-phone" required placeholder="081234567890" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                    <label class="font-semibold text-slate-700">Satu Nomor Telepon / WhatsApp</label>
+                    <input type="tel" id="form-contact-phone" required inputmode="tel" placeholder="081234567890" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                    <p class="mt-1 text-[10px] text-slate-500">Nomor yang sama dipakai untuk tombol Telepon dan WhatsApp. Tambahkan kontak terpisah untuk nomor lain.</p>
                 </div>
                 <div>
                     <label class="font-semibold text-slate-700">Link Google Maps UGD (Opsional)</label>
@@ -4081,6 +4188,20 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
         </div>
     </div>
 
+    <!-- MODAL: CHECKLIST KEPULANGAN IBU & BAYI -->
+    <div id="modal-postpartum-checklist" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4" onclick="event.stopPropagation()">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl relative max-h-[92dvh] overflow-y-auto">
+            <button onclick="closePostpartumChecklistModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="modal-postpartum-checklist-title" class="text-lg font-bold text-slate-800 pr-8">Tambah Checklist Kepulangan</h2>
+            <form id="postpartum-checklist-form" onsubmit="savePostpartumChecklistForm(event)" class="space-y-3 text-sm">
+                <input type="hidden" id="form-postpartum-checklist-id">
+                <div><label for="form-postpartum-checklist-group" class="font-semibold text-slate-700">Kelompok</label><select id="form-postpartum-checklist-group" class="w-full mt-1 p-3 border border-slate-200 rounded-xl bg-white"><option value="Ibu">Ibu</option><option value="Bayi">Bayi</option><option value="Dokumen">Dokumen</option><option value="Kontrol">Jadwal Kontrol</option></select></div>
+                <div><label for="form-postpartum-checklist-text" class="font-semibold text-slate-700">Hal yang perlu dipastikan</label><textarea id="form-postpartum-checklist-text" rows="3" required class="w-full mt-1 p-3 border border-slate-200 rounded-xl resize-y" placeholder="Tuliskan hal yang perlu ditanyakan atau dipastikan..."></textarea></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closePostpartumChecklistModal()" class="px-4 py-3 bg-slate-100 text-slate-700 font-semibold rounded-xl">Batal</button><button type="submit" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl">Simpan</button></div>
+            </form>
+        </div>
+    </div>
+
     <!-- MODAL: EDIT / TAMBAH ITEM TAS MELAHIRKAN -->
     <div id="modal-hospital-bag" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
@@ -4111,6 +4232,11 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
                 <div>
                     <label class="font-semibold text-slate-700">Jumlah (Qty)</label>
                     <input type="text" id="form-bag-qty" placeholder="misal: 3 set / 1 pak / 1 map" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                </div>
+                <div>
+                    <label class="font-semibold text-slate-700">Label Paket / Ziplock (Opsional)</label>
+                    <input type="text" id="form-bag-package" placeholder="misal: Ziplock 01 - Dokumen / Bayi Set 1" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                    <p class="mt-1 text-[10px] text-slate-500">Gunakan label yang sama untuk barang dalam satu kantong agar tampil berkelompok.</p>
                 </div>
 
                 <div class="pt-1 flex items-center gap-2">
@@ -5904,12 +6030,15 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
                 renderMedicalRecords();
                 renderMedicalChart();
             } else if (tabId === 'siaga') {
+                ensureSiagaDefaults();
                 renderEmergencyContacts();
                 renderHospitalBagTable();
                 renderDepartureChecklist();
                 renderHusbandRoles();
-                renderBirthPlan();
-                renderAffirmations();
+                renderPostpartumChecklist();
+                renderSiagaOverview();
+                // Legacy birthPlan and affirmations data remain in appState/backup for compatibility,
+                // but their old UI is intentionally retired from the Suami SIAGA page.
             } else if (tabId === 'names') {
                 renderBabyNames();
             } else if (tabId === 'referensi') {
@@ -7104,7 +7233,7 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
             saveToLocalStorage();
         }
 
-        // 6.13.12 — Shopping alternatives, preferred option and compact overview.
+        // 6.13.13 — Shopping alternatives, preferred option and compact overview.
         function splitLegacyShoppingValues(raw) {
             return String(raw || '').split(/\s*\n+\s*|\s*,\s*|\s+\/\/\s+/).map(v => v.trim()).filter(Boolean);
         }
@@ -7553,51 +7682,46 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
         }
 
         // EMERGENCY CONTACTS
+        function normalizeWhatsAppNumber(phone) {
+            let digits = String(phone || '').replace(/\D/g, '');
+            if (!digits) return '';
+            if (digits.startsWith('0')) digits = '62' + digits.slice(1);
+            else if (digits.startsWith('8')) digits = '62' + digits;
+            return digits;
+        }
+
         function renderEmergencyContacts() {
             const container = document.getElementById('emergency-contacts-container');
             if (!container) return;
-            if (!appState.emergencyContacts) appState.emergencyContacts = [];
+            if (!Array.isArray(appState.emergencyContacts)) appState.emergencyContacts = [];
 
             if (appState.emergencyContacts.length === 0) {
-                container.innerHTML = `<div class="col-span-3 text-center text-slate-400 italic text-xs py-4">Belum ada kontak darurat diset.</div>`;
+                container.innerHTML = `<div class="sm:col-span-2 xl:col-span-3 text-center text-slate-400 italic text-xs py-6 rounded-2xl bg-slate-50">Belum ada kontak darurat. Tambahkan nomor rumah sakit, dokter/bidan, atau keluarga yang perlu dihubungi.</div>`;
                 return;
             }
 
             container.innerHTML = appState.emergencyContacts.map(c => {
-                const cleanPhone = c.phone ? c.phone.replace(/[^0-9+]/g, '') : '';
+                const cleanPhone = String(c.phone || '').replace(/[^0-9+]/g, '');
+                const waPhone = normalizeWhatsAppNumber(c.phone);
+                const safeName = siagaEscapeHtml(c.name || 'Kontak darurat');
+                const safeRole = siagaEscapeHtml(c.role || 'Kontak');
+                const safePhone = siagaEscapeHtml(c.phone || '');
+                const maps = /^https?:\/\//i.test(String(c.mapsUrl || '')) ? c.mapsUrl : '';
                 return `
-                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3 relative group">
-                        <div>
-                            <span class="inline-block px-2 py-0.5 bg-sky-100 text-sky-800 text-2xs font-semibold rounded-md uppercase tracking-wider mb-1">${c.role || 'Darurat'}</span>
-                            <h3 class="font-bold text-slate-800 text-sm">${c.name}</h3>
-                            <p class="text-xs font-mono font-semibold text-slate-600 mt-0.5">${c.phone}</p>
+                    <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3 min-w-0">
+                        <div class="min-w-0"><span class="inline-flex px-2 py-1 bg-sky-100 text-sky-800 text-[10px] font-bold rounded-lg uppercase tracking-wide mb-1">${safeRole}</span><h3 class="font-bold text-slate-800 text-sm break-words">${safeName}</h3><p class="text-xs font-mono font-semibold text-slate-600 mt-1 break-all">${safePhone}</p></div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="tel:${cleanPhone}" class="min-h-[44px] px-2 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"><i class="fa-solid fa-phone"></i> Telepon</a>
+                            <a href="https://wa.me/${waPhone}" target="_blank" rel="noopener" class="min-h-[44px] px-2 py-2 bg-green-100 hover:bg-green-200 text-green-800 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"><i class="fa-brands fa-whatsapp text-base"></i> WhatsApp</a>
                         </div>
-
-                        <div class="flex gap-2 pt-1">
-                            <a href="tel:${cleanPhone}" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-center text-2xs flex items-center justify-center gap-1 shadow-sm transition">
-                                <i class="fa-solid fa-phone"></i> Telepon
-                            </a>
-                            <a href="https://wa.me/${cleanPhone.replace('+', '')}" target="_blank" class="py-2 px-3 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold rounded-xl text-center text-2xs flex items-center justify-center transition">
-                                <i class="fa-brands fa-whatsapp text-sm"></i>
-                            </a>
-                            ${c.mapsUrl ? `
-                                <a href="${c.mapsUrl}" target="_blank" class="py-2 px-3 bg-sky-100 hover:bg-sky-200 text-sky-800 font-bold rounded-xl text-center text-2xs flex items-center justify-center transition">
-                                    <i class="fa-solid fa-location-dot text-sm"></i>
-                                </a>
-                            ` : ''}
-                        </div>
-
-                        <div class="absolute top-3 right-3 flex gap-1">
-                            <button onclick="openEmergencyContactModal(${c.id})" class="p-1 bg-white hover:bg-slate-100 text-slate-500 rounded-lg text-2xs shadow-sm transition">
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-                            <button onclick="deleteEmergencyContact(${c.id})" class="p-1 bg-white hover:bg-rose-50 text-rose-600 rounded-lg text-2xs shadow-sm transition">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
+                        ${maps ? `<a href="${siagaEscapeHtml(maps)}" target="_blank" rel="noopener" class="min-h-[40px] px-3 py-2 bg-sky-100 hover:bg-sky-200 text-sky-800 font-semibold rounded-xl text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-location-dot"></i> Buka Lokasi</a>` : ''}
+                        <div class="flex justify-end gap-2 border-t border-slate-200 pt-2"><button onclick="openEmergencyContactModal(${Number(c.id)})" class="min-h-[36px] px-3 rounded-lg bg-white text-slate-600 border border-slate-200 text-xs"><i class="fa-solid fa-pen mr-1"></i>Edit</button><button onclick="deleteEmergencyContact(${Number(c.id)})" class="min-h-[36px] px-3 rounded-lg bg-rose-50 text-rose-600 text-xs"><i class="fa-solid fa-trash mr-1"></i>Hapus</button></div>
+                    </article>`;
             }).join('');
+        }
+
+        function siagaEscapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
         }
 
         function openEmergencyContactModal(id = null) {
@@ -7631,13 +7755,13 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
             const id = document.getElementById('form-contact-id').value;
             const name = document.getElementById('form-contact-name').value.trim();
             const role = document.getElementById('form-contact-role').value.trim();
-            const phone = document.getElementById('form-contact-phone').value.trim();
+            const phone = document.getElementById('form-contact-phone').value.trim().replace(/[\s()-]+/g, '');
             const mapsUrl = document.getElementById('form-contact-maps').value.trim();
 
             if (id) {
                 const idx = appState.emergencyContacts.findIndex(c => c.id == id);
                 if (idx !== -1) {
-                    appState.emergencyContacts[idx] = { id: Number(id), name, role, phone, mapsUrl };
+                    appState.emergencyContacts[idx] = { ...appState.emergencyContacts[idx], id: Number(id), name, role, phone, mapsUrl };
                 }
             } else {
                 appState.emergencyContacts.push({ id: Date.now(), name, role, phone, mapsUrl });
@@ -7659,71 +7783,52 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
         // HOSPITAL BAG TABLE
         function renderHospitalBagTable() {
             const tbody = document.getElementById('hospital-bag-tbody');
-            if (!tbody) return;
-            if (!appState.hospitalBag) appState.hospitalBag = [];
-
-            const categories = ['Dokumen', 'Istri', 'Suami', 'Bayi'];
+            const mobile = document.getElementById('hospital-bag-mobile');
+            if (!tbody && !mobile) return;
+            if (!Array.isArray(appState.hospitalBag)) appState.hospitalBag = [];
+            const owners = ['Dokumen', 'Istri', 'Suami', 'Bayi'];
             const grouped = {};
-            categories.forEach(c => grouped[c] = []);
-
+            owners.forEach(owner => grouped[owner] = []);
             appState.hospitalBag.forEach(item => {
-                const cat = item.category || 'Dokumen';
-                if (!grouped[cat]) grouped[cat] = [];
-                grouped[cat].push(item);
+                const owner = owners.includes(item.category) ? item.category : 'Dokumen';
+                grouped[owner].push(item);
             });
 
-            let html = '';
-            for (const catName in grouped) {
-                const items = grouped[catName];
-                const checkedCount = items.filter(i => i.done).length;
-
-                html += `
-                    <tr class="bg-slate-100/80 font-bold text-slate-700">
-                        <td colspan="3" class="p-2 px-3 text-2xs uppercase tracking-wider text-sky-800">
-                            <i class="fa-solid fa-box-archive mr-1.5 text-sky-600"></i> ${catName} (${checkedCount}/${items.length} Siap)
-                        </td>
-                        <td class="p-2 text-2xs text-right text-slate-400">
-                            ${checkedCount === items.length && items.length > 0 ? '✅ Lengkap' : ''}
-                        </td>
-                    </tr>
-                `;
-
-                if (items.length === 0) {
-                    html += `<tr><td colspan="4" class="p-2 text-slate-400 italic text-2xs pl-6">Belum ada item.</td></tr>`;
-                } else {
-                    items.forEach(item => {
-                        html += `
-                            <tr class="hover:bg-slate-50 transition">
-                                <td class="p-2.5 text-center">
-                                    <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleHospitalBagDone(${item.id})" class="w-4 h-4 text-sky-600 rounded cursor-pointer">
-                                </td>
-                                <td class="p-2.5">
-                                    <span class="${item.done ? 'line-through text-slate-400' : 'text-slate-800 font-medium'}">${item.name}</span>
-                                </td>
-                                <td class="p-2.5 text-center font-medium text-slate-600">${item.qty || '1'}</td>
-                                <td class="p-2.5 text-center space-x-1">
-                                    <button onclick="openHospitalBagModal(${item.id})" class="p-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-2xs transition">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </button>
-                                    <button onclick="deleteHospitalBagItem(${item.id})" class="p-1 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded text-2xs transition">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        `;
-                    });
+            let desktopHtml = '';
+            let mobileHtml = '';
+            owners.forEach(owner => {
+                const items = grouped[owner] || [];
+                const done = items.filter(i => i.done).length;
+                const packageGroups = new Map();
+                items.forEach(item => {
+                    const label = String(item.packageLabel || '').trim() || 'Belum diberi label paket';
+                    if (!packageGroups.has(label)) packageGroups.set(label, []);
+                    packageGroups.get(label).push(item);
+                });
+                desktopHtml += `<tr class="bg-slate-100/80 font-bold text-slate-700"><td colspan="3" class="p-2.5 px-3 text-[10px] uppercase tracking-wider text-sky-800"><i class="fa-solid fa-box-archive mr-1.5 text-sky-600"></i>${owner} (${done}/${items.length} siap)</td><td class="p-2 text-[10px] text-right text-slate-400">${done === items.length && items.length ? '✅ Lengkap' : ''}</td></tr>`;
+                mobileHtml += `<section class="rounded-2xl border border-slate-200 overflow-hidden"><div class="px-3 py-2.5 bg-slate-100 flex items-center justify-between"><strong class="text-xs uppercase tracking-wide text-sky-800">${owner}</strong><span class="text-[10px] text-slate-500">${done}/${items.length} siap</span></div><div class="p-2.5 space-y-3">`;
+                if (!items.length) {
+                    desktopHtml += `<tr><td colspan="4" class="p-3 text-slate-400 italic text-xs">Belum ada barang.</td></tr>`;
+                    mobileHtml += `<p class="text-xs text-slate-400 italic p-2">Belum ada barang.</p>`;
                 }
-            }
-
-            tbody.innerHTML = html;
+                packageGroups.forEach((packageItems, label) => {
+                    desktopHtml += `<tr class="bg-sky-50/70"><td colspan="4" class="px-3 py-2 text-[10px] font-bold text-sky-800"><i class="fa-solid fa-tag mr-1"></i>${siagaEscapeHtml(label)}</td></tr>`;
+                    mobileHtml += `<div class="space-y-2"><div class="text-[10px] font-bold text-sky-800 px-1"><i class="fa-solid fa-tag mr-1"></i>${siagaEscapeHtml(label)}</div>`;
+                    packageItems.forEach(item => {
+                        const name = siagaEscapeHtml(item.name || 'Barang');
+                        const qty = siagaEscapeHtml(item.qty || '1');
+                        const packageLabel = siagaEscapeHtml(item.packageLabel || 'Tanpa label paket');
+                        desktopHtml += `<tr class="hover:bg-slate-50"><td class="p-2.5 text-center"><input aria-label="Tandai ${name} siap" type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleHospitalBagDone(${Number(item.id)})" class="w-4 h-4 text-sky-600 rounded cursor-pointer"></td><td class="p-2.5"><span class="${item.done ? 'line-through text-slate-400' : 'text-slate-800 font-medium'}">${name}</span></td><td class="p-2.5 text-center font-medium text-slate-600">${qty}</td><td class="p-2.5 text-center space-x-1"><button onclick="openHospitalBagModal(${Number(item.id)})" class="p-2 bg-slate-100 text-slate-600 rounded-lg" aria-label="Edit ${name}"><i class="fa-solid fa-pen"></i></button><button onclick="deleteHospitalBagItem(${Number(item.id)})" class="p-2 bg-rose-50 text-rose-600 rounded-lg" aria-label="Hapus ${name}"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+                        mobileHtml += `<article class="rounded-xl border border-slate-200 bg-white p-3 space-y-2"><div class="flex items-start gap-2"><input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleHospitalBagDone(${Number(item.id)})" class="w-5 h-5 mt-0.5 rounded text-sky-600 shrink-0" aria-label="Tandai ${name} siap"><div class="min-w-0 flex-1"><p class="text-sm font-semibold ${item.done ? 'line-through text-slate-400' : 'text-slate-800'} break-words">${name}</p><p class="text-xs text-slate-500 mt-1">Jumlah: <strong class="text-slate-700">${qty}</strong></p></div><span class="text-[10px] rounded-full px-2 py-1 ${item.done ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${item.done ? 'Siap' : 'Belum'}</span></div><div class="flex gap-2 pt-1"><button onclick="openHospitalBagModal(${Number(item.id)})" class="flex-1 min-h-[40px] rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold"><i class="fa-solid fa-pen mr-1"></i>Edit</button><button onclick="deleteHospitalBagItem(${Number(item.id)})" class="min-h-[40px] px-4 rounded-lg bg-rose-50 text-rose-600 text-xs font-semibold"><i class="fa-solid fa-trash mr-1"></i>Hapus</button></div></article>`;
+                    });
+                    mobileHtml += `</div>`;
+                });
+                mobileHtml += `</div></section>`;
+            });
+            if (tbody) tbody.innerHTML = desktopHtml;
+            if (mobile) mobile.innerHTML = mobileHtml;
             renderDashboardWidgets();
-        }
-
-        function toggleHospitalBagDone(id) {
-            const item = appState.hospitalBag.find(i => i.id === id);
-            if (item) item.done = !item.done;
-            renderHospitalBagTable();
-            saveToLocalStorage();
+            renderSiagaOverview();
         }
 
         function openHospitalBagModal(id = null) {
@@ -7738,6 +7843,7 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
                     document.getElementById('form-bag-category').value = item.category || 'Dokumen';
                     document.getElementById('form-bag-name').value = item.name || '';
                     document.getElementById('form-bag-qty').value = item.qty || '';
+                    document.getElementById('form-bag-package').value = item.packageLabel || '';
                     document.getElementById('form-bag-done').checked = !!item.done;
                 }
             } else {
@@ -7758,15 +7864,16 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
             const category = document.getElementById('form-bag-category').value;
             const name = document.getElementById('form-bag-name').value.trim();
             const qty = document.getElementById('form-bag-qty').value.trim() || '1';
+            const packageLabel = document.getElementById('form-bag-package').value.trim();
             const done = document.getElementById('form-bag-done').checked;
 
             if (id) {
                 const index = appState.hospitalBag.findIndex(i => i.id == id);
                 if (index !== -1) {
-                    appState.hospitalBag[index] = { id: Number(id), category, name, qty, done };
+                    appState.hospitalBag[index] = { ...appState.hospitalBag[index], id: Number(id), category, name, qty, packageLabel, done };
                 }
             } else {
-                appState.hospitalBag.push({ id: Date.now(), category, name, qty, done });
+                appState.hospitalBag.push({ id: Date.now(), category, name, qty, packageLabel, done });
             }
 
             renderHospitalBagTable();
@@ -7783,53 +7890,102 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
         }
 
         // DEPARTURE CHECKLIST
+        function ensureSiagaDefaults() {
+            let changed = false;
+            const departureDefaults = [
+                { group: 'ahead', text: 'Pastikan stok kebutuhan rumah dan makanan dasar tersedia untuk beberapa hari.' },
+                { group: 'ahead', text: 'Atur bantuan untuk hewan peliharaan, tanaman, sampah, atau kebutuhan rumah lain bila ada.' },
+                { group: 'ahead', text: 'Pastikan dokumen, hospital bag, charger, dan barang penting berada di tempat yang mudah diambil.' },
+                { group: 'last-minute', text: 'Matikan kompor dan sumber api; pastikan tidak ada masakan yang tertinggal.' },
+                { group: 'last-minute', text: 'Matikan peralatan listrik yang tidak diperlukan; biarkan perangkat penting tetap menyala bila dibutuhkan.' },
+                { group: 'last-minute', text: 'Periksa keran air, pintu, dan jendela; kunci rumah dan bawa kunci.' },
+                { group: 'last-minute', text: 'Bawa dokumen ibu, Buku KIA, kartu pembiayaan, dan hospital bag.' },
+                { group: 'last-minute', text: 'Pastikan ponsel memiliki baterai dan nomor fasilitas kesehatan dapat dihubungi.' }
+            ];
+            if (!Array.isArray(appState.departureChecklist)) { appState.departureChecklist = []; changed = true; }
+            if (!appState.siagaDepartureDefaultsSeeded) {
+                const existing = new Set(appState.departureChecklist.map(i => String(i.text || '').trim().toLowerCase()));
+                departureDefaults.forEach((item, index) => {
+                    if (!existing.has(item.text.toLowerCase())) {
+                        appState.departureChecklist.push({ id: Date.now() + index, text: item.text, done: false, group: item.group });
+                        changed = true;
+                    }
+                });
+                appState.siagaDepartureDefaultsSeeded = true;
+                changed = true;
+            }
+
+            const dischargeDefaults = [
+                { group: 'Ibu', text: 'Terima dan pahami ringkasan pulang ibu, hasil pemeriksaan, serta kondisi yang perlu dipantau.' },
+                { group: 'Ibu', text: 'Pastikan instruksi obat/resep, dosis, cara penggunaan, dan kapan harus kembali sudah dijelaskan.' },
+                { group: 'Ibu', text: 'Tanyakan tanda bahaya setelah melahirkan dan nomor/fasilitas yang harus dihubungi bila muncul.' },
+                { group: 'Bayi', text: 'Terima informasi kondisi bayi, perawatan di rumah, menyusui, kehangatan, dan perawatan tali pusat.' },
+                { group: 'Bayi', text: 'Pastikan status skrining bayi baru lahir, hasil yang sudah tersedia, serta pemeriksaan susulan yang masih diperlukan.' },
+                { group: 'Kontrol', text: 'Catat tanggal, tempat, dan tujuan kontrol nifas ibu serta kunjungan neonatal bayi berikutnya.' },
+                { group: 'Dokumen', text: 'Pastikan menerima surat keterangan lahir atau dokumen kelahiran yang diterbitkan rumah sakit, bila tersedia.' },
+                { group: 'Dokumen', text: 'Tanyakan alur dan persyaratan pengurusan akta kelahiran serta pembaruan Kartu Keluarga kepada rumah sakit/Dukcapil.' },
+                { group: 'Dokumen', text: 'Konfirmasikan administrasi pembiayaan atau kepesertaan jaminan kesehatan bayi kepada rumah sakit/penjamin.' }
+            ];
+            if (!Array.isArray(appState.postpartumChecklist)) { appState.postpartumChecklist = []; changed = true; }
+            if (!appState.siagaPostpartumDefaultsSeeded) {
+                const existing = new Set(appState.postpartumChecklist.map(i => String(i.text || '').trim().toLowerCase()));
+                dischargeDefaults.forEach((item, index) => {
+                    if (!existing.has(item.text.toLowerCase())) {
+                        appState.postpartumChecklist.push({ id: Date.now() + 100 + index, text: item.text, group: item.group, done: false });
+                        changed = true;
+                    }
+                });
+                appState.siagaPostpartumDefaultsSeeded = true;
+                changed = true;
+            }
+            if (changed && typeof saveToLocalStorage === 'function') saveToLocalStorage();
+        }
+
+        function siagaChecklistItemHtml(item, kind) {
+            const id = Number(item.id);
+            const text = siagaEscapeHtml(item.text || 'Poin checklist');
+            const checked = item.done ? 'checked' : '';
+            const tone = item.done ? 'line-through text-slate-400' : 'text-slate-700';
+            if (kind === 'departure') return `<div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3"><input type="checkbox" ${checked} onchange="toggleDepartureItem(${id})" class="w-5 h-5 mt-0.5 rounded text-emerald-600 shrink-0"><span class="flex-1 text-xs sm:text-sm leading-relaxed ${tone}">${text}</span><div class="flex gap-1 shrink-0"><button onclick="editDepartureItem(${id})" class="siaga-icon-button" aria-label="Edit"><i class="fa-solid fa-pen"></i></button><button onclick="deleteDepartureItem(${id})" class="siaga-icon-button danger" aria-label="Hapus"><i class="fa-solid fa-trash"></i></button></div></div>`;
+            return `<div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3"><input type="checkbox" ${checked} onchange="togglePostpartumChecklistItem(${id})" class="w-5 h-5 mt-0.5 rounded text-emerald-600 shrink-0"><span class="flex-1 text-xs sm:text-sm leading-relaxed ${tone}">${text}</span><div class="flex gap-1 shrink-0"><button onclick="openPostpartumChecklistModal(${id})" class="siaga-icon-button" aria-label="Edit"><i class="fa-solid fa-pen"></i></button><button onclick="deletePostpartumChecklistItem(${id})" class="siaga-icon-button danger" aria-label="Hapus"><i class="fa-solid fa-trash"></i></button></div></div>`;
+        }
+
         function renderDepartureChecklist() {
             const container = document.getElementById('departure-checklist-container');
             if (!container) return;
-            if (!appState.departureChecklist) appState.departureChecklist = [];
-
-            if (appState.departureChecklist.length === 0) {
-                container.innerHTML = `<div class="text-slate-400 italic text-xs py-2">Belum ada poin ceklis.</div>`;
-                return;
-            }
-
-            container.innerHTML = appState.departureChecklist.map(item => `
-                <div class="flex items-center justify-between p-2.5 bg-slate-50 hover:bg-slate-100/80 rounded-xl transition group">
-                    <label class="flex items-center gap-3 cursor-pointer flex-1 mr-2">
-                        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleDepartureItem(${item.id})" class="w-4 h-4 text-sky-600 rounded">
-                        <span class="${item.done ? 'line-through text-slate-400' : 'text-slate-700 font-medium'} text-xs">${item.text}</span>
-                    </label>
-                    <div class="flex gap-1">
-                        <button onclick="editDepartureItem(${item.id})" class="p-1 text-slate-400 hover:text-slate-600 text-2xs transition">
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button onclick="deleteDepartureItem(${item.id})" class="p-1 text-rose-400 hover:text-rose-600 text-2xs transition">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+            if (!Array.isArray(appState.departureChecklist)) appState.departureChecklist = [];
+            const groups = [
+                { key: 'ahead', title: 'Persiapan dari jauh hari', desc: 'Bisa dicicil sebelum perkiraan persalinan.' },
+                { key: 'last-minute', title: 'Cek cepat sebelum keluar rumah', desc: 'Lakukan hanya jika tidak menunda keberangkatan yang diperlukan.' }
+            ];
+            container.innerHTML = groups.map(group => {
+                const items = appState.departureChecklist.filter(i => (i.group || 'last-minute') === group.key);
+                const done = items.filter(i => i.done).length;
+                return `<section class="rounded-2xl border border-slate-200 p-3 sm:p-4 space-y-3"><div class="flex items-start justify-between gap-2"><div><h3 class="font-bold text-sm text-slate-800">${group.title}</h3><p class="text-[11px] text-slate-500">${group.desc}</p><p class="text-[10px] text-emerald-700 font-semibold mt-1">${done}/${items.length} selesai</p></div><button onclick="addDepartureItem('${group.key}')" class="siaga-small-add"><i class="fa-solid fa-plus mr-1"></i>Tambah</button></div><div class="space-y-2">${items.length ? items.map(i => siagaChecklistItemHtml(i, 'departure')).join('') : '<p class="text-xs text-slate-400 italic">Belum ada poin.</p>'}</div></section>`;
+            }).join('');
+            renderSiagaOverview();
         }
 
         function toggleDepartureItem(id) {
-            const item = appState.departureChecklist.find(i => i.id === id);
+            const item = (appState.departureChecklist || []).find(i => i.id === id);
             if (item) item.done = !item.done;
             renderDepartureChecklist();
             saveToLocalStorage();
         }
 
-        function addDepartureItem() {
-            const text = prompt("Masukkan instruksi / poin penting sebelum meninggalkan rumah:");
+        function addDepartureItem(group = 'last-minute') {
+            const label = group === 'ahead' ? 'persiapan dari jauh hari' : 'cek cepat sebelum berangkat';
+            const text = prompt(`Masukkan poin ${label}:`);
             if (!text || !text.trim()) return;
-            appState.departureChecklist.push({ id: Date.now(), text: text.trim(), done: false });
+            appState.departureChecklist.push({ id: Date.now(), text: text.trim(), done: false, group });
             renderDepartureChecklist();
             saveToLocalStorage();
         }
 
         function editDepartureItem(id) {
-            const item = appState.departureChecklist.find(i => i.id === id);
+            const item = (appState.departureChecklist || []).find(i => i.id === id);
             if (!item) return;
-            const newText = prompt("Edit instruksi / poin ceklis:", item.text);
+            const newText = prompt('Edit poin checklist:', item.text);
             if (newText && newText.trim()) {
                 item.text = newText.trim();
                 renderDepartureChecklist();
@@ -7838,43 +7994,122 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
         }
 
         function deleteDepartureItem(id) {
-            if (confirm("Hapus poin ceklis ini?")) {
-                appState.departureChecklist = appState.departureChecklist.filter(i => i.id !== id);
+            if (confirm('Hapus poin checklist ini?')) {
+                appState.departureChecklist = (appState.departureChecklist || []).filter(i => i.id !== id);
                 renderDepartureChecklist();
                 saveToLocalStorage();
             }
+        }
+
+        function renderPostpartumChecklist() {
+            const container = document.getElementById('postpartum-checklist-container');
+            if (!container) return;
+            if (!Array.isArray(appState.postpartumChecklist)) appState.postpartumChecklist = [];
+            const groups = ['Ibu', 'Bayi', 'Kontrol', 'Dokumen'];
+            container.innerHTML = groups.map(group => {
+                const items = appState.postpartumChecklist.filter(i => (i.group || 'Ibu') === group);
+                const done = items.filter(i => i.done).length;
+                return `<section class="rounded-2xl border border-slate-200 p-3 sm:p-4 space-y-2"><div class="flex items-center justify-between"><h3 class="font-bold text-sm text-slate-800">${group}</h3><span class="text-[10px] text-slate-500">${done}/${items.length} selesai</span></div><div class="space-y-2">${items.length ? items.map(i => siagaChecklistItemHtml(i, 'postpartum')).join('') : '<p class="text-xs text-slate-400 italic">Belum ada poin.</p>'}</div></section>`;
+            }).join('');
+            renderSiagaOverview();
+        }
+
+        function openPostpartumChecklistModal(id = null) {
+            const form = document.getElementById('postpartum-checklist-form');
+            form.reset();
+            document.getElementById('form-postpartum-checklist-id').value = '';
+            if (id) {
+                const item = (appState.postpartumChecklist || []).find(i => i.id === id);
+                if (item) {
+                    document.getElementById('modal-postpartum-checklist-title').innerText = 'Edit Checklist Kepulangan';
+                    document.getElementById('form-postpartum-checklist-id').value = item.id;
+                    document.getElementById('form-postpartum-checklist-group').value = item.group || 'Ibu';
+                    document.getElementById('form-postpartum-checklist-text').value = item.text || '';
+                }
+            } else {
+                document.getElementById('modal-postpartum-checklist-title').innerText = 'Tambah Checklist Kepulangan';
+            }
+            document.getElementById('modal-postpartum-checklist').classList.remove('hidden');
+        }
+
+        function closePostpartumChecklistModal() {
+            document.getElementById('modal-postpartum-checklist').classList.add('hidden');
+        }
+
+        function savePostpartumChecklistForm(event) {
+            event.preventDefault();
+            const id = document.getElementById('form-postpartum-checklist-id').value;
+            const group = document.getElementById('form-postpartum-checklist-group').value;
+            const text = document.getElementById('form-postpartum-checklist-text').value.trim();
+            if (!text) return;
+            if (id) {
+                const item = (appState.postpartumChecklist || []).find(i => i.id == id);
+                if (item) { item.group = group; item.text = text; }
+            } else {
+                appState.postpartumChecklist.push({ id: Date.now(), group, text, done: false });
+            }
+            renderPostpartumChecklist();
+            renderSiagaOverview();
+            saveToLocalStorage();
+            closePostpartumChecklistModal();
+        }
+
+        function togglePostpartumChecklistItem(id) {
+            const item = (appState.postpartumChecklist || []).find(i => i.id === id);
+            if (item) item.done = !item.done;
+            renderPostpartumChecklist();
+            saveToLocalStorage();
+        }
+
+        function deletePostpartumChecklistItem(id) {
+            if (confirm('Hapus poin checklist kepulangan ini?')) {
+                appState.postpartumChecklist = (appState.postpartumChecklist || []).filter(i => i.id !== id);
+                renderPostpartumChecklist();
+                saveToLocalStorage();
+            }
+        }
+
+        function scrollToSiagaSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function renderSiagaOverview() {
+            const bag = Array.isArray(appState.hospitalBag) ? appState.hospitalBag : [];
+            const departure = Array.isArray(appState.departureChecklist) ? appState.departureChecklist : [];
+            const discharge = Array.isArray(appState.postpartumChecklist) ? appState.postpartumChecklist : [];
+            const bagDone = bag.filter(i => i.done).length;
+            const departureDone = departure.filter(i => i.done).length;
+            const dischargeDone = discharge.filter(i => i.done).length;
+            const total = bag.length + departure.length + discharge.length;
+            const done = bagDone + departureDone + dischargeDone;
+            const pct = total ? Math.round(done / total * 100) : 0;
+            const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+            set('siaga-total-progress', `${pct}%`);
+            set('siaga-bag-progress', `${bagDone}/${bag.length}`);
+            set('siaga-departure-progress', `${departureDone}/${departure.length}`);
+            set('siaga-discharge-progress', `${dischargeDone}/${discharge.length}`);
+            const bar = document.getElementById('siaga-progress-bar');
+            if (bar) bar.style.width = `${pct}%`;
         }
 
         // HUSBAND ROLES
         function renderHusbandRoles() {
             const container = document.getElementById('husband-roles-container');
             if (!container) return;
-            if (!appState.husbandRoles) appState.husbandRoles = [];
-
+            if (!Array.isArray(appState.husbandRoles)) appState.husbandRoles = [];
+            if (appState.husbandRoles.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 italic text-xs py-3 rounded-xl bg-slate-50">Belum ada catatan khusus. Panduan tahapan persalinan di atas tetap tersedia dan bisa langsung digunakan.</div>`;
+                return;
+            }
             const themeColors = [
                 { bg: 'bg-sky-50', border: 'border-sky-100', text: 'text-sky-800' },
                 { bg: 'bg-amber-50', border: 'border-amber-100', text: 'text-amber-800' },
                 { bg: 'bg-emerald-50', border: 'border-emerald-100', text: 'text-emerald-800' }
             ];
-
             container.innerHTML = appState.husbandRoles.map((role, idx) => {
                 const theme = themeColors[idx % themeColors.length];
-                return `
-                    <div class="p-3.5 ${theme.bg} rounded-2xl border ${theme.border} space-y-1.5 relative group">
-                        <div class="flex justify-between items-center pr-12">
-                            <div class="font-bold ${theme.text}">${role.phase}</div>
-                        </div>
-                        <p class="text-slate-600 whitespace-pre-line text-xs leading-relaxed">${role.notes}</p>
-                        <div class="absolute top-3 right-3 flex gap-1">
-                            <button onclick="openHusbandRoleModal(${role.id})" class="p-1 bg-white/80 hover:bg-white text-slate-600 rounded-lg text-2xs transition shadow-sm">
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-                            <button onclick="deleteHusbandRole(${role.id})" class="p-1 bg-white/80 hover:bg-rose-50 text-rose-600 rounded-lg text-2xs transition shadow-sm">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
+                return `<div class="p-3.5 ${theme.bg} rounded-2xl border ${theme.border} space-y-1.5 relative group"><div class="font-bold ${theme.text} pr-16">${siagaEscapeHtml(role.phase || 'Catatan')}</div><p class="text-slate-600 whitespace-pre-line text-xs leading-relaxed">${siagaEscapeHtml(role.notes || '')}</p><div class="absolute top-3 right-3 flex gap-1"><button onclick="openHusbandRoleModal(${Number(role.id)})" class="p-2 bg-white/90 hover:bg-white text-slate-600 rounded-lg text-xs shadow-sm" aria-label="Edit catatan"><i class="fa-solid fa-pen"></i></button><button onclick="deleteHusbandRole(${Number(role.id)})" class="p-2 bg-white/90 hover:bg-rose-50 text-rose-600 rounded-lg text-xs shadow-sm" aria-label="Hapus catatan"><i class="fa-solid fa-trash"></i></button></div></div>`;
             }).join('');
         }
 
@@ -9372,13 +9607,14 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
             if (has('contractions')) renderContractionLogs();
             if (has('medicalRecords')) renderMedicalRecords();
           }
-          if (siagaVisible) {
+          if (siagaVisible && has('emergencyContacts', 'hospitalBag', 'departureChecklist', 'husbandRoles', 'postpartumChecklist', 'siagaDepartureDefaultsSeeded', 'siagaPostpartumDefaultsSeeded')) {
+            ensureSiagaDefaults();
             if (has('emergencyContacts')) renderEmergencyContacts();
             if (has('hospitalBag')) renderHospitalBagTable();
-            if (has('departureChecklist')) renderDepartureChecklist();
+            if (has('departureChecklist', 'siagaDepartureDefaultsSeeded')) renderDepartureChecklist();
             if (has('husbandRoles')) renderHusbandRoles();
-            if (has('birthPlan')) renderBirthPlan();
-            if (has('affirmations')) renderAffirmations();
+            if (has('postpartumChecklist', 'siagaPostpartumDefaultsSeeded')) renderPostpartumChecklist();
+            renderSiagaOverview();
           }
           if (namesVisible && has('babyNames')) renderBabyNames();
           if (referencesVisible && has('references')) renderReferences();
@@ -9740,7 +9976,7 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.12',
+                    appVersion: '6.13.13',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -14270,7 +14506,7 @@ body.dark-mode table.mobile-card-table--shopping .kpt-shopping-detail-block.kpt-
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.12. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.13. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
