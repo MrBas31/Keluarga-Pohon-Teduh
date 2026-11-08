@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.14: shopping alternatives, budget progress and safer category removal -->
+    <!-- Keluarga Pohon Teduh 6.13.15: shopping alternatives, budget progress and safer category removal -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.14">
+    <meta name="application-version" content="6.13.15">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -1851,8 +1851,8 @@ body.dark-mode #development-modal-root .dev-btn.ghost {
 </style>
 
 <style id="budget-shopping-6138">
-/* KPT 6.13.14 — compact budget, alternatives and mobile touch targets */
-/* KPT 6.13.14 — compact budgeting, candidate comparison and touch-friendly editor */
+/* KPT 6.13.15 — compact budget, alternatives and mobile touch targets */
+/* KPT 6.13.15 — compact budgeting, candidate comparison and touch-friendly editor */
 #budget-overview-card { min-width:0; }
 #budget-overview-card .tabular-nums { overflow-wrap:anywhere; }
 .budget-alt-details { min-width:0; }
@@ -1899,7 +1899,7 @@ body.dark-mode .budget-alt-editor-card { background:#172337; border-color:#33415
 body.dark-mode .budget-alt-editor-card input, body.dark-mode .budget-alt-editor-card textarea { background:#0f1b2c !important; border-color:#475569 !important; color:#f1f5f9 !important; }
 body.dark-mode #shopping-item-form label { color:#e2e8f0 !important; }
 
-/* 6.13.14 — clearer candidate comparison and mobile touch targets */
+/* 6.13.15 — clearer candidate comparison and mobile touch targets */
 .budget-alt-details > summary { min-height:38px; padding:7px 11px; }
 .budget-alt-card { overflow-wrap:anywhere; }
 .budget-alt-card a { min-height:32px; }
@@ -1941,7 +1941,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 
 
 <style id="budget-mobile-type-61310">
-/* KPT 6.13.14 — more readable shopping cards on narrow screens */
+/* KPT 6.13.15 — more readable shopping cards on narrow screens */
 @media (max-width: 767px) {
   table.mobile-card-table--shopping .kpt-shopping-summary {
     gap: 10px !important;
@@ -2001,7 +2001,7 @@ body.dark-mode #modal-shopping-item { color:#e2e8f0; }
 </style>
 
 <style id="kpt-log-daily-mobile-61312">
-/* Log Harian 6.13.14 — single-tap sleep timer, concise forms and readable summaries. */
+/* Log Harian 6.13.15 — single-tap sleep timer, concise forms and readable summaries. */
 #modal-daily-log > div { width:min(100%, 520px); }
 #daily-log-form input:not([type="hidden"]), #daily-log-form select, #daily-log-form textarea { min-height:44px; font-size:16px; }
 #daily-log-form label { display:block; line-height:1.35; }
@@ -2223,12 +2223,12 @@ body.dark-mode #siaga-discharge .siaga-kia-visit-card strong { color:#f1f5f9 !im
 body.dark-mode #siaga-discharge .siaga-kia-visit-card span { color:#b7c5d5 !important; }
 body.dark-mode #siaga-discharge .siaga-kia-schedule a { color:#7dd3fc !important; }
 body.dark-mode #siaga-discharge .siaga-kia-schedule a:hover { color:#bae6fd !important; }
-body.dark-mode #siaga-contacts-container .siaga-contact-card { background:#172337 !important; border-color:#334155 !important; }
-body.dark-mode #siaga-contacts-container .siaga-contact-card h3 { color:#f1f5f9 !important; }
-body.dark-mode #siaga-contacts-container .siaga-contact-card > div > p { color:#cbd5e1 !important; }
-body.dark-mode #siaga-contacts-container .siaga-location-link { background:#123b56 !important; color:#bae6fd !important; }
-body.dark-mode #siaga-contacts-container .siaga-contact-manage-btn { background:#334155 !important; color:#e2e8f0 !important; border-color:#475569 !important; }
-body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1d26 !important; color:#fecdd3 !important; border-color:#71303c !important; }
+body.dark-mode #emergency-contacts-container .siaga-contact-card { background:#172337 !important; border-color:#334155 !important; }
+body.dark-mode #emergency-contacts-container .siaga-contact-card h3 { color:#f1f5f9 !important; }
+body.dark-mode #emergency-contacts-container .siaga-contact-card > div > p { color:#cbd5e1 !important; }
+body.dark-mode #emergency-contacts-container .siaga-location-link { background:#123b56 !important; color:#bae6fd !important; }
+body.dark-mode #emergency-contacts-container .siaga-contact-manage-btn { background:#334155 !important; color:#e2e8f0 !important; border-color:#475569 !important; }
+body.dark-mode #emergency-contacts-container .siaga-contact-delete { background:#4c1d26 !important; color:#fecdd3 !important; border-color:#71303c !important; }
 
 @media (prefers-reduced-motion:no-preference) {
   .siaga-contact-action, .siaga-location-link, .siaga-contact-manage-btn { transition:background-color .15s ease,transform .15s ease; }
@@ -2236,6 +2236,70 @@ body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1
 }
 </style>
 
+
+<style id="suami-siaga-61315-layout-fixes">
+/* Contact footer: full-width location action with edit/delete alongside it. */
+.siaga-contact-footer{display:flex;align-items:center;gap:10px;width:100%;padding-top:10px;border-top:1px solid #e2e8f0;min-width:0}
+.siaga-contact-footer .siaga-location-link{flex:1 1 auto;width:auto;min-width:0;max-width:none;margin:0;justify-content:flex-start;padding-left:14px;padding-right:14px}
+.siaga-contact-footer-spacer{flex:1 1 auto;min-width:0}
+.siaga-contact-management{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:0 0 auto}
+.siaga-contact-management .siaga-contact-manage-btn{width:44px;height:44px;min-width:44px;min-height:44px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+@media(min-width:1024px){
+  #emergency-contacts-container{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+  #emergency-contacts-container .siaga-contact-card{padding:13px!important;gap:10px!important}
+}
+@media(max-width:767px){
+  .siaga-contact-footer{gap:8px}
+  .siaga-contact-footer .siaga-location-link{min-height:44px;width:auto;min-width:0;flex:1 1 auto}
+  .siaga-contact-management .siaga-contact-manage-btn{width:44px;height:44px}
+  .siaga-contact-management .siaga-action-label{display:none!important}
+}
+
+/* Hospital Bag desktop: owner categories side-by-side, compact item rows. */
+.siaga-bag-desktop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+.siaga-bag-owner-card{min-width:0;overflow:hidden;border:1px solid #e2e8f0;border-radius:15px;background:#fff}
+.siaga-bag-owner-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:#f1f5f9;border-bottom:1px solid #e2e8f0}
+.siaga-bag-owner-heading strong{display:flex;align-items:center;gap:7px;color:#075985;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.siaga-bag-owner-heading span{color:#64748b;font-size:10px;white-space:nowrap}
+.siaga-bag-owner-content{padding:8px 10px;display:grid;gap:7px}
+.siaga-bag-package-heading{display:flex;align-items:center;gap:6px;padding:5px 7px;background:#eff6ff;border-radius:8px;color:#075985;font-size:10px;font-weight:700;overflow-wrap:anywhere}
+.siaga-bag-desktop-item{display:grid;grid-template-columns:25px minmax(0,1fr) auto 68px;align-items:center;gap:7px;padding:8px 6px;border:1px solid #e2e8f0;border-radius:10px;min-width:0}
+.siaga-bag-desktop-check{display:flex;align-items:center;justify-content:center;min-height:36px}
+.siaga-bag-desktop-check input{width:17px;height:17px;cursor:pointer;accent-color:#0284c7}
+.siaga-bag-desktop-name{display:grid;gap:3px;min-width:0}
+.siaga-bag-desktop-name span{font-size:11px;line-height:1.35;font-weight:600;color:#1e293b;overflow-wrap:anywhere}
+.siaga-bag-desktop-name small{font-size:10px;color:#64748b}
+.siaga-bag-desktop-item.is-done .siaga-bag-desktop-name span{text-decoration:line-through;color:#94a3b8}
+.siaga-bag-desktop-status{font-size:9px;font-weight:700;color:#92400e;background:#fef3c7;border-radius:999px;padding:4px 7px;white-space:nowrap}
+.siaga-bag-desktop-status.done{color:#065f46;background:#d1fae5}
+.siaga-bag-desktop-actions{display:flex;justify-content:flex-end;gap:4px}
+.siaga-bag-desktop-actions button{width:30px;height:32px;border-radius:8px;background:#f1f5f9;color:#475569;display:inline-flex;align-items:center;justify-content:center}
+.siaga-bag-desktop-actions button.delete{background:#fff1f2;color:#e11d48}
+.siaga-bag-empty{padding:12px;color:#94a3b8;font-size:11px;font-style:italic}
+@media(max-width:1199px) and (min-width:1024px){.siaga-bag-desktop-item{grid-template-columns:24px minmax(0,1fr) auto 64px;gap:5px}.siaga-bag-desktop-actions button{width:28px}}
+
+/* Night mode danger notice: high contrast text on dark warning background. */
+body.dark-mode #siaga-roles .siaga-danger-warning{background:#4a1d27!important;border-color:#9f4050!important}
+body.dark-mode #siaga-roles .siaga-danger-warning strong,
+body.dark-mode #siaga-roles .siaga-danger-warning p{color:#fff!important}
+body.dark-mode #siaga-roles .siaga-danger-warning i{color:#fecaca!important}
+
+/* Match dark surfaces for the new two-column desktop Hospital Bag panels. */
+body.dark-mode .siaga-bag-owner-card{background:#172337;border-color:#334155}
+body.dark-mode .siaga-bag-owner-heading{background:#1e293b;border-color:#334155}
+body.dark-mode .siaga-bag-owner-heading strong{color:#bae6fd}
+body.dark-mode .siaga-bag-owner-heading span{color:#cbd5e1}
+body.dark-mode .siaga-bag-package-heading{background:#12314a;color:#bae6fd}
+body.dark-mode .siaga-bag-desktop-item{background:#1e293b;border-color:#3b4b61}
+body.dark-mode .siaga-bag-desktop-name span{color:#f1f5f9}
+body.dark-mode .siaga-bag-desktop-name small{color:#cbd5e1}
+body.dark-mode .siaga-bag-desktop-item.is-done .siaga-bag-desktop-name span{color:#94a3b8}
+body.dark-mode .siaga-bag-desktop-actions button{background:#334155;color:#f1f5f9}
+body.dark-mode .siaga-bag-desktop-actions button.delete{background:#4c1d26;color:#fecdd3}
+body.dark-mode .siaga-bag-empty{color:#94a3b8}
+
+@media(prefers-reduced-motion:no-preference){.siaga-contact-footer .siaga-location-link,.siaga-contact-management .siaga-contact-manage-btn,.siaga-bag-desktop-actions button{transition:background-color .15s ease,transform .15s ease}.siaga-contact-footer .siaga-location-link:active,.siaga-contact-management .siaga-contact-manage-btn:active,.siaga-bag-desktop-actions button:active{transform:scale(.97)}}
+</style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -2590,7 +2654,7 @@ body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1
 
             <!-- TAB 2: BUDGET & BELANJA -->
             <section id="sec-budget" class="hidden space-y-6">
-                <!-- 6.13.14: Compact budget + purchase progress overview -->
+                <!-- 6.13.15: Compact budget + purchase progress overview -->
                 <div id="budget-overview-card" class="rounded-2xl border border-sky-100 bg-sky-50/70 px-4 py-3 shadow-sm space-y-2.5">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2 min-w-0"><i class="fa-solid fa-wallet text-sky-600"></i><h3 class="font-bold text-sm text-slate-800">Ringkasan Anggaran</h3></div>
@@ -2854,13 +2918,8 @@ body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1
                         <span class="siaga-helper-chip"><i class="fa-solid fa-person"></i> Pendamping</span>
                         <span class="siaga-helper-chip"><i class="fa-solid fa-baby"></i> Bayi</span>
                     </div>
-                    <div class="hidden sm:block overflow-x-auto rounded-xl border border-slate-100">
-                        <table class="w-full text-left text-xs text-slate-600">
-                            <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider border-y border-slate-200/60"><tr><th class="p-2.5 w-10 text-center">Siap</th><th class="p-2.5">Nama Barang / Paket</th><th class="p-2.5 w-24 text-center">Jumlah</th><th class="p-2.5 text-center w-20">Aksi</th></tr></thead>
-                            <tbody id="hospital-bag-tbody" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                    <div class="sm:hidden space-y-3" id="hospital-bag-mobile"></div>
+                    <div class="hidden lg:grid siaga-bag-desktop-grid" id="hospital-bag-desktop"></div>
+                    <div class="lg:hidden space-y-3" id="hospital-bag-mobile"></div>
                 </div>
 
                 <!-- HOUSE CHECKLIST -->
@@ -2929,7 +2988,7 @@ body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1
                                 </ul>
                             </div>
                         </details>
-                        <div class="rounded-xl border border-rose-200 bg-rose-50 p-3 space-y-1">
+                        <div class="siaga-danger-warning rounded-xl border border-rose-200 bg-rose-50 p-3 space-y-1">
                             <strong class="text-sm text-rose-800"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Tanda bahaya saat proses melahirkan</strong>
                             <p class="text-xs text-rose-800 leading-relaxed">Air ketuban hijau dan berbau, kejang, perdarahan, nyeri/kesakitan hebat, ibu tidak kuat mengejan, atau tali pusat/tangan bayi tampak keluar dari jalan lahir memerlukan pertolongan segera. Hubungi tenaga kesehatan dan ikuti arahan untuk ke fasilitas rujukan; jangan menunggu checklist selesai.</p>
                         </div>
@@ -7313,7 +7372,7 @@ body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1
             saveToLocalStorage();
         }
 
-        // 6.13.14 — Shopping alternatives, preferred option and compact overview.
+        // 6.13.15 — Shopping alternatives, preferred option and compact overview.
         function splitLegacyShoppingValues(raw) {
             return String(raw || '').split(/\s*\n+\s*|\s*,\s*|\s+\/\/\s+/).map(v => v.trim()).filter(Boolean);
         }
@@ -7794,8 +7853,10 @@ body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1
                             <a href="tel:${cleanPhone}" aria-label="Telepon ${safeName}" title="Telepon ${safeName}" class="siaga-contact-action siaga-call-action min-h-[44px] px-2 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"><i class="fa-solid fa-phone" aria-hidden="true"></i><span>Telepon</span></a>
                             <a href="https://wa.me/${waPhone}" target="_blank" rel="noopener" aria-label="WhatsApp ${safeName}" title="WhatsApp ${safeName}" class="siaga-contact-action siaga-wa-action min-h-[44px] px-2 py-2 bg-green-100 hover:bg-green-200 text-green-800 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5"><i class="fa-brands fa-whatsapp text-base" aria-hidden="true"></i><span>WhatsApp</span></a>
                         </div>
-                        ${maps ? `<a href="${siagaEscapeHtml(maps)}" target="_blank" rel="noopener" aria-label="Buka lokasi ${safeName}" title="Lokasi ${safeName}" class="siaga-location-link min-h-[40px] px-3 py-2 bg-sky-100 hover:bg-sky-200 text-sky-800 font-semibold rounded-xl text-xs inline-flex items-center justify-start gap-2"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>Lokasi</span></a>` : ''}
-                        <div class="siaga-contact-management flex justify-end gap-2 border-t border-slate-200 pt-2"><button type="button" onclick="openEmergencyContactModal(${Number(c.id)})" aria-label="Edit kontak ${safeName}" title="Edit kontak" class="siaga-contact-manage-btn min-h-[44px] min-w-[44px] px-3 rounded-lg bg-white text-slate-600 border border-slate-200 text-xs"><i class="fa-solid fa-pen" aria-hidden="true"></i><span class="siaga-action-label">Edit</span></button><button type="button" onclick="deleteEmergencyContact(${Number(c.id)})" aria-label="Hapus kontak ${safeName}" title="Hapus kontak" class="siaga-contact-manage-btn siaga-contact-delete min-h-[44px] min-w-[44px] px-3 rounded-lg bg-rose-50 text-rose-600 text-xs"><i class="fa-solid fa-trash" aria-hidden="true"></i><span class="siaga-action-label">Hapus</span></button></div>
+                        <div class="siaga-contact-footer">
+                            ${maps ? `<a href="${siagaEscapeHtml(maps)}" target="_blank" rel="noopener" aria-label="Buka lokasi ${safeName}" title="Lokasi ${safeName}" class="siaga-location-link min-h-[44px] px-3 py-2 bg-sky-100 hover:bg-sky-200 text-sky-800 font-semibold rounded-xl text-xs inline-flex items-center justify-center gap-2"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>Lokasi</span></a>` : `<span class="siaga-contact-footer-spacer" aria-hidden="true"></span>`}
+                            <div class="siaga-contact-management flex items-center gap-2"><button type="button" onclick="openEmergencyContactModal(${Number(c.id)})" aria-label="Edit kontak ${safeName}" title="Edit kontak" class="siaga-contact-manage-btn min-h-[44px] min-w-[44px] px-3 rounded-lg bg-white text-slate-600 border border-slate-200 text-xs"><i class="fa-solid fa-pen" aria-hidden="true"></i><span class="siaga-action-label">Edit</span></button><button type="button" onclick="deleteEmergencyContact(${Number(c.id)})" aria-label="Hapus kontak ${safeName}" title="Hapus kontak" class="siaga-contact-manage-btn siaga-contact-delete min-h-[44px] min-w-[44px] px-3 rounded-lg bg-rose-50 text-rose-600 text-xs"><i class="fa-solid fa-trash" aria-hidden="true"></i><span class="siaga-action-label">Hapus</span></button></div>
+                        </div>
                     </article>`;
             }).join('');
         }
@@ -7862,13 +7923,13 @@ body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1
 
         // HOSPITAL BAG TABLE
         function renderHospitalBagTable() {
-            const tbody = document.getElementById('hospital-bag-tbody');
+            const desktop = document.getElementById('hospital-bag-desktop');
             const mobile = document.getElementById('hospital-bag-mobile');
-            if (!tbody && !mobile) return;
+            if (!desktop && !mobile) return;
             if (!Array.isArray(appState.hospitalBag)) appState.hospitalBag = [];
+
             const owners = ['Dokumen', 'Istri', 'Suami', 'Bayi'];
-            const grouped = {};
-            owners.forEach(owner => grouped[owner] = []);
+            const grouped = Object.fromEntries(owners.map(owner => [owner, []]));
             appState.hospitalBag.forEach(item => {
                 const owner = owners.includes(item.category) ? item.category : 'Dokumen';
                 grouped[owner].push(item);
@@ -7876,42 +7937,76 @@ body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1
 
             let desktopHtml = '';
             let mobileHtml = '';
+
             owners.forEach(owner => {
                 const items = grouped[owner] || [];
-                const done = items.filter(i => i.done).length;
+                const done = items.filter(item => item.done).length;
                 const packageGroups = new Map();
                 items.forEach(item => {
                     const label = String(item.packageLabel || '').trim() || 'Belum diberi label paket';
                     if (!packageGroups.has(label)) packageGroups.set(label, []);
                     packageGroups.get(label).push(item);
                 });
-                desktopHtml += `<tr class="bg-slate-100/80 font-bold text-slate-700"><td colspan="3" class="p-2.5 px-3 text-[10px] uppercase tracking-wider text-sky-800"><i class="fa-solid fa-box-archive mr-1.5 text-sky-600"></i>${owner} (${done}/${items.length} siap)</td><td class="p-2 text-[10px] text-right text-slate-400">${done === items.length && items.length ? '✅ Lengkap' : ''}</td></tr>`;
-                mobileHtml += `<section class="rounded-2xl border border-slate-200 overflow-hidden"><div class="px-3 py-2.5 bg-slate-100 flex items-center justify-between"><strong class="text-xs uppercase tracking-wide text-sky-800">${owner}</strong><span class="text-[10px] text-slate-500">${done}/${items.length} siap</span></div><div class="p-2.5 space-y-3">`;
+
+                // Desktop: each owner/category is a card; the four cards are arranged in two columns.
+                let desktopItemsHtml = '';
                 if (!items.length) {
-                    desktopHtml += `<tr><td colspan="4" class="p-3 text-slate-400 italic text-xs">Belum ada barang.</td></tr>`;
-                    mobileHtml += `<p class="text-xs text-slate-400 italic p-2">Belum ada barang.</p>`;
+                    desktopItemsHtml = `<p class="siaga-bag-empty">Belum ada barang.</p>`;
+                } else {
+                    packageGroups.forEach((packageItems, label) => {
+                        desktopItemsHtml += `<div class="siaga-bag-package-heading"><i class="fa-solid fa-tag"></i><span>${siagaEscapeHtml(label)}</span></div>`;
+                        packageItems.forEach(item => {
+                            const name = siagaEscapeHtml(item.name || 'Barang');
+                            const qty = siagaEscapeHtml(item.qty || '1');
+                            const itemId = Number(item.id);
+                            desktopItemsHtml += `
+                                <div class="siaga-bag-desktop-item ${item.done ? 'is-done' : ''}">
+                                    <label class="siaga-bag-desktop-check" aria-label="Tandai ${name} siap">
+                                        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleHospitalBagDone(${itemId})">
+                                    </label>
+                                    <div class="siaga-bag-desktop-name"><span>${name}</span><small>Jumlah: ${qty}</small></div>
+                                    <span class="siaga-bag-desktop-status ${item.done ? 'done' : ''}">${item.done ? 'Siap' : 'Belum'}</span>
+                                    <div class="siaga-bag-desktop-actions">
+                                        <button type="button" onclick="openHospitalBagModal(${itemId})" aria-label="Edit ${name}" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                        <button type="button" class="delete" onclick="deleteHospitalBagItem(${itemId})" aria-label="Hapus ${name}" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
+                                </div>`;
+                        });
+                    });
                 }
+
+                desktopHtml += `
+                    <section class="siaga-bag-owner-card">
+                        <div class="siaga-bag-owner-heading">
+                            <strong><i class="fa-solid fa-box-archive"></i> ${owner}</strong>
+                            <span>${done}/${items.length} siap ${items.length && done === items.length ? '· Lengkap' : ''}</span>
+                        </div>
+                        <div class="siaga-bag-owner-content">${desktopItemsHtml}</div>
+                    </section>`;
+
+                // Mobile: preserve the familiar vertical cards and package grouping.
+                mobileHtml += `<section class="rounded-2xl border border-slate-200 overflow-hidden"><div class="px-3 py-2.5 bg-slate-100 flex items-center justify-between"><strong class="text-xs uppercase tracking-wide text-sky-800">${owner}</strong><span class="text-[10px] text-slate-500">${done}/${items.length} siap</span></div><div class="p-2.5 space-y-3">`;
+                if (!items.length) mobileHtml += `<p class="text-xs text-slate-400 italic p-2">Belum ada barang.</p>`;
                 packageGroups.forEach((packageItems, label) => {
-                    desktopHtml += `<tr class="bg-sky-50/70"><td colspan="4" class="px-3 py-2 text-[10px] font-bold text-sky-800"><i class="fa-solid fa-tag mr-1"></i>${siagaEscapeHtml(label)}</td></tr>`;
                     mobileHtml += `<div class="space-y-2"><div class="text-[10px] font-bold text-sky-800 px-1"><i class="fa-solid fa-tag mr-1"></i>${siagaEscapeHtml(label)}</div>`;
                     packageItems.forEach(item => {
                         const name = siagaEscapeHtml(item.name || 'Barang');
                         const qty = siagaEscapeHtml(item.qty || '1');
-                        const packageLabel = siagaEscapeHtml(item.packageLabel || 'Tanpa label paket');
-                        desktopHtml += `<tr class="hover:bg-slate-50"><td class="p-2.5 text-center"><input aria-label="Tandai ${name} siap" type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleHospitalBagDone(${Number(item.id)})" class="w-4 h-4 text-sky-600 rounded cursor-pointer"></td><td class="p-2.5"><span class="${item.done ? 'line-through text-slate-400' : 'text-slate-800 font-medium'}">${name}</span></td><td class="p-2.5 text-center font-medium text-slate-600">${qty}</td><td class="p-2.5 text-center space-x-1"><button onclick="openHospitalBagModal(${Number(item.id)})" class="p-2 bg-slate-100 text-slate-600 rounded-lg" aria-label="Edit ${name}"><i class="fa-solid fa-pen"></i></button><button onclick="deleteHospitalBagItem(${Number(item.id)})" class="p-2 bg-rose-50 text-rose-600 rounded-lg" aria-label="Hapus ${name}"><i class="fa-solid fa-trash"></i></button></td></tr>`;
-                        mobileHtml += `<article class="rounded-xl border border-slate-200 bg-white p-3 space-y-2"><div class="flex items-start gap-2"><input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleHospitalBagDone(${Number(item.id)})" class="w-5 h-5 mt-0.5 rounded text-sky-600 shrink-0" aria-label="Tandai ${name} siap"><div class="min-w-0 flex-1"><p class="text-sm font-semibold ${item.done ? 'line-through text-slate-400' : 'text-slate-800'} break-words">${name}</p><p class="text-xs text-slate-500 mt-1">Jumlah: <strong class="text-slate-700">${qty}</strong></p></div><span class="text-[10px] rounded-full px-2 py-1 ${item.done ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${item.done ? 'Siap' : 'Belum'}</span></div><div class="flex gap-2 pt-1"><button onclick="openHospitalBagModal(${Number(item.id)})" class="flex-1 min-h-[40px] rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold"><i class="fa-solid fa-pen mr-1"></i>Edit</button><button onclick="deleteHospitalBagItem(${Number(item.id)})" class="min-h-[40px] px-4 rounded-lg bg-rose-50 text-rose-600 text-xs font-semibold"><i class="fa-solid fa-trash mr-1"></i>Hapus</button></div></article>`;
+                        const itemId = Number(item.id);
+                        mobileHtml += `<article class="rounded-xl border border-slate-200 bg-white p-3 space-y-2"><div class="flex items-start gap-2"><input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleHospitalBagDone(${itemId})" class="w-5 h-5 mt-0.5 rounded text-sky-600 shrink-0" aria-label="Tandai ${name} siap"><div class="min-w-0 flex-1"><p class="text-sm font-semibold ${item.done ? 'line-through text-slate-400' : 'text-slate-800'} break-words">${name}</p><p class="text-xs text-slate-500 mt-1">Jumlah: <strong class="text-slate-700">${qty}</strong></p></div><span class="text-[10px] rounded-full px-2 py-1 ${item.done ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${item.done ? 'Siap' : 'Belum'}</span></div><div class="flex gap-2 pt-1"><button onclick="openHospitalBagModal(${itemId})" class="flex-1 min-h-[40px] rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold"><i class="fa-solid fa-pen mr-1"></i>Edit</button><button onclick="deleteHospitalBagItem(${itemId})" class="min-h-[40px] px-4 rounded-lg bg-rose-50 text-rose-600 text-xs font-semibold"><i class="fa-solid fa-trash mr-1"></i>Hapus</button></div></article>`;
                     });
                     mobileHtml += `</div>`;
                 });
                 mobileHtml += `</div></section>`;
             });
-            if (tbody) tbody.innerHTML = desktopHtml;
+
+            if (desktop) desktop.innerHTML = desktopHtml;
             if (mobile) mobile.innerHTML = mobileHtml;
             renderDashboardWidgets();
             renderSiagaOverview();
         }
 
-        function openHospitalBagModal(id = null) {
+                function openHospitalBagModal(id = null) {
             const form = document.getElementById('hospital-bag-form');
             form.reset();
 
@@ -10056,7 +10151,7 @@ body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.14',
+                    appVersion: '6.13.15',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -14586,7 +14681,7 @@ body.dark-mode #siaga-contacts-container .siaga-contact-delete { background:#4c1
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.14. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.15. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
