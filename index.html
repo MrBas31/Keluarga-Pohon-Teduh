@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.16: shopping alternatives, budget progress and safer category removal -->
+    <!-- Keluarga Pohon Teduh 6.13.17: refined header and authentication branding -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.16">
+    <meta name="application-version" content="6.13.17">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -2461,8 +2461,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
     <!-- AUTHENTICATION GATE: aplikasi dan data ditahan sampai UID diizinkan -->
     <section id="auth-gate" aria-live="polite">
         <div class="auth-card text-center">
-            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-3xl">
-                <i class="fa-solid fa-tree"></i>
+            <div class="auth-brand-logo-wrap" aria-hidden="true">
+                <img src="Keluarga Pohon Teduh.png" alt="" class="auth-brand-logo" decoding="async">
             </div>
             <h1 class="font-brand text-2xl font-bold text-slate-800 mb-1" id="auth-brand-title">Keluarga Pohon Teduh</h1>
             <p class="auth-muted text-sm text-slate-500 mb-6">Ruang privat untuk perjalanan keluarga kita.</p>
@@ -2522,7 +2522,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         <div id="header-main-layout" class="header-main-layout max-w-7xl mx-auto px-4 py-3 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] xl:items-center xl:gap-5">
             <!-- LOGO & BRANDING: judul dijaga tetap satu baris -->
             <div class="flex items-center gap-3 flex-shrink-0 min-w-0 xl:justify-self-start">
-                <img src="Keluarga Pohon Teduh.png" alt="Logo Keluarga Pohon Teduh" class="w-11 h-11 md:w-12 md:h-12 object-cover rounded-2xl border border-emerald-100 shadow-sm flex-shrink-0">
+                <img src="Keluarga Pohon Teduh.png" alt="Logo Keluarga Pohon Teduh" class="kpt-header-logo flex-shrink-0" decoding="async">
                 <div class="min-w-0">
                     <h1 class="text-lg md:text-xl xl:text-2xl font-bold text-slate-800 tracking-tight font-brand whitespace-nowrap">
                         Keluarga Pohon Teduh
@@ -10306,7 +10306,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.16',
+                    appVersion: '6.13.17',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -14836,7 +14836,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.16. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.17. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
@@ -15406,6 +15406,99 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         #sec-post-dashboard .kpt-post-card:hover { transform: none !important; }
     }
 
+</style>
+
+
+<style id="kpt-brand-display-61317">
+  /* 6.13.17 — brand assets are shown cleanly, without artificial frames. */
+  #header-main-layout > div:first-child img.kpt-header-logo {
+    display: block !important;
+    width: 58px !important;
+    height: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+    flex: 0 0 58px !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  #auth-gate .auth-brand-logo-wrap {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 184px;
+    height: 184px;
+    max-width: 62vw;
+    max-height: 62vw;
+    margin: 0 auto 1rem;
+  }
+  #auth-gate .auth-brand-logo-wrap::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 7%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(16,185,129,.13) 0%, rgba(16,185,129,.055) 48%, rgba(16,185,129,0) 74%);
+    filter: blur(8px);
+    pointer-events: none;
+  }
+  #auth-gate .auth-brand-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  body.dark-mode #auth-gate .auth-brand-logo-wrap::before {
+    background: radial-gradient(circle, rgba(52,211,153,.17) 0%, rgba(52,211,153,.06) 48%, rgba(52,211,153,0) 74%);
+  }
+
+  @media (max-width: 767px) {
+    #header-main-layout > div:first-child img.kpt-header-logo {
+      width: 48px !important;
+      height: 48px !important;
+      min-width: 48px !important;
+      max-width: 48px !important;
+      flex-basis: 48px !important;
+    }
+    #auth-gate .auth-brand-logo-wrap {
+      width: 156px;
+      height: 156px;
+      margin-bottom: .85rem;
+    }
+  }
+
+  @media (max-width: 390px) {
+    #header-main-layout > div:first-child img.kpt-header-logo {
+      width: 45px !important;
+      height: 45px !important;
+      min-width: 45px !important;
+      max-width: 45px !important;
+      flex-basis: 45px !important;
+    }
+    #auth-gate .auth-brand-logo-wrap {
+      width: 140px;
+      height: 140px;
+    }
+  }
+
+  @media (max-height: 650px) and (max-width: 767px) {
+    #auth-gate { align-items: flex-start; overflow-y: auto; }
+    #auth-gate .auth-card { margin: auto 0; }
+    #auth-gate .auth-brand-logo-wrap { width: 120px; height: 120px; }
+  }
 </style>
 
 </body>
