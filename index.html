@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.17: refined header and authentication branding -->
+    <!-- Keluarga Pohon Teduh 6.13.18: mobile budget item summary and collapsible details fix -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.17">
+    <meta name="application-version" content="6.13.18">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -2455,6 +2455,69 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   accent-color: #38bdf8 !important;
 }
 </style>
+
+
+<style id="budget-mobile-regression-fix-61318">
+/* KPT 6.13.18 — restore compact, truly collapsible shopping cards on mobile.
+   Desktop table rendering and the underlying shopping data are untouched. */
+@media (max-width: 767px) {
+  table.mobile-card-table--shopping tbody tr.kpt-shopping-row > td:nth-child(2) {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Put the item name on its own row so status/price controls cannot squeeze it
+     into narrow, letter-by-letter wrapping on small Android screens. */
+  table.mobile-card-table--shopping .kpt-shopping-summary {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-summary-main {
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    align-items: flex-start !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-summary-main > div:last-child {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-summary-title {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+    hyphens: manual !important;
+    line-height: 1.35 !important;
+  }
+  table.mobile-card-table--shopping .kpt-shopping-summary-meta {
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 7px !important;
+  }
+
+  /* A later 6.13.12 rule sets the panel to display:flex !important.
+     This higher-specificity hidden rule ensures the native hidden state wins. */
+  table.mobile-card-table--shopping tbody tr.kpt-shopping-row > td:nth-child(2) .kpt-shopping-details-panel[hidden] {
+    display: none !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -10306,7 +10369,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.17',
+                    appVersion: '6.13.18',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -14836,7 +14899,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.17. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.18. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
