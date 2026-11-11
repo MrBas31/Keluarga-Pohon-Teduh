@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.20: RS & Obgyn Madiun directory and comparison refinement -->
+    <!-- Keluarga Pohon Teduh 6.13.21: RS & Obgyn Madiun directory and comparison refinement -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.20">
+    <meta name="application-version" content="6.13.21">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -2838,6 +2838,9 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   .hospital-compare-value-row strong { color:#0f172a; font-size:11px; text-align:right; line-height:1.35; overflow-wrap:anywhere; }
   .hospital-compare-muted { color:#94a3b8 !important; font-weight:600 !important; }
   .hospital-compare-secondary { border:1px solid #cbd5e1; background:#fff; color:#475569; border-radius:11px; min-height:40px; padding:8px 11px; font-size:10px; font-weight:800; }
+  .hospital-doctor-schedule { display:block; margin-top:4px; color:#64748b; font-size:10px; line-height:1.45; overflow-wrap:anywhere; }
+  .hospital-doctor-schedule.is-empty { color:#94a3b8; font-style:italic; }
+  .hospital-doctor-entry:last-child { border-bottom:0; padding-bottom:0; }
   .hospital-detail-verification > div { padding:10px 11px; border-radius:13px; border:1px solid #e2e8f0; background:#f8fafc; min-width:0; }
   .hospital-detail-verification strong { display:block; color:#334155; font-size:10px; }
   .hospital-detail-verification span { display:block; color:#64748b; font-size:10px; line-height:1.4; margin-top:3px; overflow-wrap:anywhere; }
@@ -2851,6 +2854,32 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   .hospital-matrix-mobile-row span { color:#64748b; min-width:0; }
   .hospital-matrix-mobile-row strong { color:#0f172a; text-align:right; }
   #modal-rs-detail > div, #modal-rs-form > div { overscroll-behavior:contain; }
+  /* 6.13.21: detail actions are kept outside the scrollable content and above mobile navigation. */
+  #modal-rs-detail, #modal-rs-form { z-index:90 !important; }
+  #modal-rs-detail > .hospital-detail-modal-card {
+    display:flex !important; flex-direction:column !important; min-height:0;
+    overflow:hidden !important; padding:0 !important; gap:0 !important;
+    max-height:90vh; max-height:90dvh;
+  }
+  #modal-rs-detail .hospital-detail-scroll {
+    flex:1 1 auto; min-height:0; overflow-y:auto; overflow-x:hidden;
+    -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+  }
+  #modal-rs-detail .hospital-detail-actions {
+    flex:0 0 auto; display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr) minmax(0,.8fr);
+    align-items:stretch; gap:8px; padding:12px 18px max(12px, env(safe-area-inset-bottom));
+    border-top:1px solid #e2e8f0; background:#fff; position:relative; z-index:12;
+    box-shadow:0 -8px 20px rgba(15,23,42,.07);
+  }
+  #modal-rs-detail .hospital-detail-actions button {
+    min-width:0; min-height:48px; display:flex; align-items:center; justify-content:center;
+    gap:5px; line-height:1.2; white-space:normal; text-align:center;
+  }
+  body.dark-mode #modal-rs-detail .hospital-detail-actions {
+    background:#1e293b; border-color:#334155; box-shadow:0 -8px 20px rgba(0,0,0,.22);
+  }
+  body.dark-mode #modal-rs-detail .hospital-detail-action-edit { background:#26364b !important; color:#e2e8f0 !important; }
+  body.dark-mode #modal-rs-detail .hospital-detail-action-delete { background:#451a2a !important; color:#fecdd3 !important; }
   @media(max-width:640px) {
     .hospital-hero { border-radius:22px; padding:15px; }
     .hospital-stat { padding:9px 8px; border-radius:12px; }
@@ -2862,7 +2891,11 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
     .hospital-matrix-desktop { display:none; }
     .hospital-matrix-mobile { display:block; }
     #modal-rs-detail { padding:8px !important; align-items:flex-end !important; }
-    #modal-rs-detail > div { max-height:94dvh !important; border-radius:22px 22px 12px 12px !important; padding:15px !important; gap:16px !important; }
+    #modal-rs-detail > div { max-height:94dvh !important; border-radius:22px 22px 12px 12px !important; padding:0 !important; gap:0 !important; }
+    #modal-rs-detail .hospital-detail-scroll { padding:15px 14px 18px !important; }
+    #modal-rs-detail .hospital-detail-actions { grid-template-columns:minmax(0,.85fr) minmax(0,1.1fr) minmax(0,.75fr); gap:7px; padding:9px 11px max(10px, env(safe-area-inset-bottom)); }
+    #modal-rs-detail .hospital-detail-actions button { min-height:48px !important; padding:8px 5px !important; font-size:10px !important; }
+    #modal-rs-detail .hospital-detail-actions button i { margin:0 !important; }
     #detail-rs-carousel-container { height:175px !important; }
     #modal-rs-form { padding:8px !important; align-items:flex-end !important; }
     #modal-rs-form > div { max-height:95dvh !important; border-radius:22px 22px 12px 12px !important; padding:16px 14px !important; }
@@ -2895,6 +2928,9 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   body.dark-mode .hospital-compare-value-row strong { color:#e2e8f0; }
   body.dark-mode .hospital-compare-muted { color:#64748b !important; }
   body.dark-mode .hospital-compare-secondary { background:#26364b; border-color:#475569; color:#e2e8f0; }
+  body.dark-mode .hospital-doctor-schedule { color:#94a3b8; }
+  body.dark-mode #modal-rs-detail .hospital-doctor-entry .font-semibold { color:#e2e8f0; }
+  body.dark-mode #modal-rs-detail .hospital-doctor-entry { border-color:#334155; }
   body.dark-mode .hospital-detail-verification > div { background:#172337; border-color:#334155; }
   body.dark-mode .hospital-detail-verification strong { color:#cbd5e1; }
   body.dark-mode .hospital-detail-verification span { color:#94a3b8; }
@@ -2920,6 +2956,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   body.dark-mode #modal-rs-detail .text-sky-800,
   body.dark-mode #modal-rs-detail .text-slate-700 { color:#cbd5e1 !important; }
   body.dark-mode #modal-rs-form .bg-slate-50 { background:#172337 !important; border-color:#334155 !important; }
+  body.dark-mode #modal-rs-form .space-y-2.rounded-xl.bg-white { background:#1e293b !important; border-color:#334155 !important; }
+  body.dark-mode #modal-rs-form textarea[id^="form-rs-"] { background:#0f1b2c !important; color:#e2e8f0 !important; border-color:#475569 !important; }
   body.dark-mode #modal-rs-form .text-slate-700,
   body.dark-mode #modal-rs-form .text-slate-600 { color:#cbd5e1 !important; }
   @media(max-width:640px) {
@@ -3394,7 +3432,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 </div>
             </section>
 
-            <!-- TAB 3: RS BERSALIN & OBGYN — REFINEMENT 6.13.20 -->
+            <!-- TAB 3: RS BERSALIN & OBGYN — REFINEMENT 6.13.21 -->
             <section id="sec-hospital" class="hidden space-y-5 hospital-page">
                 <div class="hospital-hero rounded-3xl p-4 sm:p-6 border shadow-sm">
                     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -5157,11 +5195,12 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
     </div>
 
     <!-- MODAL: RS DETAIL VIEW -->
-    <div id="modal-rs-detail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
-        <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-6 shadow-2xl relative">
-            <button onclick="closeHospitalDetail()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg z-10 bg-white/80 p-1.5 rounded-full backdrop-blur-sm">
+    <div id="modal-rs-detail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[90] hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
+        <div class="hospital-detail-modal-card bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] shadow-2xl relative">
+            <button onclick="closeHospitalDetail()" aria-label="Tutup detail rumah sakit" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg z-10 bg-white/90 p-1.5 rounded-full backdrop-blur-sm shadow-sm">
                 <i class="fa-solid fa-xmark"></i>
             </button>
+            <div class="hospital-detail-scroll p-6 space-y-6">
 
             <!-- RS IMAGE CAROUSEL CONTAINER -->
             <div class="rounded-2xl h-56 w-full overflow-hidden relative border border-slate-100 bg-slate-900" id="detail-rs-carousel-container">
@@ -5243,18 +5282,17 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 </div>
             </div>
 
-            <div class="flex justify-between items-center pt-2 border-t border-slate-100">
-                <button id="btn-delete-rs" onclick="" class="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold text-xs rounded-xl transition">
-                    <i class="fa-solid fa-trash mr-1"></i> Hapus RS
+            </div><!-- /.hospital-detail-scroll -->
+            <div class="hospital-detail-actions">
+                <button id="btn-delete-rs" type="button" onclick="" aria-label="Hapus rumah sakit" class="hospital-detail-action-delete min-h-[48px] px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold text-xs rounded-xl transition">
+                    <i class="fa-solid fa-trash mr-1"></i><span>Hapus</span>
                 </button>
-                <div class="flex gap-2">
-                    <button id="btn-edit-rs" onclick="" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition">
-                        <i class="fa-solid fa-pen mr-1"></i> Edit Data & Matriks
-                    </button>
-                    <button onclick="closeHospitalDetail()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl transition">
-                        Tutup
-                    </button>
-                </div>
+                <button id="btn-edit-rs" type="button" onclick="" aria-label="Edit data dan matriks rumah sakit" class="hospital-detail-action-edit min-h-[48px] px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition">
+                    <i class="fa-solid fa-pen mr-1"></i><span>Edit Data</span>
+                </button>
+                <button type="button" onclick="closeHospitalDetail()" class="hospital-detail-action-close min-h-[48px] px-3 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl transition">
+                    <i class="fa-solid fa-xmark mr-1"></i><span>Tutup</span>
+                </button>
             </div>
         </div>
     </div>
@@ -5336,19 +5374,46 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 <div class="space-y-3 bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-100">
                     <div>
                         <div class="font-bold text-slate-700">Dokter &amp; Jadwal Praktik</div>
-                        <p class="text-[10px] text-slate-500 mt-0.5">Satu dokter per baris. Koma pada nama atau gelar tidak akan memisahkan data.</p>
+                        <p class="text-[10px] text-slate-500 mt-0.5">Nama dan jadwal diisi terpisah. Baris jadwal ke-1 dipasangkan dengan dokter ke-1, baris ke-2 dengan dokter ke-2, dan seterusnya. Jadwal boleh dikosongkan.</p>
                     </div>
-                    <div>
-                        <label class="text-2xs font-semibold text-pink-700">👩‍⚕️ Obgyn Perempuan</label>
-                        <textarea id="form-rs-obgyn-female" rows="2" placeholder="dr. Nama, Sp.OG (Senin: 09.00–12.00)" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y"></textarea>
+                    <div class="space-y-2 rounded-xl border border-pink-100 bg-white p-3">
+                        <div class="font-bold text-pink-700 text-xs">👩‍⚕️ Obgyn Perempuan</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <label for="form-rs-obgyn-female" class="text-[10px] font-semibold text-slate-600">Nama dokter (satu per baris)</label>
+                                <textarea id="form-rs-obgyn-female" rows="2" placeholder="dr. Nama, Sp.OG" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
+                            </div>
+                            <div>
+                                <label for="form-rs-obgyn-female-schedule" class="text-[10px] font-semibold text-slate-600">Jadwal praktik (urut sesuai nama)</label>
+                                <textarea id="form-rs-obgyn-female-schedule" rows="2" placeholder="Senin & Rabu: 09.00–12.00" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label class="text-2xs font-semibold text-slate-700">👨‍⚕️ Obgyn Laki-Laki</label>
-                        <textarea id="form-rs-obgyn-male" rows="2" placeholder="dr. Nama, Sp.OG (Rabu: 16.00–19.00)" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y"></textarea>
+                    <div class="space-y-2 rounded-xl border border-slate-200 bg-white p-3">
+                        <div class="font-bold text-slate-700 text-xs">👨‍⚕️ Obgyn Laki-Laki</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <label for="form-rs-obgyn-male" class="text-[10px] font-semibold text-slate-600">Nama dokter (satu per baris)</label>
+                                <textarea id="form-rs-obgyn-male" rows="2" placeholder="dr. Nama, Sp.OG" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
+                            </div>
+                            <div>
+                                <label for="form-rs-obgyn-male-schedule" class="text-[10px] font-semibold text-slate-600">Jadwal praktik (urut sesuai nama)</label>
+                                <textarea id="form-rs-obgyn-male-schedule" rows="2" placeholder="Rabu: 16.00–19.00" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label class="text-2xs font-semibold text-sky-700">👶 Dokter Anak (Sp.A)</label>
-                        <textarea id="form-rs-pediatricians" rows="2" placeholder="dr. Nama, Sp.A (Kamis: 10.00–13.00)" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y"></textarea>
+                    <div class="space-y-2 rounded-xl border border-sky-100 bg-white p-3">
+                        <div class="font-bold text-sky-700 text-xs">👶 Dokter Anak (Sp.A)</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <label for="form-rs-pediatricians" class="text-[10px] font-semibold text-slate-600">Nama dokter (satu per baris)</label>
+                                <textarea id="form-rs-pediatricians" rows="2" placeholder="dr. Nama, Sp.A" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
+                            </div>
+                            <div>
+                                <label for="form-rs-pediatricians-schedule" class="text-[10px] font-semibold text-slate-600">Jadwal praktik (urut sesuai nama)</label>
+                                <textarea id="form-rs-pediatricians-schedule" rows="2" placeholder="Kamis: 10.00–13.00" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -9225,16 +9290,57 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             return Number.isNaN(date.getTime()) ? raw : date.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
         }
 
+        // Supports legacy strings such as "dr. Nama, Sp.OG (Senin: 09.00–12.00)"
+        // and the new structured records { name, schedule }.
+        function hospitalParseDoctorEntry(value) {
+            if (value && typeof value === 'object' && !Array.isArray(value)) {
+                const name = String(value.name || value.doctor || value.nama || '').trim();
+                const schedule = String(value.schedule || value.jadwal || value.practiceSchedule || '').trim();
+                return name ? { name, schedule } : null;
+            }
+            const raw = String(value == null ? '' : value).trim();
+            if (!raw) return null;
+            const legacyMatch = raw.match(/^(.*?)\s+\((.*)\)$/);
+            if (legacyMatch && legacyMatch[1].trim()) {
+                return { name: legacyMatch[1].trim(), schedule: legacyMatch[2].trim() };
+            }
+            return { name: raw, schedule: '' };
+        }
+
+        function hospitalDoctorEntries(value) {
+            const source = Array.isArray(value)
+                ? value
+                : (typeof value === 'string' ? value.split(/\r?\n/) : []);
+            return source.map(hospitalParseDoctorEntry).filter(Boolean);
+        }
+
         function hospitalDoctorList(value) {
-            if (Array.isArray(value)) return value.map(item => String(item || '').trim()).filter(Boolean);
-            if (typeof value === 'string') return value.split(/\r?\n/).map(item => item.trim()).filter(Boolean);
-            return [];
+            return hospitalDoctorEntries(value).map(entry => entry.name);
+        }
+
+        function hospitalDoctorEditorValues(value) {
+            const entries = hospitalDoctorEntries(value);
+            return {
+                names: entries.map(entry => entry.name).join('\n'),
+                schedules: entries.map(entry => entry.schedule || '').join('\n')
+            };
+        }
+
+        function hospitalReadDoctorFields(nameFieldId, scheduleFieldId) {
+            const namesEl = document.getElementById(nameFieldId);
+            const schedulesEl = document.getElementById(scheduleFieldId);
+            const nameLines = namesEl ? namesEl.value.split(/\r?\n/) : [];
+            const scheduleLines = schedulesEl ? schedulesEl.value.split(/\r?\n/) : [];
+            return nameLines.map((line, index) => ({
+                name: String(line || '').trim(),
+                schedule: String(scheduleLines[index] || '').trim()
+            })).filter(entry => entry.name);
         }
 
         function hospitalDoctorSummary(value, limit = 2) {
             const list = hospitalDoctorList(value);
             if (!list.length) return 'Belum ada data dokter';
-            return list.slice(0, limit).map(item => item.split('(')[0].trim()).join(' • ') + (list.length > limit ? ` +${list.length - limit} lainnya` : '');
+            return list.slice(0, limit).join(' • ') + (list.length > limit ? ` +${list.length - limit} lainnya` : '');
         }
 
         function hospitalKnownPrice(value) {
@@ -9584,12 +9690,15 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             }
 
             const renderDocList = (arr, group) => {
-                const list = hospitalDoctorList(arr);
+                const list = hospitalDoctorEntries(arr);
                 if (!list.length) return '<li class="text-slate-400 italic">Belum ada data</li>';
                 return list.map((entry, index) => {
-                    const docName = entry.split('(')[0].trim();
+                    const docName = entry.name;
                     const isSelected = isPriority && appState.priorityDoctor === docName;
-                    return `<li class="flex items-start justify-between gap-2 border-b border-slate-100 pb-2 last:border-0 pt-1"><span class="min-w-0 break-words ${isSelected ? 'font-bold text-amber-800' : ''}">• ${hospitalEscapeHtml(entry)}</span><button type="button" onclick="selectPriorityDoctorByIndex(${Number(rs.id)}, '${group}', ${index})" class="shrink-0 min-w-[44px] min-h-[44px] rounded-lg ${isSelected ? 'text-amber-500 bg-amber-50' : 'text-slate-300 hover:text-amber-400'}" title="${isSelected ? 'Batalkan dokter utama' : 'Pilih dokter utama'}"><i class="fa-solid fa-star"></i></button></li>`;
+                    const scheduleHtml = entry.schedule
+                        ? `<span class="hospital-doctor-schedule"><i class="fa-regular fa-clock mr-1"></i>${hospitalEscapeHtml(entry.schedule)}</span>`
+                        : '<span class="hospital-doctor-schedule is-empty">Jadwal belum dicatat</span>';
+                    return `<li class="hospital-doctor-entry flex items-start justify-between gap-2 border-b border-slate-100 pb-2 last:border-0 pt-1"><div class="min-w-0 flex-1"><span class="block break-words ${isSelected ? 'font-bold text-amber-800' : 'font-semibold text-slate-700'}">${hospitalEscapeHtml(docName)}</span>${scheduleHtml}</div><button type="button" onclick="selectPriorityDoctorByIndex(${Number(rs.id)}, '${group}', ${index})" class="shrink-0 min-w-[44px] min-h-[44px] rounded-lg ${isSelected ? 'text-amber-500 bg-amber-50' : 'text-slate-300 hover:text-amber-400'}" title="${isSelected ? 'Batalkan dokter utama' : 'Pilih dokter utama'}" aria-label="${isSelected ? 'Batalkan dokter utama' : 'Pilih sebagai dokter utama'}"><i class="fa-solid fa-star"></i></button></li>`;
                 }).join('');
             };
             document.getElementById('detail-rs-obgyn-female').innerHTML = renderDocList(rs.obgynFemale, 'obgynFemale');
@@ -9704,9 +9813,9 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         function selectPriorityDoctorByIndex(rsId, group, doctorIndex) {
             const rs = appState.hospitals.find(item => Number(item.id) === Number(rsId));
             if (!rs || !['obgynFemale', 'obgynMale', 'pediatricians'].includes(group)) return;
-            const doctor = hospitalDoctorList(rs[group])[doctorIndex];
-            if (!doctor) return;
-            selectPriorityDoctor(Number(rsId), doctor.split('(')[0].trim());
+            const doctor = hospitalDoctorEntries(rs[group])[doctorIndex];
+            if (!doctor || !doctor.name) return;
+            selectPriorityDoctor(Number(rsId), doctor.name);
         }
 
         function closeHospitalDetail() {
@@ -9738,9 +9847,15 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     setValue('form-rs-ig', rs.ig);
                     setValue('form-rs-tiktok', rs.tiktok);
                     setValue('form-rs-husband-facilities', rs.husbandFacilities);
-                    setValue('form-rs-obgyn-female', hospitalDoctorList(rs.obgynFemale).join('\n'));
-                    setValue('form-rs-obgyn-male', hospitalDoctorList(rs.obgynMale).join('\n'));
-                    setValue('form-rs-pediatricians', hospitalDoctorList(rs.pediatricians).join('\n'));
+                    const femaleDoctorFields = hospitalDoctorEditorValues(rs.obgynFemale);
+                    const maleDoctorFields = hospitalDoctorEditorValues(rs.obgynMale);
+                    const pediatricDoctorFields = hospitalDoctorEditorValues(rs.pediatricians);
+                    setValue('form-rs-obgyn-female', femaleDoctorFields.names);
+                    setValue('form-rs-obgyn-female-schedule', femaleDoctorFields.schedules);
+                    setValue('form-rs-obgyn-male', maleDoctorFields.names);
+                    setValue('form-rs-obgyn-male-schedule', maleDoctorFields.schedules);
+                    setValue('form-rs-pediatricians', pediatricDoctorFields.names);
+                    setValue('form-rs-pediatricians-schedule', pediatricDoctorFields.schedules);
                     setValue('form-rs-facilities', (rs.facilities || []).join(', '));
                     setValue('form-rs-price-source', rs.priceSource);
                     setValue('form-rs-price-verified', rs.priceVerifiedAt);
@@ -9907,10 +10022,9 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             const ig = document.getElementById('form-rs-ig').value.trim();
             const tiktok = document.getElementById('form-rs-tiktok').value.trim();
             const husbandFacilities = document.getElementById('form-rs-husband-facilities').value;
-            const parseDoctorLines = fieldId => document.getElementById(fieldId).value.split(/\r?\n/).map(item => item.trim()).filter(Boolean);
-            const obgynFemale = parseDoctorLines('form-rs-obgyn-female');
-            const obgynMale = parseDoctorLines('form-rs-obgyn-male');
-            const pediatricians = parseDoctorLines('form-rs-pediatricians');
+            const obgynFemale = hospitalReadDoctorFields('form-rs-obgyn-female', 'form-rs-obgyn-female-schedule');
+            const obgynMale = hospitalReadDoctorFields('form-rs-obgyn-male', 'form-rs-obgyn-male-schedule');
+            const pediatricians = hospitalReadDoctorFields('form-rs-pediatricians', 'form-rs-pediatricians-schedule');
             const facilities = document.getElementById('form-rs-facilities').value.split(',').map(item => item.trim()).filter(Boolean);
             const workflow = document.getElementById('form-rs-workflow').value;
             const notes = document.getElementById('form-rs-notes').value;
@@ -11001,7 +11115,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.20',
+                    appVersion: '6.13.21',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -15567,7 +15681,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.20. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.21. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
