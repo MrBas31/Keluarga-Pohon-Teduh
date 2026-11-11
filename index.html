@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.18: mobile budget item summary and collapsible details fix -->
+    <!-- Keluarga Pohon Teduh 6.13.20: RS & Obgyn Madiun directory and comparison refinement -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.19">
+    <meta name="application-version" content="6.13.20">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -2779,6 +2779,158 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 }
 </style>
 
+
+<style id="hospital-madiun-refinement-61320">
+  .hospital-page { min-width:0; }
+  .hospital-hero { background:linear-gradient(135deg,#eff6ff 0%,#f0fdf4 100%); border-color:#dbeafe; color:#0f172a; }
+  .hospital-eyebrow { display:inline-flex; align-items:center; color:#0369a1; background:rgba(255,255,255,.78); border:1px solid #bfdbfe; border-radius:999px; padding:5px 10px; font-size:10px; font-weight:800; letter-spacing:.04em; }
+  .hospital-muted { color:#475569; }
+  .hospital-primary-action { color:#fff; background:#0284c7; box-shadow:0 5px 14px rgba(2,132,199,.18); }
+  .hospital-primary-action:hover { background:#0369a1; }
+  .hospital-stat { min-width:0; padding:10px 11px; border:1px solid rgba(191,219,254,.9); border-radius:15px; background:rgba(255,255,255,.78); display:flex; flex-direction:column; gap:1px; }
+  .hospital-stat span { color:#64748b; font-size:10px; font-weight:700; }
+  .hospital-stat strong { color:#0f172a; font-size:22px; line-height:1.1; font-weight:850; font-variant-numeric:tabular-nums; }
+  .hospital-stat small { color:#64748b; font-size:9px; }
+  .hospital-toolbar { border-color:#e2e8f0; background:#fff; }
+  .hospital-search-wrap { min-height:46px; display:flex; align-items:center; gap:10px; padding:0 13px; border:1px solid #cbd5e1; border-radius:13px; background:#f8fafc; color:#64748b; }
+  .hospital-search-wrap i { flex:0 0 auto; }
+  .hospital-search-wrap input { width:100%; min-width:0; border:0; outline:0; background:transparent; color:#0f172a; font-size:13px; }
+  .hospital-search-wrap input::placeholder { color:#94a3b8; }
+  .hospital-compare-action { color:#0369a1; background:#e0f2fe; border:1px solid #bae6fd; }
+  .hospital-compare-action:hover:not(:disabled) { background:#bae6fd; }
+  .hospital-compare-action:disabled { opacity:.48; cursor:not-allowed; }
+  .hospital-result-count { font-size:11px; font-weight:800; color:#64748b; background:#f1f5f9; padding:6px 9px; border-radius:999px; }
+  .hospital-card { min-width:0; background:#fff; border:1px solid #e2e8f0; border-radius:22px; overflow:hidden; box-shadow:0 2px 8px rgba(15,23,42,.04); display:flex; flex-direction:column; }
+  .hospital-card.is-priority { border-color:#fbbf24; box-shadow:0 0 0 2px rgba(251,191,36,.16),0 3px 12px rgba(15,23,42,.05); }
+  .hospital-card.is-compare-selected { border-color:#38bdf8; box-shadow:0 0 0 2px rgba(56,189,248,.16); }
+  .hospital-card-media { height:148px; background:#e2e8f0; position:relative; overflow:hidden; }
+  .hospital-card-media img { width:100%; height:100%; object-fit:cover; }
+  .hospital-card-media:after { content:""; position:absolute; inset:45% 0 0; pointer-events:none; background:linear-gradient(transparent,rgba(15,23,42,.38)); }
+  .hospital-card-media-badge { position:absolute; z-index:1; bottom:10px; left:11px; color:#fff; background:rgba(15,23,42,.68); padding:5px 9px; border-radius:999px; font-size:10px; font-weight:750; }
+  .hospital-card-priority { position:absolute; z-index:2; top:10px; right:10px; min-height:36px; padding:7px 10px; border-radius:11px; color:#fff; background:rgba(15,23,42,.68); font-size:10px; font-weight:800; backdrop-filter:blur(8px); }
+  .hospital-card-priority.active { color:#78350f; background:#fef3c7; }
+  .hospital-card-body { min-width:0; padding:14px; display:flex; flex:1; flex-direction:column; gap:11px; }
+  .hospital-card-title { color:#0f172a; font-size:15px; font-weight:850; line-height:1.25; overflow-wrap:anywhere; }
+  .hospital-card-address { color:#64748b; font-size:11px; line-height:1.4; margin-top:4px; overflow-wrap:anywhere; }
+  .hospital-card-price { background:#f0f9ff; border:1px solid #dbeafe; border-radius:14px; padding:10px 11px; }
+  .hospital-card-price small { display:block; color:#0369a1; font-size:9px; font-weight:850; letter-spacing:.07em; }
+  .hospital-card-price strong { display:block; color:#075985; font-size:13px; line-height:1.3; margin-top:3px; overflow-wrap:anywhere; }
+  .hospital-card-status { display:flex; flex-wrap:wrap; gap:5px; }
+  .hospital-card-status span { display:inline-flex; align-items:center; min-height:24px; padding:3px 7px; border-radius:999px; font-size:9px; line-height:1.15; font-weight:750; }
+  .hospital-card-doctor { color:#475569; font-size:10px; line-height:1.4; min-width:0; }
+  .hospital-card-doctor strong { display:block; color:#334155; font-size:10px; margin-bottom:2px; }
+  .hospital-card-actions { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:7px; margin-top:auto; }
+  .hospital-card-actions button { min-height:44px; border-radius:12px; font-size:11px; font-weight:800; }
+  .hospital-card-detail-btn { color:#fff; background:#0284c7; padding:10px 11px; }
+  .hospital-card-compare-btn { min-width:46px; padding:9px 12px; color:#0369a1; border:1px solid #bae6fd; background:#f0f9ff; }
+  .hospital-card-compare-btn.selected { color:#fff; background:#0369a1; border-color:#0369a1; }
+  .hospital-empty { padding:25px 16px; border:1px dashed #cbd5e1; border-radius:18px; text-align:center; color:#64748b; background:#f8fafc; font-size:12px; }
+  .hospital-comparison-panel { border-color:#bae6fd; background:linear-gradient(145deg,#f0f9ff,#fff 65%,#f0fdf4); }
+  .hospital-comparison-heading { color:#0f172a; font-size:16px; font-weight:850; }
+  .hospital-compare-rs-card { min-width:0; border:1px solid #dbeafe; border-radius:15px; background:#fff; padding:11px; }
+  .hospital-compare-rs-card strong { display:block; color:#0f172a; font-size:12px; line-height:1.3; overflow-wrap:anywhere; }
+  .hospital-compare-rs-card p { color:#64748b; font-size:10px; margin-top:4px; line-height:1.4; }
+  .hospital-compare-metric { border:1px solid #e2e8f0; border-radius:15px; background:#fff; padding:11px; min-width:0; }
+  .hospital-compare-metric h4 { color:#0f172a; font-size:11px; font-weight:850; line-height:1.35; }
+  .hospital-compare-value-row { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:8px 0; border-top:1px solid #f1f5f9; }
+  .hospital-compare-value-row:first-of-type { margin-top:7px; }
+  .hospital-compare-value-row span { color:#64748b; font-size:10px; line-height:1.35; min-width:0; }
+  .hospital-compare-value-row strong { color:#0f172a; font-size:11px; text-align:right; line-height:1.35; overflow-wrap:anywhere; }
+  .hospital-compare-muted { color:#94a3b8 !important; font-weight:600 !important; }
+  .hospital-compare-secondary { border:1px solid #cbd5e1; background:#fff; color:#475569; border-radius:11px; min-height:40px; padding:8px 11px; font-size:10px; font-weight:800; }
+  .hospital-detail-verification > div { padding:10px 11px; border-radius:13px; border:1px solid #e2e8f0; background:#f8fafc; min-width:0; }
+  .hospital-detail-verification strong { display:block; color:#334155; font-size:10px; }
+  .hospital-detail-verification span { display:block; color:#64748b; font-size:10px; line-height:1.4; margin-top:3px; overflow-wrap:anywhere; }
+  .hospital-verification-editor { border-color:#d1fae5; background:#f0fdf4; }
+  .hospital-matrix-desktop { display:block; overflow-x:auto; }
+  .hospital-matrix-mobile { display:none; }
+  .hospital-matrix-mobile-card { padding:11px; border-bottom:1px solid #e2e8f0; background:#fff; }
+  .hospital-matrix-mobile-card:last-child { border-bottom:0; }
+  .hospital-matrix-mobile-card h4 { color:#0f172a; font-size:12px; font-weight:850; margin-bottom:7px; }
+  .hospital-matrix-mobile-row { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:7px 0; border-top:1px solid #f1f5f9; font-size:11px; }
+  .hospital-matrix-mobile-row span { color:#64748b; min-width:0; }
+  .hospital-matrix-mobile-row strong { color:#0f172a; text-align:right; }
+  #modal-rs-detail > div, #modal-rs-form > div { overscroll-behavior:contain; }
+  @media(max-width:640px) {
+    .hospital-hero { border-radius:22px; padding:15px; }
+    .hospital-stat { padding:9px 8px; border-radius:12px; }
+    .hospital-stat strong { font-size:19px; }
+    .hospital-card-media { height:136px; }
+    .hospital-card-body { padding:12px; gap:9px; }
+    .hospital-card-title { font-size:14px; }
+    .hospital-card-actions button { min-height:46px; }
+    .hospital-matrix-desktop { display:none; }
+    .hospital-matrix-mobile { display:block; }
+    #modal-rs-detail { padding:8px !important; align-items:flex-end !important; }
+    #modal-rs-detail > div { max-height:94dvh !important; border-radius:22px 22px 12px 12px !important; padding:15px !important; gap:16px !important; }
+    #detail-rs-carousel-container { height:175px !important; }
+    #modal-rs-form { padding:8px !important; align-items:flex-end !important; }
+    #modal-rs-form > div { max-height:95dvh !important; border-radius:22px 22px 12px 12px !important; padding:16px 14px !important; }
+  }
+  body.dark-mode .hospital-hero { background:linear-gradient(135deg,#142b40 0%,#12352f 100%); border-color:#31516a; color:#f8fafc; }
+  body.dark-mode .hospital-eyebrow { color:#bae6fd; background:rgba(15,23,42,.55); border-color:#36546c; }
+  body.dark-mode .hospital-muted { color:#cbd5e1; }
+  body.dark-mode .hospital-stat { background:rgba(15,23,42,.5); border-color:#36546c; }
+  body.dark-mode .hospital-stat span, body.dark-mode .hospital-stat small { color:#94a3b8; }
+  body.dark-mode .hospital-stat strong { color:#f8fafc; }
+  body.dark-mode .hospital-toolbar, body.dark-mode .hospital-card, body.dark-mode .hospital-compare-rs-card, body.dark-mode .hospital-compare-metric { background:#172337; border-color:#334155; color:#e2e8f0; }
+  body.dark-mode .hospital-search-wrap { background:#0f1b2c; border-color:#475569; color:#94a3b8; }
+  body.dark-mode .hospital-search-wrap input { color:#f8fafc; }
+  body.dark-mode .hospital-search-wrap input::placeholder { color:#64748b; }
+  body.dark-mode .hospital-compare-action { color:#bae6fd; background:#123451; border-color:#075985; }
+  body.dark-mode .hospital-compare-action:hover:not(:disabled) { background:#164567; }
+  body.dark-mode .hospital-result-count { color:#cbd5e1; background:#26364b; }
+  body.dark-mode .hospital-card-title, body.dark-mode .hospital-compare-rs-card strong, body.dark-mode .hospital-compare-metric h4 { color:#f8fafc; }
+  body.dark-mode .hospital-card-address, body.dark-mode .hospital-card-doctor, body.dark-mode .hospital-compare-rs-card p, body.dark-mode .hospital-compare-value-row span { color:#94a3b8; }
+  body.dark-mode .hospital-card-doctor strong { color:#cbd5e1; }
+  body.dark-mode .hospital-card-price { background:#102c42; border-color:#164e63; }
+  body.dark-mode .hospital-card-price small { color:#7dd3fc; }
+  body.dark-mode .hospital-card-price strong { color:#bae6fd; }
+  body.dark-mode .hospital-card-compare-btn { background:#102c42; color:#7dd3fc; border-color:#075985; }
+  body.dark-mode .hospital-card-compare-btn.selected { background:#0369a1; color:#fff; }
+  body.dark-mode .hospital-empty { background:#172337; color:#94a3b8; border-color:#475569; }
+  body.dark-mode .hospital-comparison-panel { background:linear-gradient(145deg,#102c42,#172337 68%,#12352f); border-color:#075985; }
+  body.dark-mode .hospital-comparison-heading { color:#f8fafc; }
+  body.dark-mode .hospital-compare-value-row { border-color:#334155; }
+  body.dark-mode .hospital-compare-value-row strong { color:#e2e8f0; }
+  body.dark-mode .hospital-compare-muted { color:#64748b !important; }
+  body.dark-mode .hospital-compare-secondary { background:#26364b; border-color:#475569; color:#e2e8f0; }
+  body.dark-mode .hospital-detail-verification > div { background:#172337; border-color:#334155; }
+  body.dark-mode .hospital-detail-verification strong { color:#cbd5e1; }
+  body.dark-mode .hospital-detail-verification span { color:#94a3b8; }
+  body.dark-mode .hospital-verification-editor { background:#102c28; border-color:#14532d; }
+  body.dark-mode .hospital-matrix-mobile-card { background:#172337; border-color:#334155; }
+  body.dark-mode .hospital-matrix-mobile-card h4, body.dark-mode .hospital-matrix-mobile-row strong { color:#e2e8f0; }
+  body.dark-mode .hospital-matrix-mobile-row { border-color:#334155; }
+  body.dark-mode .hospital-matrix-mobile-row span { color:#94a3b8; }
+  body.dark-mode #modal-rs-detail > div, body.dark-mode #modal-rs-form > div { background:#1e293b !important; color:#f8fafc; }
+  body.dark-mode #modal-rs-detail h2, body.dark-mode #modal-rs-detail h3, body.dark-mode #modal-rs-form h2, body.dark-mode #modal-rs-form label { color:#e2e8f0 !important; }
+  body.dark-mode #modal-rs-form input, body.dark-mode #modal-rs-form textarea, body.dark-mode #modal-rs-form select { background:#0f1b2c !important; border-color:#475569 !important; color:#f1f5f9 !important; }
+  body.dark-mode #modal-rs-detail #detail-rs-address { color:#94a3b8 !important; }
+  body.dark-mode #modal-rs-detail .bg-emerald-50\/70,
+  body.dark-mode #modal-rs-detail .bg-amber-50\/60,
+  body.dark-mode #modal-rs-detail .bg-sky-50\/60,
+  body.dark-mode #modal-rs-detail .bg-slate-50 { background:#172337 !important; border-color:#334155 !important; }
+  body.dark-mode #modal-rs-detail .text-emerald-900,
+  body.dark-mode #modal-rs-detail .text-amber-900,
+  body.dark-mode #modal-rs-detail .text-sky-900,
+  body.dark-mode #modal-rs-detail .text-slate-800 { color:#e2e8f0 !important; }
+  body.dark-mode #modal-rs-detail .text-emerald-800,
+  body.dark-mode #modal-rs-detail .text-amber-800,
+  body.dark-mode #modal-rs-detail .text-sky-800,
+  body.dark-mode #modal-rs-detail .text-slate-700 { color:#cbd5e1 !important; }
+  body.dark-mode #modal-rs-form .bg-slate-50 { background:#172337 !important; border-color:#334155 !important; }
+  body.dark-mode #modal-rs-form .text-slate-700,
+  body.dark-mode #modal-rs-form .text-slate-600 { color:#cbd5e1 !important; }
+  @media(max-width:640px) {
+    #modal-rs-detail .pt-2.border-t button,
+    #modal-rs-detail #btn-edit-rs,
+    #modal-rs-detail #btn-delete-rs { min-height:44px !important; }
+    #detail-rs-matrix-container + .kpt-matrix-scroll-hint { display:none !important; }
+  }
+  body.dark-mode #sec-hospital > .flex.items-center.justify-between h3 { color:#e2e8f0 !important; }
+</style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -3242,19 +3394,49 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 </div>
             </section>
 
-            <!-- TAB 3: RS BERSALIN & OBGYN -->
-            <section id="sec-hospital" class="hidden space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-800">🏥 Matriks Perbandingan RS Bersalin (Madiun)</h2>
+            <!-- TAB 3: RS BERSALIN & OBGYN — REFINEMENT 6.13.20 -->
+            <section id="sec-hospital" class="hidden space-y-5 hospital-page">
+                <div class="hospital-hero rounded-3xl p-4 sm:p-6 border shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                        <div class="min-w-0">
+                            <div class="hospital-eyebrow"><i class="fa-solid fa-location-dot mr-1"></i> Persiapan persalinan • Madiun</div>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">RS &amp; Obgyn</h2>
+                            <p class="text-xs sm:text-sm mt-1 max-w-2xl hospital-muted">Simpan informasi rumah sakit, tinjau paket persalinan, dan bandingkan pilihan keluarga dalam satu tempat.</p>
+                        </div>
+                        <button type="button" onclick="openHospitalEdit()" class="hospital-primary-action min-h-[46px] px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 shrink-0">
+                            <i class="fa-solid fa-plus"></i> Tambah RS
+                        </button>
                     </div>
-                    <button onclick="openHospitalEdit()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl transition shadow-sm">
-                        <i class="fa-solid fa-plus mr-1"></i> Tambah RS Baru
+                    <div class="grid grid-cols-3 gap-2 sm:gap-3 mt-5">
+                        <div class="hospital-stat"><span>Direktori</span><strong id="hospital-total-count">0</strong><small>rumah sakit</small></div>
+                        <div class="hospital-stat"><span>Prioritas</span><strong id="hospital-priority-count">0</strong><small>pilihan utama</small></div>
+                        <div class="hospital-stat"><span>Perbandingan</span><strong id="hospital-compare-count">0/3</strong><small>RS dipilih</small></div>
+                    </div>
+                </div>
+
+                <div class="hospital-toolbar rounded-2xl border p-3 sm:p-4 flex flex-col sm:flex-row gap-2 sm:items-center">
+                    <label class="hospital-search-wrap flex-1 min-w-0">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input id="hospital-search-input" type="search" oninput="setHospitalSearch(this.value)" placeholder="Cari nama RS atau alamat..." autocomplete="off" aria-label="Cari rumah sakit" />
+                    </label>
+                    <button id="hospital-compare-button" type="button" onclick="showHospitalComparison()" disabled class="hospital-compare-action min-h-[46px] px-4 rounded-xl text-sm font-bold inline-flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-scale-balanced"></i><span>Bandingkan pilihan (0)</span>
                     </button>
                 </div>
 
-                <!-- RS CARDS GRID -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="hospital-cards-container">
+                <section id="hospital-comparison-panel" class="hospital-comparison-panel hidden rounded-3xl border p-3 sm:p-5 space-y-4" aria-live="polite">
+                    <!-- Comparison is rendered from selected hospital records. -->
+                </section>
+
+                <div class="flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <h3 class="text-base sm:text-lg font-extrabold text-slate-800">Direktori Rumah Sakit</h3>
+                        <p class="text-[11px] sm:text-xs text-slate-500">Pilih maksimal tiga RS untuk dibandingkan.</p>
+                    </div>
+                    <span id="hospital-result-count" class="hospital-result-count shrink-0">0 RS</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4" id="hospital-cards-container">
                     <!-- Dynamically rendered via JavaScript -->
                 </div>
             </section>
@@ -5009,9 +5191,10 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     </h3>
                 </div>
                 
-                <div class="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm" id="detail-rs-matrix-container">
-                    <!-- Dynamic Matrix Table Rendered via JS -->
+                <div class="rounded-2xl border border-slate-200 shadow-sm overflow-hidden" id="detail-rs-matrix-container">
+                    <!-- Dynamic desktop matrix and mobile price cards rendered via JS -->
                 </div>
+                <div id="detail-rs-verification" class="hospital-detail-verification grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
             </div>
 
             <div class="space-y-3">
@@ -5110,9 +5293,15 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     </div>
                 </div>
 
-                <div>
-                    <label class="font-semibold text-slate-700">Alamat Lengkap</label>
-                    <input type="text" id="form-rs-address" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="font-semibold text-slate-700">Alamat Lengkap</label>
+                        <input type="text" id="form-rs-address" class="w-full mt-1 p-2.5 min-h-[44px] border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none" placeholder="Alamat rumah sakit di Madiun">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-700">Link Google Maps (Opsional)</label>
+                        <input type="url" id="form-rs-maps" class="w-full mt-1 p-2.5 min-h-[44px] border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none" placeholder="https://maps.app.goo.gl/...">
+                    </div>
                 </div>
                 
                 <!-- ISIAN BARU: SOSIAL MEDIA & LINK -->
@@ -5144,19 +5333,47 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     <textarea id="form-rs-husband-facilities" rows="3" placeholder="Sofa Bed per kelas, Parkir inap gratis, Akses makan penunggu, dll." class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none"></textarea>
                 </div>
 
-                <div class="space-y-2 bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                    <div class="font-bold text-slate-700">Pilihan & Jadwal Dokter (Format: Nama Dokter (Hari: Jam))</div>
+                <div class="space-y-3 bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-100">
                     <div>
-                        <label class="text-2xs font-semibold text-pink-700">👩‍⚕️ Dokter Obgyn Perempuan</label>
-                        <input type="text" id="form-rs-obgyn-female" placeholder="dr. Susanti, Sp.OG (Senin - Jumat: 09.00 - 12.00)" class="w-full mt-0.5 p-2 border border-slate-200 rounded-lg outline-none">
+                        <div class="font-bold text-slate-700">Dokter &amp; Jadwal Praktik</div>
+                        <p class="text-[10px] text-slate-500 mt-0.5">Satu dokter per baris. Koma pada nama atau gelar tidak akan memisahkan data.</p>
                     </div>
                     <div>
-                        <label class="text-2xs font-semibold text-slate-700">👨‍⚕️ Dokter Obgyn Laki-Laki</label>
-                        <input type="text" id="form-rs-obgyn-male" placeholder="dr. Tauhid, Sp.OG (Senin & Rabu: 16.00 - 19.00)" class="w-full mt-0.5 p-2 border border-slate-200 rounded-lg outline-none">
+                        <label class="text-2xs font-semibold text-pink-700">👩‍⚕️ Obgyn Perempuan</label>
+                        <textarea id="form-rs-obgyn-female" rows="2" placeholder="dr. Nama, Sp.OG (Senin: 09.00–12.00)" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y"></textarea>
+                    </div>
+                    <div>
+                        <label class="text-2xs font-semibold text-slate-700">👨‍⚕️ Obgyn Laki-Laki</label>
+                        <textarea id="form-rs-obgyn-male" rows="2" placeholder="dr. Nama, Sp.OG (Rabu: 16.00–19.00)" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y"></textarea>
                     </div>
                     <div>
                         <label class="text-2xs font-semibold text-sky-700">👶 Dokter Anak (Sp.A)</label>
-                        <input type="text" id="form-rs-pediatricians" placeholder="dr. Budi, Sp.A (Selasa & Kamis: 10.00 - 13.00)" class="w-full mt-0.5 p-2 border border-slate-200 rounded-lg outline-none">
+                        <textarea id="form-rs-pediatricians" rows="2" placeholder="dr. Nama, Sp.A (Kamis: 10.00–13.00)" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y"></textarea>
+                    </div>
+                </div>
+
+                <div class="hospital-verification-editor rounded-2xl border p-3 sm:p-4 space-y-3">
+                    <div>
+                        <div class="font-bold text-slate-700"><i class="fa-solid fa-clipboard-check mr-1 text-emerald-600"></i> Sumber &amp; Tanggal Pengecekan</div>
+                        <p class="text-[10px] text-slate-500 mt-0.5">Diisi berdasarkan informasi yang benar-benar kamu konfirmasi. Kosongkan jika belum diperiksa.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-2xs font-semibold text-slate-600">Sumber informasi harga</label>
+                            <input type="text" id="form-rs-price-source" placeholder="Contoh: WhatsApp resmi / brosur RS" class="w-full mt-1 p-2.5 min-h-[44px] border border-slate-200 rounded-lg outline-none">
+                        </div>
+                        <div>
+                            <label class="text-2xs font-semibold text-slate-600">Tanggal harga diperiksa</label>
+                            <input type="date" id="form-rs-price-verified" class="w-full mt-1 p-2.5 min-h-[44px] border border-slate-200 rounded-lg outline-none">
+                        </div>
+                        <div>
+                            <label class="text-2xs font-semibold text-slate-600">Sumber jadwal dokter</label>
+                            <input type="text" id="form-rs-doctor-source" placeholder="Contoh: konfirmasi bagian pendaftaran" class="w-full mt-1 p-2.5 min-h-[44px] border border-slate-200 rounded-lg outline-none">
+                        </div>
+                        <div>
+                            <label class="text-2xs font-semibold text-slate-600">Tanggal jadwal diperiksa</label>
+                            <input type="date" id="form-rs-doctor-verified" class="w-full mt-1 p-2.5 min-h-[44px] border border-slate-200 rounded-lg outline-none">
+                        </div>
                     </div>
                 </div>
 
@@ -8974,114 +9191,288 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             }
         }
 
-        // HELPER: PRICE RANGE FROM MATRIX
+        // ============================================================
+        // RS & OBGYN MADIUN — DIRECTORY, COMPARISON & DATA VERIFICATION
+        // New metadata is optional; existing hospital records remain valid.
+        // ============================================================
+        let hospitalCompareSelection = [];
+        let hospitalCompareVisible = false;
+        let hospitalCompareExpanded = false;
+        let hospitalSearchTerm = '';
+
+        function hospitalEscapeHtml(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[ch]));
+        }
+
+        function hospitalSafeUrl(value) {
+            const raw = String(value || '').trim();
+            if (!raw) return '';
+            try {
+                const candidate = /^https?:\/\//i.test(raw) ? raw : 'https://' + raw;
+                const parsed = new URL(candidate);
+                return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : '';
+            } catch (e) { return ''; }
+        }
+
+        function hospitalDateLabel(value) {
+            if (!value) return 'Belum dicatat';
+            const raw = String(value).trim();
+            const parts = raw.split('-');
+            if (parts.length === 3 && parts[0].length === 4) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            const date = new Date(raw);
+            return Number.isNaN(date.getTime()) ? raw : date.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
+        }
+
+        function hospitalDoctorList(value) {
+            if (Array.isArray(value)) return value.map(item => String(item || '').trim()).filter(Boolean);
+            if (typeof value === 'string') return value.split(/\r?\n/).map(item => item.trim()).filter(Boolean);
+            return [];
+        }
+
+        function hospitalDoctorSummary(value, limit = 2) {
+            const list = hospitalDoctorList(value);
+            if (!list.length) return 'Belum ada data dokter';
+            return list.slice(0, limit).map(item => item.split('(')[0].trim()).join(' • ') + (list.length > limit ? ` +${list.length - limit} lainnya` : '');
+        }
+
+        function hospitalKnownPrice(value) {
+            const raw = String(value == null ? '' : value).trim();
+            return raw && raw !== '-' && raw.toLowerCase() !== 'mendukung';
+        }
+
+        function hospitalPriceFor(rs, roomClass, method) {
+            const key = `${roomClass}_${method}`;
+            const value = rs && rs.matrixPrices ? rs.matrixPrices[key] : '';
+            return hospitalKnownPrice(value) ? String(value) : 'Belum dicatat';
+        }
+
         function getPriceRange(rs) {
             normalizeHospitalMatrix(rs);
-            let nums = [];
+            const nums = [];
             if (rs.matrixPrices) {
                 Object.values(rs.matrixPrices).forEach(val => {
-                    if (val && val !== '-' && val.toLowerCase() !== 'mendukung') {
-                        let clean = val.replace(/[^0-9]/g, '');
-                        if (clean) nums.push(parseInt(clean));
+                    if (hospitalKnownPrice(val)) {
+                        const clean = String(val).replace(/[^0-9]/g, '');
+                        if (clean) nums.push(parseInt(clean, 10));
                     }
                 });
             }
-            if (nums.length === 0) return "Estimasi Bervariasi";
-            let min = Math.min(...nums);
-            let max = Math.max(...nums);
+            if (nums.length === 0) return 'Belum ada harga';
+            const min = Math.min(...nums);
+            const max = Math.max(...nums);
             if (min === max) return `Rp ${min.toLocaleString('id-ID')}`;
-            return `Rp ${min.toLocaleString('id-ID')} s.d. Rp ${max.toLocaleString('id-ID')}`;
+            return `Rp ${min.toLocaleString('id-ID')} – Rp ${max.toLocaleString('id-ID')}`;
         }
 
-        // RENDER HOSPITALS CARDS
+        function setHospitalSearch(value) {
+            hospitalSearchTerm = String(value || '').trim().toLocaleLowerCase('id-ID');
+            renderHospitals();
+        }
+
+        function toggleHospitalCompareSelection(id, event) {
+            if (event) event.stopPropagation();
+            const numericId = Number(id);
+            const exists = hospitalCompareSelection.includes(numericId);
+            if (exists) {
+                hospitalCompareSelection = hospitalCompareSelection.filter(item => item !== numericId);
+            } else {
+                if (hospitalCompareSelection.length >= 3) {
+                    alert('Perbandingan dibatasi maksimal 3 rumah sakit agar tetap nyaman dibaca di HP. Hapus salah satu pilihan terlebih dahulu.');
+                    return;
+                }
+                hospitalCompareSelection.push(numericId);
+            }
+            renderHospitals();
+        }
+
+        function showHospitalComparison() {
+            if (hospitalCompareSelection.length < 2) {
+                alert('Pilih minimal 2 rumah sakit untuk dibandingkan.');
+                return;
+            }
+            hospitalCompareVisible = true;
+            hospitalCompareExpanded = false;
+            renderHospitalComparison();
+            const panel = document.getElementById('hospital-comparison-panel');
+            if (panel) panel.scrollIntoView({ behavior:'smooth', block:'start' });
+        }
+
+        function hideHospitalComparison() {
+            hospitalCompareVisible = false;
+            const panel = document.getElementById('hospital-comparison-panel');
+            if (panel) panel.classList.add('hidden');
+        }
+
+        function clearHospitalCompareSelection() {
+            hospitalCompareSelection = [];
+            hospitalCompareVisible = false;
+            hospitalCompareExpanded = false;
+            renderHospitals();
+        }
+
+        function toggleHospitalCompareExpanded() {
+            hospitalCompareExpanded = !hospitalCompareExpanded;
+            renderHospitalComparison();
+        }
+
+        function renderHospitalComparison() {
+            const panel = document.getElementById('hospital-comparison-panel');
+            if (!panel) return;
+            const selected = hospitalCompareSelection
+                .map(id => appState.hospitals.find(rs => Number(rs.id) === Number(id)))
+                .filter(Boolean);
+            if (!hospitalCompareVisible || selected.length < 2) {
+                panel.classList.add('hidden');
+                return;
+            }
+
+            selected.forEach(normalizeHospitalMatrix);
+            const allMethods = [...new Set(selected.flatMap(rs => rs.methods || []))];
+            const allClasses = [...new Set(selected.flatMap(rs => rs.classes || []))];
+            const pricePairs = [];
+            allClasses.forEach(roomClass => allMethods.forEach(method => {
+                if (selected.some(rs => hospitalKnownPrice(rs.matrixPrices && rs.matrixPrices[`${roomClass}_${method}`]))) {
+                    pricePairs.push({ roomClass, method });
+                }
+            }));
+            const visiblePairs = hospitalCompareExpanded ? pricePairs : pricePairs.slice(0, 6);
+
+            const cards = selected.map(rs => {
+                const map = hospitalSafeUrl(rs.mapsUrl);
+                const isPriority = Number(appState.priorityRSId) === Number(rs.id);
+                return `<article class="hospital-compare-rs-card">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="min-w-0"><strong>${hospitalEscapeHtml(rs.name || 'Rumah Sakit')}</strong><p>${hospitalEscapeHtml(rs.address || 'Alamat belum dicatat')}</p></div>
+                        ${isPriority ? '<span class="shrink-0 text-[9px] font-extrabold px-2 py-1 rounded-full bg-amber-100 text-amber-800">Prioritas</span>' : ''}
+                    </div>
+                    <p class="mt-2"><b class="text-slate-700">Rentang tersimpan:</b> ${hospitalEscapeHtml(getPriceRange(rs))}</p>
+                    ${map ? `<a class="inline-flex min-h-[36px] items-center gap-1 mt-2 text-[10px] font-bold text-sky-700" href="${hospitalEscapeHtml(map)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> Buka Maps</a>` : ''}
+                </article>`;
+            }).join('');
+
+            const priceHtml = visiblePairs.length ? visiblePairs.map(pair => {
+                const rows = selected.map(rs => {
+                    const price = hospitalPriceFor(rs, pair.roomClass, pair.method);
+                    const known = price !== 'Belum dicatat';
+                    return `<div class="hospital-compare-value-row"><span>${hospitalEscapeHtml(rs.name || 'Rumah Sakit')}</span><strong class="${known ? '' : 'hospital-compare-muted'}">${hospitalEscapeHtml(price)}</strong></div>`;
+                }).join('');
+                return `<article class="hospital-compare-metric"><h4>${hospitalEscapeHtml(pair.method)} <span class="text-slate-400 font-medium">· ${hospitalEscapeHtml(pair.roomClass)}</span></h4>${rows}</article>`;
+            }).join('') : '<div class="hospital-empty">Belum ada pasangan metode dan kelas kamar yang memiliki harga untuk dibandingkan.</div>';
+
+            const docHtml = selected.map(rs => {
+                const obgyn = [...hospitalDoctorList(rs.obgynFemale), ...hospitalDoctorList(rs.obgynMale)];
+                const names = obgyn.length ? obgyn.map(item => hospitalEscapeHtml(item)).join('<br>') : '<span class="hospital-compare-muted">Belum dicatat</span>';
+                return `<div class="hospital-compare-value-row"><span>${hospitalEscapeHtml(rs.name || 'Rumah Sakit')}</span><strong>${names}</strong></div>`;
+            }).join('');
+
+            const facilityHtml = selected.map(rs => {
+                const facilities = Array.isArray(rs.facilities) ? rs.facilities.filter(Boolean) : [];
+                return `<div class="hospital-compare-value-row"><span>${hospitalEscapeHtml(rs.name || 'Rumah Sakit')}</span><strong>${facilities.length ? hospitalEscapeHtml(facilities.join(' · ')) : '<span class="hospital-compare-muted">Belum dicatat</span>'}</strong></div>`;
+            }).join('');
+
+            const verificationHtml = selected.map(rs => {
+                const priceDate = hospitalDateLabel(rs.priceVerifiedAt);
+                const doctorDate = hospitalDateLabel(rs.doctorVerifiedAt);
+                return `<div class="hospital-compare-value-row"><span>${hospitalEscapeHtml(rs.name || 'Rumah Sakit')}</span><strong>Harga: ${hospitalEscapeHtml(priceDate)}<br>Dokter: ${hospitalEscapeHtml(doctorDate)}</strong></div>`;
+            }).join('');
+
+            const moreButton = pricePairs.length > 6 ? `<button type="button" onclick="toggleHospitalCompareExpanded()" class="hospital-compare-secondary">${hospitalCompareExpanded ? 'Tampilkan lebih ringkas' : `Lihat semua ${pricePairs.length} kombinasi harga`}</button>` : '';
+
+            panel.innerHTML = `
+                <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0"><div class="hospital-eyebrow"><i class="fa-solid fa-scale-balanced mr-1"></i> Perbandingan pilihan</div><h3 class="hospital-comparison-heading mt-2">Bandingkan ${selected.length} rumah sakit</h3><p class="text-[10px] sm:text-xs text-slate-500 mt-1">Angka dan informasi mengikuti catatan yang tersimpan. Data kosong tidak diasumsikan.</p></div>
+                    <button type="button" onclick="hideHospitalComparison()" aria-label="Tutup perbandingan" class="min-h-[40px] min-w-[40px] rounded-xl bg-white/80 border border-slate-200 text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">${cards}</div>
+                <div class="space-y-2"><div><h4 class="text-xs font-extrabold text-slate-800">Perbandingan biaya paket</h4><p class="text-[10px] text-slate-500">Setiap kartu menunjukkan harga pada kombinasi metode persalinan dan kelas kamar yang sama.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${priceHtml}</div>${moreButton}</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <article class="hospital-compare-metric"><h4><i class="fa-solid fa-user-doctor mr-1 text-sky-600"></i> Dokter Obgyn tersimpan</h4>${docHtml}</article>
+                    <article class="hospital-compare-metric"><h4><i class="fa-solid fa-hospital mr-1 text-emerald-600"></i> Fasilitas unggulan</h4>${facilityHtml}</article>
+                    <article class="hospital-compare-metric md:col-span-2"><h4><i class="fa-solid fa-calendar-check mr-1 text-amber-600"></i> Tanggal pengecekan informasi</h4>${verificationHtml}</article>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:justify-end gap-2 pt-1"><button type="button" onclick="clearHospitalCompareSelection()" class="hospital-compare-secondary">Hapus pilihan perbandingan</button></div>
+            `;
+            panel.classList.remove('hidden');
+        }
+
+        // RENDER HOSPITAL CARDS — mobile-first and still backed by appState.hospitals.
         function renderHospitals() {
             const container = document.getElementById('hospital-cards-container');
             if (!container) return;
+            const hospitals = Array.isArray(appState.hospitals) ? appState.hospitals : [];
+            const filtered = hospitals.filter(rs => {
+                const haystack = [rs.name, rs.address, rs.type].filter(Boolean).join(' ').toLocaleLowerCase('id-ID');
+                return !hospitalSearchTerm || haystack.includes(hospitalSearchTerm);
+            });
 
-            container.innerHTML = appState.hospitals.map(rs => {
-                normalizeHospitalMatrix(rs);
-                const isPriority = appState.priorityRSId === rs.id;
-                const range = getPriceRange(rs);
-                const femaleDocs = rs.obgynFemale && rs.obgynFemale.length > 0 ? rs.obgynFemale.map(d => `• ${d.split('(')[0].trim()}`).join('<br>') : '<span class="text-slate-400 italic">Belum ada data</span>';
-                const peds = rs.pediatricians && rs.pediatricians.length > 0 ? rs.pediatricians.map(d => `• ${d.split('(')[0].trim()}`).join('<br>') : '<span class="text-slate-400 italic">Belum ada data</span>';
+            const totalEl = document.getElementById('hospital-total-count');
+            const priorityEl = document.getElementById('hospital-priority-count');
+            const compareCountEl = document.getElementById('hospital-compare-count');
+            const resultCountEl = document.getElementById('hospital-result-count');
+            const compareButton = document.getElementById('hospital-compare-button');
+            if (totalEl) totalEl.textContent = hospitals.length.toLocaleString('id-ID');
+            if (priorityEl) priorityEl.textContent = hospitals.filter(rs => Number(rs.id) === Number(appState.priorityRSId)).length.toLocaleString('id-ID');
+            if (compareCountEl) compareCountEl.textContent = `${hospitalCompareSelection.length}/3`;
+            if (resultCountEl) resultCountEl.textContent = `${filtered.length} RS`;
+            if (compareButton) {
+                compareButton.disabled = hospitalCompareSelection.length < 2;
+                const label = compareButton.querySelector('span');
+                if (label) label.textContent = `Bandingkan pilihan (${hospitalCompareSelection.length})`;
+            }
 
-                const hImgs = (rs.images || []).map(i => formatPhotoUrl(i));
-                const currentHSlide = hospitalSlideIndexes[rs.id] || 0;
-                const activeHImg = hImgs[currentHSlide] || hImgs[0];
-
-                return `
-                    <div class="bg-white rounded-3xl shadow-sm border ${isPriority ? 'border-amber-400 ring-2 ring-amber-300/50' : 'border-slate-100'} overflow-hidden hover:shadow-md transition flex flex-col justify-between group relative">
-                        <div>
-                            <div class="h-44 w-full overflow-hidden relative bg-slate-900 group/himg">
-                                <img src="${activeHImg}" alt="${rs.name}" onclick="openHospitalDetail(${rs.id})" class="w-full h-full object-cover group-hover:scale-105 transition duration-300 cursor-pointer">
-                                <span class="absolute bottom-3 left-3 px-2.5 py-1 bg-black/60 backdrop-blur-md text-white font-semibold rounded-full text-2xs pointer-events-none">
-                                    ${rs.type || 'Rumah Sakit'} (${currentHSlide + 1}/${hImgs.length})
-                                </span>
-                                
-                                ${hImgs.length > 1 ? `
-                                    <div class="absolute inset-y-0 inset-x-2 flex justify-between items-center pointer-events-none">
-                                        <button onclick="prevHospitalSlide(${rs.id}, ${hImgs.length}, event)" class="w-7 h-7 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center pointer-events-auto transition text-xs shadow">
-                                            <i class="fa-solid fa-chevron-left"></i>
-                                        </button>
-                                        <button onclick="nextHospitalSlide(${rs.id}, ${hImgs.length}, event)" class="w-7 h-7 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center pointer-events-auto transition text-xs shadow">
-                                            <i class="fa-solid fa-chevron-right"></i>
-                                        </button>
-                                    </div>
-                                ` : ''}
-
-                                <button onclick="togglePriorityRS(${rs.id}, event)" class="absolute top-3 right-3 px-3 py-1.5 ${isPriority ? 'bg-amber-500 text-white font-extrabold' : 'bg-black/40 hover:bg-black/70 text-white'} backdrop-blur-md rounded-xl text-xs flex items-center gap-1.5 shadow-md transition" title="${isPriority ? 'Klik untuk membatalkan RS Prioritas' : 'Jadikan RS Prioritas'}">
-                                    <i class="fa-solid fa-star ${isPriority ? 'text-amber-200' : 'text-slate-300'}"></i>
-                                    <span>${isPriority ? 'RS Utama ⭐' : 'Pilih Utama'}</span>
-                                </button>
+            if (!hospitals.length) {
+                container.innerHTML = '<div class="hospital-empty md:col-span-2 xl:col-span-3"><i class="fa-solid fa-hospital text-2xl mb-2"></i><p class="font-bold">Belum ada rumah sakit tersimpan</p><p class="mt-1">Tambahkan rumah sakit bersalin di wilayah Madiun untuk mulai membandingkan.</p></div>';
+            } else if (!filtered.length) {
+                container.innerHTML = '<div class="hospital-empty md:col-span-2 xl:col-span-3"><i class="fa-solid fa-magnifying-glass text-2xl mb-2"></i><p class="font-bold">Rumah sakit tidak ditemukan</p><p class="mt-1">Coba kata kunci nama atau alamat yang berbeda.</p></div>';
+            } else {
+                container.innerHTML = filtered.map(rs => {
+                    normalizeHospitalMatrix(rs);
+                    const isPriority = Number(appState.priorityRSId) === Number(rs.id);
+                    const isSelected = hospitalCompareSelection.includes(Number(rs.id));
+                    const range = getPriceRange(rs);
+                    const hImgs = (rs.images || []).map(i => formatPhotoUrl(i));
+                    const currentHSlide = hospitalSlideIndexes[rs.id] || 0;
+                    const activeHImg = hImgs[currentHSlide] || hImgs[0] || '';
+                    const safeImg = hospitalSafeUrl(activeHImg);
+                    const femaleSummary = hospitalDoctorSummary(rs.obgynFemale);
+                    const pediatricSummary = hospitalDoctorSummary(rs.pediatricians);
+                    const priceDate = hospitalDateLabel(rs.priceVerifiedAt);
+                    const doctorDate = hospitalDateLabel(rs.doctorVerifiedAt);
+                    const priceStatus = rs.priceVerifiedAt ? `<span class="bg-emerald-50 text-emerald-700">Harga dicek ${hospitalEscapeHtml(priceDate)}</span>` : '<span class="bg-amber-50 text-amber-800">Harga belum dicek</span>';
+                    const doctorStatus = rs.doctorVerifiedAt ? `<span class="bg-emerald-50 text-emerald-700">Jadwal dicek ${hospitalEscapeHtml(doctorDate)}</span>` : '<span class="bg-amber-50 text-amber-800">Jadwal belum dicek</span>';
+                    return `
+                        <article class="hospital-card ${isPriority ? 'is-priority' : ''} ${isSelected ? 'is-compare-selected' : ''}">
+                            <div class="hospital-card-media">
+                                ${safeImg ? `<img src="${hospitalEscapeHtml(safeImg)}" alt="${hospitalEscapeHtml(rs.name || 'Rumah sakit')}" loading="lazy">` : '<div class="w-full h-full flex items-center justify-center text-slate-400"><i class="fa-solid fa-hospital text-4xl"></i></div>'}
+                                <span class="hospital-card-media-badge">${hospitalEscapeHtml(rs.type || 'Rumah Sakit')} · Madiun</span>
+                                <button type="button" onclick="togglePriorityRS(${Number(rs.id)}, event)" class="hospital-card-priority ${isPriority ? 'active' : ''}" aria-label="${isPriority ? 'Batalkan rumah sakit prioritas' : 'Jadikan rumah sakit prioritas'}"><i class="fa-solid fa-star mr-1"></i>${isPriority ? 'Prioritas keluarga' : 'Jadikan prioritas'}</button>
+                                ${hImgs.length > 1 ? `<div class="absolute z-[3] inset-y-0 left-2 right-2 flex items-center justify-between pointer-events-none"><button type="button" onclick="prevHospitalSlide(${Number(rs.id)}, ${hImgs.length}, event)" aria-label="Foto sebelumnya" class="w-9 h-9 rounded-full bg-black/55 text-white pointer-events-auto"><i class="fa-solid fa-chevron-left"></i></button><button type="button" onclick="nextHospitalSlide(${Number(rs.id)}, ${hImgs.length}, event)" aria-label="Foto berikutnya" class="w-9 h-9 rounded-full bg-black/55 text-white pointer-events-auto"><i class="fa-solid fa-chevron-right"></i></button></div>` : ''}
                             </div>
-
-                            <div class="p-5 space-y-4 cursor-pointer" onclick="openHospitalDetail(${rs.id})">
-                                <div>
-                                    <h3 class="font-bold text-slate-800 text-lg group-hover:text-sky-600 transition flex items-center justify-between">
-                                        <span>${rs.name}</span>
-                                        ${isPriority ? '<span class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">⭐ Utama</span>' : ''}
-                                    </h3>
-                                    <p class="text-xs text-slate-500 truncate">${rs.address}</p>
+                            <div class="hospital-card-body">
+                                <div class="min-w-0"><h3 class="hospital-card-title">${hospitalEscapeHtml(rs.name || 'Rumah Sakit')}</h3><p class="hospital-card-address">${hospitalEscapeHtml(rs.address || 'Alamat belum dicatat')}</p></div>
+                                <div class="hospital-card-price"><small>RENTANG HARGA TERSIMPAN</small><strong>${hospitalEscapeHtml(range)}</strong></div>
+                                <div class="hospital-card-status">${priceStatus}${doctorStatus}</div>
+                                <div class="grid grid-cols-1 gap-2">
+                                    <div class="hospital-card-doctor"><strong><i class="fa-solid fa-user-doctor text-pink-600 mr-1"></i> Obgyn</strong>${hospitalEscapeHtml(femaleSummary)}${rs.obgynMale && rs.obgynMale.length ? `<div class="mt-1">${hospitalEscapeHtml(hospitalDoctorSummary(rs.obgynMale))}</div>` : ''}</div>
+                                    <div class="hospital-card-doctor"><strong><i class="fa-solid fa-baby text-sky-600 mr-1"></i> Dokter anak</strong>${hospitalEscapeHtml(pediatricSummary)}</div>
                                 </div>
-
-                                <div class="bg-sky-50/70 p-3 rounded-2xl border border-sky-100 space-y-0.5">
-                                    <div class="text-2xs font-bold text-sky-800 uppercase tracking-wider">Estimasi Rentang Harga:</div>
-                                    <div class="text-sm font-extrabold text-sky-900">${range}</div>
-                                </div>
-
-                                ${isPriority && (appState.priorityMethod || appState.priorityClass || appState.priorityDoctor) ? `
-                                    <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200/80 text-2xs space-y-1">
-                                        <div class="font-bold text-amber-900"><i class="fa-solid fa-star text-amber-500 mr-1"></i>Pilihan Kamu & Istri:</div>
-                                        ${appState.priorityMethod ? `<div class="text-slate-700 font-semibold">• Metode: ${appState.priorityMethod}</div>` : ''}
-                                        ${appState.priorityClass ? `<div class="text-slate-700 font-semibold">• Kelas Kamar: ${appState.priorityClass}</div>` : ''}
-                                        ${appState.priorityDoctor ? `<div class="text-slate-700 font-semibold">• Dokter Utama: ${appState.priorityDoctor}</div>` : ''}
-                                    </div>
-                                ` : ''}
-
-                                <div class="space-y-2 text-2xs text-slate-600">
-                                    <div>
-                                        <div class="font-bold text-pink-700 flex items-center gap-1">
-                                            <i class="fa-solid fa-user-nurse"></i> Obgyn Perempuan:
-                                        </div>
-                                        <div class="mt-0.5 text-slate-700 font-medium pl-3 truncate">${femaleDocs}</div>
-                                    </div>
-                                    <div>
-                                        <div class="font-bold text-sky-700 flex items-center gap-1">
-                                            <i class="fa-solid fa-baby"></i> Dokter Anak:
-                                        </div>
-                                        <div class="mt-0.5 text-slate-700 font-medium pl-3 truncate">${peds}</div>
-                                    </div>
+                                <div class="hospital-card-actions">
+                                    <button type="button" onclick="openHospitalDetail(${Number(rs.id)})" class="hospital-card-detail-btn"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Lihat detail &amp; paket</button>
+                                    <button type="button" onclick="toggleHospitalCompareSelection(${Number(rs.id)}, event)" class="hospital-card-compare-btn ${isSelected ? 'selected' : ''}" aria-label="${isSelected ? 'Hapus dari perbandingan' : 'Pilih untuk dibandingkan'}" title="${isSelected ? 'Hapus dari perbandingan' : 'Pilih untuk dibandingkan'}"><i class="fa-solid ${isSelected ? 'fa-check' : 'fa-scale-balanced'}"></i></button>
                                 </div>
                             </div>
-                        </div>
+                        </article>
+                    `;
+                }).join('');
+            }
 
-                        <div onclick="openHospitalDetail(${rs.id})" class="p-4 bg-slate-50 border-t border-slate-100 text-center text-xs text-sky-600 font-semibold flex items-center justify-center gap-1 group-hover:bg-sky-50 transition cursor-pointer">
-                            <span>Buka Matriks Harga & Rincian RS</span>
-                            <i class="fa-solid fa-arrow-right text-2xs"></i>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            if (hospitalCompareVisible) renderHospitalComparison();
+            else {
+                const panel = document.getElementById('hospital-comparison-panel');
+                if (panel) panel.classList.add('hidden');
+            }
         }
 
         function nextHospitalSlide(rsId, total, e) {
@@ -9102,10 +9493,10 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
         function togglePriorityRS(id, e) {
             if (e) e.stopPropagation();
-            if (appState.priorityRSId === id) {
+            if (Number(appState.priorityRSId) === Number(id)) {
                 appState.priorityRSId = null;
             } else {
-                appState.priorityRSId = id;
+                appState.priorityRSId = Number(id);
             }
             renderHospitals();
             renderDashboardWidgets();
@@ -9113,132 +9504,100 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         }
 
         function openHospitalDetail(id) {
-            const rs = appState.hospitals.find(h => h.id === id);
+            const rs = appState.hospitals.find(h => Number(h.id) === Number(id));
             if (!rs) return;
 
             normalizeHospitalMatrix(rs);
-            const isPriority = appState.priorityRSId === rs.id;
+            const isPriority = Number(appState.priorityRSId) === Number(rs.id);
             detailHospitalSlideIndex = 0;
-
             renderHospitalDetailCarousel(rs);
 
-            document.getElementById('detail-rs-name').innerText = rs.name;
-            document.getElementById('detail-rs-address').innerText = rs.address;
-            
-            // LOGIKA WHATSAPP OTOMATIS
-            let phoneHtml = '<i class="fa-solid fa-phone mr-1"></i> Kontak: -';
-            if (rs.phone) {
-                const cleanPhone = rs.phone.replace(/[^0-9]/g, '');
-                const waPhone = cleanPhone.startsWith('0') ? '62' + cleanPhone.substring(1) : cleanPhone;
-                phoneHtml = `<a href="https://wa.me/${waPhone}" target="_blank" class="hover:underline hover:text-emerald-500 transition flex items-center gap-1.5" title="Chat WhatsApp RS"><i class="fa-brands fa-whatsapp text-sm text-emerald-500"></i> WhatsApp: ${rs.phone}</a>`;
-            }
-            document.getElementById('detail-rs-phone').innerHTML = phoneHtml;
-            
-            // LOGIKA SOCIAL MEDIA LINKS
+            document.getElementById('detail-rs-name').innerText = rs.name || 'Rumah Sakit';
+            document.getElementById('detail-rs-address').innerText = rs.address || 'Alamat belum dicatat';
+
             const socialContainer = document.getElementById('detail-rs-socials');
+            const safePhone = String(rs.phone || '').replace(/[^0-9]/g, '');
+            const waPhone = safePhone.startsWith('0') ? '62' + safePhone.substring(1) : safePhone;
             let socialsHtml = '';
-            if (rs.web) socialsHtml += `<a href="${rs.web.startsWith('http') ? rs.web : 'https://'+rs.web}" target="_blank" class="px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg text-2xs font-semibold transition border border-sky-100"><i class="fa-solid fa-globe mr-1"></i> Website</a>`;
-            if (rs.linktree) socialsHtml += `<a href="${rs.linktree.startsWith('http') ? rs.linktree : 'https://'+rs.linktree}" target="_blank" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-2xs font-semibold transition border border-emerald-100"><i class="fa-solid fa-link mr-1"></i> Linktree</a>`;
+            if (safePhone) {
+                socialsHtml += `<a href="tel:${hospitalEscapeHtml(safePhone)}" class="hospital-contact-action min-h-[44px] px-3 py-2 bg-emerald-50 text-emerald-700 rounded-xl text-[11px] font-bold border border-emerald-100"><i class="fa-solid fa-phone mr-1"></i> Telepon</a>`;
+                socialsHtml += `<a href="https://wa.me/${hospitalEscapeHtml(waPhone)}" target="_blank" rel="noopener noreferrer" class="hospital-contact-action min-h-[44px] px-3 py-2 bg-green-50 text-green-700 rounded-xl text-[11px] font-bold border border-green-100"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp</a>`;
+            }
+            const webUrl = hospitalSafeUrl(rs.web);
+            const treeUrl = hospitalSafeUrl(rs.linktree);
+            const mapUrl = hospitalSafeUrl(rs.mapsUrl);
+            if (mapUrl) socialsHtml += `<a href="${hospitalEscapeHtml(mapUrl)}" target="_blank" rel="noopener noreferrer" class="hospital-contact-action min-h-[44px] px-3 py-2 bg-sky-50 text-sky-700 rounded-xl text-[11px] font-bold border border-sky-100"><i class="fa-solid fa-map-location-dot mr-1"></i> Google Maps</a>`;
+            if (webUrl) socialsHtml += `<a href="${hospitalEscapeHtml(webUrl)}" target="_blank" rel="noopener noreferrer" class="hospital-contact-action min-h-[44px] px-3 py-2 bg-slate-50 text-slate-700 rounded-xl text-[11px] font-bold border border-slate-200"><i class="fa-solid fa-globe mr-1"></i> Website</a>`;
+            if (treeUrl) socialsHtml += `<a href="${hospitalEscapeHtml(treeUrl)}" target="_blank" rel="noopener noreferrer" class="hospital-contact-action min-h-[44px] px-3 py-2 bg-emerald-50 text-emerald-700 rounded-xl text-[11px] font-bold border border-emerald-100"><i class="fa-solid fa-link mr-1"></i> Linktree</a>`;
             if (rs.ig) {
-                let igLink = rs.ig.includes('instagram.com') ? rs.ig : `https://instagram.com/${rs.ig.replace('@', '')}`;
-                socialsHtml += `<a href="${igLink}" target="_blank" class="px-2.5 py-1 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg text-2xs font-semibold transition border border-pink-100"><i class="fa-brands fa-instagram mr-1"></i> Instagram</a>`;
+                const igRaw = String(rs.ig).trim();
+                const igUrl = hospitalSafeUrl(igRaw.includes('instagram.com') ? igRaw : `https://instagram.com/${igRaw.replace('@','')}`);
+                if (igUrl) socialsHtml += `<a href="${hospitalEscapeHtml(igUrl)}" target="_blank" rel="noopener noreferrer" class="hospital-contact-action min-h-[44px] px-3 py-2 bg-pink-50 text-pink-700 rounded-xl text-[11px] font-bold border border-pink-100"><i class="fa-brands fa-instagram mr-1"></i> Instagram</a>`;
             }
             if (rs.tiktok) {
-                let ttLink = rs.tiktok.includes('tiktok.com') ? rs.tiktok : `https://tiktok.com/@${rs.tiktok.replace('@', '')}`;
-                socialsHtml += `<a href="${ttLink}" target="_blank" class="px-2.5 py-1 bg-slate-800 hover:bg-black text-white rounded-lg text-2xs font-semibold transition shadow-sm"><i class="fa-brands fa-tiktok mr-1"></i> TikTok</a>`;
+                const ttRaw = String(rs.tiktok).trim();
+                const ttUrl = hospitalSafeUrl(ttRaw.includes('tiktok.com') ? ttRaw : `https://tiktok.com/@${ttRaw.replace('@','')}`);
+                if (ttUrl) socialsHtml += `<a href="${hospitalEscapeHtml(ttUrl)}" target="_blank" rel="noopener noreferrer" class="hospital-contact-action min-h-[44px] px-3 py-2 bg-slate-800 text-white rounded-xl text-[11px] font-bold"><i class="fa-brands fa-tiktok mr-1"></i> TikTok</a>`;
             }
-            if (socialContainer) socialContainer.innerHTML = socialsHtml;
-
+            if (socialContainer) socialContainer.innerHTML = socialsHtml || '<span class="text-xs text-slate-400">Kontak dan tautan belum dicatat.</span>';
+            document.getElementById('detail-rs-phone').innerHTML = safePhone ? `<i class="fa-solid fa-phone mr-1"></i> ${hospitalEscapeHtml(rs.phone)}` : '<i class="fa-solid fa-phone mr-1"></i> Kontak belum dicatat';
             document.getElementById('detail-rs-husband-facilities').innerText = rs.husbandFacilities || 'Belum ada data fasilitas pendamping dicatat.';
 
             const matrixContainer = document.getElementById('detail-rs-matrix-container');
-            
-            let tableHtml = `
+            const tableHtml = `
                 <table class="w-full text-left text-xs border-collapse">
-                    <thead>
-                        <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-                            <th class="p-3 text-slate-500 text-2xs uppercase tracking-wider border-r border-slate-200 bg-slate-200/50 min-w-[120px]">
-                                Kelas \\ Metode
-                            </th>
-                            ${rs.methods.map(method => {
-                                const isMethodSelected = isPriority && appState.priorityMethod === method;
-                                return `
-                                    <th class="p-3 text-center border-r border-slate-200 ${isMethodSelected ? 'bg-amber-100/90 text-amber-900 font-extrabold' : ''}">
-                                        <div class="flex items-center justify-center gap-1.5">
-                                            <span>${method}</span>
-                                            <button onclick="selectPriorityMethod('${rs.id}', '${method}')" class="text-sm px-1 py-0.5 rounded ${isMethodSelected ? 'text-amber-500' : 'text-slate-300 hover:text-amber-400'} transition" title="${isMethodSelected ? 'Membatalkan Pilihan Metode' : 'Pilih Metode Ini'}">
-                                                <i class="fa-solid fa-star"></i>
-                                            </button>
-                                        </div>
-                                    </th>
-                                `;
-                            }).join('')}
-                        </tr>
-                    </thead>
+                    <thead><tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                        <th class="p-3 text-slate-500 text-2xs uppercase tracking-wider border-r border-slate-200 bg-slate-200/50 min-w-[120px]">Kelas \\ Metode</th>
+                        ${rs.methods.map((method, mIdx) => {
+                            const selected = isPriority && appState.priorityMethod === method;
+                            return `<th class="p-3 text-center border-r border-slate-200 ${selected ? 'bg-amber-100 text-amber-900' : ''}"><div class="flex items-center justify-center gap-1.5"><span>${hospitalEscapeHtml(method)}</span><button type="button" onclick="selectPriorityMethodByIndex(${Number(rs.id)}, ${mIdx})" class="min-w-[30px] min-h-[30px] rounded-lg ${selected ? 'text-amber-500' : 'text-slate-300'}" title="${selected ? 'Batalkan pilihan metode' : 'Pilih metode'}"><i class="fa-solid fa-star"></i></button></div></th>`;
+                        }).join('')}
+                    </tr></thead>
                     <tbody class="divide-y divide-slate-100">
-                        ${rs.classes.map(roomClass => {
-                            const isClassSelected = isPriority && appState.priorityClass === roomClass;
-                            return `
-                                <tr>
-                                    <td class="p-3 font-bold border-r border-slate-200 ${isClassSelected ? 'bg-amber-100/90 text-amber-900' : 'bg-slate-50 text-slate-700'} min-w-[120px]">
-                                        <div class="flex items-center justify-between gap-1.5">
-                                            <span>${roomClass}</span>
-                                            <button onclick="selectPriorityClass('${rs.id}', '${roomClass}')" class="text-sm px-1 py-0.5 rounded ${isClassSelected ? 'text-amber-500' : 'text-slate-300 hover:text-amber-400'} transition" title="${isClassSelected ? 'Membatalkan Pilihan Kelas' : 'Pilih Kelas Ini'}">
-                                                <i class="fa-solid fa-star"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    ${rs.methods.map(method => {
-                                        const priceKey = `${roomClass}_${method}`;
-                                        const priceVal = (rs.matrixPrices && rs.matrixPrices[priceKey]) ? rs.matrixPrices[priceKey] : '-';
-                                        
-                                        const isCross = isPriority && appState.priorityClass === roomClass && appState.priorityMethod === method;
-                                        const isColumnSelected = isPriority && appState.priorityMethod === method;
-                                        const isRowSelected = isPriority && appState.priorityClass === roomClass;
-
-                                        let cellStyle = "text-slate-600";
-                                        if (isCross) {
-                                            cellStyle = "bg-amber-200/90 text-amber-950 font-extrabold ring-2 ring-amber-400 shadow-md scale-[1.02] z-10 relative";
-                                        } else if (isColumnSelected || isRowSelected) {
-                                            cellStyle = "bg-amber-50/50 font-semibold text-slate-800";
-                                        }
-
-                                        return `
-                                            <td class="p-3 text-center border-r border-slate-100 transition ${cellStyle}">
-                                                <div>${priceVal}</div>
-                                                ${isCross ? '<div class="text-3xs text-amber-800 font-bold uppercase tracking-wider mt-0.5">⭐ Terpilih</div>' : ''}
-                                            </td>
-                                        `;
-                                    }).join('')}
-                                </tr>
-                            `;
+                        ${rs.classes.map((roomClass, cIdx) => {
+                            const selected = isPriority && appState.priorityClass === roomClass;
+                            return `<tr><td class="p-3 font-bold border-r border-slate-200 ${selected ? 'bg-amber-100 text-amber-900' : 'bg-slate-50 text-slate-700'} min-w-[120px]"><div class="flex items-center justify-between gap-1.5"><span>${hospitalEscapeHtml(roomClass)}</span><button type="button" onclick="selectPriorityClassByIndex(${Number(rs.id)}, ${cIdx})" class="min-w-[30px] min-h-[30px] rounded-lg ${selected ? 'text-amber-500' : 'text-slate-300'}" title="${selected ? 'Batalkan pilihan kelas' : 'Pilih kelas'}"><i class="fa-solid fa-star"></i></button></div></td>
+                                ${rs.methods.map(method => {
+                                    const priceVal = (rs.matrixPrices && rs.matrixPrices[`${roomClass}_${method}`]) || '-';
+                                    const chosen = isPriority && appState.priorityClass === roomClass && appState.priorityMethod === method;
+                                    return `<td class="p-3 text-center border-r border-slate-100 ${chosen ? 'bg-amber-100 text-amber-950 font-extrabold' : 'text-slate-600'}"><div>${hospitalEscapeHtml(priceVal)}</div>${chosen ? '<div class="text-3xs text-amber-800 font-bold mt-0.5">Pilihan keluarga</div>' : ''}</td>`;
+                                }).join('')}</tr>`;
                         }).join('')}
                     </tbody>
-                </table>
-            `;
+                </table>`;
+            const mobileMatrixHtml = rs.classes.map(roomClass => {
+                const selectedClass = isPriority && appState.priorityClass === roomClass;
+                return `<article class="hospital-matrix-mobile-card"><div class="flex items-center justify-between gap-2"><h4>${hospitalEscapeHtml(roomClass)}</h4><button type="button" onclick="selectPriorityClassByIndex(${Number(rs.id)}, ${rs.classes.indexOf(roomClass)})" class="min-w-[44px] min-h-[44px] rounded-xl ${selectedClass ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-400'}" aria-label="Pilih ${hospitalEscapeHtml(roomClass)}"><i class="fa-solid fa-star"></i></button></div>
+                    ${rs.methods.map((method, idx) => {
+                        const priceVal = (rs.matrixPrices && rs.matrixPrices[`${roomClass}_${method}`]) || '-';
+                        const selectedMethod = isPriority && appState.priorityMethod === method;
+                        return `<div class="hospital-matrix-mobile-row"><span>${hospitalEscapeHtml(method)}</span><div class="flex items-center gap-2"><strong>${hospitalEscapeHtml(priceVal)}</strong><button type="button" onclick="selectPriorityMethodByIndex(${Number(rs.id)}, ${idx})" class="min-w-[44px] min-h-[44px] rounded-lg ${selectedMethod ? 'text-amber-500' : 'text-slate-300'}" aria-label="Pilih ${hospitalEscapeHtml(method)}"><i class="fa-solid fa-star"></i></button></div></div>`;
+                    }).join('')}</article>`;
+            }).join('');
+            matrixContainer.innerHTML = `<div class="hospital-matrix-desktop">${tableHtml}</div><div class="hospital-matrix-mobile">${mobileMatrixHtml}</div>`;
 
-            matrixContainer.innerHTML = tableHtml;
+            const verification = document.getElementById('detail-rs-verification');
+            if (verification) {
+                verification.innerHTML = `
+                    <div><strong><i class="fa-solid fa-money-bill-wave mr-1 text-sky-600"></i> Informasi harga</strong><span>Terakhir dicek: ${hospitalEscapeHtml(hospitalDateLabel(rs.priceVerifiedAt))}</span><span>Sumber: ${hospitalEscapeHtml(rs.priceSource || 'Belum dicatat')}</span></div>
+                    <div><strong><i class="fa-solid fa-user-doctor mr-1 text-emerald-600"></i> Jadwal dokter</strong><span>Terakhir dicek: ${hospitalEscapeHtml(hospitalDateLabel(rs.doctorVerifiedAt))}</span><span>Sumber: ${hospitalEscapeHtml(rs.doctorSource || 'Belum dicatat')}</span></div>`;
+            }
 
-            const renderDocList = (arr) => arr && arr.length > 0 ? arr.map(d => {
-                const docName = d.split('(')[0].trim();
-                const isSelected = isPriority && appState.priorityDoctor === docName;
-                return `
-                    <li class="flex items-center justify-between border-b border-slate-100 pb-1.5 last:border-0 pt-1">
-                        <span class="${isSelected ? 'font-bold text-amber-800' : ''}">• ${d}</span>
-                        <button onclick="selectPriorityDoctor('${rs.id}', '${docName}')" class="text-sm px-1.5 py-0.5 rounded hover:bg-amber-100 ${isSelected ? 'text-amber-500 font-bold' : 'text-slate-300 hover:text-amber-400'} transition" title="${isSelected ? 'Membatalkan Dokter Utama' : 'Pilih Dokter Utama'}">
-                            <i class="fa-solid fa-star"></i>
-                        </button>
-                    </li>
-                `;
-            }).join('') : '<li class="text-slate-400 italic">Belum ada data</li>';
-            
-            document.getElementById('detail-rs-obgyn-female').innerHTML = renderDocList(rs.obgynFemale);
-            document.getElementById('detail-rs-obgyn-male').innerHTML = renderDocList(rs.obgynMale);
-            document.getElementById('detail-rs-pediatricians').innerHTML = renderDocList(rs.pediatricians);
+            const renderDocList = (arr, group) => {
+                const list = hospitalDoctorList(arr);
+                if (!list.length) return '<li class="text-slate-400 italic">Belum ada data</li>';
+                return list.map((entry, index) => {
+                    const docName = entry.split('(')[0].trim();
+                    const isSelected = isPriority && appState.priorityDoctor === docName;
+                    return `<li class="flex items-start justify-between gap-2 border-b border-slate-100 pb-2 last:border-0 pt-1"><span class="min-w-0 break-words ${isSelected ? 'font-bold text-amber-800' : ''}">• ${hospitalEscapeHtml(entry)}</span><button type="button" onclick="selectPriorityDoctorByIndex(${Number(rs.id)}, '${group}', ${index})" class="shrink-0 min-w-[44px] min-h-[44px] rounded-lg ${isSelected ? 'text-amber-500 bg-amber-50' : 'text-slate-300 hover:text-amber-400'}" title="${isSelected ? 'Batalkan dokter utama' : 'Pilih dokter utama'}"><i class="fa-solid fa-star"></i></button></li>`;
+                }).join('');
+            };
+            document.getElementById('detail-rs-obgyn-female').innerHTML = renderDocList(rs.obgynFemale, 'obgynFemale');
+            document.getElementById('detail-rs-obgyn-male').innerHTML = renderDocList(rs.obgynMale, 'obgynMale');
+            document.getElementById('detail-rs-pediatricians').innerHTML = renderDocList(rs.pediatricians, 'pediatricians');
 
             const facContainer = document.getElementById('detail-rs-facilities');
-            facContainer.innerHTML = (rs.facilities || []).map(f => `<span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">${f}</span>`).join('') || '<span class="text-slate-400 italic">Belum ada fasilitas dicatat</span>';
-
+            facContainer.innerHTML = (rs.facilities || []).map(f => `<span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">${hospitalEscapeHtml(f)}</span>`).join('') || '<span class="text-slate-400 italic">Belum ada fasilitas dicatat</span>';
             document.getElementById('detail-rs-workflow').innerText = rs.workflow || '-';
             document.getElementById('detail-rs-notes').innerText = rs.notes || '-';
 
@@ -9247,11 +9606,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 openHospitalEdit(rs.id);
             };
             document.getElementById('btn-delete-rs').onclick = function() {
-                if (confirm(`Yakin ingin menghapus ${rs.name}?`)) {
-                    deleteHospital(rs.id);
-                }
+                if (confirm(`Yakin ingin menghapus ${rs.name || 'rumah sakit ini'}?`)) deleteHospital(rs.id);
             };
-
             document.getElementById('modal-rs-detail').classList.remove('hidden');
         }
 
@@ -9259,31 +9615,21 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             const container = document.getElementById('detail-rs-carousel-container');
             const imgs = (rs.images || []).map(i => formatPhotoUrl(i));
             if (detailHospitalSlideIndex >= imgs.length) detailHospitalSlideIndex = 0;
-            const activeImg = imgs[detailHospitalSlideIndex] || imgs[0];
-            const isPriority = appState.priorityRSId === rs.id;
-
+            const activeImg = hospitalSafeUrl(imgs[detailHospitalSlideIndex] || imgs[0] || '');
+            const isPriority = Number(appState.priorityRSId) === Number(rs.id);
             container.innerHTML = `
-                <img src="${activeImg}" alt="${rs.name}" class="w-full h-full object-cover">
+                ${activeImg ? `<img src="${hospitalEscapeHtml(activeImg)}" alt="${hospitalEscapeHtml(rs.name || 'Rumah Sakit')}" class="w-full h-full object-cover">` : '<div class="w-full h-full flex items-center justify-center text-white"><i class="fa-solid fa-hospital text-5xl"></i></div>'}
                 <div class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-xl text-white text-2xs font-medium">
-                    ${rs.type || 'Rumah Sakit'} • Foto (${detailHospitalSlideIndex + 1}/${imgs.length})
+                    ${hospitalEscapeHtml(rs.type || 'Rumah Sakit')} • Foto (${detailHospitalSlideIndex + 1}/${imgs.length})
                 </div>
-
                 ${imgs.length > 1 ? `
                     <div class="absolute inset-y-0 inset-x-3 flex justify-between items-center pointer-events-none">
-                        <button onclick="prevDetailSlide(${rs.id}, ${imgs.length})" class="w-8 h-8 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center pointer-events-auto transition shadow">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </button>
-                        <button onclick="nextDetailSlide(${rs.id}, ${imgs.length})" class="w-8 h-8 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center pointer-events-auto transition shadow">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
-                    </div>
-                ` : ''}
-
-                <button onclick="togglePriorityRS(${rs.id}); openHospitalDetail(${rs.id});" class="absolute top-3 right-3 px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-md flex items-center gap-1.5 ${isPriority ? 'bg-amber-500 text-white' : 'bg-black/60 hover:bg-black/80 text-white backdrop-blur-md'}">
-                    <i class="fa-solid fa-star ${isPriority ? 'text-amber-200' : 'text-slate-300'}"></i>
-                    <span>${isPriority ? 'RS Utama ⭐' : 'Set Utama'}</span>
-                </button>
-            `;
+                        <button type="button" onclick="prevDetailSlide(${Number(rs.id)}, ${imgs.length})" aria-label="Foto sebelumnya" class="min-w-[44px] min-h-[44px] bg-black/55 text-white rounded-full flex items-center justify-center pointer-events-auto shadow"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button type="button" onclick="nextDetailSlide(${Number(rs.id)}, ${imgs.length})" aria-label="Foto berikutnya" class="min-w-[44px] min-h-[44px] bg-black/55 text-white rounded-full flex items-center justify-center pointer-events-auto shadow"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>` : ''}
+                <button type="button" onclick="togglePriorityRS(${Number(rs.id)}); openHospitalDetail(${Number(rs.id)});" class="absolute top-3 right-3 min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-md flex items-center gap-1.5 ${isPriority ? 'bg-amber-500 text-white' : 'bg-black/60 hover:bg-black/80 text-white backdrop-blur-md'}">
+                    <i class="fa-solid fa-star ${isPriority ? 'text-amber-200' : 'text-slate-300'}"></i><span>${isPriority ? 'RS Utama ⭐' : 'Set Utama'}</span>
+                </button>`;
         }
 
         function nextDetailSlide(rsId, total) {
@@ -9343,6 +9689,26 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             openHospitalDetail(Number(rsId));
         }
 
+        function selectPriorityMethodByIndex(rsId, methodIndex) {
+            const rs = appState.hospitals.find(item => Number(item.id) === Number(rsId));
+            const method = rs && rs.methods ? rs.methods[methodIndex] : null;
+            if (method) selectPriorityMethod(Number(rsId), method);
+        }
+
+        function selectPriorityClassByIndex(rsId, classIndex) {
+            const rs = appState.hospitals.find(item => Number(item.id) === Number(rsId));
+            const roomClass = rs && rs.classes ? rs.classes[classIndex] : null;
+            if (roomClass) selectPriorityClass(Number(rsId), roomClass);
+        }
+
+        function selectPriorityDoctorByIndex(rsId, group, doctorIndex) {
+            const rs = appState.hospitals.find(item => Number(item.id) === Number(rsId));
+            if (!rs || !['obgynFemale', 'obgynMale', 'pediatricians'].includes(group)) return;
+            const doctor = hospitalDoctorList(rs[group])[doctorIndex];
+            if (!doctor) return;
+            selectPriorityDoctor(Number(rsId), doctor.split('(')[0].trim());
+        }
+
         function closeHospitalDetail() {
             document.getElementById('modal-rs-detail').classList.add('hidden');
         }
@@ -9350,49 +9716,49 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         function openHospitalEdit(id = null) {
             const form = document.getElementById('rs-editor-form');
             form.reset();
+            const setValue = (fieldId, value) => {
+                const field = document.getElementById(fieldId);
+                if (field) field.value = value == null ? '' : value;
+            };
 
             if (id) {
-                const rs = appState.hospitals.find(h => h.id === id);
+                const rs = appState.hospitals.find(h => Number(h.id) === Number(id));
                 if (rs) {
                     normalizeHospitalMatrix(rs);
-                    document.getElementById('form-rs-title').innerText = `Edit Data & Matriks: ${rs.name}`;
-                    document.getElementById('form-rs-id').value = rs.id;
-                    document.getElementById('form-rs-name').value = rs.name || '';
-                    document.getElementById('form-rs-image').value = (rs.images || []).join('\n');
-                    document.getElementById('form-rs-type').value = rs.type || '';
-                    document.getElementById('form-rs-phone').value = rs.phone || '';
-                    document.getElementById('form-rs-address').value = rs.address || '';
-                    document.getElementById('form-rs-web').value = rs.web || '';
-                    document.getElementById('form-rs-linktree').value = rs.linktree || '';
-                    document.getElementById('form-rs-ig').value = rs.ig || '';
-                    document.getElementById('form-rs-tiktok').value = rs.tiktok || '';
-                    document.getElementById('form-rs-husband-facilities').value = rs.husbandFacilities || '';
-                    
-                    document.getElementById('form-rs-obgyn-female').value = (rs.obgynFemale || []).join(', ');
-                    document.getElementById('form-rs-obgyn-male').value = (rs.obgynMale || []).join(', ');
-                    document.getElementById('form-rs-pediatricians').value = (rs.pediatricians || []).join(', ');
-
-                    document.getElementById('form-rs-facilities').value = (rs.facilities || []).join(', ');
-
+                    document.getElementById('form-rs-title').innerText = `Edit Data & Matriks: ${rs.name || 'Rumah Sakit'}`;
+                    setValue('form-rs-id', rs.id);
+                    setValue('form-rs-name', rs.name);
+                    setValue('form-rs-image', (rs.images || []).join('\n'));
+                    setValue('form-rs-type', rs.type);
+                    setValue('form-rs-phone', rs.phone);
+                    setValue('form-rs-address', rs.address);
+                    setValue('form-rs-maps', rs.mapsUrl);
+                    setValue('form-rs-web', rs.web);
+                    setValue('form-rs-linktree', rs.linktree);
+                    setValue('form-rs-ig', rs.ig);
+                    setValue('form-rs-tiktok', rs.tiktok);
+                    setValue('form-rs-husband-facilities', rs.husbandFacilities);
+                    setValue('form-rs-obgyn-female', hospitalDoctorList(rs.obgynFemale).join('\n'));
+                    setValue('form-rs-obgyn-male', hospitalDoctorList(rs.obgynMale).join('\n'));
+                    setValue('form-rs-pediatricians', hospitalDoctorList(rs.pediatricians).join('\n'));
+                    setValue('form-rs-facilities', (rs.facilities || []).join(', '));
+                    setValue('form-rs-price-source', rs.priceSource);
+                    setValue('form-rs-price-verified', rs.priceVerifiedAt);
+                    setValue('form-rs-doctor-source', rs.doctorSource);
+                    setValue('form-rs-doctor-verified', rs.doctorVerifiedAt);
                     tempEditMatrix = JSON.parse(JSON.stringify({
-                        methods: rs.methods || ["Spontan Normal", "SC ERACS"],
-                        classes: rs.classes || ["VIP", "Kelas 1"],
+                        methods: rs.methods || ['Spontan Normal', 'SC ERACS'],
+                        classes: rs.classes || ['VIP', 'Kelas 1'],
                         matrixPrices: rs.matrixPrices || {}
                     }));
-
-                    document.getElementById('form-rs-workflow').value = rs.workflow || '';
-                    document.getElementById('form-rs-notes').value = rs.notes || '';
+                    setValue('form-rs-workflow', rs.workflow);
+                    setValue('form-rs-notes', rs.notes);
                 }
             } else {
-                document.getElementById('form-rs-title').innerText = "Tambah Rumah Sakit Baru";
-                document.getElementById('form-rs-id').value = "";
-                tempEditMatrix = {
-                    methods: ["Spontan Normal", "SC ERACS"],
-                    classes: ["VVIP", "VIP", "Kelas 1"],
-                    matrixPrices: {}
-                };
+                document.getElementById('form-rs-title').innerText = 'Tambah Rumah Sakit Baru';
+                setValue('form-rs-id', '');
+                tempEditMatrix = { methods:['Spontan Normal','SC ERACS'], classes:['VVIP','VIP','Kelas 1'], matrixPrices:{} };
             }
-
             renderMatrixEditor();
             document.getElementById('modal-rs-form').classList.remove('hidden');
         }
@@ -9528,42 +9894,46 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         function saveHospitalForm(event) {
             event.preventDefault();
             const id = document.getElementById('form-rs-id').value;
-            const name = document.getElementById('form-rs-name').value;
+            const existing = id ? appState.hospitals.find(h => Number(h.id) === Number(id)) : null;
+            const name = document.getElementById('form-rs-name').value.trim();
             const rawImages = document.getElementById('form-rs-image').value;
-            const images = rawImages.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
-            const type = document.getElementById('form-rs-type').value;
-            const phone = document.getElementById('form-rs-phone').value;
-            const address = document.getElementById('form-rs-address').value;
+            const images = rawImages.split(/[\n,]+/).map(item => item.trim()).filter(Boolean);
+            const type = document.getElementById('form-rs-type').value.trim();
+            const phone = document.getElementById('form-rs-phone').value.trim();
+            const address = document.getElementById('form-rs-address').value.trim();
+            const mapsUrl = document.getElementById('form-rs-maps').value.trim();
             const web = document.getElementById('form-rs-web').value.trim();
             const linktree = document.getElementById('form-rs-linktree').value.trim();
             const ig = document.getElementById('form-rs-ig').value.trim();
             const tiktok = document.getElementById('form-rs-tiktok').value.trim();
             const husbandFacilities = document.getElementById('form-rs-husband-facilities').value;
-            
-            const obgynFemale = document.getElementById('form-rs-obgyn-female').value.split(',').map(s => s.trim()).filter(Boolean);
-            const obgynMale = document.getElementById('form-rs-obgyn-male').value.split(',').map(s => s.trim()).filter(Boolean);
-            const pediatricians = document.getElementById('form-rs-pediatricians').value.split(',').map(s => s.trim()).filter(Boolean);
-
-            const facilities = document.getElementById('form-rs-facilities').value.split(',').map(s => s.trim()).filter(Boolean);
-            
+            const parseDoctorLines = fieldId => document.getElementById(fieldId).value.split(/\r?\n/).map(item => item.trim()).filter(Boolean);
+            const obgynFemale = parseDoctorLines('form-rs-obgyn-female');
+            const obgynMale = parseDoctorLines('form-rs-obgyn-male');
+            const pediatricians = parseDoctorLines('form-rs-pediatricians');
+            const facilities = document.getElementById('form-rs-facilities').value.split(',').map(item => item.trim()).filter(Boolean);
             const workflow = document.getElementById('form-rs-workflow').value;
             const notes = document.getElementById('form-rs-notes').value;
+            const priceSource = document.getElementById('form-rs-price-source').value.trim();
+            const priceVerifiedAt = document.getElementById('form-rs-price-verified').value;
+            const doctorSource = document.getElementById('form-rs-doctor-source').value.trim();
+            const doctorVerifiedAt = document.getElementById('form-rs-doctor-verified').value;
 
             const newRSData = {
+                ...(existing || {}),
                 id: id ? Number(id) : Date.now(),
-                name, images, type, phone, address, web, linktree, ig, tiktok, husbandFacilities,
+                name, images, type, phone, address, mapsUrl, web, linktree, ig, tiktok, husbandFacilities,
                 obgynFemale, obgynMale, pediatricians, facilities,
                 methods: tempEditMatrix.methods,
                 classes: tempEditMatrix.classes,
                 matrixPrices: tempEditMatrix.matrixPrices,
-                workflow, notes
+                workflow, notes,
+                priceSource, priceVerifiedAt, doctorSource, doctorVerifiedAt
             };
 
             if (id) {
-                const index = appState.hospitals.findIndex(h => h.id == id);
-                if (index !== -1) {
-                    appState.hospitals[index] = newRSData;
-                }
+                const index = appState.hospitals.findIndex(h => Number(h.id) === Number(id));
+                if (index !== -1) appState.hospitals[index] = newRSData;
             } else {
                 appState.hospitals.push(newRSData);
             }
@@ -9575,8 +9945,9 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         }
 
         function deleteHospital(id) {
-            appState.hospitals = appState.hospitals.filter(h => h.id !== id);
-            if (appState.priorityRSId === id) appState.priorityRSId = null;
+            appState.hospitals = appState.hospitals.filter(h => Number(h.id) !== Number(id));
+            hospitalCompareSelection = hospitalCompareSelection.filter(item => Number(item) !== Number(id));
+            if (Number(appState.priorityRSId) === Number(id)) appState.priorityRSId = null;
             renderHospitals();
             renderDashboardWidgets();
             saveToLocalStorage();
@@ -10630,7 +11001,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.19',
+                    appVersion: '6.13.20',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -15196,7 +15567,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.19. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.20. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
