@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.21: RS & Obgyn Madiun directory and comparison refinement -->
+    <!-- Keluarga Pohon Teduh 6.13.22: RS & Obgyn Madiun directory and comparison refinement -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.21">
+    <meta name="application-version" content="6.13.22">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -2969,6 +2969,91 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   body.dark-mode #sec-hospital > .flex.items-center.justify-between h3 { color:#e2e8f0 !important; }
 </style>
 
+
+<style id="rs-obgyn-structured-doctor-schedule-61322">
+  .hospital-doctor-editor-group {
+    border:1px solid #e2e8f0; border-radius:15px; padding:11px; background:#fff;
+    display:flex; flex-direction:column; gap:9px; min-width:0;
+  }
+  .hospital-doctor-group-title { font-size:12px; font-weight:800; color:#334155; }
+  .hospital-doctor-editor-list { display:flex; flex-direction:column; gap:9px; min-width:0; }
+  .hospital-doctor-editor-card {
+    border:1px solid #dbe3ed; border-radius:12px; padding:10px; background:#f8fafc;
+    display:flex; flex-direction:column; gap:8px; min-width:0;
+  }
+  .hospital-doctor-editor-head { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .hospital-doctor-name-label { font-size:10px; font-weight:750; color:#475569; }
+  .hospital-doctor-name-input {
+    width:100%; min-width:0; min-height:44px; border:1px solid #cbd5e1; border-radius:9px;
+    padding:9px 11px; font-size:12px; color:#0f172a; background:#fff; outline:none;
+  }
+  .hospital-doctor-name-input:focus, .hospital-doctor-schedule-row select:focus,
+  .hospital-doctor-schedule-row input:focus { border-color:#0ea5e9; box-shadow:0 0 0 2px rgba(14,165,233,.13); }
+  .hospital-doctor-remove-btn, .hospital-doctor-remove-session {
+    width:44px; min-width:44px; height:44px; min-height:44px; border-radius:9px; display:inline-flex;
+    align-items:center; justify-content:center; color:#e11d48; background:#fff1f2;
+    border:1px solid #fecdd3; flex-shrink:0;
+  }
+  .hospital-doctor-schedule-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:2px; }
+  .hospital-doctor-schedule-heading > span:first-child { font-size:10px; font-weight:800; color:#475569; }
+  .hospital-doctor-schedule-hint { font-size:9px; color:#94a3b8; }
+  .hospital-doctor-schedule-rows { display:flex; flex-direction:column; gap:7px; }
+  .hospital-doctor-schedule-row {
+    display:grid; grid-template-columns:minmax(92px,1fr) minmax(76px,.78fr) 12px minmax(76px,.78fr) 36px;
+    align-items:center; gap:5px; min-width:0;
+  }
+  .hospital-doctor-schedule-row select, .hospital-doctor-schedule-row input {
+    width:100%; min-width:0; height:40px; border:1px solid #cbd5e1; border-radius:8px;
+    padding:6px 7px; font-size:11px; color:#0f172a; background:#fff; outline:none;
+  }
+  .hospital-doctor-time-separator { text-align:center; color:#94a3b8; font-size:12px; }
+  .hospital-doctor-add-session, .hospital-doctor-add-btn {
+    width:100%; min-height:44px; border-radius:10px; border:1px dashed #93c5fd;
+    background:#eff6ff; color:#0369a1; font-size:11px; font-weight:800; padding:9px 10px;
+  }
+  .hospital-doctor-add-btn { border-style:solid; border-color:#bfdbfe; background:#f0f9ff; }
+  .hospital-doctor-legacy-wrap { border:1px solid #fcd34d; background:#fffbeb; border-radius:9px; padding:9px; }
+  .hospital-doctor-legacy-wrap.hidden { display:none !important; }
+  .hospital-doctor-legacy-wrap label { display:block; color:#92400e; font-size:10px; font-weight:800; margin-bottom:5px; }
+  .hospital-doctor-legacy-wrap textarea { width:100%; border:1px solid #fcd34d; border-radius:7px; padding:7px; font-size:11px; color:#78350f; background:#fff; }
+  .hospital-doctor-legacy-wrap p { color:#92400e; font-size:9px; line-height:1.4; margin-top:4px; }
+  .hospital-doctor-sessions-view { display:flex; flex-direction:column; gap:5px; margin-top:5px; }
+  .hospital-doctor-session-view { display:flex; align-items:center; justify-content:space-between; gap:8px; min-width:0; }
+  .hospital-doctor-day-chip { display:inline-flex; align-items:center; min-height:23px; padding:3px 8px; border-radius:7px; background:#e0f2fe; color:#075985; font-size:10px; font-weight:800; }
+  .hospital-doctor-time-value { color:#475569; font-size:10px; font-weight:650; text-align:right; font-variant-numeric:tabular-nums; }
+  .hospital-doctor-legacy-note { display:block; margin-top:5px; color:#a16207; font-size:9px; line-height:1.35; }
+  body.dark-mode .hospital-doctor-editor { background:#172337 !important; border-color:#334155 !important; }
+  body.dark-mode .hospital-doctor-editor-group { background:#1e293b; border-color:#475569; }
+  body.dark-mode .hospital-doctor-group-title, body.dark-mode .hospital-doctor-name-label,
+  body.dark-mode .hospital-doctor-schedule-heading > span:first-child { color:#cbd5e1; }
+  body.dark-mode .hospital-doctor-editor-card { background:#172337; border-color:#475569; }
+  body.dark-mode .hospital-doctor-name-input, body.dark-mode .hospital-doctor-schedule-row select,
+  body.dark-mode .hospital-doctor-schedule-row input { color:#f1f5f9; background:#0f1b2c; border-color:#475569; }
+  body.dark-mode .hospital-doctor-remove-btn, body.dark-mode .hospital-doctor-remove-session { color:#fecdd3; background:#451a2a; border-color:#7f1d3d; }
+  body.dark-mode .hospital-doctor-add-session, body.dark-mode .hospital-doctor-add-btn { color:#bae6fd; background:#082f49; border-color:#075985; }
+  body.dark-mode .hospital-doctor-legacy-wrap { background:#422006; border-color:#92400e; }
+  body.dark-mode .hospital-doctor-legacy-wrap label, body.dark-mode .hospital-doctor-legacy-wrap p { color:#fde68a; }
+  body.dark-mode .hospital-doctor-legacy-wrap textarea { background:#1c1917; color:#fef3c7; border-color:#92400e; }
+  body.dark-mode .hospital-doctor-day-chip { color:#bae6fd; background:#0c4a6e; }
+  body.dark-mode .hospital-doctor-time-value { color:#cbd5e1; }
+  body.dark-mode .hospital-doctor-legacy-note { color:#fcd34d; }
+  @media(max-width:390px) {
+    .hospital-doctor-schedule-row { grid-template-columns:minmax(0,1fr) 34px; gap:6px; }
+    .hospital-doctor-schedule-row .hospital-doctor-day { grid-column:1; grid-row:1; }
+    .hospital-doctor-schedule-row .hospital-doctor-remove-session { grid-column:2; grid-row:1; }
+    .hospital-doctor-schedule-row .hospital-doctor-start { grid-column:1; grid-row:2; }
+    .hospital-doctor-schedule-row .hospital-doctor-time-separator { display:none; }
+    .hospital-doctor-schedule-row .hospital-doctor-end { grid-column:2; grid-row:2; }
+  }
+  @media(max-width:640px) {
+    .hospital-doctor-editor { padding:10px !important; }
+    .hospital-doctor-editor-group { padding:9px; gap:8px; }
+    .hospital-doctor-editor-card { padding:9px; gap:7px; }
+    .hospital-doctor-session-view { padding:2px 0; }
+    .hospital-doctor-time-value { font-size:10px; }
+  }
+</style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -5371,50 +5456,35 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     <textarea id="form-rs-husband-facilities" rows="3" placeholder="Sofa Bed per kelas, Parkir inap gratis, Akses makan penunggu, dll." class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none"></textarea>
                 </div>
 
-                <div class="space-y-3 bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-100">
+                <div class="hospital-doctor-editor rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4 space-y-3">
                     <div>
                         <div class="font-bold text-slate-700">Dokter &amp; Jadwal Praktik</div>
-                        <p class="text-[10px] text-slate-500 mt-0.5">Nama dan jadwal diisi terpisah. Baris jadwal ke-1 dipasangkan dengan dokter ke-1, baris ke-2 dengan dokter ke-2, dan seterusnya. Jadwal boleh dikosongkan.</p>
+                        <p class="text-[10px] text-slate-500 mt-0.5">Tambahkan dokter satu per satu. Setiap dokter dapat memiliki beberapa sesi jadwal, masing-masing dengan hari, jam mulai, dan jam selesai. Jadwal boleh dikosongkan jika belum diketahui.</p>
                     </div>
-                    <div class="space-y-2 rounded-xl border border-pink-100 bg-white p-3">
-                        <div class="font-bold text-pink-700 text-xs">👩‍⚕️ Obgyn Perempuan</div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <div>
-                                <label for="form-rs-obgyn-female" class="text-[10px] font-semibold text-slate-600">Nama dokter (satu per baris)</label>
-                                <textarea id="form-rs-obgyn-female" rows="2" placeholder="dr. Nama, Sp.OG" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
-                            </div>
-                            <div>
-                                <label for="form-rs-obgyn-female-schedule" class="text-[10px] font-semibold text-slate-600">Jadwal praktik (urut sesuai nama)</label>
-                                <textarea id="form-rs-obgyn-female-schedule" rows="2" placeholder="Senin & Rabu: 09.00–12.00" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-y-2 rounded-xl border border-slate-200 bg-white p-3">
-                        <div class="font-bold text-slate-700 text-xs">👨‍⚕️ Obgyn Laki-Laki</div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <div>
-                                <label for="form-rs-obgyn-male" class="text-[10px] font-semibold text-slate-600">Nama dokter (satu per baris)</label>
-                                <textarea id="form-rs-obgyn-male" rows="2" placeholder="dr. Nama, Sp.OG" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
-                            </div>
-                            <div>
-                                <label for="form-rs-obgyn-male-schedule" class="text-[10px] font-semibold text-slate-600">Jadwal praktik (urut sesuai nama)</label>
-                                <textarea id="form-rs-obgyn-male-schedule" rows="2" placeholder="Rabu: 16.00–19.00" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-y-2 rounded-xl border border-sky-100 bg-white p-3">
-                        <div class="font-bold text-sky-700 text-xs">👶 Dokter Anak (Sp.A)</div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <div>
-                                <label for="form-rs-pediatricians" class="text-[10px] font-semibold text-slate-600">Nama dokter (satu per baris)</label>
-                                <textarea id="form-rs-pediatricians" rows="2" placeholder="dr. Nama, Sp.A" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
-                            </div>
-                            <div>
-                                <label for="form-rs-pediatricians-schedule" class="text-[10px] font-semibold text-slate-600">Jadwal praktik (urut sesuai nama)</label>
-                                <textarea id="form-rs-pediatricians-schedule" rows="2" placeholder="Kamis: 10.00–13.00" class="w-full mt-1 p-2.5 min-h-[76px] border border-slate-200 rounded-lg outline-none resize-y text-xs"></textarea>
-                            </div>
-                        </div>
-                    </div>
+
+                    <section class="hospital-doctor-editor-group hospital-doctor-group-female">
+                        <div class="hospital-doctor-group-title">👩‍⚕️ Obgyn Perempuan</div>
+                        <div id="form-rs-obgyn-female-list" class="hospital-doctor-editor-list"></div>
+                        <button type="button" onclick="hospitalAddDoctorEditorCard('obgynFemale')" class="hospital-doctor-add-btn">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah Dokter Obgyn Perempuan
+                        </button>
+                    </section>
+
+                    <section class="hospital-doctor-editor-group hospital-doctor-group-male">
+                        <div class="hospital-doctor-group-title">👨‍⚕️ Obgyn Laki-Laki</div>
+                        <div id="form-rs-obgyn-male-list" class="hospital-doctor-editor-list"></div>
+                        <button type="button" onclick="hospitalAddDoctorEditorCard('obgynMale')" class="hospital-doctor-add-btn">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah Dokter Obgyn Laki-Laki
+                        </button>
+                    </section>
+
+                    <section class="hospital-doctor-editor-group hospital-doctor-group-pediatric">
+                        <div class="hospital-doctor-group-title">👶 Dokter Anak (Sp.A)</div>
+                        <div id="form-rs-pediatricians-list" class="hospital-doctor-editor-list"></div>
+                        <button type="button" onclick="hospitalAddDoctorEditorCard('pediatricians')" class="hospital-doctor-add-btn">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah Dokter Anak
+                        </button>
+                    </section>
                 </div>
 
                 <div class="hospital-verification-editor rounded-2xl border p-3 sm:p-4 space-y-3">
@@ -9292,19 +9362,143 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
         // Supports legacy strings such as "dr. Nama, Sp.OG (Senin: 09.00–12.00)"
         // and the new structured records { name, schedule }.
+
+        const HOSPITAL_DOCTOR_GROUPS = {
+            obgynFemale: {
+                containerId: 'form-rs-obgyn-female-list',
+                label: 'Obgyn Perempuan'
+            },
+            obgynMale: {
+                containerId: 'form-rs-obgyn-male-list',
+                label: 'Obgyn Laki-Laki'
+            },
+            pediatricians: {
+                containerId: 'form-rs-pediatricians-list',
+                label: 'Dokter Anak'
+            }
+        };
+        const HOSPITAL_WEEKDAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+
+        function hospitalNormalizeTimeValue(value) {
+            const raw = String(value == null ? '' : value).trim();
+            const match = raw.match(/^(\d{1,2})[.:](\d{2})$/);
+            if (!match) return '';
+            const hour = Number(match[1]);
+            const minute = Number(match[2]);
+            if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return '';
+            return String(hour).padStart(2, '0') + ':' + String(minute).padStart(2, '0');
+        }
+
+        function hospitalDisplayTime(value) {
+            const normalized = hospitalNormalizeTimeValue(value);
+            return normalized ? normalized.replace(':', '.') : String(value || '').trim();
+        }
+
+        function hospitalNormalizeDoctorSessions(value) {
+            if (!Array.isArray(value)) return [];
+            return value.map(item => {
+                if (!item || typeof item !== 'object') return null;
+                const hari = HOSPITAL_WEEKDAYS.find(day => day.toLowerCase() === String(item.hari || '').trim().toLowerCase());
+                const mulai = hospitalNormalizeTimeValue(item.mulai || item.start || '');
+                const selesai = hospitalNormalizeTimeValue(item.selesai || item.end || '');
+                return hari && mulai && selesai ? { hari, mulai, selesai } : null;
+            }).filter(Boolean);
+        }
+
+        function hospitalParseLegacyDoctorSchedule(value) {
+            const raw = String(value == null ? '' : value).trim();
+            if (!raw) return { sessions: [], unparsed: '' };
+
+            const sessions = [];
+            const unparsed = [];
+            const chunks = raw.split(/;|\r?\n/).map(part => part.trim()).filter(Boolean);
+
+            chunks.forEach(chunk => {
+                const match = chunk.match(/^(.+?)\s*:\s*(\d{1,2}[.:]\d{2})\s*(?:-|–|—|s\.?\s*d\.?)\s*(\d{1,2}[.:]\d{2})$/i);
+                if (!match) {
+                    unparsed.push(chunk);
+                    return;
+                }
+
+                const startTime = hospitalNormalizeTimeValue(match[2]);
+                const endTime = hospitalNormalizeTimeValue(match[3]);
+                if (!startTime || !endTime) {
+                    unparsed.push(chunk);
+                    return;
+                }
+
+                let dayText = match[1].replace(/\([^)]*\)/g, ' ').trim();
+                const rangeMatch = dayText.match(/^(Senin|Selasa|Rabu|Kamis|Jumat|Sabtu|Minggu)\s*(?:s\.?\s*d\.?|sampai|[-–])\s*(Senin|Selasa|Rabu|Kamis|Jumat|Sabtu|Minggu)$/i);
+                let days = [];
+                if (rangeMatch) {
+                    const first = HOSPITAL_WEEKDAYS.findIndex(day => day.toLowerCase() === rangeMatch[1].toLowerCase());
+                    const last = HOSPITAL_WEEKDAYS.findIndex(day => day.toLowerCase() === rangeMatch[2].toLowerCase());
+                    if (first >= 0 && last >= 0) {
+                        let cursor = first;
+                        for (let guard = 0; guard < HOSPITAL_WEEKDAYS.length; guard++) {
+                            days.push(HOSPITAL_WEEKDAYS[cursor]);
+                            if (cursor === last) break;
+                            cursor = (cursor + 1) % HOSPITAL_WEEKDAYS.length;
+                        }
+                    }
+                } else {
+                    const tokens = dayText.split(/\s*(?:&|\bdan\b|,|\/|\+)\s*/i).map(token => token.trim()).filter(Boolean);
+                    days = tokens.map(token => HOSPITAL_WEEKDAYS.find(day => day.toLowerCase() === token.toLowerCase())).filter(Boolean);
+                }
+
+                if (!days.length) {
+                    unparsed.push(chunk);
+                    return;
+                }
+                days.forEach(hari => sessions.push({ hari, mulai: startTime, selesai: endTime }));
+            });
+
+            return { sessions, unparsed: unparsed.join('; ') };
+        }
+
+        function hospitalFormatDoctorSchedule(value) {
+            const sessions = hospitalNormalizeDoctorSessions(value);
+            return sessions.map(session =>
+                `${session.hari}: ${hospitalDisplayTime(session.mulai)}–${hospitalDisplayTime(session.selesai)}`
+            ).join('; ');
+        }
+
         function hospitalParseDoctorEntry(value) {
             if (value && typeof value === 'object' && !Array.isArray(value)) {
                 const name = String(value.name || value.doctor || value.nama || '').trim();
-                const schedule = String(value.schedule || value.jadwal || value.practiceSchedule || '').trim();
-                return name ? { name, schedule } : null;
+                if (!name) return null;
+
+                const scheduleText = typeof value.schedule === 'string'
+                    ? value.schedule
+                    : (typeof value.practiceSchedule === 'string' ? value.practiceSchedule : '');
+                const structuredSource = Array.isArray(value.jadwal)
+                    ? value.jadwal
+                    : (Array.isArray(value.sessions) ? value.sessions : null);
+                const legacyParsed = structuredSource
+                    ? { sessions: hospitalNormalizeDoctorSessions(structuredSource), unparsed: String(value.legacyScheduleText || '').trim() }
+                    : hospitalParseLegacyDoctorSchedule(scheduleText || (typeof value.jadwal === 'string' ? value.jadwal : ''));
+
+                return {
+                    name,
+                    jadwal: legacyParsed.sessions,
+                    schedule: scheduleText || hospitalFormatDoctorSchedule(legacyParsed.sessions),
+                    legacyScheduleText: String(value.legacyScheduleText || legacyParsed.unparsed || '').trim()
+                };
             }
+
             const raw = String(value == null ? '' : value).trim();
             if (!raw) return null;
             const legacyMatch = raw.match(/^(.*?)\s+\((.*)\)$/);
             if (legacyMatch && legacyMatch[1].trim()) {
-                return { name: legacyMatch[1].trim(), schedule: legacyMatch[2].trim() };
+                const parsed = hospitalParseLegacyDoctorSchedule(legacyMatch[2].trim());
+                return {
+                    name: legacyMatch[1].trim(),
+                    jadwal: parsed.sessions,
+                    schedule: legacyMatch[2].trim(),
+                    legacyScheduleText: parsed.unparsed
+                };
             }
-            return { name: raw, schedule: '' };
+            return { name: raw, jadwal: [], schedule: '', legacyScheduleText: '' };
         }
 
         function hospitalDoctorEntries(value) {
@@ -9318,31 +9512,160 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             return hospitalDoctorEntries(value).map(entry => entry.name);
         }
 
-        function hospitalDoctorEditorValues(value) {
-            const entries = hospitalDoctorEntries(value);
-            return {
-                names: entries.map(entry => entry.name).join('\n'),
-                schedules: entries.map(entry => entry.schedule || '').join('\n')
-            };
-        }
-
-        function hospitalReadDoctorFields(nameFieldId, scheduleFieldId) {
-            const namesEl = document.getElementById(nameFieldId);
-            const schedulesEl = document.getElementById(scheduleFieldId);
-            const nameLines = namesEl ? namesEl.value.split(/\r?\n/) : [];
-            const scheduleLines = schedulesEl ? schedulesEl.value.split(/\r?\n/) : [];
-            return nameLines.map((line, index) => ({
-                name: String(line || '').trim(),
-                schedule: String(scheduleLines[index] || '').trim()
-            })).filter(entry => entry.name);
-        }
-
         function hospitalDoctorSummary(value, limit = 2) {
             const list = hospitalDoctorList(value);
             if (!list.length) return 'Belum ada data dokter';
             return list.slice(0, limit).join(' • ') + (list.length > limit ? ` +${list.length - limit} lainnya` : '');
         }
 
+        function hospitalClearDoctorEditorGroups() {
+            Object.values(HOSPITAL_DOCTOR_GROUPS).forEach(group => {
+                const container = document.getElementById(group.containerId);
+                if (container) container.innerHTML = '';
+            });
+        }
+
+        function hospitalAddDoctorScheduleRow(card, session = {}) {
+            const container = card && card.querySelector('.hospital-doctor-schedule-rows');
+            if (!container) return;
+
+            const hari = HOSPITAL_WEEKDAYS.includes(session.hari) ? session.hari : 'Senin';
+            const mulai = hospitalNormalizeTimeValue(session.mulai || '');
+            const selesai = hospitalNormalizeTimeValue(session.selesai || '');
+            const options = HOSPITAL_WEEKDAYS.map(day =>
+                `<option value="${day}" ${day === hari ? 'selected' : ''}>${day}</option>`
+            ).join('');
+
+            container.insertAdjacentHTML('beforeend', `
+                <div class="hospital-doctor-schedule-row" data-hospital-schedule-row>
+                    <select class="hospital-doctor-day" aria-label="Hari praktik">${options}</select>
+                    <input type="time" class="hospital-doctor-start" aria-label="Jam mulai" value="${mulai}">
+                    <span class="hospital-doctor-time-separator" aria-hidden="true">–</span>
+                    <input type="time" class="hospital-doctor-end" aria-label="Jam selesai" value="${selesai}">
+                    <button type="button" class="hospital-doctor-remove-session" onclick="hospitalRemoveDoctorScheduleRow(this)" aria-label="Hapus sesi jadwal" title="Hapus sesi">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `);
+        }
+
+        function hospitalAddDoctorCard(groupKey, entry = {}) {
+            const config = HOSPITAL_DOCTOR_GROUPS[groupKey];
+            const container = config && document.getElementById(config.containerId);
+            if (!container) return;
+
+            const card = document.createElement('article');
+            card.className = 'hospital-doctor-editor-card';
+            card.setAttribute('data-hospital-doctor-card', '');
+            card.innerHTML = `
+                <div class="hospital-doctor-editor-head">
+                    <label class="hospital-doctor-name-label">Nama dokter</label>
+                    <button type="button" class="hospital-doctor-remove-btn" onclick="hospitalRemoveDoctorCard(this)" aria-label="Hapus dokter" title="Hapus dokter">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+                <input type="text" class="hospital-doctor-name-input" value="${hospitalEscapeHtml(entry.name || '')}" placeholder="Contoh: dr. Nama, Sp.OG" autocomplete="off">
+                <div class="hospital-doctor-schedule-heading">
+                    <span>Jadwal praktik</span>
+                    <span class="hospital-doctor-schedule-hint">Hari dan jam (jam belum diisi)</span>
+                </div>
+                <div class="hospital-doctor-schedule-rows"></div>
+                <button type="button" class="hospital-doctor-add-session" onclick="hospitalAddDoctorScheduleRowFromButton(this)">
+                    <i class="fa-solid fa-plus mr-1"></i> Tambah sesi jadwal
+                </button>
+                <div class="hospital-doctor-legacy-wrap ${entry.legacyScheduleText ? '' : 'hidden'}">
+                    <label>Catatan jadwal lama (belum terstruktur)</label>
+                    <textarea class="hospital-doctor-legacy-text" rows="2" placeholder="Jadwal lama tetap disimpan di sini">${hospitalEscapeHtml(entry.legacyScheduleText || '')}</textarea>
+                    <p>Catatan ini dipertahankan agar informasi lama tidak hilang. Pindahkan ke sesi hari dan jam jika memungkinkan.</p>
+                </div>
+            `;
+            container.appendChild(card);
+
+            const sessions = hospitalNormalizeDoctorSessions(entry.jadwal || []);
+            if (sessions.length) {
+                sessions.forEach(session => hospitalAddDoctorScheduleRow(card, session));
+            } else {
+                // Satu baris kosong memandu input pertama; jam tidak diisi otomatis agar tidak membuat jadwal fiktif.
+                hospitalAddDoctorScheduleRow(card, {});
+            }
+        }
+
+        function hospitalAddDoctorEditorCard(groupKey) {
+            hospitalAddDoctorCard(groupKey, { name: '', jadwal: [], legacyScheduleText: '' });
+            const container = document.getElementById(HOSPITAL_DOCTOR_GROUPS[groupKey].containerId);
+            const last = container && container.lastElementChild;
+            const nameInput = last && last.querySelector('.hospital-doctor-name-input');
+            if (nameInput) nameInput.focus();
+        }
+
+        function hospitalAddDoctorScheduleRowFromButton(button) {
+            const card = button && button.closest('[data-hospital-doctor-card]');
+            if (card) hospitalAddDoctorScheduleRow(card, {});
+        }
+
+        function hospitalRemoveDoctorScheduleRow(button) {
+            const row = button && button.closest('[data-hospital-schedule-row]');
+            if (row) row.remove();
+        }
+
+        function hospitalRemoveDoctorCard(button) {
+            const card = button && button.closest('[data-hospital-doctor-card]');
+            if (!card) return;
+            const name = card.querySelector('.hospital-doctor-name-input')?.value.trim();
+            if (name && !confirm(`Hapus data ${name} dari daftar dokter RS ini?`)) return;
+            card.remove();
+        }
+
+        function hospitalRenderDoctorEditorGroup(groupKey, value) {
+            const config = HOSPITAL_DOCTOR_GROUPS[groupKey];
+            const container = config && document.getElementById(config.containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            hospitalDoctorEntries(value).forEach(entry => hospitalAddDoctorCard(groupKey, entry));
+        }
+
+        function hospitalReadDoctorEditorGroup(groupKey) {
+            const config = HOSPITAL_DOCTOR_GROUPS[groupKey];
+            const container = config && document.getElementById(config.containerId);
+            if (!container) return [];
+
+            const result = [];
+            const cards = Array.from(container.querySelectorAll('[data-hospital-doctor-card]'));
+            for (let cardIndex = 0; cardIndex < cards.length; cardIndex++) {
+                const card = cards[cardIndex];
+                const name = String(card.querySelector('.hospital-doctor-name-input')?.value || '').trim();
+                const rows = Array.from(card.querySelectorAll('[data-hospital-schedule-row]'));
+                const sessions = [];
+
+                for (const row of rows) {
+                    const hari = row.querySelector('.hospital-doctor-day')?.value || '';
+                    const mulai = row.querySelector('.hospital-doctor-start')?.value || '';
+                    const selesai = row.querySelector('.hospital-doctor-end')?.value || '';
+                    if (!mulai && !selesai) continue;
+                    if (!name) throw new Error(`Nama dokter pada bagian ${config.label} belum diisi.`);
+                    if (!mulai || !selesai) throw new Error(`Lengkapi jam mulai dan jam selesai untuk ${name}.`);
+                    if (!hari) throw new Error(`Pilih hari praktik untuk ${name}.`);
+                    sessions.push({ hari, mulai, selesai });
+                }
+
+                const legacyScheduleText = String(card.querySelector('.hospital-doctor-legacy-text')?.value || '').trim();
+                if (!name) {
+                    if (legacyScheduleText || sessions.length) throw new Error(`Isi nama dokter pada bagian ${config.label}, atau hapus kartu dokter tersebut.`);
+                    continue;
+                }
+
+                const normalizedSessions = hospitalNormalizeDoctorSessions(sessions);
+                const formattedSchedule = hospitalFormatDoctorSchedule(normalizedSessions);
+                const schedule = [formattedSchedule, legacyScheduleText].filter(Boolean).join('; ');
+                result.push({
+                    name,
+                    jadwal: normalizedSessions,
+                    schedule,
+                    ...(legacyScheduleText ? { legacyScheduleText } : {})
+                });
+            }
+            return result;
+        }
         function hospitalKnownPrice(value) {
             const raw = String(value == null ? '' : value).trim();
             return raw && raw !== '-' && raw.toLowerCase() !== 'mendukung';
@@ -9695,10 +10018,16 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 return list.map((entry, index) => {
                     const docName = entry.name;
                     const isSelected = isPriority && appState.priorityDoctor === docName;
-                    const scheduleHtml = entry.schedule
-                        ? `<span class="hospital-doctor-schedule"><i class="fa-regular fa-clock mr-1"></i>${hospitalEscapeHtml(entry.schedule)}</span>`
-                        : '<span class="hospital-doctor-schedule is-empty">Jadwal belum dicatat</span>';
-                    return `<li class="hospital-doctor-entry flex items-start justify-between gap-2 border-b border-slate-100 pb-2 last:border-0 pt-1"><div class="min-w-0 flex-1"><span class="block break-words ${isSelected ? 'font-bold text-amber-800' : 'font-semibold text-slate-700'}">${hospitalEscapeHtml(docName)}</span>${scheduleHtml}</div><button type="button" onclick="selectPriorityDoctorByIndex(${Number(rs.id)}, '${group}', ${index})" class="shrink-0 min-w-[44px] min-h-[44px] rounded-lg ${isSelected ? 'text-amber-500 bg-amber-50' : 'text-slate-300 hover:text-amber-400'}" title="${isSelected ? 'Batalkan dokter utama' : 'Pilih dokter utama'}" aria-label="${isSelected ? 'Batalkan dokter utama' : 'Pilih sebagai dokter utama'}"><i class="fa-solid fa-star"></i></button></li>`;
+                    const sessions = hospitalNormalizeDoctorSessions(entry.jadwal || []);
+                    const scheduleHtml = sessions.length
+                        ? `<div class="hospital-doctor-sessions-view">${sessions.map(session => `<div class="hospital-doctor-session-view"><span class="hospital-doctor-day-chip">${hospitalEscapeHtml(session.hari)}</span><span class="hospital-doctor-time-value">${hospitalEscapeHtml(hospitalDisplayTime(session.mulai))}–${hospitalEscapeHtml(hospitalDisplayTime(session.selesai))}</span></div>`).join('')}</div>`
+                        : (entry.legacyScheduleText || entry.schedule
+                            ? `<span class="hospital-doctor-schedule"><i class="fa-regular fa-clock mr-1"></i>${hospitalEscapeHtml(entry.legacyScheduleText || entry.schedule)}</span>`
+                            : '<span class="hospital-doctor-schedule is-empty">Jadwal belum dicatat</span>');
+                    const legacyNote = sessions.length && entry.legacyScheduleText
+                        ? `<span class="hospital-doctor-legacy-note">Catatan jadwal lama: ${hospitalEscapeHtml(entry.legacyScheduleText)}</span>`
+                        : '';
+                    return `<li class="hospital-doctor-entry flex items-start justify-between gap-2 border-b border-slate-100 pb-2 last:border-0 pt-1"><div class="min-w-0 flex-1"><span class="block break-words ${isSelected ? 'font-bold text-amber-800' : 'font-semibold text-slate-700'}">${hospitalEscapeHtml(docName)}</span>${scheduleHtml}${legacyNote}</div><button type="button" onclick="selectPriorityDoctorByIndex(${Number(rs.id)}, '${group}', ${index})" class="shrink-0 min-w-[44px] min-h-[44px] rounded-lg ${isSelected ? 'text-amber-500 bg-amber-50' : 'text-slate-300 hover:text-amber-400'}" title="${isSelected ? 'Batalkan dokter utama' : 'Pilih dokter utama'}" aria-label="${isSelected ? 'Batalkan dokter utama' : 'Pilih sebagai dokter utama'}"><i class="fa-solid fa-star"></i></button></li>`;
                 }).join('');
             };
             document.getElementById('detail-rs-obgyn-female').innerHTML = renderDocList(rs.obgynFemale, 'obgynFemale');
@@ -9829,6 +10158,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 const field = document.getElementById(fieldId);
                 if (field) field.value = value == null ? '' : value;
             };
+            hospitalClearDoctorEditorGroups();
 
             if (id) {
                 const rs = appState.hospitals.find(h => Number(h.id) === Number(id));
@@ -9847,15 +10177,9 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     setValue('form-rs-ig', rs.ig);
                     setValue('form-rs-tiktok', rs.tiktok);
                     setValue('form-rs-husband-facilities', rs.husbandFacilities);
-                    const femaleDoctorFields = hospitalDoctorEditorValues(rs.obgynFemale);
-                    const maleDoctorFields = hospitalDoctorEditorValues(rs.obgynMale);
-                    const pediatricDoctorFields = hospitalDoctorEditorValues(rs.pediatricians);
-                    setValue('form-rs-obgyn-female', femaleDoctorFields.names);
-                    setValue('form-rs-obgyn-female-schedule', femaleDoctorFields.schedules);
-                    setValue('form-rs-obgyn-male', maleDoctorFields.names);
-                    setValue('form-rs-obgyn-male-schedule', maleDoctorFields.schedules);
-                    setValue('form-rs-pediatricians', pediatricDoctorFields.names);
-                    setValue('form-rs-pediatricians-schedule', pediatricDoctorFields.schedules);
+                    hospitalRenderDoctorEditorGroup('obgynFemale', rs.obgynFemale);
+                    hospitalRenderDoctorEditorGroup('obgynMale', rs.obgynMale);
+                    hospitalRenderDoctorEditorGroup('pediatricians', rs.pediatricians);
                     setValue('form-rs-facilities', (rs.facilities || []).join(', '));
                     setValue('form-rs-price-source', rs.priceSource);
                     setValue('form-rs-price-verified', rs.priceVerifiedAt);
@@ -10022,9 +10346,15 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             const ig = document.getElementById('form-rs-ig').value.trim();
             const tiktok = document.getElementById('form-rs-tiktok').value.trim();
             const husbandFacilities = document.getElementById('form-rs-husband-facilities').value;
-            const obgynFemale = hospitalReadDoctorFields('form-rs-obgyn-female', 'form-rs-obgyn-female-schedule');
-            const obgynMale = hospitalReadDoctorFields('form-rs-obgyn-male', 'form-rs-obgyn-male-schedule');
-            const pediatricians = hospitalReadDoctorFields('form-rs-pediatricians', 'form-rs-pediatricians-schedule');
+            let obgynFemale, obgynMale, pediatricians;
+            try {
+                obgynFemale = hospitalReadDoctorEditorGroup('obgynFemale');
+                obgynMale = hospitalReadDoctorEditorGroup('obgynMale');
+                pediatricians = hospitalReadDoctorEditorGroup('pediatricians');
+            } catch (error) {
+                alert(error && error.message ? error.message : 'Periksa kembali data dokter dan jadwal praktik.');
+                return;
+            }
             const facilities = document.getElementById('form-rs-facilities').value.split(',').map(item => item.trim()).filter(Boolean);
             const workflow = document.getElementById('form-rs-workflow').value;
             const notes = document.getElementById('form-rs-notes').value;
@@ -11115,7 +11445,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.21',
+                    appVersion: '6.13.22',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -15681,7 +16011,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.21. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.22. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
