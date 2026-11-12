@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.24: RS & DSA directory redesign, pediatric data handoff and monthly shopping refinements -->
+    <!-- Keluarga Pohon Teduh 6.13.25: RS & DSA directory redesign, pediatric data handoff and monthly shopping refinements -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.24">
+    <meta name="application-version" content="6.13.25">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3181,6 +3181,59 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
     #modal-rs > div, #modal-dsa > div { max-height:95dvh !important; border-radius:22px 22px 12px 12px !important; padding:16px 14px !important; }
   }
   @media(prefers-reduced-motion:reduce) { .rsdsa-card { transition:none; } .rsdsa-card:hover { transform:none; } }
+</style>
+
+
+<style id="rsdsa-light-mode-contrast-61325">
+  /*
+    6.13.25 — RS & DSA light-mode contrast correction.
+    Some Tailwind dark:* utilities can briefly win while the root theme
+    class is being reconciled. These explicit light-only rules keep text,
+    surfaces and action buttons readable without touching Night Mode.
+  */
+  body:not(.dark-mode) #sec-rs-dsa .rsdsa-hero { color:#0f172a !important; }
+  body:not(.dark-mode) #sec-rs-dsa .rsdsa-hero h2 { color:#0f172a !important; }
+  body:not(.dark-mode) #sec-rs-dsa .rsdsa-hero p { color:#475569 !important; }
+  body:not(.dark-mode) #sec-rs-dsa .rsdsa-hero .rsdsa-eyebrow { color:#075985 !important; background:rgba(255,255,255,.94) !important; border-color:#bfdbfe !important; }
+  body:not(.dark-mode) #sec-rs-dsa .rsdsa-hero .rsdsa-stat span { color:#475569 !important; }
+  body:not(.dark-mode) #sec-rs-dsa .rsdsa-hero .rsdsa-stat strong { color:#0f172a !important; }
+  body:not(.dark-mode) #sec-rs-dsa .rsdsa-hero .rsdsa-stat small { color:#64748b !important; }
+
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-detail-dialog,
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-detail-actions { background:#fff !important; color:#1e293b !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-detail-dialog > div:first-child { background:#fff !important; border-color:#e2e8f0 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail #rsdsa-detail-title { color:#0f172a !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-detail-dialog > div:first-child span { color:#0369a1 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-detail-dialog > div:first-child button { background:#f1f5f9 !important; color:#475569 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-detail-actions { border-color:#e2e8f0 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-detail-actions button:first-child { background:#fff1f2 !important; color:#be123c !important; border-color:#fecdd3 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-detail-actions button:last-child { background:#0284c7 !important; color:#fff !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-section-card,
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-doctor-card { background:#fff !important; border-color:#e2e8f0 !important; color:#334155 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-section-title { color:#334155 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail #rsdsa-detail-content .text-slate-400 { color:#64748b !important; }
+
+  /* Explicitly neutralize dark-variant utilities if a stale .dark root class remains. */
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:text-white"] { color:#1e293b !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:text-slate-100"],
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:text-slate-200"] { color:#334155 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:text-slate-300"] { color:#475569 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:text-slate-400"] { color:#64748b !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:text-sky-300"] { color:#0369a1 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:text-rose-300"] { color:#be123c !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:text-amber-300"] { color:#92400e !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:bg-slate-800"] { background-color:#f8fafc !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:bg-slate-700"] { background-color:#f1f5f9 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:bg-sky-950/40"] { background-color:#eff6ff !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:bg-rose-950/40"] { background-color:#fff1f2 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:bg-amber-950/40"] { background-color:#fffbeb !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:border-slate-700"] { border-color:#e2e8f0 !important; }
+  body:not(.dark-mode) #modal-rs-dsa-detail [class~="dark:border-slate-600"] { border-color:#cbd5e1 !important; }
+
+  @media (max-width:640px) {
+    body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-detail-dialog > div:first-child { min-height:62px; }
+    body:not(.dark-mode) #modal-rs-dsa-detail .rsdsa-detail-actions button { min-height:48px; }
+  }
 </style>
 
 </head>
