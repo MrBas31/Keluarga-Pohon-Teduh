@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.23: Postnatal monthly shopping safety, mobile cards and history -->
+    <!-- Keluarga Pohon Teduh 6.13.24: RS & DSA directory redesign, pediatric data handoff and monthly shopping refinements -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.23">
+    <meta name="application-version" content="6.13.24">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3078,6 +3078,111 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
     body.dark-mode #sec-post-belanja .post-shop-item-card .bg-slate-50 { background: #0f172a !important; }
 </style>
 
+
+<style id="rs-dsa-directory-redesign-61324">
+  #sec-rs-dsa { min-width:0; }
+  /* Doctor and facility forms opened from the detail sheet must stay above it. */
+  #modal-rs, #modal-dsa { z-index:100 !important; }
+  .rsdsa-hero { background:linear-gradient(135deg,#eff6ff 0%,#ecfdf5 58%,#f0fdfa 100%); border:1px solid #dbeafe; color:#0f172a; }
+  .rsdsa-eyebrow { display:inline-flex; align-items:center; gap:6px; padding:5px 10px; border:1px solid #bfdbfe; border-radius:999px; background:rgba(255,255,255,.78); color:#0369a1; font-size:9px; line-height:1.2; font-weight:850; letter-spacing:.13em; text-transform:uppercase; }
+  .rsdsa-stat { min-width:0; border:1px solid rgba(191,219,254,.9); border-radius:15px; background:rgba(255,255,255,.82); padding:10px 11px; display:flex; flex-direction:column; gap:2px; }
+  .rsdsa-stat span { color:#64748b; font-size:10px; font-weight:700; }
+  .rsdsa-stat strong { color:#0f172a; font-size:22px; line-height:1.1; font-weight:850; font-variant-numeric:tabular-nums; }
+  .rsdsa-stat small { color:#94a3b8; font-size:9px; }
+  .rsdsa-action-primary { min-height:46px; padding:10px 14px; border-radius:13px; background:#0284c7; color:#fff; font-size:11px; font-weight:850; box-shadow:0 5px 14px rgba(2,132,199,.17); }
+  .rsdsa-action-primary:hover { background:#0369a1; }
+  .rsdsa-action-secondary { min-height:46px; padding:10px 13px; border-radius:13px; border:1px solid #bfdbfe; background:rgba(255,255,255,.78); color:#0369a1; font-size:11px; font-weight:800; }
+  .rsdsa-toolbar { border:1px solid #e2e8f0; background:#fff; }
+  .rsdsa-search { display:flex; align-items:center; gap:9px; min-height:46px; padding:0 12px; border:1px solid #cbd5e1; border-radius:13px; background:#f8fafc; color:#64748b; }
+  .rsdsa-search input { width:100%; min-width:0; background:transparent; border:0; outline:0; color:#0f172a; font-size:13px; }
+  .rsdsa-filter { width:100%; min-height:46px; padding:0 11px; border:1px solid #cbd5e1; border-radius:13px; background:#f8fafc; color:#334155; font-size:12px; }
+  .rsdsa-result-count { display:inline-flex; align-items:center; min-height:30px; padding:5px 10px; border-radius:999px; background:#f1f5f9; color:#64748b; font-size:10px; font-weight:850; white-space:nowrap; }
+  .rsdsa-card { min-width:0; overflow:hidden; display:flex; flex-direction:column; border:1px solid #e2e8f0; border-radius:22px; background:#fff; box-shadow:0 4px 15px rgba(15,23,42,.045); transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease; }
+  .rsdsa-card:hover { transform:translateY(-2px); border-color:#bfdbfe; box-shadow:0 10px 25px rgba(15,23,42,.075); }
+  .rsdsa-card.is-main { border-color:#fbbf24; box-shadow:0 0 0 2px rgba(251,191,36,.12),0 5px 16px rgba(15,23,42,.045); }
+  .rsdsa-card-media { height:132px; position:relative; overflow:hidden; background:linear-gradient(135deg,#dbeafe,#dcfce7 58%,#cffafe); }
+  .rsdsa-card-media img { width:100%; height:100%; object-fit:cover; }
+  .rsdsa-card-media:after { content:""; position:absolute; inset:45% 0 0; background:linear-gradient(transparent,rgba(15,23,42,.36)); pointer-events:none; }
+  .rsdsa-media-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#0e7490; font-size:38px; }
+  .rsdsa-card-badge { position:absolute; z-index:2; bottom:9px; left:10px; padding:5px 9px; border-radius:999px; background:rgba(15,23,42,.68); color:#fff; font-size:9px; font-weight:800; }
+  .rsdsa-card-main-badge { position:absolute; z-index:2; top:9px; right:9px; min-height:32px; display:inline-flex; align-items:center; gap:5px; padding:6px 9px; border-radius:10px; background:#fef3c7; color:#92400e; font-size:9px; font-weight:850; }
+  .rsdsa-card-body { min-width:0; flex:1; display:flex; flex-direction:column; gap:10px; padding:13px; }
+  .rsdsa-card-title { color:#0f172a; font-size:14px; line-height:1.3; font-weight:850; overflow-wrap:anywhere; }
+  .rsdsa-card-location { margin-top:4px; color:#64748b; font-size:10px; line-height:1.45; overflow-wrap:anywhere; }
+  .rsdsa-card-meta { display:flex; flex-wrap:wrap; gap:5px; }
+  .rsdsa-chip { display:inline-flex; align-items:center; gap:5px; min-height:24px; padding:4px 8px; border-radius:999px; background:#f1f5f9; color:#475569; font-size:9px; line-height:1.2; font-weight:800; }
+  .rsdsa-chip-blue { background:#e0f2fe; color:#075985; }
+  .rsdsa-doctor-preview { border-top:1px solid #f1f5f9; padding-top:9px; color:#64748b; font-size:10px; line-height:1.5; overflow-wrap:anywhere; }
+  .rsdsa-doctor-preview strong { display:block; margin-bottom:3px; color:#334155; font-size:10px; }
+  .rsdsa-card-actions { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:7px; margin-top:auto; }
+  .rsdsa-card-actions button { min-height:44px; border-radius:12px; font-size:11px; font-weight:850; }
+  .rsdsa-detail-button { background:#0284c7; color:white; padding:9px 11px; }
+  .rsdsa-icon-button { width:44px; border:1px solid #e2e8f0; background:#f8fafc; color:#64748b; }
+  .rsdsa-empty { grid-column:1/-1; padding:28px 16px; border:1px dashed #cbd5e1; border-radius:19px; background:#f8fafc; color:#64748b; text-align:center; }
+  .rsdsa-detail-dialog { width:100%; max-width:680px; max-height:91dvh; display:flex; flex-direction:column; overflow:hidden; border-radius:24px; background:#fff; color:#1e293b; box-shadow:0 24px 70px rgba(15,23,42,.25); }
+  .rsdsa-detail-scroll { flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
+  .rsdsa-detail-actions { flex:0 0 auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.25fr); gap:8px; padding:11px 15px max(11px,env(safe-area-inset-bottom)); border-top:1px solid #e2e8f0; background:#fff; box-shadow:0 -7px 18px rgba(15,23,42,.05); }
+  .rsdsa-detail-actions button { min-width:0; min-height:46px; border-radius:12px; font-size:11px; font-weight:850; }
+  .rsdsa-section-card { border:1px solid #e2e8f0; border-radius:17px; background:#fff; padding:12px; min-width:0; }
+  .rsdsa-section-title { margin-bottom:9px; color:#334155; font-size:11px; font-weight:850; }
+  .rsdsa-contact-link { min-height:42px; display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:8px 11px; border:1px solid #e2e8f0; border-radius:11px; background:#f8fafc; color:#334155; font-size:10px; font-weight:800; }
+  .rsdsa-doctor-card { border:1px solid #e2e8f0; border-radius:15px; padding:11px; background:#fff; }
+  .rsdsa-schedule-row { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; border-top:1px solid #f1f5f9; font-size:10px; }
+  .rsdsa-schedule-day { color:#0369a1; font-weight:800; }
+  .rsdsa-schedule-time { color:#334155; font-weight:750; font-variant-numeric:tabular-nums; }
+  .rsdsa-verify-box { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .rsdsa-verify-item { min-width:0; padding:10px; border:1px solid #dbeafe; border-radius:13px; background:#f0f9ff; }
+  .rsdsa-verify-item strong { display:block; color:#075985; font-size:10px; }
+  .rsdsa-verify-item span { display:block; margin-top:4px; color:#64748b; font-size:10px; line-height:1.4; overflow-wrap:anywhere; }
+  .rsdsa-form-section { padding-top:13px; border-top:1px solid #e2e8f0; }
+  .rsdsa-form-section-title { margin-bottom:9px; color:#334155; font-size:11px; font-weight:850; }
+  .rsdsa-field-label { display:block; margin-bottom:5px; color:#64748b; font-size:10px; font-weight:800; }
+  .rsdsa-input { width:100%; min-height:44px; padding:10px 11px; border:1px solid #cbd5e1; border-radius:11px; background:#fff; color:#1e293b; font-size:13px; }
+  .rsdsa-import-option { display:flex; align-items:flex-start; gap:10px; padding:11px; border:1px solid #e2e8f0; border-radius:14px; background:#fff; }
+  .rsdsa-import-option input { width:18px; height:18px; flex:0 0 auto; margin-top:2px; }
+  body.dark-mode .rsdsa-hero { background:linear-gradient(135deg,#142b40 0%,#12352f 100%); border-color:#31516a; color:#f8fafc; }
+  body.dark-mode .rsdsa-eyebrow { color:#bae6fd; background:rgba(15,23,42,.55); border-color:#36546c; }
+  body.dark-mode .rsdsa-stat { background:rgba(15,23,42,.5); border-color:#36516a; }
+  body.dark-mode .rsdsa-stat span, body.dark-mode .rsdsa-stat small { color:#94a3b8; }
+  body.dark-mode .rsdsa-stat strong { color:#f8fafc; }
+  body.dark-mode .rsdsa-action-secondary, body.dark-mode .rsdsa-toolbar, body.dark-mode .rsdsa-card, body.dark-mode .rsdsa-section-card, body.dark-mode .rsdsa-doctor-card, body.dark-mode .rsdsa-import-option { background:#1e293b; border-color:#334155; color:#e2e8f0; }
+  body.dark-mode .rsdsa-search, body.dark-mode .rsdsa-filter, body.dark-mode .rsdsa-icon-button { background:#0f1b2c; border-color:#475569; color:#cbd5e1; }
+  body.dark-mode .rsdsa-search input, body.dark-mode .rsdsa-filter { color:#f1f5f9; }
+  body.dark-mode .rsdsa-search input::placeholder { color:#64748b; }
+  body.dark-mode .rsdsa-result-count, body.dark-mode .rsdsa-chip { background:#26364b; color:#cbd5e1; }
+  body.dark-mode .rsdsa-chip-blue { background:#123451; color:#bae6fd; }
+  body.dark-mode .rsdsa-card-title, body.dark-mode .rsdsa-doctor-preview strong, body.dark-mode .rsdsa-section-title, body.dark-mode .rsdsa-form-section-title { color:#f1f5f9; }
+  body.dark-mode .rsdsa-card-location, body.dark-mode .rsdsa-doctor-preview { color:#94a3b8; }
+  body.dark-mode .rsdsa-doctor-preview, body.dark-mode .rsdsa-schedule-row { border-color:#334155; }
+  body.dark-mode .rsdsa-empty { background:#172337; border-color:#475569; color:#94a3b8; }
+  body.dark-mode .rsdsa-detail-dialog, body.dark-mode .rsdsa-detail-actions { background:#1e293b; color:#e2e8f0; }
+  body.dark-mode .rsdsa-detail-actions { border-color:#334155; }
+  body.dark-mode .rsdsa-contact-link { background:#26364b; border-color:#475569; color:#e2e8f0; }
+  body.dark-mode .rsdsa-section-card, body.dark-mode .rsdsa-doctor-card { background:#172337; }
+  body.dark-mode .rsdsa-schedule-time { color:#cbd5e1; }
+  body.dark-mode .rsdsa-verify-item { background:#102c42; border-color:#164e63; }
+  body.dark-mode .rsdsa-verify-item strong { color:#bae6fd; }
+  body.dark-mode .rsdsa-verify-item span { color:#94a3b8; }
+  body.dark-mode .rsdsa-form-section { border-color:#334155; }
+  body.dark-mode .rsdsa-field-label { color:#94a3b8; }
+  body.dark-mode .rsdsa-input { background:#0f1b2c; border-color:#475569; color:#f1f5f9; }
+  @media(max-width:640px) {
+    #sec-rs-dsa .rsdsa-hero { padding:15px !important; border-radius:22px !important; }
+    .rsdsa-stat { padding:9px 8px; border-radius:12px; }
+    .rsdsa-stat strong { font-size:19px; }
+    .rsdsa-card-media { height:112px; }
+    .rsdsa-card-body { padding:11px; gap:8px; }
+    .rsdsa-card-title { font-size:13px; }
+    .rsdsa-detail-dialog { max-height:94dvh; border-radius:22px 22px 12px 12px; }
+    #modal-rs-dsa-detail, #modal-rs-dsa-import { padding:7px !important; align-items:flex-end !important; }
+    .rsdsa-detail-actions { padding-left:12px; padding-right:12px; }
+    .rsdsa-verify-box { grid-template-columns:1fr; }
+    #modal-rs, #modal-dsa { padding:8px !important; align-items:flex-end !important; }
+    #modal-rs > div, #modal-dsa > div { max-height:95dvh !important; border-radius:22px 22px 12px 12px !important; padding:16px 14px !important; }
+  }
+  @media(prefers-reduced-motion:reduce) { .rsdsa-card { transition:none; } .rsdsa-card:hover { transform:none; } }
+</style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -4345,33 +4450,51 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 </div>
             </section>
 
-            <!-- TAB 4: RS & DSA -->
-            <section id="sec-rs-dsa" class="hidden space-y-6">
-                <!-- Header & Filter -->
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-hospital text-blue-500 mr-2"></i>Direktori RS & DSA</h2>
-                        <p class="text-sm text-slate-500">Pantau jadwal dokter anak dan rumah sakit langganan.</p>
+            <!-- TAB 4: RS & DSA — DIRECTORY REDESIGN 6.13.24 -->
+            <section id="sec-rs-dsa" class="hidden space-y-5 rsdsa-page">
+                <div class="rsdsa-hero rounded-3xl p-4 sm:p-6 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                        <div class="min-w-0">
+                            <span class="rsdsa-eyebrow"><i class="fa-solid fa-heart-pulse"></i> Direktori kesehatan keluarga</span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold mt-2 text-slate-800 dark:text-white">RS &amp; DSA</h2>
+                            <p class="text-xs sm:text-sm mt-1 max-w-2xl text-slate-600 dark:text-slate-300">Temukan fasilitas kesehatan anak, cek jadwal dokter, dan hubungi layanan dengan lebih praktis.</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full sm:w-auto shrink-0">
+                            <button type="button" onclick="openRsDsaImportModal()" class="rsdsa-action-secondary"><i class="fa-solid fa-copy mr-1.5"></i>Salin dari RS &amp; Obgyn</button>
+                            <button type="button" onclick="openModalRs()" class="rsdsa-action-primary"><i class="fa-solid fa-plus mr-1.5"></i>Tambah Fasilitas</button>
+                        </div>
                     </div>
-                    
-                    <!-- Dropdown Filter Kota -->
-                    <div class="w-full sm:w-auto">
-                        <select id="filter-kota-rs" onchange="renderRsDsa()" class="w-full sm:w-auto p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500 text-slate-700">
+                    <div class="grid grid-cols-3 gap-2 sm:gap-3 mt-5">
+                        <div class="rsdsa-stat"><span>Fasilitas</span><strong id="rsdsa-total-facilities">0</strong><small>tersimpan</small></div>
+                        <div class="rsdsa-stat"><span>Dokter anak</span><strong id="rsdsa-total-doctors">0</strong><small>terdaftar</small></div>
+                        <div class="rsdsa-stat"><span>Fasilitas utama</span><strong id="rsdsa-main-count">0</strong><small>pilihan keluarga</small></div>
+                    </div>
+                </div>
+
+                <div class="rsdsa-toolbar rounded-2xl p-3 sm:p-4 space-y-2.5">
+                    <label class="rsdsa-search w-full">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input id="rs-dsa-search" type="search" oninput="renderRsDsa()" placeholder="Cari nama RS, dokter, kota, atau alamat..." autocomplete="off" aria-label="Cari rumah sakit atau dokter anak">
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <select id="filter-kota-rs" onchange="renderRsDsa()" class="rsdsa-filter" aria-label="Filter kota">
                             <option value="Semua">Semua Kota</option>
-                            <!-- Pilihan kota akan di-generate otomatis oleh JS -->
+                        </select>
+                        <select id="filter-tipe-rs" onchange="renderRsDsa()" class="rsdsa-filter" aria-label="Filter jenis fasilitas">
+                            <option value="Semua">Semua Jenis Fasilitas</option>
+                            <option value="Rumah Sakit">Rumah Sakit</option>
+                            <option value="Klinik">Klinik</option>
+                            <option value="Praktik Dokter">Praktik Dokter</option>
+                            <option value="Lainnya">Lainnya</option>
                         </select>
                     </div>
                 </div>
-            
-                <!-- Tombol Tambah RS -->
-                <button onclick="openModalRs()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-2xl transition shadow-md shadow-blue-500/30">
-                    <i class="fa-solid fa-plus mr-1"></i> Tambah Rumah Sakit / Klinik
-                </button>
-            
-                <!-- Wadah Daftar Kartu RS -->
-                <div id="rs-dsa-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    <!-- Kartu RS akan masuk ke sini -->
+
+                <div class="flex items-center justify-between gap-3 px-1">
+                    <div class="min-w-0"><h3 class="text-base sm:text-lg font-extrabold text-slate-800 dark:text-white">Direktori Fasilitas</h3><p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">Pilih fasilitas untuk melihat kontak dan jadwal dokter anak.</p></div>
+                    <span id="rsdsa-result-count" class="rsdsa-result-count">0 fasilitas</span>
                 </div>
+                <div id="rs-dsa-list" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4"></div>
             </section>
 
             <!-- TAB 5: MEDIS -->
@@ -5871,6 +5994,36 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         </div>
     </div>
 
+    <!-- RS & DSA DETAIL MODAL: responsive sheet with fixed actions -->
+    <div id="modal-rs-dsa-detail" class="fixed inset-0 z-[90] hidden items-center justify-center bg-slate-950/55 backdrop-blur-sm p-3" onclick="if(event.target===this)closeRsDsaDetail()" aria-modal="true" role="dialog" aria-labelledby="rsdsa-detail-title">
+        <div class="rsdsa-detail-dialog">
+            <div class="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="min-w-0"><span class="text-[9px] font-extrabold uppercase tracking-[.15em] text-sky-600 dark:text-sky-300">Profil fasilitas kesehatan</span><h2 id="rsdsa-detail-title" class="text-base sm:text-lg font-extrabold text-slate-800 dark:text-white truncate">Detail Fasilitas</h2></div>
+                <button type="button" onclick="closeRsDsaDetail()" class="w-10 h-10 shrink-0 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-200" aria-label="Tutup detail"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="rsdsa-detail-content" class="rsdsa-detail-scroll p-3 sm:p-5 space-y-3"></div>
+            <div class="rsdsa-detail-actions">
+                <button type="button" onclick="deleteRsDsaFromDetail()" class="bg-rose-50 text-rose-700 border border-rose-100 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-900"><i class="fa-solid fa-trash mr-1"></i> Hapus</button>
+                <button type="button" onclick="editRsDsaFromDetail()" class="bg-sky-600 hover:bg-sky-700 text-white"><i class="fa-solid fa-pen mr-1"></i> Edit Fasilitas</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COPY FACILITY / PEDIATRICIAN DATA FROM PRENATAL DIRECTORY -->
+    <div id="modal-rs-dsa-import" class="fixed inset-0 z-[90] hidden items-center justify-center bg-slate-950/55 backdrop-blur-sm p-3" onclick="if(event.target===this)closeRsDsaImportModal()" aria-modal="true" role="dialog" aria-labelledby="rsdsa-import-title">
+        <div class="w-full max-w-lg max-h-[90dvh] overflow-hidden rounded-3xl bg-white dark:bg-slate-800 shadow-2xl flex flex-col">
+            <div class="px-4 sm:px-5 py-4 border-b border-slate-100 dark:border-slate-700 flex items-start justify-between gap-3">
+                <div><h2 id="rsdsa-import-title" class="text-base font-extrabold text-slate-800 dark:text-white">Salin dari RS &amp; Obgyn</h2><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Pilih fasilitas yang ingin disalin. Data fase kehamilan tidak akan dipindahkan atau diubah.</p></div>
+                <button type="button" onclick="closeRsDsaImportModal()" class="w-9 h-9 shrink-0 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-500" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="rsdsa-import-options" class="p-4 space-y-2 overflow-y-auto flex-1"></div>
+            <div class="px-4 py-3 border-t border-slate-100 dark:border-slate-700 flex gap-2">
+                <button type="button" onclick="closeRsDsaImportModal()" class="flex-1 min-h-[44px] rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 text-xs font-bold">Batal</button>
+                <button type="button" onclick="executeRsDsaImport()" class="flex-1 min-h-[44px] rounded-xl bg-sky-600 text-white text-xs font-bold"><i class="fa-solid fa-copy mr-1"></i> Salin Pilihan</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL TAMBAH/EDIT RUMAH SAKIT -->
     <div id="modal-rs" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm px-4">
         <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-3xl p-6 shadow-xl max-h-[90vh] overflow-y-auto">
@@ -5882,21 +6035,52 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Nama Rumah Sakit <span class="text-red-500">*</span></label>
                     <input type="text" id="rs-nama" class="w-full p-3 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm">
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Kota <span class="text-red-500">*</span></label>
-                    <input type="text" id="rs-kota" class="w-full p-3 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="rsdsa-field-label">Jenis fasilitas</label>
+                        <select id="rs-tipe" class="rsdsa-input"><option value="Rumah Sakit">Rumah Sakit</option><option value="Klinik">Klinik</option><option value="Praktik Dokter">Praktik Dokter</option><option value="Lainnya">Lainnya</option></select>
+                    </div>
+                    <div>
+                        <label class="rsdsa-field-label">Kota / area <span class="text-rose-500">*</span></label>
+                        <input type="text" id="rs-kota" class="rsdsa-input" placeholder="Contoh: Madiun">
+                    </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Alamat Lengkap</label>
-                    <textarea id="rs-alamat" rows="2" class="w-full p-3 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm"></textarea>
+                    <label class="rsdsa-field-label">Alamat lengkap</label>
+                    <textarea id="rs-alamat" rows="2" class="rsdsa-input" placeholder="Alamat fasilitas"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">URL Foto RS (Opsional)</label>
-                    <input type="url" id="rs-foto" class="w-full p-3 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl text-sm" placeholder="https://...">
+                    <label class="rsdsa-field-label">URL foto fasilitas (opsional)</label>
+                    <input type="url" id="rs-foto" class="rsdsa-input" placeholder="https://...">
+                </div>
+
+                <div class="rsdsa-form-section space-y-3">
+                    <div class="rsdsa-form-section-title"><i class="fa-solid fa-address-book text-sky-600 mr-1"></i> Kontak &amp; akses</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div><label class="rsdsa-field-label">Telepon fasilitas</label><input type="tel" id="rs-phone" class="rsdsa-input" placeholder="Nomor telepon"></div>
+                        <div><label class="rsdsa-field-label">WhatsApp pendaftaran</label><input type="tel" id="rs-whatsapp" class="rsdsa-input" placeholder="62812... atau 08..."></div>
+                    </div>
+                    <div><label class="rsdsa-field-label">Google Maps</label><input type="url" id="rs-maps" class="rsdsa-input" placeholder="https://maps.google.com/..."></div>
+                    <div><label class="rsdsa-field-label">Website / pendaftaran online</label><input type="url" id="rs-web" class="rsdsa-input" placeholder="https://..."></div>
+                </div>
+                <div class="rsdsa-form-section space-y-2">
+                    <div class="rsdsa-form-section-title"><i class="fa-solid fa-stethoscope text-emerald-600 mr-1"></i> Layanan kesehatan anak</div>
+                    <label class="rsdsa-field-label">Layanan yang sudah dikonfirmasi (pisahkan dengan koma)</label>
+                    <input type="text" id="rs-layanan" class="rsdsa-input" placeholder="Misal: Poli Anak, IGD 24 Jam, NICU">
+                </div>
+                <div class="rsdsa-form-section space-y-3">
+                    <div class="rsdsa-form-section-title"><i class="fa-solid fa-circle-check text-amber-600 mr-1"></i> Verifikasi informasi</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div><label class="rsdsa-field-label">Tanggal info fasilitas dicek</label><input type="date" id="rs-facility-verified" class="rsdsa-input"></div>
+                        <div><label class="rsdsa-field-label">Sumber info fasilitas</label><input type="text" id="rs-facility-source" class="rsdsa-input" placeholder="Website resmi / telepon RS"></div>
+                        <div><label class="rsdsa-field-label">Tanggal jadwal dokter dicek</label><input type="date" id="rs-doctor-verified" class="rsdsa-input"></div>
+                        <div><label class="rsdsa-field-label">Sumber jadwal dokter</label><input type="text" id="rs-doctor-source" class="rsdsa-input" placeholder="Admin RS / WhatsApp dokter"></div>
+                    </div>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-500">Tanggal hanya diperbarui saat informasi benar-benar dikonfirmasi. Aplikasi tidak menganggap jadwal lama sebagai jadwal terbaru.</p>
                 </div>
                 
-                <div class="border-t border-slate-100 dark:border-slate-700 pt-4 mt-2">
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">Tautan Ekstra (Web, IG, Maps)</label>
+                <div class="rsdsa-form-section">
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">Tautan ekstra (mis. Instagram atau tautan lain)</label>
                     <div id="rs-links-container" class="space-y-2 mb-3"></div>
                     <button onclick="addRsLinkRow()" class="text-xs font-bold text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-3 py-2 rounded-lg w-full text-center hover:bg-blue-100 dark:hover:bg-blue-800">
                         <i class="fa-solid fa-plus mr-1"></i> Tambah Tautan
@@ -11494,7 +11678,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.23',
+                    appVersion: '6.13.24',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -13037,224 +13221,394 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             if (typeof renderPostnatalStimulationDashboardWidget === 'function') renderPostnatalStimulationDashboardWidget();
         }
 
-        // 1. Inisialisasi State (Wajib)
-        if (!appState.rsDsa) {
-            appState.rsDsa = [];
-        }
-        
-        // 2. Fungsi Utama Menampilkan Data
-        function renderRsDsa() {
-            const container = document.getElementById('rs-dsa-list');
-            const filterKota = document.getElementById('filter-kota-rs');
-            if (!container) return; 
-        
-            const semuaKota = [...new Set(appState.rsDsa.map(rs => rs.kota))].filter(Boolean);
-            let opsiKota = '<option value="Semua">Semua Kota</option>';
-            semuaKota.forEach(kota => {
-                opsiKota += `<option value="${kota}" ${filterKota.value === kota ? 'selected' : ''}>${kota}</option>`;
-            });
-            filterKota.innerHTML = opsiKota;
-            filterKota.value = filterKota.value || 'Semua';
-        
-            let dataTampil = filterKota.value !== 'Semua' ? appState.rsDsa.filter(rs => rs.kota === filterKota.value) : appState.rsDsa;
-            dataTampil.sort((a, b) => (b.isUtama ? 1 : 0) - (a.isUtama ? 1 : 0));
-        
-            if (dataTampil.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center p-8 text-slate-500">Belum ada data RS/Klinik di area ini.</div>`;
-                return;
-            }
-        
-            let html = '';
-            dataTampil.forEach(rs => {
-                let dsaListHtml = '<div class="text-sm text-slate-500 dark:text-slate-400 italic">Belum ada data dokter</div>';
-                let dsaDetailHtml = '';
-        
-                if (rs.dsa && rs.dsa.length > 0) {
-                    dsaListHtml = rs.dsa.map(d => `<li class="text-sm text-slate-600 dark:text-slate-400">• ${d.nama} ${d.isFavorite ? '⭐' : ''}</li>`).join('');
-                    
-                    rs.dsa.forEach(dokter => {
-                        let jadwalHtml = '';
-                        if (dokter.jadwal && dokter.jadwal.length > 0) {
-                            dokter.jadwal.forEach(j => {
-                                jadwalHtml += `<div class="flex justify-between text-sm text-slate-600 dark:text-slate-400">
-                                    <span>${j.hari}</span>
-                                    <span class="font-medium">${j.mulai} - ${j.selesai}</span>
-                                </div>`;
-                            });
-                        } else {
-                            jadwalHtml = `<div class="text-sm text-slate-500 dark:text-slate-400 italic">Belum ada jadwal</div>`;
-                        }
-        
-                        dsaDetailHtml += `
-                        <div class="border-t border-slate-200 dark:border-slate-700 py-4 mt-2">
-                            <div class="flex justify-between items-start mb-3">
-                                <div>
-                                    <h5 class="font-bold text-slate-800 dark:text-white">${dokter.nama}</h5>
-                                    ${dokter.catatan ? `<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 italic">"${dokter.catatan}"</p>` : ''}
-                                </div>
-                                <button onclick="toggleFavoriteDsa('${rs.id}', '${dokter.id}')" class="text-xl ${dokter.isFavorite ? 'text-yellow-400' : 'text-slate-400 hover:text-yellow-500 dark:text-slate-600 dark:hover:text-yellow-400'} transition">
-                                    <i class="fa-solid fa-star"></i>
-                                </button>
-                            </div>
-                            
-                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl mb-3 border border-slate-200 dark:border-slate-700">
-                                <h6 class="text-xs font-bold text-slate-600 dark:text-slate-400 mb-2 border-b border-slate-200 dark:border-slate-700 pb-1">Jadwal Praktik:</h6>
-                                <div class="space-y-1">${jadwalHtml}</div>
-                            </div>
-                            
-                            <div class="flex flex-wrap gap-2">
-                                ${dokter.kontak ? `<a href="https://wa.me/${dokter.kontak.replace(/^0/, '62')}" target="_blank" class="text-xs bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1.5 rounded-lg font-bold hover:bg-green-100 dark:hover:bg-green-900/50"><i class="fa-brands fa-whatsapp mr-1"></i> WA</a>` : ''}
-                                <button onclick="openModalDsa('${rs.id}', '${dokter.id}')" class="text-xs bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg font-bold hover:bg-slate-200 dark:hover:bg-slate-600"><i class="fa-solid fa-pen mr-1"></i> Edit</button>
-                                <button onclick="deleteDsa('${rs.id}', '${dokter.id}')" class="text-xs bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-3 py-1.5 rounded-lg font-bold hover:bg-red-100 dark:hover:bg-red-900/50"><i class="fa-solid fa-trash mr-1"></i> Hapus</button>
-                            </div>
-                        </div>`;
-                    });
-                }
-        
-                let linksHtml = '';
-                if (rs.links && rs.links.length > 0) {
-                    linksHtml = `<div class="flex flex-wrap gap-2 mt-3">` + rs.links.map(l => {
-                        let icon = l.tipe === 'IG' ? 'fa-instagram' : l.tipe === 'WA' ? 'fa-whatsapp' : l.tipe === 'Maps' ? 'fa-map-location-dot' : l.tipe === 'Web' ? 'fa-globe' : 'fa-link';
-                        return `<a href="${l.url}" target="_blank" class="text-xs border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"><i class="fa-solid ${icon} mr-1"></i>${l.tipe}</a>`;
-                    }).join('') + `</div>`;
-                }
-        
-                const fotoUrl = rs.foto || 'https://via.placeholder.com/400x200?text=Foto+Rumah+Sakit';
-        
-                html += `
-                <div class="bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden shadow-lg flex flex-col">
-                    <div class="relative h-48 bg-slate-100 dark:bg-slate-800">
-                        <img src="${fotoUrl}" class="w-full h-full object-cover opacity-80" alt="Foto RS">
-                        <button onclick="setUtamaRs('${rs.id}')" class="absolute top-3 right-3 bg-black/50 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full hover:bg-black/70 border border-white/20 transition">
-                            <i class="fa-solid fa-star ${rs.isUtama ? 'text-yellow-400' : 'text-white'} mr-1"></i> ${rs.isUtama ? 'RS Utama' : 'Pilih Utama'}
-                        </button>
-                    </div>
-                    
-                    <div class="p-5 flex-1 flex flex-col">
-                        <h4 class="font-bold text-xl text-slate-800 dark:text-white mb-1">${rs.nama}</h4>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4"><i class="fa-solid fa-location-dot mr-1"></i>${rs.alamat || rs.kota}</p>
-                        ${linksHtml}
-                        
-                        <div class="mt-4 flex-1">
-                            <p class="text-sm font-bold text-blue-600 dark:text-blue-400 mb-1"><i class="fa-solid fa-user-doctor mr-1"></i> Dokter Anak:</p>
-                            <ul class="space-y-1">${dsaListHtml}</ul>
-                        </div>
-                        
-                        <div class="flex gap-2 mt-5">
-                            <button onclick="openModalRs('${rs.id}')" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteRs('${rs.id}')" class="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 w-10 h-10 rounded-xl flex items-center justify-center hover:bg-red-100 dark:hover:bg-red-900/50"><i class="fa-solid fa-trash"></i></button>
-                            <button onclick="toggleDetailRs('${rs.id}')" class="flex-1 bg-blue-50 dark:bg-blue-600/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-600/30 py-2 rounded-xl text-sm font-bold hover:bg-blue-100 dark:hover:bg-blue-600/40 transition">Lihat Detail & Jadwal ➔</button>
-                        </div>
-        
-                        <!-- AREA DETAIL DAN JADWAL (TERSEMBUNYI DEFAULT) -->
-                        <div id="detail-rs-${rs.id}" class="hidden mt-4 border-t border-slate-200 dark:border-slate-700 pt-4 transition-all">
-                            <h5 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Detail Jadwal Dokter:</h5>
-                            ${dsaDetailHtml}
-                            <button onclick="openModalDsa('${rs.id}')" class="w-full mt-4 border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 text-sm font-bold py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                                <i class="fa-solid fa-plus mr-1"></i> Tambah Dokter (DSA)
-                            </button>
-                        </div>
-                    </div>
-                </div>`;
-            });
-            container.innerHTML = html;
+        // RS & DSA — FAMILY PEDIATRIC HEALTHCARE DIRECTORY (6.13.24)
+        // New fields are optional; legacy rsDsa records remain readable and editable.
+        if (!Array.isArray(appState.rsDsa)) appState.rsDsa = [];
+        let activeRsDsaDetailId = null;
+
+        function rsDsaEscapeHtml(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+                '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+            }[ch]));
         }
 
-        function toggleDetailRs(rsId) {
-            const detailDiv = document.getElementById(`detail-rs-${rsId}`);
-            if (detailDiv) {
-                detailDiv.classList.toggle('hidden');
-            }
+        function rsDsaSafeUrl(value) {
+            const raw = String(value || '').trim();
+            if (!raw) return '';
+            try {
+                const candidate = /^https?:\/\//i.test(raw) ? raw : 'https://' + raw;
+                const parsed = new URL(candidate);
+                return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : '';
+            } catch (_) { return ''; }
         }
-        
-        // 3. Sistem Modal & Simpan Data RS
+
+        function rsDsaDigits(value) { return String(value || '').replace(/[^0-9]/g, ''); }
+        function rsDsaWaNumber(value) {
+            let digits = rsDsaDigits(value);
+            if (digits.startsWith('0')) digits = '62' + digits.slice(1);
+            return digits;
+        }
+        function rsDsaType(rs) {
+            const raw = String(rs && (rs.tipe || rs.type) || '').trim().toLowerCase();
+            if (raw.includes('klinik')) return 'Klinik';
+            if (raw.includes('praktik') || raw.includes('praktek')) return 'Praktik Dokter';
+            if (raw.includes('rumah sakit') || raw === 'rs') return 'Rumah Sakit';
+            return raw ? 'Lainnya' : 'Rumah Sakit';
+        }
+        function rsDsaDoctorCount(rs) { return Array.isArray(rs && rs.dsa) ? rs.dsa.length : 0; }
+        function rsDsaFind(id) { return appState.rsDsa.find(rs => String(rs.id) === String(id)); }
+        function rsDsaLink(rs, type) {
+            const links = Array.isArray(rs && rs.links) ? rs.links : [];
+            const item = links.find(link => String(link.tipe || '').toLowerCase() === String(type).toLowerCase() && link.url);
+            return item ? String(item.url).trim() : '';
+        }
+        function rsDsaFacilityPhone(rs) { return String(rs && (rs.phone || rs.telepon) || rsDsaLink(rs, 'Telepon') || '').trim(); }
+        function rsDsaFacilityWa(rs) { return String(rs && (rs.whatsapp || rs.wa) || rsDsaLink(rs, 'WA') || '').trim(); }
+        function rsDsaFacilityMaps(rs) { return rsDsaSafeUrl(rs && (rs.mapsUrl || rs.maps) || rsDsaLink(rs, 'Maps')); }
+        function rsDsaFacilityWeb(rs) { return rsDsaSafeUrl(rs && (rs.web || rs.website) || rsDsaLink(rs, 'Web')); }
+        function rsDsaServices(rs) {
+            const raw = rs && (rs.layananAnak || rs.services || rs.layanan);
+            if (Array.isArray(raw)) return raw.map(x => String(x || '').trim()).filter(Boolean);
+            return String(raw || '').split(/[,;\n]/).map(x => x.trim()).filter(Boolean);
+        }
+        function rsDsaDisplaySchedule(dsa) {
+            const sessions = Array.isArray(dsa && dsa.jadwal) ? dsa.jadwal.filter(j => j && j.hari && j.mulai && j.selesai) : [];
+            if (sessions.length) return sessions.map(j => `${j.hari}: ${j.mulai}–${j.selesai}`).join(' · ');
+            return String(dsa && (dsa.legacyScheduleText || dsa.schedule) || '').trim();
+        }
+
+        function renderRsDsa() {
+            const container = document.getElementById('rs-dsa-list');
+            const cityFilter = document.getElementById('filter-kota-rs');
+            const typeFilter = document.getElementById('filter-tipe-rs');
+            const searchInput = document.getElementById('rs-dsa-search');
+            if (!container || !cityFilter || !typeFilter) return;
+            const facilities = Array.isArray(appState.rsDsa) ? appState.rsDsa : [];
+            const currentCity = cityFilter.value || 'Semua';
+            const currentType = typeFilter.value || 'Semua';
+            const currentSearch = searchInput ? searchInput.value : '';
+
+            const cities = [...new Set(facilities.map(rs => String(rs.kota || '').trim()).filter(Boolean))]
+                .sort((a,b) => a.localeCompare(b, 'id'));
+            cityFilter.innerHTML = '<option value="Semua">Semua Kota</option>' + cities.map(city =>
+                `<option value="${rsDsaEscapeHtml(city)}">${rsDsaEscapeHtml(city)}</option>`
+            ).join('');
+            cityFilter.value = cities.includes(currentCity) ? currentCity : 'Semua';
+            typeFilter.value = ['Semua','Rumah Sakit','Klinik','Praktik Dokter','Lainnya'].includes(currentType) ? currentType : 'Semua';
+
+            const search = String(currentSearch || '').trim().toLocaleLowerCase('id-ID');
+            const filtered = facilities.filter(rs => {
+                const doctors = Array.isArray(rs.dsa) ? rs.dsa : [];
+                const haystack = [rs.nama, rs.kota, rs.alamat, rs.tipe, rs.type,
+                    ...doctors.flatMap(d => [d.nama, d.name, d.catatan, d.legacyScheduleText])]
+                    .filter(Boolean).join(' ').toLocaleLowerCase('id-ID');
+                const cityMatch = cityFilter.value === 'Semua' || String(rs.kota || '').trim() === cityFilter.value;
+                const typeMatch = typeFilter.value === 'Semua' || rsDsaType(rs) === typeFilter.value;
+                return cityMatch && typeMatch && (!search || haystack.includes(search));
+            }).sort((a,b) => Number(Boolean(b.isUtama)) - Number(Boolean(a.isUtama)) ||
+                String(a.nama || '').localeCompare(String(b.nama || ''), 'id'));
+
+            const totalDoctors = facilities.reduce((sum, rs) => sum + rsDsaDoctorCount(rs), 0);
+            const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+            setText('rsdsa-total-facilities', facilities.length);
+            setText('rsdsa-total-doctors', totalDoctors);
+            setText('rsdsa-main-count', facilities.filter(rs => rs.isUtama).length);
+            setText('rsdsa-result-count', `${filtered.length} fasilitas`);
+
+            if (!filtered.length) {
+                container.innerHTML = `<div class="rsdsa-empty"><div class="text-3xl mb-2"><i class="fa-solid fa-hospital"></i></div><strong class="block text-sm text-slate-700 dark:text-slate-200">${facilities.length ? 'Tidak ada hasil yang cocok' : 'Direktori masih kosong'}</strong><p class="mt-1 text-xs">${facilities.length ? 'Coba ubah kata pencarian atau filter kota dan jenis fasilitas.' : 'Tambahkan fasilitas kesehatan anak atau salin data dari RS & Obgyn fase kehamilan.'}</p></div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(rs => {
+                const id = rsDsaEscapeHtml(rs.id);
+                const photo = rsDsaSafeUrl(rs.foto || (Array.isArray(rs.images) ? rs.images[0] : ''));
+                const doctors = Array.isArray(rs.dsa) ? rs.dsa : [];
+                const doctorsSorted = doctors.slice().sort((a,b) => Number(Boolean(b.isFavorite)) - Number(Boolean(a.isFavorite)));
+                const doctorPreview = doctors.length
+                    ? doctorsSorted.slice(0,2).map(d => `${d.isFavorite ? '★ ' : ''}${rsDsaEscapeHtml(d.nama || d.name || 'Dokter anak')}`).join(' · ') + (doctors.length > 2 ? ` +${doctors.length-2} lainnya` : '')
+                    : 'Belum ada dokter yang dicatat';
+                const phone = rsDsaFacilityPhone(rs);
+                const wa = rsDsaFacilityWa(rs);
+                const map = rsDsaFacilityMaps(rs);
+                const contactCount = [phone,wa,map].filter(Boolean).length;
+                const location = [rs.alamat,rs.kota].filter(Boolean).join(' · ') || 'Alamat belum dicatat';
+                const serviceCount = rsDsaServices(rs).length;
+                return `<article class="rsdsa-card ${rs.isUtama ? 'is-main' : ''}">
+                    <div class="rsdsa-card-media">
+                        ${photo ? `<img src="${rsDsaEscapeHtml(photo)}" alt="${rsDsaEscapeHtml(rs.nama || 'Foto fasilitas kesehatan')}" loading="lazy" onerror="this.style.display='none'">` : ''}
+                        ${!photo ? '<div class="rsdsa-media-fallback"><i class="fa-solid fa-hospital"></i></div>' : ''}
+                        <span class="rsdsa-card-badge">${rsDsaEscapeHtml(rsDsaType(rs))}</span>
+                        ${rs.isUtama ? '<span class="rsdsa-card-main-badge"><i class="fa-solid fa-star"></i> Utama</span>' : ''}
+                    </div>
+                    <div class="rsdsa-card-body">
+                        <div class="min-w-0"><h3 class="rsdsa-card-title">${rsDsaEscapeHtml(rs.nama || 'Fasilitas kesehatan')}</h3><p class="rsdsa-card-location"><i class="fa-solid fa-location-dot mr-1"></i>${rsDsaEscapeHtml(location)}</p></div>
+                        <div class="rsdsa-card-meta"><span class="rsdsa-chip rsdsa-chip-blue"><i class="fa-solid fa-user-doctor"></i>${doctors.length} dokter anak</span><span class="rsdsa-chip"><i class="fa-solid fa-link"></i>${contactCount} akses kontak</span>${serviceCount ? `<span class="rsdsa-chip"><i class="fa-solid fa-stethoscope"></i>${serviceCount} layanan</span>` : ''}</div>
+                        <div class="rsdsa-doctor-preview"><strong><i class="fa-solid fa-stethoscope text-sky-600 mr-1"></i> Dokter anak</strong>${doctorPreview}</div>
+                        <div class="rsdsa-card-actions">
+                            <button type="button" onclick="openRsDsaDetail('${id}')" class="rsdsa-detail-button"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Detail &amp; Jadwal</button>
+                            <button type="button" onclick="setUtamaRs('${id}')" class="rsdsa-icon-button" title="${rs.isUtama ? 'Batalkan fasilitas utama' : 'Jadikan fasilitas utama'}" aria-label="${rs.isUtama ? 'Batalkan fasilitas utama' : 'Jadikan fasilitas utama'}"><i class="fa-solid fa-star ${rs.isUtama ? 'text-amber-500' : ''}"></i></button>
+                        </div>
+                    </div>
+                </article>`;
+            }).join('');
+        }
+
+        function openRsDsaDetail(id) {
+            const rs = rsDsaFind(id);
+            if (!rs) return;
+            activeRsDsaDetailId = String(rs.id);
+            const modal = document.getElementById('modal-rs-dsa-detail');
+            const title = document.getElementById('rsdsa-detail-title');
+            const content = document.getElementById('rsdsa-detail-content');
+            if (!modal || !title || !content) return;
+            title.textContent = rs.nama || 'Detail Fasilitas';
+
+            const phone = rsDsaFacilityPhone(rs);
+            const phoneDigits = rsDsaDigits(phone);
+            const wa = rsDsaWaNumber(rsDsaFacilityWa(rs));
+            const maps = rsDsaFacilityMaps(rs);
+            const web = rsDsaFacilityWeb(rs);
+            let contactHtml = '';
+            if (phoneDigits) contactHtml += `<a class="rsdsa-contact-link" href="tel:${phoneDigits}"><i class="fa-solid fa-phone text-emerald-600"></i> Telepon</a>`;
+            if (wa) contactHtml += `<a class="rsdsa-contact-link" href="https://wa.me/${wa}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp text-green-600"></i> WhatsApp</a>`;
+            if (maps) contactHtml += `<a class="rsdsa-contact-link" href="${rsDsaEscapeHtml(maps)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot text-sky-600"></i> Google Maps</a>`;
+            if (web) contactHtml += `<a class="rsdsa-contact-link" href="${rsDsaEscapeHtml(web)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-globe text-indigo-600"></i> Website</a>`;
+            if (!contactHtml) contactHtml = '<p class="text-[11px] text-slate-400 italic">Kontak dan tautan fasilitas belum dicatat.</p>';
+
+            const services = rsDsaServices(rs);
+            const servicesHtml = services.length ? `<div class="flex flex-wrap gap-1.5">${services.map(service => `<span class="rsdsa-chip rsdsa-chip-blue">${rsDsaEscapeHtml(service)}</span>`).join('')}</div>` : '<p class="text-[11px] text-slate-400 italic">Belum ada layanan anak yang dicatat.</p>';
+            const doctors = Array.isArray(rs.dsa) ? rs.dsa : [];
+            const doctorsSorted = doctors.slice().sort((a,b) => Number(Boolean(b.isFavorite)) - Number(Boolean(a.isFavorite)));
+            const doctorsHtml = doctors.length ? doctorsSorted.map((d, index) => {
+                const name = d.nama || d.name || 'Dokter anak';
+                const schedule = Array.isArray(d.jadwal) ? d.jadwal.filter(j => j && j.hari && j.mulai && j.selesai) : [];
+                const scheduleHtml = schedule.length
+                    ? schedule.map(j => `<div class="rsdsa-schedule-row"><span class="rsdsa-schedule-day">${rsDsaEscapeHtml(j.hari)}</span><span class="rsdsa-schedule-time">${rsDsaEscapeHtml(j.mulai)} – ${rsDsaEscapeHtml(j.selesai)}</span></div>`).join('')
+                    : (d.legacyScheduleText || d.schedule ? `<p class="mt-1 text-[10px] text-slate-500 dark:text-slate-400">${rsDsaEscapeHtml(d.legacyScheduleText || d.schedule)}</p>` : '<p class="mt-1 text-[10px] text-slate-400 italic">Jadwal belum dicatat.</p>');
+                const dsaPhone = rsDsaWaNumber(d.kontak || d.whatsapp || '');
+                return `<article class="rsdsa-doctor-card">
+                    <div class="flex items-start justify-between gap-2"><div class="min-w-0"><h4 class="text-xs font-extrabold text-slate-800 dark:text-white">${rsDsaEscapeHtml(name)}</h4>${d.catatan ? `<p class="mt-1 text-[10px] text-slate-500 dark:text-slate-400">${rsDsaEscapeHtml(d.catatan)}</p>` : ''}</div><button type="button" onclick="toggleFavoriteDsa('${rsDsaEscapeHtml(rs.id)}','${rsDsaEscapeHtml(d.id)}')" class="min-w-[42px] min-h-[42px] rounded-xl ${d.isFavorite ? 'bg-amber-50 text-amber-500 dark:bg-amber-950/40' : 'bg-slate-50 text-slate-300 dark:bg-slate-700'}" aria-label="${d.isFavorite ? 'Hapus dokter dari favorit' : 'Jadikan dokter favorit'}"><i class="fa-solid fa-star"></i></button></div>
+                    <div class="mt-2"><div class="text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Jadwal praktik</div>${scheduleHtml}</div>
+                    <div class="flex flex-wrap gap-2 mt-2"><button type="button" onclick="openModalDsa('${rsDsaEscapeHtml(rs.id)}','${rsDsaEscapeHtml(d.id)}')" class="min-h-[38px] px-3 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 text-[10px] font-bold"><i class="fa-solid fa-pen mr-1"></i>Edit</button><button type="button" onclick="deleteDsa('${rsDsaEscapeHtml(rs.id)}','${rsDsaEscapeHtml(d.id)}')" class="min-h-[38px] px-3 rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 text-[10px] font-bold"><i class="fa-solid fa-trash mr-1"></i>Hapus</button>${dsaPhone ? `<a href="https://wa.me/${dsaPhone}" target="_blank" rel="noopener noreferrer" class="min-h-[38px] px-3 inline-flex items-center rounded-lg bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-300 text-[10px] font-bold"><i class="fa-brands fa-whatsapp mr-1"></i>WhatsApp</a>` : ''}</div>
+                </article>`;
+            }).join('') : '<div class="rounded-xl border border-dashed border-slate-300 dark:border-slate-600 p-4 text-center text-[11px] text-slate-400">Belum ada dokter anak. Tambahkan profil dokter beserta jadwal yang sudah dikonfirmasi.</div>';
+
+            const facilityVerified = rs.facilityVerifiedAt || rs.infoVerifiedAt || '';
+            const facilitySource = rs.facilitySource || rs.infoSource || '';
+            const doctorVerified = rs.doctorVerifiedAt || '';
+            const doctorSource = rs.doctorSource || '';
+            const location = [rs.alamat,rs.kota].filter(Boolean).join(' · ') || 'Alamat belum dicatat';
+            content.innerHTML = `
+                <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+                    ${rsDsaSafeUrl(rs.foto) ? `<img src="${rsDsaEscapeHtml(rsDsaSafeUrl(rs.foto))}" alt="${rsDsaEscapeHtml(rs.nama || 'Foto fasilitas')}" class="w-full h-36 sm:h-44 object-cover" onerror="this.style.display='none'">` : '<div class="h-24 flex items-center justify-center text-4xl text-sky-600 bg-gradient-to-r from-sky-50 to-emerald-50 dark:from-slate-800 dark:to-slate-700"><i class="fa-solid fa-hospital"></i></div>'}
+                    <div class="p-3"><div class="flex flex-wrap gap-1.5 mb-2"><span class="rsdsa-chip rsdsa-chip-blue">${rsDsaEscapeHtml(rsDsaType(rs))}</span>${rs.isUtama ? '<span class="rsdsa-chip" style="background:#fef3c7;color:#92400e"><i class="fa-solid fa-star"></i> Fasilitas utama</span>' : ''}</div><p class="text-[11px] text-slate-600 dark:text-slate-300"><i class="fa-solid fa-location-dot text-sky-600 mr-1"></i>${rsDsaEscapeHtml(location)}</p></div>
+                </div>
+                <section class="rsdsa-section-card"><h3 class="rsdsa-section-title"><i class="fa-solid fa-address-book text-sky-600 mr-1"></i> Kontak &amp; navigasi</h3><div class="flex flex-wrap gap-2">${contactHtml}</div></section>
+                <section class="rsdsa-section-card"><h3 class="rsdsa-section-title"><i class="fa-solid fa-stethoscope text-emerald-600 mr-1"></i> Layanan kesehatan anak</h3>${servicesHtml}</section>
+                <section class="rsdsa-section-card"><div class="flex items-center justify-between gap-2 mb-2"><h3 class="rsdsa-section-title mb-0"><i class="fa-solid fa-user-doctor text-sky-600 mr-1"></i> Dokter anak &amp; jadwal praktik</h3><button type="button" onclick="openModalDsa('${rsDsaEscapeHtml(rs.id)}')" class="min-h-[38px] px-3 rounded-lg bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 text-[10px] font-extrabold"><i class="fa-solid fa-plus mr-1"></i>Tambah</button></div><div class="space-y-2">${doctorsHtml}</div></section>
+                <section class="rsdsa-section-card"><h3 class="rsdsa-section-title"><i class="fa-solid fa-shield-check text-amber-600 mr-1"></i> Verifikasi informasi</h3><div class="rsdsa-verify-box"><div class="rsdsa-verify-item"><strong>Informasi fasilitas</strong><span>Dicek: ${rsDsaEscapeHtml(facilityVerified ? hospitalDateLabel(facilityVerified) : 'Belum dicatat')}<br>Sumber: ${rsDsaEscapeHtml(facilitySource || 'Belum dicatat')}</span></div><div class="rsdsa-verify-item"><strong>Jadwal dokter</strong><span>Dicek: ${rsDsaEscapeHtml(doctorVerified ? hospitalDateLabel(doctorVerified) : 'Belum dicatat')}<br>Sumber: ${rsDsaEscapeHtml(doctorSource || 'Belum dicatat')}</span></div></div><p class="mt-2 text-[9px] text-slate-400">Informasi ini adalah catatan keluarga dan perlu dikonfirmasi kembali kepada fasilitas kesehatan.</p></section>
+                ${rs.importedFromHospitalId ? '<p class="text-[9px] text-slate-400 px-1"><i class="fa-solid fa-copy mr-1"></i>Data dasar disalin dari direktori RS & Obgyn. Perubahan di kedua menu tidak saling menimpa.</p>' : ''}
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeRsDsaDetail() {
+            const modal = document.getElementById('modal-rs-dsa-detail');
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+            activeRsDsaDetailId = null;
+        }
+        function editRsDsaFromDetail() {
+            const id = activeRsDsaDetailId;
+            closeRsDsaDetail();
+            if (id) openModalRs(id);
+        }
+        function deleteRsDsaFromDetail() { if (activeRsDsaDetailId) deleteRs(activeRsDsaDetailId); }
+        function toggleDetailRs(rsId) { openRsDsaDetail(rsId); }
+
+        // Facility add/edit: preserve all existing record properties.
         function openModalRs(id = null) {
-            document.getElementById('modal-rs').classList.remove('hidden');
-            document.getElementById('modal-rs').classList.add('flex');
+            const modal = document.getElementById('modal-rs');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
             document.getElementById('rs-links-container').innerHTML = '';
-            
-            if (id) {
-                document.getElementById('modal-rs-title').innerText = 'Edit Rumah Sakit';
-                const rs = appState.rsDsa.find(item => item.id === id);
+            const fields = ['rs-id','rs-nama','rs-kota','rs-alamat','rs-foto','rs-tipe','rs-phone','rs-whatsapp','rs-maps','rs-web','rs-layanan','rs-facility-verified','rs-facility-source','rs-doctor-verified','rs-doctor-source'];
+            fields.forEach(field => { const el = document.getElementById(field); if (el) el.value = ''; });
+            const rs = id ? rsDsaFind(id) : null;
+            document.getElementById('modal-rs-title').innerText = rs ? 'Edit Fasilitas Kesehatan' : 'Tambah Fasilitas Kesehatan';
+            if (rs) {
                 document.getElementById('rs-id').value = rs.id;
-                document.getElementById('rs-nama').value = rs.nama;
-                document.getElementById('rs-kota').value = rs.kota;
+                document.getElementById('rs-nama').value = rs.nama || '';
+                document.getElementById('rs-kota').value = rs.kota || '';
                 document.getElementById('rs-alamat').value = rs.alamat || '';
                 document.getElementById('rs-foto').value = rs.foto || '';
-                if (rs.links) rs.links.forEach(l => addRsLinkRow(l.tipe, l.url));
+                document.getElementById('rs-tipe').value = rsDsaType(rs);
+                document.getElementById('rs-phone').value = rsDsaFacilityPhone(rs);
+                document.getElementById('rs-whatsapp').value = rsDsaFacilityWa(rs);
+                document.getElementById('rs-maps').value = rs.mapsUrl || rs.maps || rsDsaLink(rs,'Maps');
+                document.getElementById('rs-web').value = rs.web || rs.website || rsDsaLink(rs,'Web');
+                document.getElementById('rs-layanan').value = rsDsaServices(rs).join(', ');
+                document.getElementById('rs-facility-verified').value = rs.facilityVerifiedAt || rs.infoVerifiedAt || '';
+                document.getElementById('rs-facility-source').value = rs.facilitySource || rs.infoSource || '';
+                document.getElementById('rs-doctor-verified').value = rs.doctorVerifiedAt || '';
+                document.getElementById('rs-doctor-source').value = rs.doctorSource || '';
+                if (Array.isArray(rs.links)) rs.links.forEach(l => addRsLinkRow(l.tipe, l.url));
             } else {
-                document.getElementById('modal-rs-title').innerText = 'Tambah Rumah Sakit';
-                document.getElementById('rs-id').value = '';
-                document.getElementById('rs-nama').value = '';
-                document.getElementById('rs-kota').value = '';
-                document.getElementById('rs-alamat').value = '';
-                document.getElementById('rs-foto').value = '';
+                document.getElementById('rs-tipe').value = 'Rumah Sakit';
             }
         }
-        
+
         function addRsLinkRow(tipe = 'Web', url = '') {
             const container = document.getElementById('rs-links-container');
-            const rowId = 'link-' + Date.now() + Math.floor(Math.random()*1000);
-            const options = ['Web', 'IG', 'WA', 'Maps', 'Lainnya'].map(t => `<option value="${t}" ${tipe===t?'selected':''}>${t}</option>`).join('');
-            
-            container.insertAdjacentHTML('beforeend', `
-            <div id="${rowId}" class="flex gap-2 link-row">
-                <select class="link-tipe p-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm w-24">${options}</select>
-                <input type="text" class="link-url flex-1 p-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg text-sm" value="${url}" placeholder="URL / Nomor">
-                <button onclick="document.getElementById('${rowId}').remove()" class="text-red-400 hover:text-red-600 px-2"><i class="fa-solid fa-xmark"></i></button>
-            </div>`);
+            if (!container) return;
+            const rowId = 'rs-link-' + Date.now() + Math.floor(Math.random()*1000);
+            const options = ['Web','IG','WA','Maps','Lainnya'].map(t => `<option value="${t}" ${tipe===t?'selected':''}>${t}</option>`).join('');
+            container.insertAdjacentHTML('beforeend', `<div id="${rowId}" class="flex gap-2 link-row"><select class="link-tipe rsdsa-input" style="width:104px">${options}</select><input type="text" class="link-url rsdsa-input flex-1 min-w-0" value="${rsDsaEscapeHtml(url)}" placeholder="URL / nomor"><button type="button" onclick="document.getElementById('${rowId}').remove()" class="min-w-[42px] min-h-[42px] rounded-lg bg-rose-50 text-rose-500"><i class="fa-solid fa-xmark"></i></button></div>`);
         }
-        
         function closeModalRs() {
-            document.getElementById('modal-rs').classList.add('hidden');
-            document.getElementById('modal-rs').classList.remove('flex');
+            const modal = document.getElementById('modal-rs');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
         }
-        
         function saveRs() {
-            if (!appState.rsDsa) appState.rsDsa = [];
+            if (!Array.isArray(appState.rsDsa)) appState.rsDsa = [];
             const id = document.getElementById('rs-id').value;
             const nama = document.getElementById('rs-nama').value.trim();
             const kota = document.getElementById('rs-kota').value.trim();
-            if (!nama || !kota) return alert('Nama RS dan Kota wajib diisi!');
-        
-            const links = [];
-            document.querySelectorAll('.link-row').forEach(row => {
-                links.push({ tipe: row.querySelector('.link-tipe').value, url: row.querySelector('.link-url').value });
-            });
-        
+            if (!nama || !kota) return alert('Nama fasilitas dan kota/area wajib diisi.');
+            const links = Array.from(document.querySelectorAll('#rs-links-container .link-row')).map(row => ({
+                tipe: row.querySelector('.link-tipe')?.value || 'Lainnya',
+                url: String(row.querySelector('.link-url')?.value || '').trim()
+            })).filter(item => item.url);
             const data = {
-                nama, kota, 
+                nama, kota,
+                tipe: document.getElementById('rs-tipe').value || 'Rumah Sakit',
                 alamat: document.getElementById('rs-alamat').value.trim(),
                 foto: document.getElementById('rs-foto').value.trim(),
+                phone: document.getElementById('rs-phone').value.trim(),
+                whatsapp: document.getElementById('rs-whatsapp').value.trim(),
+                mapsUrl: document.getElementById('rs-maps').value.trim(),
+                web: document.getElementById('rs-web').value.trim(),
+                layananAnak: document.getElementById('rs-layanan').value.split(/[,;\n]/).map(x => x.trim()).filter(Boolean),
+                facilityVerifiedAt: document.getElementById('rs-facility-verified').value,
+                facilitySource: document.getElementById('rs-facility-source').value.trim(),
+                doctorVerifiedAt: document.getElementById('rs-doctor-verified').value,
+                doctorSource: document.getElementById('rs-doctor-source').value.trim(),
                 links
             };
-        
+            if (data.mapsUrl && !rsDsaSafeUrl(data.mapsUrl)) return alert('Tautan Google Maps harus berupa URL http atau https yang valid.');
+            if (data.web && !rsDsaSafeUrl(data.web)) return alert('Tautan website harus berupa URL http atau https yang valid.');
             if (id) {
-                const idx = appState.rsDsa.findIndex(item => item.id === id);
+                const idx = appState.rsDsa.findIndex(item => String(item.id) === String(id));
+                if (idx < 0) return alert('Data fasilitas tidak ditemukan. Silakan buka ulang formulir.');
                 appState.rsDsa[idx] = { ...appState.rsDsa[idx], ...data };
             } else {
-                appState.rsDsa.push({ id: 'rs-' + Date.now(), ...data, isUtama: false, dsa: [] });
+                appState.rsDsa.push({ id:'rs-' + Date.now(), ...data, isUtama:false, dsa:[] });
             }
-            
-            saveToLocalStorage(); 
-            closeModalRs();
-            renderRsDsa();
+            saveToLocalStorage(); closeModalRs(); renderRsDsa();
+            if (activeRsDsaDetailId) openRsDsaDetail(activeRsDsaDetailId);
         }
-        
         function deleteRs(id) {
-            if(confirm('Yakin ingin menghapus RS ini beserta semua data dokternya?')) {
-                appState.rsDsa = appState.rsDsa.filter(item => item.id !== id);
-                saveToLocalStorage();
-                renderRsDsa();
+            const rs = rsDsaFind(id);
+            if (!rs) return;
+            if (confirm(`Yakin ingin menghapus ${rs.nama || 'fasilitas ini'} beserta seluruh data dokternya?`)) {
+                appState.rsDsa = appState.rsDsa.filter(item => String(item.id) !== String(id));
+                saveToLocalStorage(); renderRsDsa(); closeRsDsaDetail();
             }
+        }
+        function setUtamaRs(id) {
+            const rs = rsDsaFind(id);
+            if (!rs) return;
+            const nextValue = !rs.isUtama;
+            appState.rsDsa.forEach(item => item.isUtama = nextValue && String(item.id) === String(id));
+            saveToLocalStorage(); renderRsDsa();
+            if (activeRsDsaDetailId) openRsDsaDetail(activeRsDsaDetailId);
         }
 
-        function setUtamaRs(id) {
-            appState.rsDsa.forEach(rs => rs.isUtama = (rs.id === id));
-            saveToLocalStorage();
-            renderRsDsa();
+        // Import/copy from prenatal hospitals: independent copies, no source mutation.
+        function rsDsaNormalizeName(value) { return String(value || '').toLocaleLowerCase('id-ID').replace(/[^a-z0-9]+/g,' ').trim(); }
+        function rsDsaAlreadyImported(source) {
+            const sourceId = String(source && source.id);
+            const name = rsDsaNormalizeName(source && source.name);
+            const address = rsDsaNormalizeName(source && source.address);
+            return appState.rsDsa.some(existing => {
+                if (existing.importedFromHospitalId && String(existing.importedFromHospitalId) === sourceId) return true;
+                return name && rsDsaNormalizeName(existing.nama) === name && address && rsDsaNormalizeName(existing.alamat) === address;
+            });
         }
-        
+        function openRsDsaImportModal() {
+            renderRsDsaImportOptions();
+            const modal = document.getElementById('modal-rs-dsa-import');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+        function closeRsDsaImportModal() {
+            const modal = document.getElementById('modal-rs-dsa-import');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+        }
+        function renderRsDsaImportOptions() {
+            const container = document.getElementById('rsdsa-import-options');
+            if (!container) return;
+            const sources = Array.isArray(appState.hospitals) ? appState.hospitals : [];
+            if (!sources.length) {
+                container.innerHTML = '<div class="rsdsa-empty">Belum ada data rumah sakit di menu RS & Obgyn fase kehamilan.</div>';
+                return;
+            }
+            const candidates = sources.filter(rs => !rsDsaAlreadyImported(rs));
+            if (!candidates.length) {
+                container.innerHTML = '<div class="rsdsa-empty"><i class="fa-solid fa-circle-check text-2xl mb-2"></i><strong class="block">Semua data yang cocok sudah ada</strong><p class="mt-1">Tidak ditemukan rumah sakit baru untuk disalin. Data yang sudah tersalin tetap berdiri sendiri.</p></div>';
+                return;
+            }
+            container.innerHTML = '<p class="text-[10px] text-slate-500 dark:text-slate-400 mb-2">Data yang akan disalin: identitas fasilitas dan daftar Dokter Anak (pediatricians) beserta jadwal yang tersedia. Paket persalinan dan data Obgyn tidak disalin.</p>' + candidates.map(rs => {
+                const doctors = hospitalDoctorEntries(rs.pediatricians || []);
+                return `<label class="rsdsa-import-option"><input class="rsdsa-import-checkbox" type="checkbox" value="${rsDsaEscapeHtml(rs.id)}"><span class="min-w-0 flex-1"><strong class="block text-xs text-slate-800 dark:text-slate-100">${rsDsaEscapeHtml(rs.name || 'Rumah Sakit')}</strong><span class="block mt-1 text-[10px] text-slate-500 dark:text-slate-400">${rsDsaEscapeHtml(rs.address || 'Alamat belum dicatat')}</span><span class="block mt-1 text-[10px] text-sky-700 dark:text-sky-300">${doctors.length} data dokter anak</span></span></label>`;
+            }).join('');
+        }
+        function executeRsDsaImport() {
+            const selectedIds = Array.from(document.querySelectorAll('.rsdsa-import-checkbox:checked')).map(input => String(input.value));
+            if (!selectedIds.length) return alert('Pilih minimal satu fasilitas untuk disalin.');
+            const sources = (Array.isArray(appState.hospitals) ? appState.hospitals : []).filter(rs => selectedIds.includes(String(rs.id)) && !rsDsaAlreadyImported(rs));
+            if (!sources.length) return alert('Tidak ada data baru yang dapat disalin.');
+            const confirmCopy = confirm(`Salin ${sources.length} fasilitas dari RS & Obgyn ke RS & DSA? Data sumber tetap utuh dan kedua menu tidak akan tersinkron otomatis.`);
+            if (!confirmCopy) return;
+            const copies = sources.map((source, index) => {
+                const doctors = hospitalDoctorEntries(source.pediatricians || []).map((doctor, doctorIndex) => ({
+                    id: `dsa-copy-${String(source.id).replace(/[^a-zA-Z0-9_-]/g,'')}-${doctorIndex}-${Date.now()}`,
+                    nama: doctor.name,
+                    kontak: '',
+                    catatan: '',
+                    jadwal: hospitalNormalizeDoctorSessions(doctor.jadwal || []),
+                    ...(doctor.legacyScheduleText ? { legacyScheduleText: doctor.legacyScheduleText } : {}),
+                    isFavorite: Boolean(Number(appState.priorityRSId) === Number(source.id) && appState.priorityDoctor === doctor.name)
+                }));
+                const images = Array.isArray(source.images) ? source.images : [];
+                return {
+                    id: `rs-copy-${Date.now()}-${index}`,
+                    nama: source.name || 'Rumah Sakit',
+                    kota: source.city || source.kota || '',
+                    tipe: source.type || 'Rumah Sakit',
+                    alamat: source.address || '',
+                    foto: source.image || images[0] || '',
+                    phone: source.phone || '',
+                    whatsapp: source.whatsapp || '',
+                    mapsUrl: source.mapsUrl || '',
+                    web: source.web || '',
+                    layananAnak: [],
+                    facilityVerifiedAt: '',
+                    facilitySource: 'Disalin dari RS & Obgyn; perlu konfirmasi ulang',
+                    doctorVerifiedAt: source.doctorVerifiedAt || '',
+                    doctorSource: source.doctorSource || '',
+                    links: [],
+                    isUtama: Number(appState.priorityRSId) === Number(source.id),
+                    dsa: doctors,
+                    importedFromHospitalId: String(source.id)
+                };
+            });
+            appState.rsDsa.push(...copies);
+            saveToLocalStorage();
+            closeRsDsaImportModal();
+            renderRsDsa();
+            alert(`${copies.length} fasilitas berhasil disalin. Silakan lengkapi kota, kontak, layanan anak, dan verifikasi informasi yang belum tersedia.`);
+        }
+
         // 4. Sistem Modal & Simpan Data Jadwal Dokter Dinamis
         function openModalDsa(rsId, dsaId = null) {
             document.getElementById('modal-dsa').classList.remove('hidden');
@@ -13264,7 +13618,9 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             
             if (dsaId) {
                 document.getElementById('modal-dsa-title').innerText = 'Edit Dokter';
-                const dsa = appState.rsDsa.find(item => item.id === rsId).dsa.find(item => item.id === dsaId);
+                const parent = rsDsaFind(rsId);
+                const dsa = parent && Array.isArray(parent.dsa) ? parent.dsa.find(item => String(item.id) === String(dsaId)) : null;
+                if (!dsa) return alert('Data dokter tidak ditemukan.');
                 document.getElementById('dsa-id').value = dsa.id;
                 document.getElementById('dsa-nama').value = dsa.nama;
                 document.getElementById('dsa-kontak').value = dsa.kontak || '';
@@ -13290,7 +13646,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             document.getElementById('modal-dsa').classList.remove('flex');
         }
         
-        function addScheduleRow(hari = 'Senin', mulai = '08:00', selesai = '12:00') {
+        function addScheduleRow(hari = 'Senin', mulai = '', selesai = '') {
             const container = document.getElementById('dsa-schedule-container');
             const rowId = 'sch-' + Date.now() + Math.floor(Math.random()*1000);
             const hariOptions = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'].map(h => 
@@ -13317,15 +13673,19 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             
             if (!nama) return alert('Nama dokter wajib diisi!');
         
-            // Kumpulkan data jadwal dari form
+            // Jadwal kosong tidak disimpan sebagai jadwal fiktif.
+            // Sesi parsial atau jam selesai <= jam mulai harus dilengkapi terlebih dahulu.
             const jadwal = [];
-            document.querySelectorAll('.schedule-row').forEach(row => {
-                jadwal.push({
-                    hari: row.querySelector('.sch-hari').value,
-                    mulai: row.querySelector('.sch-mulai').value,
-                    selesai: row.querySelector('.sch-selesai').value
-                });
-            });
+            const scheduleRows = Array.from(document.querySelectorAll('#dsa-schedule-container .schedule-row'));
+            for (const row of scheduleRows) {
+                const hari = row.querySelector('.sch-hari').value;
+                const mulai = row.querySelector('.sch-mulai').value;
+                const selesai = row.querySelector('.sch-selesai').value;
+                if (!mulai && !selesai) continue;
+                if (!mulai || !selesai) return alert('Lengkapi jam mulai dan jam selesai, atau kosongkan keduanya untuk melewati sesi ini.');
+                if (selesai <= mulai) return alert('Jam selesai harus lebih besar daripada jam mulai.');
+                jadwal.push({ hari, mulai, selesai });
+            }
         
             // Cari lokasi Rumah Sakitnya di dalam database
             const rsIndex = appState.rsDsa.findIndex(item => item.id === rsId);
@@ -13357,26 +13717,35 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             }
             
             // Simpan ke LocalStorage
-            saveToLocalStorage(); 
+            saveToLocalStorage();
             closeModalDsa();
             renderRsDsa();
+            if (activeRsDsaDetailId) openRsDsaDetail(activeRsDsaDetailId);
         }
         
         function deleteDsa(rsId, dsaId) {
-            if(confirm('Hapus profil DSA ini?')) {
-                const rsIndex = appState.rsDsa.findIndex(item => item.id === rsId);
-                appState.rsDsa[rsIndex].dsa = appState.rsDsa[rsIndex].dsa.filter(item => item.id !== dsaId);
+            const rsIndex = appState.rsDsa.findIndex(item => String(item.id) === String(rsId));
+            if (rsIndex < 0) return;
+            const doctors = Array.isArray(appState.rsDsa[rsIndex].dsa) ? appState.rsDsa[rsIndex].dsa : [];
+            const doctor = doctors.find(item => String(item.id) === String(dsaId));
+            if (!doctor) return;
+            if (confirm(`Hapus profil ${doctor.nama || 'dokter anak'} dari direktori ini?`)) {
+                appState.rsDsa[rsIndex].dsa = doctors.filter(item => String(item.id) !== String(dsaId));
                 saveToLocalStorage();
                 renderRsDsa();
+                if (activeRsDsaDetailId) openRsDsaDetail(activeRsDsaDetailId);
             }
         }
         
         function toggleFavoriteDsa(rsId, dsaId) {
-            const rsIndex = appState.rsDsa.findIndex(item => item.id === rsId);
-            const dsaIndex = appState.rsDsa[rsIndex].dsa.findIndex(item => item.id === dsaId);
-            appState.rsDsa[rsIndex].dsa[dsaIndex].isFavorite = !appState.rsDsa[rsIndex].dsa[dsaIndex].isFavorite;
+            const rs = rsDsaFind(rsId);
+            if (!rs || !Array.isArray(rs.dsa)) return;
+            const doctor = rs.dsa.find(item => String(item.id) === String(dsaId));
+            if (!doctor) return;
+            doctor.isFavorite = !doctor.isFavorite;
             saveToLocalStorage();
             renderRsDsa();
+            if (activeRsDsaDetailId) openRsDsaDetail(activeRsDsaDetailId);
         }
 
         // ==========================================================
@@ -16188,7 +16557,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 name: filename,
                 mimeType: 'application/json',
                 parents: [folder.id],
-                description: 'Backup Keluarga Pohon Teduh 6.13.23. Snapshot point-in-time langsung dari Firebase Realtime Database.'
+                description: 'Backup Keluarga Pohon Teduh 6.13.24. Snapshot point-in-time langsung dari Firebase Realtime Database.'
             };
             const boundary = 'kpt_drive_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
             const body = '--' + boundary + '\r\n' +
