@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.29: compact equal-height postnatal dashboard cards -->
+    <!-- Keluarga Pohon Teduh 6.13.30: Panduan Perawatan accordion & poster gallery -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.28">
+    <meta name="application-version" content="6.13.30">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3377,6 +3377,47 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   }
 </style>
 
+
+<style id="kpt-care-guides-61330">
+  .kpt-knowledge-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 2px 6px}
+  .kpt-knowledge-eyebrow{font-size:9px;font-weight:900;letter-spacing:.15em;color:#0e7490}
+  .kpt-knowledge-heading h2{color:#0f172a}.kpt-knowledge-heading p{color:#64748b}
+  .kpt-knowledge-accordion{border:1px solid #dbe4ee;border-radius:19px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.035);overflow:hidden}
+  .kpt-knowledge-accordion-button{display:flex;align-items:center;gap:11px;width:100%;min-height:76px;padding:13px 15px;text-align:left;background:#fff;color:#172f45}
+  .kpt-knowledge-accordion-button:hover{background:#f8fafc}
+  .kpt-knowledge-accordion-icon{display:flex;align-items:center;justify-content:center;width:42px;height:42px;flex:0 0 42px;border-radius:13px;font-size:18px}
+  .kpt-knowledge-accordion-icon.tone-teal{background:#ccfbf1;color:#0f766e}.kpt-knowledge-accordion-icon.tone-sky{background:#e0f2fe;color:#0369a1}
+  .kpt-knowledge-accordion-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}.kpt-knowledge-accordion-copy strong{font-size:14px;font-weight:850;line-height:1.3}.kpt-knowledge-accordion-copy small{font-size:10px;color:#64748b;line-height:1.4}
+  .kpt-knowledge-count{flex:0 0 auto;padding:5px 8px;border-radius:999px;background:#f1f5f9;color:#64748b;font-size:9px;font-weight:800;white-space:nowrap}.kpt-knowledge-chevron{color:#64748b;font-size:12px;transition:transform .2s}.kpt-knowledge-accordion-button[aria-expanded="true"] .kpt-knowledge-chevron{transform:rotate(180deg)}
+  .kpt-knowledge-accordion-panel{padding:14px;border-top:1px solid #e2e8f0;background:#fbfdff}
+  .kpt-care-panel-intro{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}.kpt-care-panel-intro strong{font-size:13px;color:#172f45}.kpt-care-panel-intro p{font-size:10px;color:#64748b;line-height:1.5;margin-top:3px;max-width:540px}
+  .kpt-care-add-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:9px 13px;border-radius:12px;background:#0f8b82;color:#fff;font-size:11px;font-weight:850;white-space:nowrap;box-shadow:0 4px 12px rgba(15,139,130,.16)}.kpt-care-add-button:hover{background:#0f766e}
+  .kpt-care-folder-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+  .kpt-care-folder{display:flex;min-width:0;min-height:158px;flex-direction:column;align-items:flex-start;text-align:left;padding:13px;border:1px solid transparent;border-radius:17px;transition:transform .16s,box-shadow .16s}
+  .kpt-care-folder:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,23,42,.08)}.kpt-care-folder-icon{display:flex;width:38px;height:38px;align-items:center;justify-content:center;border-radius:12px;font-size:17px;margin-bottom:10px}
+  .kpt-care-folder-name{font-size:12px;font-weight:900;line-height:1.3;color:#172f45}.kpt-care-folder small{display:block;font-size:9px;line-height:1.4;color:#64748b;margin-top:5px;min-height:25px}.kpt-care-folder-count{margin-top:auto;padding-top:9px;font-size:9px;font-weight:800;color:#475569}
+  .folder-blue{background:#eff6ff;border-color:#dbeafe}.folder-blue .kpt-care-folder-icon{background:#dbeafe;color:#1d4ed8}.folder-pink{background:#fdf2f8;border-color:#fce7f3}.folder-pink .kpt-care-folder-icon{background:#fce7f3;color:#be185d}.folder-green{background:#f0fdf4;border-color:#dcfce7}.folder-green .kpt-care-folder-icon{background:#dcfce7;color:#15803d}.folder-amber{background:#fffbeb;border-color:#fef3c7}.folder-amber .kpt-care-folder-icon{background:#fef3c7;color:#b45309}
+  .kpt-care-viewer-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:2px 0 14px;flex-wrap:wrap}.kpt-care-back-button{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:8px 11px;border-radius:11px;background:#e2e8f0;color:#334155;font-size:10px;font-weight:850}
+  .kpt-care-search{position:relative;display:flex;align-items:center;min-width:170px}.kpt-care-search i{position:absolute;left:11px;color:#94a3b8;font-size:11px}.kpt-care-search input{width:100%;min-height:44px;padding:8px 10px 8px 30px;border:1px solid #dbe4ee;border-radius:11px;background:#fff;color:#334155;font-size:11px;outline:none}
+  .kpt-care-age-filter{min-height:44px;max-width:145px;padding:8px 10px;border:1px solid #dbe4ee;border-radius:11px;background:#fff;color:#334155;font-size:10px;outline:none}.kpt-care-slide-counter{padding:5px 9px;border-radius:999px;background:#e0f2fe;color:#075985;font-size:10px;font-weight:850;white-space:nowrap}
+  .kpt-care-gallery-stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:300px;padding:14px 54px;border:1px solid #dbe4ee;border-radius:18px;background:linear-gradient(135deg,#f1f5f9,#eaf2f7);overflow:hidden;touch-action:pan-y}
+  .kpt-care-gallery-content{display:flex;align-items:center;justify-content:center;width:100%;min-width:0;flex-direction:column;gap:9px}.kpt-care-poster-button{display:flex;align-items:center;justify-content:center;width:100%;min-height:240px;border:0;background:transparent;cursor:zoom-in}.kpt-care-poster-image{display:block;max-width:100%;width:auto;max-height:68vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 28px rgba(15,23,42,.13)}
+  .kpt-care-gallery-arrow{position:absolute;z-index:2;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:44px;height:48px;border:1px solid rgba(148,163,184,.45);border-radius:13px;background:rgba(255,255,255,.92);color:#334155;box-shadow:0 3px 12px rgba(15,23,42,.10)}.kpt-care-gallery-arrow.is-prev{left:9px}.kpt-care-gallery-arrow.is-next{right:9px}.kpt-care-gallery-arrow:disabled{opacity:.3;cursor:not-allowed}
+  .kpt-care-slide-title{font-size:14px;font-weight:900;line-height:1.35;color:#172f45;text-align:center}.kpt-care-slide-meta{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:9px;color:#64748b;text-align:center}.kpt-care-slide-notes{max-width:760px;margin:0 auto;color:#475569;font-size:10px;line-height:1.5;text-align:center}.kpt-care-gallery-actions{display:flex;justify-content:center;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px}.kpt-care-small-action{display:inline-flex;align-items:center;gap:5px;min-height:44px;padding:7px 10px;border:1px solid #dbe4ee;border-radius:10px;background:#fff;color:#475569;font-size:9px;font-weight:800}.kpt-care-small-action.danger{color:#be123c;background:#fff1f2;border-color:#fecdd3}.kpt-care-small-action.favorite.active{color:#b45309;background:#fffbeb;border-color:#fde68a}
+  .kpt-care-gallery-dots{display:flex;justify-content:center;align-items:center;gap:5px;margin-top:10px;flex-wrap:wrap}.kpt-care-gallery-dots button{width:7px;height:7px;padding:0;border-radius:99px;background:#cbd5e1}.kpt-care-gallery-dots button.active{width:20px;background:#0d9488}
+  .kpt-care-empty{padding:25px 14px;border:1px dashed #cbd5e1;border-radius:16px;background:#f8fafc;color:#64748b;text-align:center;font-size:11px}.kpt-care-empty strong{display:block;color:#334155;font-size:13px;margin-bottom:4px}.kpt-care-storage-note{margin-top:13px;padding:9px 11px;border-radius:11px;background:#f0f9ff;color:#0369a1;font-size:9px;line-height:1.5}
+  .kpt-care-editor-card{background:#fff;color:#172f45}.kpt-care-editor-header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid #e2e8f0;background:#f8fafc}.kpt-care-editor-close{display:flex;width:44px;height:44px;align-items:center;justify-content:center;border-radius:11px;background:#e2e8f0;color:#475569}.kpt-care-field{display:flex;flex-direction:column;gap:5px}.kpt-care-field label,.kpt-care-upload-box label{font-size:11px;font-weight:850;color:#334155}.kpt-care-field input,.kpt-care-field select,.kpt-care-field textarea{width:100%;min-height:42px;padding:9px 11px;border:1px solid #cbd5e1;border-radius:11px;background:#fff;color:#172f45;font-size:12px;outline:none}.kpt-care-field textarea{min-height:78px;resize:vertical}.kpt-care-field small,.kpt-care-upload-box small{font-size:9px;line-height:1.45;color:#64748b}.kpt-care-upload-box{display:flex;flex-direction:column;gap:7px;padding:12px;border:1px dashed #94a3b8;border-radius:13px;background:#f8fafc}.kpt-care-upload-box input{width:100%;font-size:11px;color:#475569}.kpt-care-existing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}.kpt-care-existing-page{position:relative;padding:6px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc}.kpt-care-existing-page img{width:100%;height:76px;object-fit:contain}.kpt-care-existing-page label{display:flex;gap:5px;align-items:center;font-size:9px;color:#be123c;margin-top:5px}.kpt-care-cancel-button,.kpt-care-save-button{min-height:44px;padding:10px;border-radius:11px;font-size:11px;font-weight:850}.kpt-care-cancel-button{background:#f1f5f9;color:#475569}.kpt-care-save-button{background:#0f8b82;color:#fff}.kpt-care-save-button:disabled{opacity:.55;cursor:wait}
+  .kpt-care-lightbox-close{position:absolute;z-index:3;top:12px;right:12px;width:44px;height:44px;border-radius:50%;background:#fff;color:#0f172a;font-size:17px}.kpt-care-lightbox-image{position:absolute;inset:60px 58px 62px;width:calc(100% - 116px);height:calc(100% - 122px);object-fit:contain}.kpt-care-lightbox-arrow{position:absolute;z-index:3;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:42px;height:48px;border-radius:12px;background:rgba(255,255,255,.92);color:#0f172a}.kpt-care-lightbox-caption{position:absolute;bottom:13px;left:65px;right:65px;color:#e2e8f0;text-align:center;font-size:11px}
+  body.dark-mode .kpt-knowledge-heading h2{color:#f8fafc}body.dark-mode .kpt-knowledge-heading p{color:#94a3b8}body.dark-mode .kpt-knowledge-eyebrow{color:#67e8f9}
+  body.dark-mode .kpt-knowledge-accordion{background:#1e293b;border-color:#334155}body.dark-mode .kpt-knowledge-accordion-button{background:#1e293b;color:#f8fafc}body.dark-mode .kpt-knowledge-accordion-button:hover{background:#26364b}body.dark-mode .kpt-knowledge-accordion-copy small{color:#94a3b8}body.dark-mode .kpt-knowledge-count{background:#334155;color:#cbd5e1}body.dark-mode .kpt-knowledge-accordion-panel{background:#172334;border-color:#334155}
+  body.dark-mode .kpt-care-panel-intro strong,body.dark-mode .kpt-care-folder-name,body.dark-mode .kpt-care-slide-title{color:#f1f5f9}body.dark-mode .kpt-care-panel-intro p,body.dark-mode .kpt-care-folder small,body.dark-mode .kpt-care-slide-meta,body.dark-mode .kpt-care-slide-notes{color:#cbd5e1}
+  body.dark-mode .folder-blue{background:#172b43;border-color:#284967}body.dark-mode .folder-blue .kpt-care-folder-icon{background:#1e3a5f;color:#93c5fd}body.dark-mode .folder-pink{background:#3a2336;border-color:#63344f}body.dark-mode .folder-pink .kpt-care-folder-icon{background:#5b2b4b;color:#f9a8d4}body.dark-mode .folder-green{background:#18352e;border-color:#285648}body.dark-mode .folder-green .kpt-care-folder-icon{background:#1e5141;color:#86efac}body.dark-mode .folder-amber{background:#382f1c;border-color:#66502b}body.dark-mode .folder-amber .kpt-care-folder-icon{background:#59431e;color:#fcd34d}body.dark-mode .kpt-care-folder-count{color:#cbd5e1}
+  body.dark-mode .kpt-care-back-button{background:#334155;color:#e2e8f0}body.dark-mode .kpt-care-search input,body.dark-mode .kpt-care-age-filter,body.dark-mode .kpt-care-gallery-arrow,body.dark-mode .kpt-care-small-action{background:#26364b;color:#e2e8f0;border-color:#475569}body.dark-mode .kpt-care-slide-counter{background:#123b4b;color:#a5f3fc}body.dark-mode .kpt-care-gallery-stage{background:linear-gradient(135deg,#0f172a,#1e293b);border-color:#334155}body.dark-mode .kpt-care-empty{background:#1e293b;border-color:#475569;color:#cbd5e1}body.dark-mode .kpt-care-empty strong{color:#f1f5f9}body.dark-mode .kpt-care-storage-note{background:#123451;color:#bae6fd}
+  body.dark-mode .kpt-care-editor-card{background:#1e293b;color:#f8fafc}body.dark-mode .kpt-care-editor-header{background:#172334;border-color:#334155}body.dark-mode .kpt-care-field label,body.dark-mode .kpt-care-upload-box label{color:#e2e8f0}body.dark-mode .kpt-care-field input,body.dark-mode .kpt-care-field select,body.dark-mode .kpt-care-field textarea{background:#0f172a;color:#f8fafc;border-color:#475569}body.dark-mode .kpt-care-field small,body.dark-mode .kpt-care-upload-box small{color:#94a3b8}body.dark-mode .kpt-care-upload-box,body.dark-mode .kpt-care-existing-page{background:#172334;border-color:#475569}body.dark-mode .kpt-care-editor-close,body.dark-mode .kpt-care-cancel-button{background:#334155;color:#e2e8f0}body.dark-mode .kpt-care-existing-page{border-color:#475569}
+  @media(min-width:768px) and (max-width:1023px){.kpt-care-folder-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:767px){.kpt-knowledge-accordion-button{min-height:68px;padding:11px}.kpt-knowledge-accordion-icon{width:38px;height:38px;flex-basis:38px}.kpt-knowledge-accordion-copy strong{font-size:12px}.kpt-knowledge-accordion-copy small{font-size:9px}.kpt-care-folder-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.kpt-care-folder{min-height:145px;padding:11px}.kpt-care-folder-name{font-size:11px}.kpt-care-folder small{font-size:8px}.kpt-care-panel-intro{align-items:flex-start}.kpt-care-panel-intro p{max-width:100%}.kpt-care-add-button{min-height:44px;padding:8px 10px;font-size:10px}.kpt-care-viewer-heading{align-items:flex-start}.kpt-care-viewer-heading>div{width:100%}.kpt-care-search{flex:1;min-width:0}.kpt-care-gallery-stage{min-height:260px;padding:10px 39px}.kpt-care-poster-button{min-height:220px}.kpt-care-poster-image{max-height:62vh}.kpt-care-gallery-arrow{width:40px;height:44px}.kpt-care-gallery-arrow.is-prev{left:5px}.kpt-care-gallery-arrow.is-next{right:5px}.kpt-care-lightbox-image{inset:60px 42px 66px;width:calc(100% - 84px);height:calc(100% - 126px)}.kpt-care-lightbox-caption{left:44px;right:44px}}
+</style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -4190,7 +4231,74 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             </section>
 
             <!-- TAB 6: PUSTAKA EDUKASI (REFERENSI ARTIKEL & VIDEO) -->
-            <section id="sec-referensi" class="hidden space-y-6">
+            <section id="sec-referensi" class="hidden space-y-5">
+                <div class="kpt-knowledge-heading">
+                    <div>
+                        <div class="kpt-knowledge-eyebrow">PUSAT PENGETAHUAN KELUARGA</div>
+                        <h2 class="text-xl sm:text-2xl font-extrabold mt-1">Panduan & Edukasi</h2>
+                        <p class="text-xs sm:text-sm mt-1">Kumpulkan panduan visual dan referensi yang ingin dipelajari bersama.</p>
+                    </div>
+                </div>
+
+                <!-- Independent accordion: Panduan Perawatan -->
+                <div class="kpt-knowledge-accordion">
+                    <button type="button" id="kpt-care-accordion-button" class="kpt-knowledge-accordion-button" aria-expanded="false" aria-controls="kpt-care-accordion-panel" onclick="toggleKnowledgePanel('care')">
+                        <span class="kpt-knowledge-accordion-icon tone-teal"><i class="fa-solid fa-images"></i></span>
+                        <span class="kpt-knowledge-accordion-copy"><strong>Panduan Perawatan</strong><small>Koleksi poster dan panduan visual keluarga</small></span>
+                        <span id="kpt-care-guide-count" class="kpt-knowledge-count">0 panduan</span>
+                        <i class="fa-solid fa-chevron-down kpt-knowledge-chevron" aria-hidden="true"></i>
+                    </button>
+                    <div id="kpt-care-accordion-panel" class="kpt-knowledge-accordion-panel hidden">
+                        <div class="kpt-care-panel-intro">
+                            <div><strong>Jelajahi berdasarkan kategori</strong><p>Unggah poster sendiri atau simpan materi yang kalian temukan. Satu panduan dapat berisi beberapa halaman.</p></div>
+                            <button type="button" class="kpt-care-add-button" onclick="openCareGuideModal()"><i class="fa-solid fa-plus"></i> Tambah Panduan</button>
+                        </div>
+                        <div id="kpt-care-folder-grid" class="kpt-care-folder-grid">
+                            <button type="button" class="kpt-care-folder folder-blue" onclick="openCareGuideFolder('perawatan')">
+                                <span class="kpt-care-folder-icon"><i class="fa-solid fa-baby"></i></span><span class="kpt-care-folder-name">Perawatan Harian</span><small>Newborn, mandi, popok, kebersihan</small><span class="kpt-care-folder-count" id="kpt-care-count-perawatan">0 panduan</span>
+                            </button>
+                            <button type="button" class="kpt-care-folder folder-pink" onclick="openCareGuideFolder('nutrisi')">
+                                <span class="kpt-care-folder-icon"><i class="fa-solid fa-bottle-water"></i></span><span class="kpt-care-folder-name">ASI & Nutrisi</span><small>Menyusui, ASI perah, formula, MPASI</small><span class="kpt-care-folder-count" id="kpt-care-count-nutrisi">0 panduan</span>
+                            </button>
+                            <button type="button" class="kpt-care-folder folder-green" onclick="openCareGuideFolder('kesehatan')">
+                                <span class="kpt-care-folder-icon"><i class="fa-solid fa-heart-pulse"></i></span><span class="kpt-care-folder-name">Kesehatan & Keselamatan</span><small>Tanda bahaya, tidur aman, kebersihan</small><span class="kpt-care-folder-count" id="kpt-care-count-kesehatan">0 panduan</span>
+                            </button>
+                            <button type="button" class="kpt-care-folder folder-amber" onclick="openCareGuideFolder('tumbuh-kembang')">
+                                <span class="kpt-care-folder-icon"><i class="fa-solid fa-shapes"></i></span><span class="kpt-care-folder-name">Tumbuh Kembang</span><small>Tummy time, tidur, bermain, stimulasi</small><span class="kpt-care-folder-count" id="kpt-care-count-tumbuh-kembang">0 panduan</span>
+                            </button>
+                        </div>
+                        <div id="kpt-care-folder-viewer" class="hidden mt-4">
+                            <div class="kpt-care-viewer-heading">
+                                <button type="button" class="kpt-care-back-button" onclick="closeCareGuideFolder()"><i class="fa-solid fa-arrow-left"></i> Semua folder</button>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <label class="kpt-care-search"><i class="fa-solid fa-magnifying-glass"></i><input id="kpt-care-search-input" type="search" placeholder="Cari panduan..." oninput="renderCareGuideGallery()"></label>
+                                    <select id="kpt-care-age-filter" class="kpt-care-age-filter" aria-label="Filter usia panduan" onchange="renderCareGuideGallery()"><option value="ALL">Semua usia</option><option value="0–28 hari">0–28 hari</option><option value="0–3 bulan">0–3 bulan</option><option value="3–6 bulan">3–6 bulan</option><option value="6–12 bulan">6–12 bulan</option><option value="1–2 tahun">1–2 tahun</option><option value="2–6 tahun">2–6 tahun</option></select>
+                                    <button type="button" class="kpt-care-add-button" onclick="openCareGuideModal()"><i class="fa-solid fa-plus"></i> Tambah</button>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between gap-2 mb-3"><div><h3 id="kpt-care-active-folder-title" class="font-extrabold text-base"></h3><p id="kpt-care-active-folder-subtitle" class="text-xs text-slate-500 mt-0.5"></p></div><span id="kpt-care-slide-counter" class="kpt-care-slide-counter">0/0</span></div>
+                            <div id="kpt-care-gallery-stage" class="kpt-care-gallery-stage" ontouchstart="careGuideTouchStart(event)" ontouchend="careGuideTouchEnd(event)">
+                                <button type="button" class="kpt-care-gallery-arrow is-prev" onclick="moveCareGuideSlide(-1)" aria-label="Panduan sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
+                                <div id="kpt-care-gallery-content" class="kpt-care-gallery-content"></div>
+                                <button type="button" class="kpt-care-gallery-arrow is-next" onclick="moveCareGuideSlide(1)" aria-label="Panduan berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                            <div id="kpt-care-gallery-empty" class="hidden kpt-care-empty"></div>
+                            <div id="kpt-care-gallery-dots" class="kpt-care-gallery-dots"></div>
+                        </div>
+                        <p class="kpt-care-storage-note"><i class="fa-brands fa-google-drive"></i> Poster disimpan di Google Drive pada folder media khusus. Pastikan akun keluarga menggunakan folder Drive bersama yang sama.</p>
+                    </div>
+                </div>
+
+                <!-- Independent accordion: existing Pustaka Edukasi table -->
+                <div class="kpt-knowledge-accordion">
+                    <button type="button" id="kpt-reference-accordion-button" class="kpt-knowledge-accordion-button" aria-expanded="false" aria-controls="kpt-reference-accordion-panel" onclick="toggleKnowledgePanel('references')">
+                        <span class="kpt-knowledge-accordion-icon tone-sky"><i class="fa-solid fa-book-open"></i></span>
+                        <span class="kpt-knowledge-accordion-copy"><strong>Pustaka Edukasi & Referensi</strong><small>Artikel, video, postingan, dan tautan edukasi</small></span>
+                        <span class="kpt-knowledge-count">Koleksi</span>
+                        <i class="fa-solid fa-chevron-down kpt-knowledge-chevron" aria-hidden="true"></i>
+                    </button>
+                    <div id="kpt-reference-accordion-panel" class="kpt-knowledge-accordion-panel hidden">
+
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                     <div>
                         <h2 class="text-xl font-bold text-slate-800">📚 Pustaka Edukasi & Referensi</h2>
@@ -4235,6 +4343,40 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                         </table>
                     </div>
                     <p class="text-2xs text-slate-400 italic">💡 Tips (di Laptop/PC): Arahkan kursor ke garis kanan judul kolom (misal: "Kategori" atau "Judul"), klik dan tahan untuk memperlebar/mempersempit kolom.</p>
+                </div>
+                    </div>
+                </div>
+
+                <!-- Editor panduan visual -->
+                <div id="kpt-care-guide-editor" class="hidden fixed inset-0 z-[120] items-end sm:items-center justify-center p-2 sm:p-4 bg-slate-950/65" role="dialog" aria-modal="true" aria-labelledby="kpt-care-editor-title">
+                    <div class="kpt-care-editor-card w-full max-w-xl max-h-[94dvh] overflow-y-auto rounded-2xl sm:rounded-3xl shadow-2xl">
+                        <div class="kpt-care-editor-header"><div><span class="kpt-knowledge-eyebrow">KOLEKSI KELUARGA</span><h3 id="kpt-care-editor-title" class="text-lg font-extrabold mt-1">Tambah Panduan</h3></div><button type="button" class="kpt-care-editor-close" onclick="closeCareGuideModal()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button></div>
+                        <form id="kpt-care-guide-form" class="p-4 sm:p-5 space-y-3" onsubmit="saveCareGuideForm(event)">
+                            <input type="hidden" name="id" id="kpt-care-guide-id">
+                            <div class="kpt-care-field"><label for="kpt-care-guide-title">Judul panduan</label><input id="kpt-care-guide-title" name="title" maxlength="120" required placeholder="Contoh: Cara memandikan bayi"></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="kpt-care-field"><label for="kpt-care-guide-category">Folder</label><select id="kpt-care-guide-category" name="category" required><option value="perawatan">Perawatan Harian</option><option value="nutrisi">ASI & Nutrisi</option><option value="kesehatan">Kesehatan & Keselamatan</option><option value="tumbuh-kembang">Tumbuh Kembang</option></select></div>
+                                <div class="kpt-care-field"><label for="kpt-care-guide-age">Kelompok usia</label><select id="kpt-care-guide-age" name="ageRange"><option value="Semua usia">Semua usia</option><option value="0–28 hari">0–28 hari</option><option value="0–3 bulan">0–3 bulan</option><option value="3–6 bulan">3–6 bulan</option><option value="6–12 bulan">6–12 bulan</option><option value="1–2 tahun">1–2 tahun</option><option value="2–6 tahun">2–6 tahun</option></select></div>
+                            </div>
+                            <div class="kpt-care-field"><label for="kpt-care-guide-source">Sumber / pembuat</label><input id="kpt-care-guide-source" name="source" maxlength="160" placeholder="Contoh: Buku KIA Kemenkes 2024 atau akun pembuat"></div>
+                            <div class="kpt-care-field"><label for="kpt-care-guide-source-url">Tautan sumber (opsional)</label><input id="kpt-care-guide-source-url" name="sourceUrl" type="url" maxlength="1000" placeholder="https://..."></div>
+                            <div class="kpt-care-field"><label for="kpt-care-guide-notes">Catatan keluarga (opsional)</label><textarea id="kpt-care-guide-notes" name="notes" rows="3" maxlength="1500" placeholder="Catatan tambahan untuk membantu mengingat isi panduan..."></textarea></div>
+                            <div class="kpt-care-field"><label for="kpt-care-guide-review">Status peninjauan keluarga</label><select id="kpt-care-guide-review" name="reviewStatus"><option value="belum-ditinjau">Belum ditinjau</option><option value="ditinjau-keluarga">Sudah ditinjau keluarga</option></select><small>Status ini hanya mencatat peninjauan keluarga, bukan validasi medis oleh dokter.</small></div>
+                            <div id="kpt-care-existing-pages" class="hidden"></div>
+                            <div class="kpt-care-upload-box"><label for="kpt-care-guide-files"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Poster / halaman panduan</label><input id="kpt-care-guide-files" name="pages" type="file" accept="image/jpeg,image/png,image/webp" multiple><small>Pilih satu atau beberapa gambar (JPG, PNG, WebP). Maksimal 10 halaman per panduan dan 20 MB per gambar.</small></div>
+                            <div id="kpt-care-guide-upload-status" class="text-xs text-slate-500" aria-live="polite"></div>
+                            <div class="flex gap-2 pt-1"><button type="button" class="kpt-care-cancel-button flex-1" onclick="closeCareGuideModal()">Batal</button><button type="submit" id="kpt-care-guide-save" class="kpt-care-save-button flex-1"><i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Panduan</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Fullscreen poster viewer -->
+                <div id="kpt-care-guide-lightbox" class="hidden fixed inset-0 z-[130] bg-slate-950/95 p-3 sm:p-6" role="dialog" aria-modal="true" aria-label="Tampilan poster penuh">
+                    <button type="button" onclick="closeCareGuideFullscreen()" class="kpt-care-lightbox-close" aria-label="Tutup poster"><i class="fa-solid fa-xmark"></i></button>
+                    <button type="button" onclick="moveCareGuideSlide(-1);renderCareGuideFullscreen()" class="kpt-care-lightbox-arrow left-2 sm:left-5" aria-label="Poster sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
+                    <img id="kpt-care-lightbox-image" src="" alt="Poster panduan" class="kpt-care-lightbox-image">
+                    <button type="button" onclick="moveCareGuideSlide(1);renderCareGuideFullscreen()" class="kpt-care-lightbox-arrow right-2 sm:right-5" aria-label="Poster berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
+                    <div id="kpt-care-lightbox-caption" class="kpt-care-lightbox-caption"></div>
                 </div>
             </section>
             
@@ -6504,6 +6646,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 babyNames: [],
                 hospitals: [],
                 references: [],
+                careGuides: [],
                 babyBorn: false,
                 babyBirthDate: '',
                 babyGender: '',
@@ -10972,6 +11115,356 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         }
 
         // ==========================================
+        // PANDUAN PERAWATAN — VISUAL GUIDE LIBRARY
+        // Images live in the family's configured Google Drive folder;
+        // metadata and ordering are synchronized through appState.
+        // ==========================================
+        const KPT_CARE_GUIDE_FOLDERS = [
+            { id:'perawatan', title:'Perawatan Harian', subtitle:'Newborn, mandi, popok, dan kebersihan' },
+            { id:'nutrisi', title:'ASI & Nutrisi', subtitle:'Menyusui, ASI perah, formula, dan MPASI' },
+            { id:'kesehatan', title:'Kesehatan & Keselamatan', subtitle:'Tanda bahaya, tidur aman, dan kesehatan' },
+            { id:'tumbuh-kembang', title:'Tumbuh Kembang', subtitle:'Tummy time, tidur, bermain, dan stimulasi' }
+        ];
+        let activeCareGuideCategory = '';
+        let activeCareGuideSlideIndex = 0;
+        let careGuideSwipeStartX = 0;
+        let careGuideFullscreenOpen = false;
+        let careGuideEditorBusy = false;
+
+        function kptCareGuideEscape(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+        }
+        function kptCareGuideId() {
+            return 'care_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,9);
+        }
+        function kptGetCareGuides() {
+            if (!appState || !Array.isArray(appState.careGuides)) appState.careGuides = [];
+            return appState.careGuides;
+        }
+        function kptCareGuideFolder(category) {
+            return KPT_CARE_GUIDE_FOLDERS.find(folder => folder.id === category) || KPT_CARE_GUIDE_FOLDERS[0];
+        }
+        function toggleKnowledgePanel(panelName) {
+            const map = panelName === 'care'
+                ? { button:'kpt-care-accordion-button', panel:'kpt-care-accordion-panel' }
+                : { button:'kpt-reference-accordion-button', panel:'kpt-reference-accordion-panel' };
+            const button = document.getElementById(map.button);
+            const panel = document.getElementById(map.panel);
+            if (!button || !panel) return;
+            const willOpen = panel.classList.contains('hidden');
+            panel.classList.toggle('hidden', !willOpen);
+            button.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+            if (panelName === 'care') renderCareGuideFolders();
+        }
+        function renderCareGuideFolders() {
+            const guides = kptGetCareGuides();
+            const total = document.getElementById('kpt-care-guide-count');
+            if (total) total.textContent = guides.length + ' panduan';
+            KPT_CARE_GUIDE_FOLDERS.forEach(folder => {
+                const count = guides.filter(guide => guide && guide.category === folder.id).length;
+                const el = document.getElementById('kpt-care-count-' + folder.id);
+                if (el) el.textContent = count + ' panduan';
+            });
+            if (activeCareGuideCategory) renderCareGuideGallery();
+        }
+        function openCareGuideFolder(category) {
+            if (!KPT_CARE_GUIDE_FOLDERS.some(folder => folder.id === category)) return;
+            activeCareGuideCategory = category;
+            activeCareGuideSlideIndex = 0;
+            const grid = document.getElementById('kpt-care-folder-grid');
+            const viewer = document.getElementById('kpt-care-folder-viewer');
+            const title = document.getElementById('kpt-care-active-folder-title');
+            const subtitle = document.getElementById('kpt-care-active-folder-subtitle');
+            if (grid) grid.classList.add('hidden');
+            if (viewer) viewer.classList.remove('hidden');
+            const folder = kptCareGuideFolder(category);
+            if (title) title.textContent = folder.title;
+            if (subtitle) subtitle.textContent = folder.subtitle;
+            const search = document.getElementById('kpt-care-search-input');
+            if (search) search.value = '';
+            const ageFilter = document.getElementById('kpt-care-age-filter');
+            if (ageFilter) ageFilter.value = 'ALL';
+            renderCareGuideGallery();
+        }
+        function closeCareGuideFolder() {
+            activeCareGuideCategory = '';
+            activeCareGuideSlideIndex = 0;
+            const grid = document.getElementById('kpt-care-folder-grid');
+            const viewer = document.getElementById('kpt-care-folder-viewer');
+            if (grid) grid.classList.remove('hidden');
+            if (viewer) viewer.classList.add('hidden');
+            renderCareGuideFolders();
+        }
+        function getCareGuideSlides(category) {
+            const search = String(document.getElementById('kpt-care-search-input')?.value || '').trim().toLowerCase();
+            const ageFilter = String(document.getElementById('kpt-care-age-filter')?.value || 'ALL');
+            const guides = kptGetCareGuides()
+                .filter(guide => guide && guide.category === category)
+                .filter(guide => ageFilter === 'ALL' || String(guide.ageRange || 'Semua usia') === ageFilter || String(guide.ageRange || 'Semua usia') === 'Semua usia')
+                .filter(guide => !search || [guide.title, guide.source, guide.notes, guide.ageRange].some(value => String(value || '').toLowerCase().includes(search)))
+                .sort((a,b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
+            const slides = [];
+            guides.forEach((guide, guideIndex) => {
+                const pages = Array.isArray(guide.pages) ? guide.pages : [];
+                pages.forEach((page, pageIndex) => {
+                    const fileUrl = page.webViewLink || page.url || (page.driveFileId ? 'https://drive.google.com/file/d/' + page.driveFileId + '/view' : '');
+                    const displayUrl = page.displayUrl || (fileUrl && typeof formatPhotoUrl === 'function' ? formatPhotoUrl(fileUrl) : fileUrl);
+                    if (displayUrl) slides.push({ guide, page, guideIndex, pageIndex, pageCount:pages.length, displayUrl, fileUrl });
+                });
+            });
+            return slides;
+        }
+        function renderCareGuideGallery() {
+            if (!activeCareGuideCategory) return;
+            const slides = getCareGuideSlides(activeCareGuideCategory);
+            const content = document.getElementById('kpt-care-gallery-content');
+            const stage = document.getElementById('kpt-care-gallery-stage');
+            const empty = document.getElementById('kpt-care-gallery-empty');
+            const dots = document.getElementById('kpt-care-gallery-dots');
+            const counter = document.getElementById('kpt-care-slide-counter');
+            if (!content || !stage || !empty || !dots) return;
+            if (!slides.length) {
+                stage.classList.add('hidden');
+                dots.innerHTML = '';
+                if (counter) counter.textContent = '0/0';
+                empty.classList.remove('hidden');
+                const guidesExist = kptGetCareGuides().some(guide => guide && guide.category === activeCareGuideCategory);
+                empty.innerHTML = '<i class="fa-solid fa-images text-3xl mb-2"></i><strong>' + (guidesExist ? 'Panduan tidak ditemukan' : 'Folder ini masih kosong') + '</strong><span>' + (guidesExist ? 'Coba kata kunci lain.' : 'Tambahkan poster atau beberapa halaman panduan untuk mulai mengisi folder.') + '</span><div class="mt-3"><button type="button" class="kpt-care-add-button" onclick="openCareGuideModal()"><i class="fa-solid fa-plus"></i> Tambah Panduan</button></div>';
+                return;
+            }
+            if (activeCareGuideSlideIndex >= slides.length) activeCareGuideSlideIndex = slides.length - 1;
+            if (activeCareGuideSlideIndex < 0) activeCareGuideSlideIndex = 0;
+            const slide = slides[activeCareGuideSlideIndex];
+            const guide = slide.guide;
+            stage.classList.remove('hidden');
+            empty.classList.add('hidden');
+            if (counter) counter.textContent = (activeCareGuideSlideIndex + 1) + '/' + slides.length;
+            const reviewLabel = guide.reviewStatus === 'ditinjau-keluarga' ? 'Ditinjau keluarga' : 'Belum ditinjau';
+            const reviewTone = guide.reviewStatus === 'ditinjau-keluarga' ? 'success' : 'warning';
+            content.innerHTML = `
+                <button type="button" class="kpt-care-poster-button" onclick="openCareGuideFullscreen()" title="Perbesar poster">
+                    <img class="kpt-care-poster-image" src="${kptCareGuideEscape(slide.displayUrl)}" alt="${kptCareGuideEscape(guide.title || 'Poster panduan')}" loading="lazy" draggable="false" onerror="this.closest('.kpt-care-poster-button').innerHTML='<span class=&quot;text-xs text-rose-600 p-5&quot;>Pratinjau gambar tidak dapat dimuat. Periksa akses folder Google Drive bersama.</span>'">
+                </button>
+                <div class="w-full space-y-1">
+                    <div class="kpt-care-slide-title">${kptCareGuideEscape(guide.title || 'Panduan tanpa judul')}</div>
+                    <div class="kpt-care-slide-meta"><span>${kptCareGuideEscape(guide.ageRange || 'Semua usia')}</span><span>•</span><span>Halaman ${slide.pageIndex + 1}/${slide.pageCount}</span><span>•</span><span>${kptCareGuideEscape(guide.source || 'Sumber belum dicatat')}</span><span>•</span><span>${reviewLabel}</span></div>
+                    ${guide.notes ? `<p class="kpt-care-slide-notes">${kptCareGuideEscape(guide.notes)}</p>` : ''}
+                    ${guide.sourceUrl && /^https:\/\//i.test(guide.sourceUrl) ? `<div class="text-center"><a class="text-[10px] font-bold text-sky-700 hover:underline" href="${kptCareGuideEscape(guide.sourceUrl)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Buka sumber asli</a></div>` : ''}
+                    <div class="kpt-care-gallery-actions">
+                        <button type="button" class="kpt-care-small-action favorite ${guide.favorite ? 'active' : ''}" onclick="toggleCareGuideFavorite('${kptCareGuideEscape(guide.id)}')"><i class="fa-${guide.favorite ? 'solid' : 'regular'} fa-star"></i> ${guide.favorite ? 'Favorit' : 'Simpan favorit'}</button>
+                        <button type="button" class="kpt-care-small-action" onclick="openCareGuideModal('${kptCareGuideEscape(guide.id)}')"><i class="fa-solid fa-pen"></i> Edit informasi</button>
+                        <button type="button" class="kpt-care-small-action danger" onclick="deleteCareGuide('${kptCareGuideEscape(guide.id)}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+                    </div>
+                </div>`;
+            dots.innerHTML = slides.length > 1 ? slides.map((_,index) => `<button type="button" class="${index === activeCareGuideSlideIndex ? 'active' : ''}" onclick="goToCareGuideSlide(${index})" aria-label="Buka poster ${index + 1}"></button>`).join('') : '';
+            stage.querySelectorAll('.kpt-care-gallery-arrow').forEach(button => { button.disabled = slides.length <= 1; });
+        }
+        function moveCareGuideSlide(direction) {
+            const slides = getCareGuideSlides(activeCareGuideCategory);
+            if (!slides.length) return;
+            activeCareGuideSlideIndex = (activeCareGuideSlideIndex + direction + slides.length) % slides.length;
+            renderCareGuideGallery();
+        }
+        function goToCareGuideSlide(index) {
+            const slides = getCareGuideSlides(activeCareGuideCategory);
+            if (!slides.length) return;
+            activeCareGuideSlideIndex = Math.max(0, Math.min(slides.length - 1, Number(index) || 0));
+            renderCareGuideGallery();
+        }
+        function careGuideTouchStart(event) {
+            const touch = event && event.touches && event.touches[0];
+            careGuideSwipeStartX = touch ? touch.clientX : 0;
+        }
+        function careGuideTouchEnd(event) {
+            const touch = event && event.changedTouches && event.changedTouches[0];
+            if (!touch || !careGuideSwipeStartX) return;
+            const delta = touch.clientX - careGuideSwipeStartX;
+            careGuideSwipeStartX = 0;
+            if (Math.abs(delta) >= 45) moveCareGuideSlide(delta < 0 ? 1 : -1);
+        }
+        function openCareGuideFullscreen() {
+            const overlay = document.getElementById('kpt-care-guide-lightbox');
+            if (!overlay) return;
+            careGuideFullscreenOpen = true;
+            overlay.classList.remove('hidden');
+            renderCareGuideFullscreen();
+        }
+        function renderCareGuideFullscreen() {
+            if (!careGuideFullscreenOpen) return;
+            const slides = getCareGuideSlides(activeCareGuideCategory);
+            const slide = slides[activeCareGuideSlideIndex];
+            const image = document.getElementById('kpt-care-lightbox-image');
+            const caption = document.getElementById('kpt-care-lightbox-caption');
+            if (!slide || !image) return;
+            image.src = slide.displayUrl;
+            image.alt = slide.guide.title || 'Poster panduan';
+            if (caption) caption.textContent = slide.guide.title + ' · ' + (activeCareGuideSlideIndex + 1) + '/' + slides.length;
+        }
+        function closeCareGuideFullscreen() {
+            careGuideFullscreenOpen = false;
+            const overlay = document.getElementById('kpt-care-guide-lightbox');
+            if (overlay) overlay.classList.add('hidden');
+        }
+        function toggleCareGuideFavorite(id) {
+            const guide = kptGetCareGuides().find(item => String(item.id) === String(id));
+            if (!guide) return;
+            guide.favorite = !guide.favorite;
+            guide.updatedAt = new Date().toISOString();
+            saveToLocalStorage();
+            renderCareGuideFolders();
+        }
+        function openCareGuideModal(id) {
+            const modal = document.getElementById('kpt-care-guide-editor');
+            const form = document.getElementById('kpt-care-guide-form');
+            const pagesHost = document.getElementById('kpt-care-existing-pages');
+            if (!modal || !form) return;
+            form.reset();
+            const guide = id ? kptGetCareGuides().find(item => String(item.id) === String(id)) : null;
+            document.getElementById('kpt-care-editor-title').textContent = guide ? 'Edit Panduan' : 'Tambah Panduan';
+            document.getElementById('kpt-care-guide-id').value = guide ? guide.id : '';
+            document.getElementById('kpt-care-guide-title').value = guide ? (guide.title || '') : '';
+            document.getElementById('kpt-care-guide-category').value = guide ? guide.category : (activeCareGuideCategory || 'perawatan');
+            document.getElementById('kpt-care-guide-age').value = guide ? (guide.ageRange || 'Semua usia') : 'Semua usia';
+            document.getElementById('kpt-care-guide-source').value = guide ? (guide.source || '') : '';
+            document.getElementById('kpt-care-guide-source-url').value = guide ? (guide.sourceUrl || '') : '';
+            document.getElementById('kpt-care-guide-notes').value = guide ? (guide.notes || '') : '';
+            document.getElementById('kpt-care-guide-review').value = guide ? (guide.reviewStatus || 'belum-ditinjau') : 'belum-ditinjau';
+            const fileInput = document.getElementById('kpt-care-guide-files');
+            if (fileInput) fileInput.value = '';
+            const status = document.getElementById('kpt-care-guide-upload-status');
+            if (status) status.textContent = '';
+            if (pagesHost) {
+                const pages = guide && Array.isArray(guide.pages) ? guide.pages : [];
+                pagesHost.classList.toggle('hidden', !pages.length);
+                pagesHost.innerHTML = pages.length ? `<div class="text-xs font-extrabold text-slate-700">Halaman tersimpan (${pages.length})</div><small class="text-[9px] text-slate-500">Centang halaman yang ingin dilepas dari koleksi. File asli di Google Drive tidak ikut dihapus.</small><div class="kpt-care-existing-grid">${pages.map((page,index) => {
+                    const url = page.webViewLink || page.url || (page.driveFileId ? 'https://drive.google.com/file/d/' + page.driveFileId + '/view' : '');
+                    const display = page.displayUrl || (url && typeof formatPhotoUrl === 'function' ? formatPhotoUrl(url) : url);
+                    return `<div class="kpt-care-existing-page"><img src="${kptCareGuideEscape(display)}" alt="Halaman ${index+1}" loading="lazy"><label><input type="checkbox" name="removePage" value="${kptCareGuideEscape(page.id || String(index))}"> Lepas halaman ${index+1}</label></div>`;
+                }).join('')}</div>` : '';
+            }
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.classList.add('overflow-hidden');
+        }
+        function closeCareGuideModal() {
+            if (careGuideEditorBusy) return;
+            const modal = document.getElementById('kpt-care-guide-editor');
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+            document.body.classList.remove('overflow-hidden');
+        }
+        async function saveCareGuideForm(event) {
+            event.preventDefault();
+            if (careGuideEditorBusy) return;
+            const form = event.currentTarget;
+            const formData = new FormData(form);
+            const id = String(formData.get('id') || '');
+            const existing = id ? kptGetCareGuides().find(item => String(item.id) === id) : null;
+            const title = String(formData.get('title') || '').trim();
+            const category = String(formData.get('category') || 'perawatan');
+            const sourceUrl = String(formData.get('sourceUrl') || '').trim();
+            const files = Array.from(document.getElementById('kpt-care-guide-files')?.files || []);
+            const removeIds = new Set(Array.from(form.querySelectorAll('input[name="removePage"]:checked')).map(input => String(input.value)));
+            const existingPages = existing && Array.isArray(existing.pages) ? existing.pages.filter((page,index) => !removeIds.has(String(page.id || index))) : [];
+            const status = document.getElementById('kpt-care-guide-upload-status');
+            const saveButton = document.getElementById('kpt-care-guide-save');
+            if (!title) { alert('Isi judul panduan terlebih dahulu.'); return; }
+            if (!KPT_CARE_GUIDE_FOLDERS.some(folder => folder.id === category)) { alert('Folder panduan tidak dikenali.'); return; }
+            if (sourceUrl && !/^https:\/\//i.test(sourceUrl)) { alert('Tautan sumber harus menggunakan HTTPS.'); return; }
+            if (files.length + existingPages.length > 10) { alert('Satu panduan maksimal memiliki 10 halaman gambar.'); return; }
+            for (const file of files) {
+                if (!/^image\/(jpeg|png|webp)$/i.test(file.type || '')) { alert('Gunakan gambar JPG, PNG, atau WebP.'); return; }
+                if (file.size > 20 * 1024 * 1024) { alert('Ukuran setiap gambar maksimal 20 MB: ' + file.name); return; }
+            }
+            if (files.length && (typeof window.kptDriveUploadDevelopmentMedia !== 'function' || typeof window.kptDriveDevelopmentMediaReady !== 'function' || !window.kptDriveDevelopmentMediaReady())) {
+                alert('Hubungkan Google Drive keluarga terlebih dahulu melalui Backup & Recovery, lalu pastikan folder bersama sudah dipilih pada perangkat ini.');
+                return;
+            }
+            careGuideEditorBusy = true;
+            if (saveButton) { saveButton.disabled = true; saveButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan...'; }
+            const uploadedPages = [];
+            let uploadError = '';
+            try {
+                for (let index = 0; index < files.length; index++) {
+                    const file = files[index];
+                    if (status) status.textContent = 'Mengunggah halaman ' + (index + 1) + '/' + files.length + ': ' + file.name;
+                    try {
+                        const uploaded = await window.kptDriveUploadDevelopmentMedia(file, {
+                            folderName: 'KPT - Panduan Perawatan',
+                            description: 'Poster Panduan Perawatan Keluarga Pohon Teduh.',
+                            onProgress: percent => { if (status) status.textContent = 'Mengunggah halaman ' + (index + 1) + '/' + files.length + ': ' + file.name + ' (' + percent + '%)'; }
+                        });
+                        uploadedPages.push({
+                            id:kptCareGuideId(), driveFileId:uploaded.driveFileId,
+                            webViewLink:uploaded.webViewLink, thumbnailLink:uploaded.thumbnailLink || '',
+                            displayUrl:uploaded.driveFileId ? 'https://lh3.googleusercontent.com/d/' + uploaded.driveFileId : uploaded.webViewLink,
+                            fileName:uploaded.name || file.name, mimeType:uploaded.mimeType || file.type,
+                            size:Number(uploaded.size || file.size), uploadedAt:uploaded.createdTime || new Date().toISOString()
+                        });
+                    } catch (error) { uploadError = error && error.message ? error.message : String(error); break; }
+                }
+                const pages = existingPages.concat(uploadedPages);
+                if (!pages.length) throw new Error('Panduan harus memiliki setidaknya satu poster.');
+                const now = new Date().toISOString();
+                const guide = {
+                    id: existing ? existing.id : kptCareGuideId(), title, category,
+                    ageRange:String(formData.get('ageRange') || 'Semua usia'),
+                    source:String(formData.get('source') || '').trim(), sourceUrl,
+                    notes:String(formData.get('notes') || '').trim(),
+                    reviewStatus:String(formData.get('reviewStatus') || 'belum-ditinjau'),
+                    favorite:existing ? !!existing.favorite : false,
+                    pages, createdAt:existing ? (existing.createdAt || now) : now,
+                    updatedAt:now
+                };
+                if (existing) {
+                    const index = kptGetCareGuides().findIndex(item => String(item.id) === String(existing.id));
+                    if (index >= 0) kptGetCareGuides()[index] = { ...existing, ...guide };
+                } else kptGetCareGuides().unshift(guide);
+                saveToLocalStorage();
+                const finalCategory = category;
+                activeCareGuideCategory = finalCategory;
+                const grid = document.getElementById('kpt-care-folder-grid');
+                const viewer = document.getElementById('kpt-care-folder-viewer');
+                if (grid) grid.classList.add('hidden');
+                if (viewer) viewer.classList.remove('hidden');
+                const folder = kptCareGuideFolder(finalCategory);
+                const folderTitle = document.getElementById('kpt-care-active-folder-title');
+                const folderSubtitle = document.getElementById('kpt-care-active-folder-subtitle');
+                if (folderTitle) folderTitle.textContent = folder.title;
+                if (folderSubtitle) folderSubtitle.textContent = folder.subtitle;
+                const search = document.getElementById('kpt-care-search-input');
+                if (search) search.value = '';
+                activeCareGuideSlideIndex = 0;
+                const modal = document.getElementById('kpt-care-guide-editor');
+                if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+                document.body.classList.remove('overflow-hidden');
+                if (uploadError) alert('Sebagian halaman berhasil disimpan, tetapi unggahan berikutnya gagal: ' + uploadError + '\nHalaman yang berhasil diunggah tetap tersimpan dalam panduan.');
+                renderCareGuideFolders();
+            } catch (error) {
+                if (status) status.textContent = error && error.message ? error.message : String(error);
+                else alert('Tidak dapat menyimpan panduan: ' + (error.message || String(error)));
+            } finally {
+                careGuideEditorBusy = false;
+                if (saveButton) { saveButton.disabled = false; saveButton.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Panduan'; }
+            }
+        }
+        function deleteCareGuide(id) {
+            const guide = kptGetCareGuides().find(item => String(item.id) === String(id));
+            if (!guide) return;
+            if (!confirm('Hapus panduan "' + (guide.title || 'Tanpa judul') + '" dari koleksi aplikasi? File gambar asli di Google Drive tidak ikut dihapus.')) return;
+            appState.careGuides = kptGetCareGuides().filter(item => String(item.id) !== String(id));
+            activeCareGuideSlideIndex = 0;
+            saveToLocalStorage();
+            renderCareGuideFolders();
+        }
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                if (careGuideFullscreenOpen) closeCareGuideFullscreen();
+                else if (!document.getElementById('kpt-care-guide-editor')?.classList.contains('hidden')) closeCareGuideModal();
+            } else if (careGuideFullscreenOpen && event.key === 'ArrowRight') moveCareGuideSlide(1), renderCareGuideFullscreen();
+            else if (careGuideFullscreenOpen && event.key === 'ArrowLeft') moveCareGuideSlide(-1), renderCareGuideFullscreen();
+        });
+
+        // ==========================================
         // PUSTAKA EDUKASI LOGIC
         // ==========================================
         function renderReferences() {
@@ -11884,7 +12377,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.24',
+                    appVersion: '6.13.30',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -12016,6 +12509,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 ['Log harian bayi', len('dailyLogs')],
                 ['Checklist & persiapan', len('hospitalBag') + len('departureChecklist') + len('husbandRoles') + len('birthPlan')],
                 ['Nama & referensi', len('babyNames') + len('references')],
+                ['Panduan perawatan & poster', len('careGuides')],
                 ['Galeri keluarga', len('gallery') + len('postnatalGallery')],
                 ['Data tumbuh kembang', len('kmsData')],
                 ['Profil dan data kelahiran', Object.keys(isSyncPlainObject(state.babyProfile) ? state.babyProfile : {}).length],
@@ -17091,12 +17585,14 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
     const MEDIA_FOLDER_MIME = 'application/vnd.google-apps.folder';
     const MAX_MEDIA_UPLOAD_BYTES = 100 * 1024 * 1024;
 
-    async function ensureDevelopmentMediaFolder() {
+    async function ensureDevelopmentMediaFolder(options) {
         const parent = readFolder();
         if (!parent) throw new Error('Pilih folder Google Drive keluarga terlebih dahulu di Backup & Recovery.');
         const uid = currentAuthenticatedUser && currentAuthenticatedUser.uid;
         if (!uid) throw new Error('Sesi login aplikasi tidak ditemukan.');
-        const cacheKey = MEDIA_FOLDER_KEY_PREFIX + uid;
+        const requestedFolderName = String(options && options.folderName || MEDIA_FOLDER_NAME).trim().slice(0, 90) || MEDIA_FOLDER_NAME;
+        const folderCacheSuffix = requestedFolderName.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+        const cacheKey = MEDIA_FOLDER_KEY_PREFIX + uid + '_' + folderCacheSuffix;
         let cached = null;
         try { cached = JSON.parse(localStorage.getItem(cacheKey) || 'null'); } catch (_) {}
         if (cached && cached.id && cached.parentId === parent.id) {
@@ -17107,7 +17603,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             } catch (_) { localStorage.removeItem(cacheKey); }
         }
         const escapedParent = parent.id.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-        const q = "'" + escapedParent + "' in parents and name='" + MEDIA_FOLDER_NAME.replace(/'/g, "\\'") + "' and mimeType='" + MEDIA_FOLDER_MIME + "' and trashed=false";
+        const q = "'" + escapedParent + "' in parents and name='" + requestedFolderName.replace(/'/g, "\\'") + "' and mimeType='" + MEDIA_FOLDER_MIME + "' and trashed=false";
         const listUrl = 'https://www.googleapis.com/drive/v3/files?q=' + encodeURIComponent(q) + '&pageSize=10&fields=files(id,name,mimeType)';
         const listResponse = await driveFetch(listUrl, { method: 'GET' });
         const list = await listResponse.json();
@@ -17115,7 +17611,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         if (!folder) {
             const createResponse = await driveFetch('https://www.googleapis.com/drive/v3/files?fields=id,name,mimeType', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: MEDIA_FOLDER_NAME, mimeType: MEDIA_FOLDER_MIME, parents: [parent.id], description: 'Media jurnal Stimulasi & Milestone Keluarga Pohon Teduh.' })
+                body: JSON.stringify({ name: requestedFolderName, mimeType: MEDIA_FOLDER_MIME, parents: [parent.id], description: String(options && options.description || 'Media keluarga Keluarga Pohon Teduh.') })
             });
             folder = await createResponse.json();
             if (!folder.id) throw new Error('Google Drive tidak mengembalikan ID subfolder media.');
@@ -17130,11 +17626,11 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         if (file.size > MAX_MEDIA_UPLOAD_BYTES) throw new Error('Ukuran media melebihi batas 100 MB per file.');
         const mime = String(file.type || '').toLowerCase();
         if (!(mime.startsWith('image/') || ['video/mp4','video/webm','video/quicktime'].includes(mime))) throw new Error('Format media tidak didukung.');
-        const folder = await ensureDevelopmentMediaFolder();
+        const folder = await ensureDevelopmentMediaFolder(options);
         const token = await getAccessToken();
         const uid = currentAuthenticatedUser.uid;
         const safeName = String(file.name || 'media').replace(/[\\/:*?"<>|#%{}]/g, '_').slice(0, 120);
-        const metadata = { name: Date.now() + '_' + safeName, mimeType: mime, parents: [folder.id], description: 'Media jurnal Stimulasi & Milestone Keluarga Pohon Teduh.' };
+        const metadata = { name: Date.now() + '_' + safeName, mimeType: mime, parents: [folder.id], description: String(options && options.description || 'Media keluarga Keluarga Pohon Teduh.') };
         let result = null;
         if (file.size <= 5 * 1024 * 1024) {
             const boundary = 'kpt_media_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
