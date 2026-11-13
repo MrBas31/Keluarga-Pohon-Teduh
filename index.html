@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.27: vaccine timeline and dynamic postnatal medical dashboard -->
+    <!-- Keluarga Pohon Teduh 6.13.28: compact postnatal dashboard stimulation widget -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.27">
+    <meta name="application-version" content="6.13.28">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -4317,7 +4317,6 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                                     <h3 class="text-sm font-bold">Fokus Tumbuh Kembang</h3>
                                     <div class="kpt-post-stim-age mt-2"><i class="fa-solid fa-calendar-heart" aria-hidden="true"></i><span id="dash-stim-age">Tanggal lahir belum diatur</span></div>
                                     <div class="kpt-post-stim-countline mt-2"><strong id="dash-stim-count">--</strong><span id="dash-stim-count-label">panduan tersedia</span></div>
-                                    <p id="dash-stim-hint" class="kpt-post-stim-hint mt-1">Panduan stimulasi dan milestone untuk perjalanan tumbuh kembang si kecil.</p>
                                 </div>
                                 <div class="kpt-post-stim-stats">
                                     <div class="kpt-post-stim-stat"><small>Catatan aktivitas bulan ini</small><strong id="dash-stim-month">0</strong></div>
@@ -15569,7 +15568,6 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         if (!ageEl) return;
         const countEl = document.getElementById('dash-stim-count');
         const countLabelEl = document.getElementById('dash-stim-count-label');
-        const hintEl = document.getElementById('dash-stim-hint');
         const monthEl = document.getElementById('dash-stim-month');
         const milestonesEl = document.getElementById('dash-stim-milestones');
         const hasSavedLibrary = Array.isArray(appState.stimulationLibrary) && appState.stimulationLibraryInitialized611 === true;
@@ -15588,12 +15586,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
         ageEl.textContent = bandKnown ? ('Kelompok usia ' + (band ? band.label : age.bandId)) : (age.known ? 'Di luar rentang katalog usia' : 'Tanggal lahir belum diatur');
         if (countEl) countEl.textContent = String(displayedCount);
-        if (countLabelEl) countLabelEl.textContent = bandKnown ? 'aktivitas sesuai usia' : 'panduan dalam katalog';
-        if (hintEl) {
-            if (bandKnown) hintEl.textContent = 'Panduan mengikuti usia si kecil saat ini (' + age.label + '). Pilih aktivitas yang menyenangkan dan ikuti respons si kecil.';
-            else if (!age.known) hintEl.textContent = 'Lengkapi tanggal lahir si kecil agar panduan aktivitas otomatis mengikuti kelompok usianya.';
-            else hintEl.textContent = 'Katalog stimulasi tersedia untuk kelompok usia hingga 5–6 tahun. Kamu tetap dapat menjelajah kelompok usia secara manual.';
-        }
+        if (countLabelEl) countLabelEl.textContent = bandKnown ? 'aktivitas sesuai usia' : 'panduan tersedia';
         if (monthEl) monthEl.textContent = String(activitiesThisMonth);
         if (milestonesEl) milestonesEl.textContent = String(milestonesObserved);
     }
