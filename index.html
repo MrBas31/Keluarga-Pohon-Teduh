@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.26: vaccine timeline and dynamic postnatal medical dashboard -->
+    <!-- Keluarga Pohon Teduh 6.13.27: vaccine timeline and dynamic postnatal medical dashboard -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.26">
+    <meta name="application-version" content="6.13.27">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3265,16 +3265,26 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   .baby-imm-timeline-status.overdue { color:#be123c; background:#ffe4e6; }
   .baby-imm-timeline-status.na { color:#475569; background:#e2e8f0; }
   .baby-imm-timeline-empty { padding:18px 14px; border:1px dashed #cbd5e1; border-radius:16px; color:#64748b; background:#f8fafc; text-align:center; }
-  .kpt-post-medical-agenda { border:1px solid #bae6fd; border-radius:16px; padding:12px; background:linear-gradient(135deg,#eff8ff,#f0fdfa); }
-  .kpt-post-medical-agenda small { display:block; color:#0369a1; font-size:9px; font-weight:850; letter-spacing:.08em; text-transform:uppercase; }
-  .kpt-post-medical-agenda strong { display:block; margin-top:5px; color:#0f2b43; font-size:13px; line-height:1.35; }
-  .kpt-post-medical-agenda span { display:block; margin-top:4px; color:#475569; font-size:10px; line-height:1.4; }
-  .kpt-post-medical-metrics { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-  .kpt-post-medical-metric { min-width:0; padding:10px; border:1px solid #e2e8f0; border-radius:13px; background:#fff; }
-  .kpt-post-medical-metric small { display:block; color:#64748b; font-size:9px; line-height:1.3; }
-  .kpt-post-medical-metric strong { display:block; color:#0f2b43; font-size:12px; line-height:1.35; margin-top:5px; overflow-wrap:anywhere; }
-  .kpt-post-medical-progress { height:6px; overflow:hidden; margin-top:7px; border-radius:99px; background:#e2e8f0; }
-  .kpt-post-medical-progress > div { height:100%; border-radius:inherit; background:#0d9488; transition:width .25s ease; }
+  /* Compact two-step vaccine agenda: designed not to dictate dashboard row height. */
+  #sec-post-dashboard .kpt-post-medical-card { min-height:278px; }
+  .kpt-post-vaccine-list { display:flex; flex-direction:column; gap:8px; }
+  .kpt-post-vaccine-item { display:grid; grid-template-columns:14px minmax(0,1fr); gap:7px; min-width:0; }
+  .kpt-post-vaccine-rail { position:relative; display:flex; justify-content:center; padding-top:8px; }
+  .kpt-post-vaccine-rail:after { content:""; position:absolute; top:18px; bottom:-10px; width:2px; border-radius:99px; background:#cbd5e1; }
+  .kpt-post-vaccine-item.is-last .kpt-post-vaccine-rail:after { display:none; }
+  .kpt-post-vaccine-rail i { position:relative; z-index:1; display:block; width:9px; height:9px; border:2px solid #fff; border-radius:50%; background:#0d9488; box-shadow:0 0 0 1px #99f6e4; }
+  .kpt-post-vaccine-content { min-width:0; padding:8px 9px; border:1px solid #dbeafe; border-radius:12px; background:linear-gradient(135deg,#f0f9ff,#f0fdfa); }
+  .kpt-post-vaccine-topline { display:flex; align-items:center; justify-content:space-between; gap:6px; min-width:0; }
+  .kpt-post-vaccine-topline strong { min-width:0; color:#0f2b43; font-size:11px; line-height:1.25; font-weight:850; }
+  .kpt-post-vaccine-topline > span { flex:0 0 auto; color:#64748b; font-size:8px; font-weight:750; }
+  .kpt-post-vaccine-names { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; margin-top:4px; color:#334155; font-size:9px; line-height:1.35; overflow-wrap:anywhere; }
+  .kpt-post-vaccine-bottomline { display:flex; align-items:center; justify-content:space-between; gap:5px; margin-top:5px; min-width:0; }
+  .kpt-post-vaccine-bottomline small { min-width:0; color:#64748b; font-size:8px; line-height:1.25; overflow-wrap:anywhere; }
+  .kpt-post-vaccine-status { flex:0 0 auto; padding:3px 5px; border-radius:6px; font-size:7px; line-height:1.2; font-weight:850; white-space:nowrap; }
+  .kpt-post-vaccine-status.is-pending { color:#0369a1; background:#e0f2fe; }
+  .kpt-post-vaccine-status.is-planned { color:#047857; background:#d1fae5; }
+  .kpt-post-vaccine-status.is-overdue { color:#be123c; background:#ffe4e6; }
+  .kpt-post-vaccine-empty { padding:12px 10px; border:1px dashed #cbd5e1; border-radius:12px; color:#64748b; background:#f8fafc; font-size:10px; line-height:1.45; text-align:center; }
   body.dark-mode .baby-imm-view-switch { background:#0f1b2c; border-color:#334155; }
   body.dark-mode .baby-imm-view-switch button { color:#94a3b8; }
   body.dark-mode .baby-imm-view-switch button.active { color:#bae6fd; background:#26364b; box-shadow:none; }
@@ -3291,13 +3301,17 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   body.dark-mode .baby-imm-timeline-status.overdue { color:#fecdd3; background:#881337; }
   body.dark-mode .baby-imm-timeline-status.na { color:#cbd5e1; background:#334155; }
   body.dark-mode .baby-imm-timeline-empty { color:#94a3b8; border-color:#475569; background:#172337; }
-  body.dark-mode .kpt-post-medical-agenda { background:linear-gradient(135deg,#102c42,#12352f); border-color:#164e63; }
-  body.dark-mode .kpt-post-medical-agenda small { color:#7dd3fc; }
-  body.dark-mode .kpt-post-medical-agenda strong, body.dark-mode .kpt-post-medical-metric strong { color:#f1f5f9; }
-  body.dark-mode .kpt-post-medical-agenda span { color:#cbd5e1; }
-  body.dark-mode .kpt-post-medical-metric { background:#263449; border-color:#3b4a60; }
-  body.dark-mode .kpt-post-medical-metric small { color:#a8b5c7; }
-  body.dark-mode .kpt-post-medical-progress { background:#334155; }
+  body.dark-mode .kpt-post-vaccine-rail:after { background:#475569; }
+  body.dark-mode .kpt-post-vaccine-rail i { border-color:#1e293b; background:#2dd4bf; box-shadow:0 0 0 1px #0f766e; }
+  body.dark-mode .kpt-post-vaccine-content { background:linear-gradient(135deg,#102c42,#12352f); border-color:#164e63; }
+  body.dark-mode .kpt-post-vaccine-topline strong { color:#f1f5f9; }
+  body.dark-mode .kpt-post-vaccine-topline > span,
+  body.dark-mode .kpt-post-vaccine-names,
+  body.dark-mode .kpt-post-vaccine-bottomline small { color:#cbd5e1; }
+  body.dark-mode .kpt-post-vaccine-status.is-pending { color:#bae6fd; background:#0c4a6e; }
+  body.dark-mode .kpt-post-vaccine-status.is-planned { color:#a7f3d0; background:#065f46; }
+  body.dark-mode .kpt-post-vaccine-status.is-overdue { color:#fecdd3; background:#881337; }
+  body.dark-mode .kpt-post-vaccine-empty { color:#94a3b8; border-color:#475569; background:#172337; }
   @media(max-width:640px) {
     .baby-imm-timeline-group { padding-left:24px; }
     .baby-imm-timeline-card { align-items:flex-start; padding:10px; }
@@ -4315,36 +4329,22 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                             </div>
                         </article>
 
-                        <!-- WIDGET 3: MEDIS & VAKSIN — DATA DINAMIS DARI CATATAN MEDIS -->
-                        <article class="kpt-post-card rounded-3xl p-5 flex flex-col justify-between gap-4">
+                        <!-- WIDGET 3: DUA AGENDA IMUNISASI BERIKUTNYA -->
+                        <article class="kpt-post-card kpt-post-medical-card rounded-3xl p-5 flex flex-col justify-between gap-3">
                             <div class="space-y-3">
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="kpt-post-tag kpt-post-tag-emerald">Medis & Kesehatan</span>
                                     <span class="kpt-post-icon kpt-post-icon-emerald"><i class="fa-solid fa-heart-pulse"></i></span>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-bold">Agenda Kesehatan Terdekat</h3>
-                                    <div id="dash-medical-agenda" class="kpt-post-medical-agenda mt-3" aria-live="polite">
-                                        <small>Agenda berikutnya</small>
-                                        <strong id="dash-medical-agenda-title">Jadwal medis akan tampil di sini</strong>
-                                        <span id="dash-medical-agenda-detail">Data diambil dari catatan imunisasi, skrining, dan kontrol.</span>
-                                    </div>
-                                    <div class="kpt-post-medical-metrics mt-2">
-                                        <div class="kpt-post-medical-metric">
-                                            <small>Imunisasi nasional tercatat</small>
-                                            <strong id="dash-medical-vaccine-progress">—</strong>
-                                            <div class="kpt-post-medical-progress"><div id="dash-medical-vaccine-progress-bar" style="width:0%"></div></div>
-                                        </div>
-                                        <div class="kpt-post-medical-metric">
-                                            <small>Aktivitas medis terakhir</small>
-                                            <strong id="dash-medical-last-activity">Belum ada catatan</strong>
-                                            <small id="dash-medical-last-date" class="mt-1">Aktivitas akan muncul setelah dicatat.</small>
-                                        </div>
+                                    <h3 class="text-sm font-bold">Agenda Imunisasi</h3>
+                                    <div id="dash-medical-next-vaccines" class="kpt-post-vaccine-list mt-3" aria-live="polite">
+                                        <div class="kpt-post-vaccine-empty">Agenda imunisasi akan tampil di sini.</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="kpt-post-card-footer pt-3 border-t">
-                                <button type="button" onclick="mobileNavigate('post-medis')" class="kpt-post-link kpt-post-link-emerald">Buka Medis Bayi Lahir <i class="fa-solid fa-arrow-right"></i></button>
+                                <button type="button" onclick="mobileNavigate('post-medis'); switchBabyMedicalTab('imunisasi'); setBabyImmunizationView('timeline')" class="kpt-post-link kpt-post-link-emerald">Buka Timeline Imunisasi <i class="fa-solid fa-arrow-right"></i></button>
                             </div>
                         </article>
 
@@ -14808,87 +14808,129 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         }
 
         function renderPostnatalMedicalDashboardWidget() {
-            const titleEl = document.getElementById('dash-medical-agenda-title');
-            if (!titleEl) return;
-            const detailEl = document.getElementById('dash-medical-agenda-detail');
-            const progressEl = document.getElementById('dash-medical-vaccine-progress');
-            const progressBar = document.getElementById('dash-medical-vaccine-progress-bar');
-            const lastActivityEl = document.getElementById('dash-medical-last-activity');
-            const lastDateEl = document.getElementById('dash-medical-last-date');
+            const container = document.getElementById('dash-medical-next-vaccines');
+            if (!container) return;
+
             const today = getLocalDateKey();
             const dob = getBabyBirthDateKey();
             const stored = Array.isArray(appState.babyImmunizations) ? appState.babyImmunizations : [];
             const useDefaults = !stored.length && appState.babyImmunizationsInitialized !== true;
-            const vaccines = useDefaults && Array.isArray(BABY_IMMUNIZATION_DEFAULTS) ? BABY_IMMUNIZATION_DEFAULTS : stored;
-            const national = vaccines.filter(row => row && row.source === 'national' && !row.conditional && row.status !== 'not_applicable');
-            const completed = national.filter(row => row.status === 'done').length;
-            if (progressEl) progressEl.textContent = national.length ? `${completed}/${national.length} dosis` : 'Belum ada';
-            if (progressBar) progressBar.style.width = national.length ? `${Math.min(100, completed / national.length * 100)}%` : '0%';
+            const vaccines = useDefaults && Array.isArray(BABY_IMMUNIZATION_DEFAULTS)
+                ? BABY_IMMUNIZATION_DEFAULTS
+                : stored;
 
-            const candidates = [];
+            // Widget hanya menampilkan agenda vaksin yang belum diberikan.
+            // Rekomendasi kondisional baru ditampilkan setelah direncanakan.
+            const grouped = new Map();
             vaccines.forEach(row => {
-                if (!row || !['pending','planned'].includes(row.status) || (row.conditional && row.status !== 'planned')) return;
-                const due = row.plannedDate || (dob ? babyImmGetDueDate(row) : '');
-                if (due) candidates.push({ type:'vaccine', date:due, title:row.name || 'Imunisasi', detail:[row.dose, row.plannedDate ? 'Tanggal rencana' : `Usia target ${babyImmGetAgeLabel(row)}`].filter(Boolean).join(' · '), row });
-            });
-            (Array.isArray(appState.babyScreeningRecords) ? appState.babyScreeningRecords : []).forEach(row => {
-                if (row && row.status === 'planned' && row.date) candidates.push({ type:'screening', date:row.date, title:row.name || 'Skrining bayi', detail:'Skrining / pemeriksaan terencana', row });
-            });
-            (Array.isArray(appState.babyMedicalRecords) ? appState.babyMedicalRecords : []).forEach(row => {
-                if (row && row.nextVisit && row.nextVisit >= today) candidates.push({ type:'visit', date:row.nextVisit, title:row.doctor || 'Kontrol berikutnya', detail:'Jadwal kontrol dari catatan medis', row });
-            });
+                if (!row || !['pending', 'planned'].includes(row.status)) return;
+                if (row.conditional && row.status !== 'planned') return;
 
-            candidates.sort((a,b) => {
-                const aPast = a.date < today ? 0 : 1;
-                const bPast = b.date < today ? 0 : 1;
-                return aPast - bPast || a.date.localeCompare(b.date);
-            });
-            const next = candidates[0] || null;
-            if (next) {
-                const days = daysBetweenCalendarDates(today, next.date);
-                let timing = babyImmFormatDate(next.date);
-                if (days < 0) timing += ` · Lewat ${Math.abs(days)} hari dari tanggal target`;
-                else if (days === 0) timing += ' · Hari ini';
-                else if (days <= 30) timing += ` · ${days} hari lagi`;
-                const prefix = next.type === 'vaccine' ? 'Imunisasi' : (next.type === 'screening' ? 'Skrining' : 'Kontrol');
-                titleEl.textContent = `${prefix}: ${next.title}`;
-                if (detailEl) detailEl.textContent = `${timing}${next.detail ? ' · ' + next.detail : ''}`;
-            } else if (!dob) {
-                const first = [...vaccines].filter(row => row && ['pending','planned'].includes(row.status) && !row.conditional)
-                    .sort((a,b) => Number(a.targetAgeMonths ?? 999) - Number(b.targetAgeMonths ?? 999))[0];
-                if (first) {
-                    titleEl.textContent = `Setelah lahir: ${first.name || 'Imunisasi pertama'}`;
-                    if (detailEl) detailEl.textContent = `${babyImmGetAgeLabel(first)} · Lengkapi tanggal lahir setelah bayi lahir untuk menghitung tanggal target.`;
-                } else {
-                    titleEl.textContent = 'Tanggal lahir belum dilengkapi';
-                    if (detailEl) detailEl.textContent = 'Agenda kesehatan akan dihitung setelah profil kelahiran dilengkapi.';
+                const rawAge = row.targetAgeMonths;
+                const hasAge = rawAge !== null && rawAge !== undefined && rawAge !== '' && Number.isFinite(Number(rawAge));
+                const ageMonths = hasAge ? Number(rawAge) : null;
+                const dueDate = typeof babyImmGetDueDate === 'function' ? babyImmGetDueDate(row) : (row.plannedDate || '');
+                if (ageMonths === null && !dueDate) return;
+
+                // Prioritaskan pengelompokan berdasarkan usia agar vaksin pada
+                // satu tahap kunjungan tidak memenuhi widget sebagai item terpisah.
+                const key = ageMonths !== null ? `age:${ageMonths}` : `date:${dueDate}`;
+                if (!grouped.has(key)) {
+                    grouped.set(key, {
+                        key,
+                        ageMonths,
+                        ageLabel: babyImmGetAgeLabel(row),
+                        items: [],
+                        dates: [],
+                        plannedCount: 0
+                    });
                 }
-            } else {
-                titleEl.textContent = 'Belum ada agenda medis terdekat';
-                if (detailEl) detailEl.textContent = 'Tambahkan rencana imunisasi, skrining, atau tanggal kontrol untuk menampilkan agenda.';
+                const group = grouped.get(key);
+                group.items.push(row);
+                if (dueDate && /^\d{4}-\d{2}-\d{2}$/.test(dueDate)) group.dates.push(dueDate);
+                if (row.status === 'planned') group.plannedCount += 1;
+            });
+
+            const groups = Array.from(grouped.values()).map(group => {
+                const uniqueDates = [...new Set(group.dates)].sort();
+                const sortDate = uniqueDates[0] || '';
+                return {
+                    ...group,
+                    uniqueDates,
+                    sortDate,
+                    isOverdue: !!(dob && sortDate && sortDate < today),
+                    allPlanned: group.plannedCount === group.items.length
+                };
+            });
+
+            groups.sort((a, b) => {
+                if (dob) {
+                    // Jika ada beberapa jadwal terlewat, dahulukan target yang
+                    // paling dekat dengan hari ini; agenda mendatang menyusul.
+                    if (a.isOverdue !== b.isOverdue) return a.isOverdue ? -1 : 1;
+                    if (a.isOverdue && b.isOverdue) return (b.sortDate || '').localeCompare(a.sortDate || '');
+                    if (a.sortDate && b.sortDate && a.sortDate !== b.sortDate) return a.sortDate.localeCompare(b.sortDate);
+                    if (a.sortDate && !b.sortDate) return -1;
+                    if (!a.sortDate && b.sortDate) return 1;
+                } else {
+                    // Sebelum tanggal lahir tersedia, urutan tetap mengikuti usia
+                    // target; tanggal rencana hanya menjadi informasi pendamping.
+                    if (a.ageMonths === null && b.ageMonths === null && a.sortDate !== b.sortDate) {
+                        return (a.sortDate || '').localeCompare(b.sortDate || '');
+                    }
+                }
+                const aAge = a.ageMonths === null ? Number.POSITIVE_INFINITY : a.ageMonths;
+                const bAge = b.ageMonths === null ? Number.POSITIVE_INFINITY : b.ageMonths;
+                return aAge - bAge || String(a.ageLabel).localeCompare(String(b.ageLabel), 'id');
+            });
+
+            const visibleGroups = groups.slice(0, 2);
+            if (!visibleGroups.length) {
+                const message = dob
+                    ? 'Belum ada agenda imunisasi berikutnya. Periksa kembali catatan vaksin di menu Imunisasi.'
+                    : 'Lengkapi tanggal lahir setelah bayi lahir untuk menampilkan agenda berdasarkan usia.';
+                container.innerHTML = `<div class="kpt-post-vaccine-empty"><i class="fa-solid fa-calendar-check mr-1"></i>${babyImmEscape(message)}</div>`;
+                return;
             }
 
-            const activities = [];
-            (Array.isArray(appState.babyMedicalRecords) ? appState.babyMedicalRecords : []).forEach(row => {
-                if (row && row.date) activities.push({ date:row.date, title:row.category === 'Sakit' ? 'Catatan sakit / keluhan' : (row.category === 'Imunisasi' ? 'Imunisasi (riwayat medis)' : 'Kontrol / pemeriksaan') });
-            });
-            (Array.isArray(appState.babyImmunizations) ? appState.babyImmunizations : []).forEach(row => {
-                if (row && row.status === 'done' && row.administeredDate) activities.push({ date:row.administeredDate, title:`${row.name || 'Imunisasi'} ${row.dose || ''}`.trim() });
-            });
-            (Array.isArray(appState.babyScreeningRecords) ? appState.babyScreeningRecords : []).forEach(row => {
-                if (row && row.status === 'done' && row.date) activities.push({ date:row.date, title:row.name || 'Skrining / pemeriksaan' });
-            });
-            (Array.isArray(appState.kmsData) ? appState.kmsData : []).forEach(row => {
-                if (row && row.date) activities.push({ date:row.date, title:'Pengukuran pertumbuhan' });
-            });
-            activities.sort((a,b) => String(b.date).localeCompare(String(a.date)));
-            if (activities[0]) {
-                if (lastActivityEl) lastActivityEl.textContent = activities[0].title;
-                if (lastDateEl) lastDateEl.textContent = babyImmFormatDate(activities[0].date);
-            } else {
-                if (lastActivityEl) lastActivityEl.textContent = 'Belum ada aktivitas medis';
-                if (lastDateEl) lastDateEl.textContent = dob ? 'Catatan pertama akan tampil di sini.' : 'Aktivitas akan tampil setelah dicatat.';
-            }
+            container.innerHTML = visibleGroups.map((group, index) => {
+                const ageHeading = group.ageMonths === null
+                    ? 'Jadwal khusus'
+                    : (group.ageMonths === 0
+                        ? 'Saat lahir'
+                        : (/^(mulai\s+usia|usia\s)/i.test(String(group.ageLabel || ''))
+                            ? babyImmEscape(group.ageLabel)
+                            : `Usia ${babyImmEscape(group.ageLabel)}`));
+                const names = group.items.map(row => {
+                    const name = String(row.name || 'Imunisasi').trim();
+                    const dose = String(row.dose || '').trim();
+                    return dose ? `${name} (${dose})` : name;
+                });
+                const dateText = group.uniqueDates.length === 1
+                    ? (dob ? `Target ${babyImmFormatDate(group.uniqueDates[0])}` : `Rencana ${babyImmFormatDate(group.uniqueDates[0])}`)
+                    : (group.uniqueDates.length > 1 ? 'Tanggal mengikuti rencana tiap vaksin' : (dob ? 'Tanggal target mengikuti usia bayi' : 'Tanggal dihitung setelah tanggal lahir diisi'));
+                let statusText = group.isOverdue
+                    ? 'Perlu konfirmasi jadwal'
+                    : (group.allPlanned ? 'Sudah direncanakan' : (group.plannedCount ? 'Sebagian direncanakan' : 'Target usia'));
+                const statusClass = group.isOverdue ? 'is-overdue' : (group.allPlanned ? 'is-planned' : 'is-pending');
+                const nameText = names.join(' · ');
+                const countText = `${group.items.length} vaksin`;
+                return `
+                    <article class="kpt-post-vaccine-item ${index === visibleGroups.length - 1 ? 'is-last' : ''}">
+                        <span class="kpt-post-vaccine-rail" aria-hidden="true"><i></i></span>
+                        <div class="kpt-post-vaccine-content">
+                            <div class="kpt-post-vaccine-topline">
+                                <strong>${ageHeading}</strong>
+                                <span>${countText}</span>
+                            </div>
+                            <div class="kpt-post-vaccine-names" title="${babyImmEscape(nameText)}">${babyImmEscape(nameText)}</div>
+                            <div class="kpt-post-vaccine-bottomline">
+                                <small>${babyImmEscape(dateText)}</small>
+                                <span class="kpt-post-vaccine-status ${statusClass}">${babyImmEscape(statusText)}</span>
+                            </div>
+                        </div>
+                    </article>`;
+            }).join('');
         }
 
         function babyImmFormatAge(months) {
@@ -17412,6 +17454,12 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         #sec-post-dashboard .kpt-post-schedule { padding: .65rem !important; }
         #sec-post-dashboard .kpt-post-schedule strong { font-size: .72rem !important; }
         #sec-post-dashboard .kpt-post-schedule span { font-size: .62rem !important; }
+    #sec-post-dashboard .kpt-post-medical-card { min-height: 0 !important; }
+    #sec-post-dashboard .kpt-post-vaccine-list { gap: 6px; margin-top: .55rem !important; }
+    #sec-post-dashboard .kpt-post-vaccine-content { padding: 7px 8px; }
+    #sec-post-dashboard .kpt-post-vaccine-topline strong { font-size: 10px; }
+    #sec-post-dashboard .kpt-post-vaccine-names { font-size: 8px; }
+    #sec-post-dashboard .kpt-post-vaccine-status { font-size: 6.5px; }
         #sec-post-dashboard .kpt-post-welcome-title { font-size: 1.35rem !important; }
         #sec-post-dashboard .kpt-post-metric { padding: .68rem .4rem !important; border-radius: 14px !important; }
         #sec-post-dashboard .kpt-post-metric > div:first-child { font-size: 1.05rem !important; line-height: 1.2 !important; overflow-wrap: anywhere; }
