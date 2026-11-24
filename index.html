@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.14.3: Abstract Gradient Motion — organic animated gradients replace literal leaves -->
+    <!-- Keluarga Pohon Teduh 6.13.31: Hijri mobile, independent labor accordions, hospital shortlists, and gift acquisition -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.14.3">
+    <meta name="application-version" content="6.13.31">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3420,12 +3420,6 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
-    <!-- Abstract organic gradient background; decorative only. -->
-    <div id="kpt-ambient-bg" aria-hidden="true">
-        <span class="kpt-ambient-flow kpt-flow-one"></span>
-        <span class="kpt-ambient-flow kpt-flow-two"></span>
-        <span class="kpt-ambient-flow kpt-flow-three"></span>
-    </div>
 
     <!-- AUTHENTICATION GATE: aplikasi dan data ditahan sampai UID diizinkan -->
     <section id="auth-gate" aria-live="polite">
@@ -12547,7 +12541,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.14.3',
+                    appVersion: '6.13.31',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -18365,204 +18359,6 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   }
   body.dark-mode #shopping-gift-details > div:first-child,
   body.dark-mode #shopping-gift-details p { color: #a7f3d0 !important; }
-</style>
-
-
-
-<style id="kpt-abstract-gradient-motion-6143">
-  /* ==========================================================
-     KPT 6.14.3 — ABSTRACT ORGANIC GRADIENT MOTION
-     Original Slate/blue app palette retained. Literal leaves removed.
-     Motion lives in soft gradient fields and flowing curved forms.
-     ========================================================== */
-  :root {
-    --kpt-page-start: #f8fafc;
-    --kpt-page-mid: #f7f9fc;
-    --kpt-page-end: #f5f8fc;
-  }
-  body.dark-mode {
-    --kpt-page-start: #0f172a;
-    --kpt-page-mid: #111c30;
-    --kpt-page-end: #0f172a;
-  }
-
-  html { background-color: var(--kpt-page-start); }
-  body,
-  body.dark-mode {
-    position: relative;
-    isolation: isolate;
-    background: transparent !important;
-  }
-
-  #kpt-ambient-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-    user-select: none;
-    background: linear-gradient(136deg,
-      var(--kpt-page-start) 0%,
-      var(--kpt-page-mid) 53%,
-      var(--kpt-page-end) 100%);
-    contain: paint;
-  }
-
-  /* Broad colour atmosphere: slow movement in the gradient itself. */
-  #kpt-ambient-bg::before {
-    content: "";
-    position: absolute;
-    inset: -12%;
-    background:
-      radial-gradient(ellipse 42% 34% at 16% 20%, rgba(96,165,250,.17) 0%, rgba(96,165,250,.075) 42%, transparent 76%),
-      radial-gradient(ellipse 38% 40% at 84% 24%, rgba(45,212,191,.13) 0%, rgba(45,212,191,.055) 44%, transparent 76%),
-      radial-gradient(ellipse 44% 34% at 76% 84%, rgba(167,139,250,.115) 0%, rgba(167,139,250,.045) 46%, transparent 78%),
-      radial-gradient(ellipse 36% 32% at 20% 82%, rgba(251,191,36,.09) 0%, rgba(251,191,36,.035) 45%, transparent 78%);
-    background-size: 125% 125%;
-    background-position: 0% 45%;
-    opacity: .92;
-    transform: translate3d(0,0,0);
-    will-change: background-position, transform;
-    animation: kpt-gradient-wander 38s ease-in-out infinite alternate;
-  }
-  body.dark-mode #kpt-ambient-bg::before {
-    background:
-      radial-gradient(ellipse 42% 34% at 16% 20%, rgba(59,130,246,.19) 0%, rgba(59,130,246,.085) 42%, transparent 76%),
-      radial-gradient(ellipse 38% 40% at 84% 24%, rgba(20,184,166,.145) 0%, rgba(20,184,166,.06) 44%, transparent 76%),
-      radial-gradient(ellipse 44% 34% at 76% 84%, rgba(139,92,246,.15) 0%, rgba(139,92,246,.06) 46%, transparent 78%),
-      radial-gradient(ellipse 36% 32% at 20% 82%, rgba(245,158,11,.105) 0%, rgba(245,158,11,.04) 45%, transparent 78%);
-    opacity: .82;
-  }
-
-  /* Three oversized curved colour forms create a leaf-like rhythm without leaf illustrations. */
-  .kpt-ambient-flow {
-    position: absolute;
-    display: block;
-    pointer-events: none;
-    border: 1px solid rgba(96,165,250,.075);
-    filter: blur(25px);
-    opacity: .74;
-    background-size: 180% 180%;
-    background-position: 0% 50%;
-    will-change: transform, background-position;
-    transform-origin: center;
-  }
-  .kpt-flow-one {
-    width: 76vw;
-    height: 48vh;
-    min-height: 270px;
-    left: -22vw;
-    top: -7vh;
-    border-radius: 64% 36% 58% 42% / 49% 38% 62% 51%;
-    background:
-      radial-gradient(ellipse at 42% 48%, rgba(96,165,250,.19) 0%, rgba(96,165,250,.09) 39%, transparent 73%),
-      linear-gradient(128deg, rgba(45,212,191,.075), rgba(96,165,250,.035) 58%, transparent 82%);
-    animation: kpt-flow-one 34s ease-in-out infinite alternate;
-  }
-  .kpt-flow-two {
-    width: 72vw;
-    height: 53vh;
-    min-height: 300px;
-    right: -24vw;
-    top: 17vh;
-    border-color: rgba(45,212,191,.07);
-    border-radius: 42% 58% 61% 39% / 44% 58% 42% 56%;
-    background:
-      radial-gradient(ellipse at 56% 42%, rgba(45,212,191,.16) 0%, rgba(45,212,191,.075) 42%, transparent 74%),
-      linear-gradient(145deg, rgba(167,139,250,.055), rgba(45,212,191,.035) 62%, transparent 84%);
-    animation: kpt-flow-two 41s ease-in-out infinite alternate;
-  }
-  .kpt-flow-three {
-    width: 78vw;
-    height: 42vh;
-    min-height: 240px;
-    left: 10vw;
-    bottom: -22vh;
-    border-color: rgba(167,139,250,.065);
-    border-radius: 57% 43% 36% 64% / 55% 42% 58% 45%;
-    background:
-      radial-gradient(ellipse at 50% 42%, rgba(167,139,250,.135) 0%, rgba(167,139,250,.06) 43%, transparent 75%),
-      linear-gradient(115deg, rgba(251,191,36,.07), rgba(244,114,182,.035) 58%, transparent 82%);
-    animation: kpt-flow-three 37s ease-in-out infinite alternate;
-  }
-
-  body.dark-mode .kpt-ambient-flow {
-    filter: blur(29px);
-    opacity: .68;
-    border-color: rgba(148,163,184,.09);
-  }
-  body.dark-mode .kpt-flow-one {
-    background:
-      radial-gradient(ellipse at 42% 48%, rgba(59,130,246,.23) 0%, rgba(59,130,246,.105) 39%, transparent 73%),
-      linear-gradient(128deg, rgba(20,184,166,.09), rgba(59,130,246,.045) 58%, transparent 82%);
-  }
-  body.dark-mode .kpt-flow-two {
-    border-color: rgba(45,212,191,.085);
-    background:
-      radial-gradient(ellipse at 56% 42%, rgba(20,184,166,.19) 0%, rgba(20,184,166,.085) 42%, transparent 74%),
-      linear-gradient(145deg, rgba(139,92,246,.075), rgba(20,184,166,.045) 62%, transparent 84%);
-  }
-  body.dark-mode .kpt-flow-three {
-    border-color: rgba(167,139,250,.08);
-    background:
-      radial-gradient(ellipse at 50% 42%, rgba(139,92,246,.19) 0%, rgba(139,92,246,.085) 43%, transparent 75%),
-      linear-gradient(115deg, rgba(245,158,11,.08), rgba(236,72,153,.045) 58%, transparent 82%);
-  }
-
-  @keyframes kpt-gradient-wander {
-    0%   { background-position: 0% 42%; transform: translate3d(-.5%, -.3%, 0) scale(1); }
-    50%  { background-position: 52% 58%; }
-    100% { background-position: 100% 46%; transform: translate3d(.6%, .5%, 0) scale(1.025); }
-  }
-  @keyframes kpt-flow-one {
-    0%   { transform: translate3d(-1.5vw, -1vh, 0) rotate(-13deg) scale(.98); background-position: 0% 50%; }
-    100% { transform: translate3d(3vw, 2.5vh, 0) rotate(-5deg) scale(1.055); background-position: 100% 54%; }
-  }
-  @keyframes kpt-flow-two {
-    0%   { transform: translate3d(2vw, -2vh, 0) rotate(12deg) scale(1.02); background-position: 100% 45%; }
-    100% { transform: translate3d(-3vw, 2vh, 0) rotate(4deg) scale(.96); background-position: 0% 58%; }
-  }
-  @keyframes kpt-flow-three {
-    0%   { transform: translate3d(-2vw, 1vh, 0) rotate(-8deg) scale(.97); background-position: 15% 50%; }
-    100% { transform: translate3d(2vw, -2.5vh, 0) rotate(3deg) scale(1.06); background-position: 85% 48%; }
-  }
-
-  /* Keep the ambient layer behind the complete app without intercepting interaction. */
-  body > header,
-  body > main,
-  body > #kpt-public-policy-footer {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Retain the glass-header refinement from the previous visual refresh. */
-  header.bg-white {
-    background: rgba(255,255,255,.92) !important;
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-  }
-  body.dark-mode header.bg-white {
-    background: rgba(30,41,59,.94) !important;
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-  }
-
-  @media (max-width: 767px) {
-    /* Smaller and softer organic fields on phones; no layout or content shifts. */
-    #kpt-ambient-bg::before { inset: -7%; opacity: .82; }
-    .kpt-ambient-flow { filter: blur(30px); opacity: .62; }
-    .kpt-flow-one { width: 112vw; height: 38vh; min-height: 210px; left: -42vw; top: -3vh; }
-    .kpt-flow-two { width: 104vw; height: 42vh; min-height: 230px; right: -48vw; top: 27vh; }
-    .kpt-flow-three { width: 108vw; height: 34vh; min-height: 190px; left: -3vw; bottom: -16vh; }
-    body.dark-mode .kpt-ambient-flow { filter: blur(33px); opacity: .58; }
-    header.bg-white { -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    #kpt-ambient-bg::before,
-    .kpt-ambient-flow { animation: none !important; }
-    /* Static ambient gradient remains visible for users who reduce motion. */
-  }
 </style>
 
 </body>
