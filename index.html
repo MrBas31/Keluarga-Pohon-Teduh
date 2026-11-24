@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.31: Hijri mobile, independent labor accordions, hospital shortlists, and gift acquisition -->
+    <!-- Keluarga Pohon Teduh 6.14.0: Calm Botanical Visual Refresh — soft animated background and sage visual foundation -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.31">
+    <meta name="application-version" content="6.14.0">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3420,6 +3420,13 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
+    <!-- Calm Botanical ambient background: decorative only, never interactive. -->
+    <div id="kpt-ambient-bg" aria-hidden="true">
+        <span class="kpt-ambient-leaf kpt-leaf-a"></span>
+        <span class="kpt-ambient-leaf kpt-leaf-b"></span>
+        <span class="kpt-ambient-leaf kpt-leaf-c"></span>
+        <span class="kpt-ambient-leaf kpt-leaf-d"></span>
+    </div>
 
     <!-- AUTHENTICATION GATE: aplikasi dan data ditahan sampai UID diizinkan -->
     <section id="auth-gate" aria-live="polite">
@@ -12541,7 +12548,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.31',
+                    appVersion: '6.14.0',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -18359,6 +18366,228 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   }
   body.dark-mode #shopping-gift-details > div:first-child,
   body.dark-mode #shopping-gift-details p { color: #a7f3d0 !important; }
+</style>
+
+
+
+<style id="kpt-calm-botanical-visual-refresh-6140">
+  /* ==========================================================
+     KPT 6.14.0 — CALM BOTANICAL VISUAL FOUNDATION
+     Presentation-only layer. No data model or app workflow changes.
+     ========================================================== */
+  :root {
+    --kpt-sage-950: #263f32;
+    --kpt-sage-900: #304c3a;
+    --kpt-sage-800: #3d6048;
+    --kpt-sage-700: #52765b;
+    --kpt-sage-600: #66886b;
+    --kpt-sage-500: #819b7d;
+    --kpt-sage-200: #dce7d9;
+    --kpt-sage-100: #eaf0e7;
+    --kpt-sage-50: #f3f6f0;
+    --kpt-page-start: #f7f8f3;
+    --kpt-page-mid: #eff4ec;
+    --kpt-page-end: #f5f3ed;
+    --kpt-surface: rgba(255,255,255,.92);
+    --kpt-border: #e3eade;
+    --kpt-soft-shadow: 0 8px 24px rgba(48,76,58,.055);
+  }
+
+  body.dark-mode {
+    --kpt-sage-950: #d8e7d6;
+    --kpt-sage-900: #c5dac4;
+    --kpt-sage-800: #aec9ae;
+    --kpt-sage-700: #9fbd9f;
+    --kpt-sage-600: #8fac90;
+    --kpt-sage-500: #78977d;
+    --kpt-sage-200: #405747;
+    --kpt-sage-100: #2b4034;
+    --kpt-sage-50: #202f27;
+    --kpt-page-start: #111a16;
+    --kpt-page-mid: #17231c;
+    --kpt-page-end: #1b241e;
+    --kpt-surface: rgba(28,42,33,.94);
+    --kpt-border: #34483a;
+    --kpt-soft-shadow: 0 10px 28px rgba(0,0,0,.20);
+  }
+
+  /* Keep the page canvas transparent so the fixed, low-contrast gradient
+     remains stable while scrolling on desktop and mobile browsers. */
+  html { background-color: var(--kpt-page-start); }
+  body,
+  body.dark-mode {
+    position: relative;
+    isolation: isolate;
+    background: transparent !important;
+  }
+  #kpt-ambient-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    background: linear-gradient(132deg,
+      var(--kpt-page-start) 0%,
+      var(--kpt-page-mid) 53%,
+      var(--kpt-page-end) 100%);
+    contain: paint;
+  }
+  #kpt-ambient-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 7% 14%, rgba(126,157,119,.075), transparent 34%),
+      radial-gradient(ellipse at 93% 78%, rgba(186,157,120,.055), transparent 38%);
+  }
+  body.dark-mode #kpt-ambient-bg::before {
+    background:
+      radial-gradient(ellipse at 7% 14%, rgba(119,157,125,.10), transparent 36%),
+      radial-gradient(ellipse at 93% 78%, rgba(139,157,117,.055), transparent 40%);
+  }
+  .kpt-ambient-leaf {
+    position: absolute;
+    display: block;
+    width: 17px;
+    height: 9px;
+    border-radius: 100% 0 100% 0;
+    opacity: .12;
+    background: linear-gradient(135deg, rgba(112,148,105,.26), rgba(146,169,128,.10));
+    border: 1px solid rgba(105,139,99,.12);
+    box-shadow: 0 1px 3px rgba(65,93,61,.035);
+    transform-origin: center;
+    will-change: transform;
+  }
+  body.dark-mode .kpt-ambient-leaf {
+    opacity: .11;
+    background: linear-gradient(135deg, rgba(154,190,148,.24), rgba(111,146,115,.12));
+    border-color: rgba(164,195,157,.12);
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .kpt-leaf-a { left: 7%; top: -8%; animation: kpt-leaf-float-a 48s linear infinite; }
+  .kpt-leaf-b { right: 12%; top: 9%; width: 14px; height: 8px; animation: kpt-leaf-float-b 58s linear 13s infinite; opacity: .095; }
+  .kpt-leaf-c { left: 24%; top: 28%; width: 12px; height: 7px; animation: kpt-leaf-float-c 64s linear 27s infinite; opacity: .085; }
+  .kpt-leaf-d { right: 27%; top: 56%; width: 15px; height: 8px; animation: kpt-leaf-float-d 55s linear 6s infinite; opacity: .09; }
+  @keyframes kpt-leaf-float-a {
+    0% { transform: translate3d(0,-3vh,0) rotate(-24deg); }
+    50% { transform: translate3d(22px,52vh,0) rotate(155deg); }
+    100% { transform: translate3d(-8px,112vh,0) rotate(335deg); }
+  }
+  @keyframes kpt-leaf-float-b {
+    0% { transform: translate3d(0,-4vh,0) rotate(28deg); }
+    50% { transform: translate3d(-20px,51vh,0) rotate(190deg); }
+    100% { transform: translate3d(8px,112vh,0) rotate(388deg); }
+  }
+  @keyframes kpt-leaf-float-c {
+    0% { transform: translate3d(0,-5vh,0) rotate(4deg); }
+    50% { transform: translate3d(17px,51vh,0) rotate(178deg); }
+    100% { transform: translate3d(-12px,112vh,0) rotate(364deg); }
+  }
+  @keyframes kpt-leaf-float-d {
+    0% { transform: translate3d(0,-4vh,0) rotate(-12deg); }
+    50% { transform: translate3d(-16px,52vh,0) rotate(160deg); }
+    100% { transform: translate3d(12px,112vh,0) rotate(350deg); }
+  }
+
+  /* Light-touch botanical treatment for the sticky header and navigation. */
+  header.bg-white {
+    background: rgba(255,255,255,.91) !important;
+    border-bottom-color: var(--kpt-border) !important;
+    box-shadow: 0 5px 20px rgba(43,68,49,.045) !important;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+  body.dark-mode header.bg-white {
+    background: rgba(24,37,29,.94) !important;
+    border-bottom-color: #304437 !important;
+    box-shadow: 0 7px 22px rgba(0,0,0,.16) !important;
+  }
+  #header-main-layout .text-sky-700 { color: var(--kpt-sage-700) !important; }
+  body.dark-mode #header-main-layout .text-sky-700 { color: #a9c9a7 !important; }
+  .tab-btn.active {
+    border-bottom-color: var(--kpt-sage-700) !important;
+    color: var(--kpt-sage-800) !important;
+  }
+  body.dark-mode .tab-btn.active {
+    border-bottom-color: #9fbd9f !important;
+    color: #b7d2b4 !important;
+  }
+  .phase-btn.active,
+  .budget-subtab.active {
+    background-color: var(--kpt-sage-700) !important;
+    color: #fff !important;
+  }
+  body.dark-mode .phase-btn.active,
+  body.dark-mode .budget-subtab.active {
+    background-color: #55765d !important;
+    color: #f4faf2 !important;
+  }
+
+  /* Dashboard is the first page to receive the more visible visual polish. */
+  #sec-dashboard .kpt-dash-hero {
+    background: linear-gradient(132deg, #456b50 0%, #5d7f60 49%, #2e4938 100%) !important;
+    box-shadow: 0 18px 42px rgba(54,91,62,.17) !important;
+  }
+  #sec-dashboard .kpt-dash-hero-orb-two { background: rgba(208,226,198,.12) !important; }
+  #sec-dashboard .kpt-dash-card {
+    border-color: #e5ece2 !important;
+    box-shadow: 0 6px 20px rgba(48,76,58,.05) !important;
+  }
+  #sec-dashboard .kpt-dash-card:hover {
+    border-color: #cbdcc8 !important;
+    box-shadow: 0 12px 28px rgba(48,76,58,.085) !important;
+  }
+  #sec-dashboard .kpt-dash-tag-sky { color: #45694d !important; background: #e8f0e5 !important; }
+  #sec-dashboard .kpt-dash-icon-sky { color: #557b5b !important; background: #e8f0e5 !important; }
+  #sec-dashboard .kpt-dash-quick-panel {
+    background: linear-gradient(135deg, #f5f8f1 0%, #f8f8f3 56%, #edf3e9 100%) !important;
+    border-color: #e2eadf !important;
+    box-shadow: var(--kpt-soft-shadow) !important;
+  }
+  #sec-dashboard .kpt-dash-shortcut { border-color: #e4ebe1 !important; }
+  #sec-dashboard .kpt-dash-shortcut:hover { border-color: #b9cfb6 !important; }
+  #sec-dashboard .kpt-dash-shortcut:focus-visible,
+  #sec-dashboard button:focus-visible { outline-color: rgba(91,132,93,.42) !important; }
+  #sec-dashboard .kpt-dashboard-eyebrow { color: #5b7e5d !important; }
+  body.dark-mode #sec-dashboard .kpt-dash-hero {
+    background: linear-gradient(132deg, #31543d 0%, #426448 49%, #233a2d 100%) !important;
+    box-shadow: 0 18px 42px rgba(0,0,0,.24) !important;
+  }
+  body.dark-mode #sec-dashboard .kpt-dash-card {
+    background: #1d2b22 !important;
+    border-color: #34483a !important;
+    box-shadow: 0 7px 22px rgba(0,0,0,.16) !important;
+  }
+  body.dark-mode #sec-dashboard .kpt-dash-card:hover { border-color: #506b54 !important; }
+  body.dark-mode #sec-dashboard .kpt-dash-tag-sky { color: #c5ddc1 !important; background: #304a36 !important; }
+  body.dark-mode #sec-dashboard .kpt-dash-icon-sky { color: #c5ddc1 !important; background: #304a36 !important; }
+  body.dark-mode #sec-dashboard .kpt-dash-quick-panel {
+    background: linear-gradient(135deg, #1c2b21 0%, #202e24 58%, #26372a 100%) !important;
+    border-color: #354a39 !important;
+  }
+  body.dark-mode #sec-dashboard .kpt-dash-shortcut {
+    background: #26372a !important;
+    border-color: #3a4e3d !important;
+  }
+  body.dark-mode #sec-dashboard .kpt-dash-shortcut:hover { border-color: #657f63 !important; }
+  body.dark-mode #sec-dashboard .kpt-dashboard-eyebrow { color: #a9c9a7 !important; }
+
+  /* Keep background decoration behind content and almost imperceptible on phones. */
+  @media (max-width: 640px) {
+    .kpt-ambient-leaf { width: 13px; height: 7px; opacity: .075; }
+    .kpt-leaf-c, .kpt-leaf-d { display: none; }
+    body.dark-mode .kpt-ambient-leaf { opacity: .07; }
+    header.bg-white { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kpt-ambient-leaf { animation: none !important; }
+    #sec-dashboard .kpt-dash-card,
+    #sec-dashboard .kpt-dash-shortcut,
+    #sec-dashboard .kpt-dash-progress-fill { transition: none !important; }
+    #sec-dashboard .kpt-dash-card:hover,
+    #sec-dashboard .kpt-dash-shortcut:hover { transform: none !important; }
+  }
 </style>
 
 </body>
