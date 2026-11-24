@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.14.0: Calm Botanical Visual Refresh — soft animated background and sage visual foundation -->
+    <!-- Keluarga Pohon Teduh 6.14.1: Botanical Palette & Ambient Motion — deeper layered canvas and visible leaf drift -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.14.0">
+    <meta name="application-version" content="6.14.1">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3426,6 +3426,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         <span class="kpt-ambient-leaf kpt-leaf-b"></span>
         <span class="kpt-ambient-leaf kpt-leaf-c"></span>
         <span class="kpt-ambient-leaf kpt-leaf-d"></span>
+        <span class="kpt-ambient-leaf kpt-leaf-e"></span>
+        <span class="kpt-ambient-leaf kpt-leaf-f"></span>
     </div>
 
     <!-- AUTHENTICATION GATE: aplikasi dan data ditahan sampai UID diizinkan -->
@@ -12548,7 +12550,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.14.0',
+                    appVersion: '6.14.1',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -18370,49 +18372,49 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
 
 
-<style id="kpt-calm-botanical-visual-refresh-6140">
+<style id="kpt-calm-botanical-visual-refresh-6141">
   /* ==========================================================
-     KPT 6.14.0 — CALM BOTANICAL VISUAL FOUNDATION
-     Presentation-only layer. No data model or app workflow changes.
+     KPT 6.14.1 — BOTANICAL PALETTE & AMBIENT MOTION
+     Presentation-only refinement. No data model or app workflow changes.
      ========================================================== */
   :root {
-    --kpt-sage-950: #263f32;
-    --kpt-sage-900: #304c3a;
-    --kpt-sage-800: #3d6048;
-    --kpt-sage-700: #52765b;
-    --kpt-sage-600: #66886b;
-    --kpt-sage-500: #819b7d;
-    --kpt-sage-200: #dce7d9;
-    --kpt-sage-100: #eaf0e7;
-    --kpt-sage-50: #f3f6f0;
-    --kpt-page-start: #f7f8f3;
-    --kpt-page-mid: #eff4ec;
-    --kpt-page-end: #f5f3ed;
-    --kpt-surface: rgba(255,255,255,.92);
-    --kpt-border: #e3eade;
-    --kpt-soft-shadow: 0 8px 24px rgba(48,76,58,.055);
+    /* Six coordinated tones: forest, sage, cream, terracotta, blue-grey, ochre. */
+    --kpt-forest-950: #263a31;
+    --kpt-forest-900: #344a3e;
+    --kpt-sage-700: #5d7862;
+    --kpt-sage-600: #708a73;
+    --kpt-sage-500: #8fa48d;
+    --kpt-cream: #e8e1d4;
+    --kpt-terracotta: #b9826d;
+    --kpt-dusty-blue: #7f96a3;
+    --kpt-soft-ochre: #bda374;
+    --kpt-page-start: #dce3da;
+    --kpt-page-mid: #e2e4dc;
+    --kpt-page-end: #e8dfd5;
+    --kpt-surface: rgba(255,255,255,.96);
+    --kpt-border: #d6ded5;
+    --kpt-soft-shadow: 0 9px 25px rgba(38,58,49,.075);
   }
 
   body.dark-mode {
-    --kpt-sage-950: #d8e7d6;
-    --kpt-sage-900: #c5dac4;
-    --kpt-sage-800: #aec9ae;
-    --kpt-sage-700: #9fbd9f;
-    --kpt-sage-600: #8fac90;
-    --kpt-sage-500: #78977d;
-    --kpt-sage-200: #405747;
-    --kpt-sage-100: #2b4034;
-    --kpt-sage-50: #202f27;
-    --kpt-page-start: #111a16;
-    --kpt-page-mid: #17231c;
-    --kpt-page-end: #1b241e;
-    --kpt-surface: rgba(28,42,33,.94);
-    --kpt-border: #34483a;
-    --kpt-soft-shadow: 0 10px 28px rgba(0,0,0,.20);
+    --kpt-forest-950: #e2ebe1;
+    --kpt-forest-900: #c7d8c8;
+    --kpt-sage-700: #9bb39b;
+    --kpt-sage-600: #86a18a;
+    --kpt-sage-500: #6f8b75;
+    --kpt-page-start: #101a16;
+    --kpt-page-mid: #14211b;
+    --kpt-page-end: #1b2521;
+    --kpt-surface: rgba(32,45,37,.97);
+    --kpt-border: #3a4a3e;
+    --kpt-soft-shadow: 0 11px 30px rgba(0,0,0,.24);
   }
 
-  /* Keep the page canvas transparent so the fixed, low-contrast gradient
-     remains stable while scrolling on desktop and mobile browsers. */
+  /*
+     The ambient layer must sit ABOVE the document canvas but BELOW app content.
+     The previous negative z-index placed it behind the root canvas in some browsers,
+     making both the gradient and leaves effectively invisible.
+  */
   html { background-color: var(--kpt-page-start); }
   body,
   body.dark-mode {
@@ -18423,95 +18425,111 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   #kpt-ambient-bg {
     position: fixed;
     inset: 0;
-    z-index: -1;
+    z-index: 0;
     overflow: hidden;
     pointer-events: none;
     user-select: none;
     background: linear-gradient(132deg,
       var(--kpt-page-start) 0%,
-      var(--kpt-page-mid) 53%,
+      var(--kpt-page-mid) 52%,
       var(--kpt-page-end) 100%);
     contain: paint;
+  }
+  /* Keep the main content above the decorative layer without changing modal stacking. */
+  body > header,
+  body > main,
+  body > #kpt-public-policy-footer {
+    position: relative;
+    z-index: 1;
   }
   #kpt-ambient-bg::before {
     content: "";
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse at 7% 14%, rgba(126,157,119,.075), transparent 34%),
-      radial-gradient(ellipse at 93% 78%, rgba(186,157,120,.055), transparent 38%);
+      radial-gradient(ellipse at 9% 15%, rgba(117,145,119,.18), transparent 34%),
+      radial-gradient(ellipse at 88% 22%, rgba(127,150,163,.13), transparent 32%),
+      radial-gradient(ellipse at 82% 84%, rgba(185,130,109,.13), transparent 36%),
+      radial-gradient(ellipse at 24% 88%, rgba(189,163,116,.09), transparent 34%);
   }
   body.dark-mode #kpt-ambient-bg::before {
     background:
-      radial-gradient(ellipse at 7% 14%, rgba(119,157,125,.10), transparent 36%),
-      radial-gradient(ellipse at 93% 78%, rgba(139,157,117,.055), transparent 40%);
+      radial-gradient(ellipse at 9% 15%, rgba(104,137,111,.13), transparent 35%),
+      radial-gradient(ellipse at 88% 22%, rgba(103,129,145,.10), transparent 34%),
+      radial-gradient(ellipse at 82% 84%, rgba(156,112,95,.075), transparent 36%),
+      radial-gradient(ellipse at 24% 88%, rgba(171,145,99,.055), transparent 34%);
   }
+
+  /* Small, translucent leaves in several muted palette colours. */
   .kpt-ambient-leaf {
     position: absolute;
     display: block;
-    width: 17px;
-    height: 9px;
+    width: 21px;
+    height: 13px;
     border-radius: 100% 0 100% 0;
-    opacity: .12;
-    background: linear-gradient(135deg, rgba(112,148,105,.26), rgba(146,169,128,.10));
-    border: 1px solid rgba(105,139,99,.12);
-    box-shadow: 0 1px 3px rgba(65,93,61,.035);
+    border: 1px solid rgba(255,255,255,.22);
+    background: linear-gradient(135deg, var(--kpt-leaf-light), var(--kpt-leaf-dark));
+    box-shadow: 0 2px 7px rgba(40,57,47,.09);
+    opacity: 0;
+    transform-origin: 50% 50%;
+    will-change: transform, opacity;
+    animation-name: kpt-leaf-drift;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .kpt-ambient-leaf::after {
+    content: "";
+    position: absolute;
+    left: 13%;
+    top: 49%;
+    width: 76%;
+    height: 1px;
+    border-radius: 99px;
+    background: rgba(255,255,255,.36);
+    transform: rotate(-19deg);
     transform-origin: center;
-    will-change: transform;
   }
   body.dark-mode .kpt-ambient-leaf {
-    opacity: .11;
-    background: linear-gradient(135deg, rgba(154,190,148,.24), rgba(111,146,115,.12));
-    border-color: rgba(164,195,157,.12);
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    border-color: rgba(225,235,225,.12);
+    box-shadow: 0 2px 8px rgba(0,0,0,.16);
   }
-  .kpt-leaf-a { left: 7%; top: -8%; animation: kpt-leaf-float-a 48s linear infinite; }
-  .kpt-leaf-b { right: 12%; top: 9%; width: 14px; height: 8px; animation: kpt-leaf-float-b 58s linear 13s infinite; opacity: .095; }
-  .kpt-leaf-c { left: 24%; top: 28%; width: 12px; height: 7px; animation: kpt-leaf-float-c 64s linear 27s infinite; opacity: .085; }
-  .kpt-leaf-d { right: 27%; top: 56%; width: 15px; height: 8px; animation: kpt-leaf-float-d 55s linear 6s infinite; opacity: .09; }
-  @keyframes kpt-leaf-float-a {
-    0% { transform: translate3d(0,-3vh,0) rotate(-24deg); }
-    50% { transform: translate3d(22px,52vh,0) rotate(155deg); }
-    100% { transform: translate3d(-8px,112vh,0) rotate(335deg); }
-  }
-  @keyframes kpt-leaf-float-b {
-    0% { transform: translate3d(0,-4vh,0) rotate(28deg); }
-    50% { transform: translate3d(-20px,51vh,0) rotate(190deg); }
-    100% { transform: translate3d(8px,112vh,0) rotate(388deg); }
-  }
-  @keyframes kpt-leaf-float-c {
-    0% { transform: translate3d(0,-5vh,0) rotate(4deg); }
-    50% { transform: translate3d(17px,51vh,0) rotate(178deg); }
-    100% { transform: translate3d(-12px,112vh,0) rotate(364deg); }
-  }
-  @keyframes kpt-leaf-float-d {
-    0% { transform: translate3d(0,-4vh,0) rotate(-12deg); }
-    50% { transform: translate3d(-16px,52vh,0) rotate(160deg); }
-    100% { transform: translate3d(12px,112vh,0) rotate(350deg); }
+  body.dark-mode .kpt-ambient-leaf::after { background: rgba(240,245,235,.26); }
+
+  .kpt-leaf-a { left: 7%; top: -5%; --kpt-leaf-light:#a8b89f; --kpt-leaf-dark:#718b73; --kpt-leaf-opacity:.19; --kpt-leaf-drift:34px; --kpt-leaf-turn:295deg; animation-duration:43s; animation-delay:-23s; }
+  .kpt-leaf-b { left: 24%; top: -14%; width:17px; height:11px; --kpt-leaf-light:#d0a18d; --kpt-leaf-dark:#b9826d; --kpt-leaf-opacity:.16; --kpt-leaf-drift:-28px; --kpt-leaf-turn:330deg; animation-duration:51s; animation-delay:-8s; }
+  .kpt-leaf-c { left: 43%; top: -7%; width:19px; height:12px; --kpt-leaf-light:#a5b7bf; --kpt-leaf-dark:#7f96a3; --kpt-leaf-opacity:.17; --kpt-leaf-drift:42px; --kpt-leaf-turn:305deg; animation-duration:47s; animation-delay:-31s; }
+  .kpt-leaf-d { right: 31%; top: -16%; width:16px; height:10px; --kpt-leaf-light:#d4c39e; --kpt-leaf-dark:#bda374; --kpt-leaf-opacity:.16; --kpt-leaf-drift:-35px; --kpt-leaf-turn:320deg; animation-duration:55s; animation-delay:-17s; }
+  .kpt-leaf-e { right: 14%; top: -8%; --kpt-leaf-light:#aabca5; --kpt-leaf-dark:#78947b; --kpt-leaf-opacity:.18; --kpt-leaf-drift:27px; --kpt-leaf-turn:285deg; animation-duration:45s; animation-delay:-35s; }
+  .kpt-leaf-f { right: 4%; top: -19%; width:16px; height:10px; --kpt-leaf-light:#b5c0c1; --kpt-leaf-dark:#839ba2; --kpt-leaf-opacity:.14; --kpt-leaf-drift:-23px; --kpt-leaf-turn:310deg; animation-duration:57s; animation-delay:-27s; }
+  @keyframes kpt-leaf-drift {
+    0% { opacity:0; transform:translate3d(0,-12vh,0) rotate(-28deg) scale(.82); }
+    12% { opacity:var(--kpt-leaf-opacity,.16); }
+    78% { opacity:var(--kpt-leaf-opacity,.16); }
+    100% { opacity:0; transform:translate3d(var(--kpt-leaf-drift,30px),116vh,0) rotate(var(--kpt-leaf-turn,300deg)) scale(1.04); }
   }
 
-  /* Light-touch botanical treatment for the sticky header and navigation. */
+  /* Header and active navigation use forest/sage; other semantic colours remain intact. */
   header.bg-white {
-    background: rgba(255,255,255,.91) !important;
+    background: rgba(250,250,246,.93) !important;
     border-bottom-color: var(--kpt-border) !important;
-    box-shadow: 0 5px 20px rgba(43,68,49,.045) !important;
+    box-shadow: 0 5px 20px rgba(43,68,49,.055) !important;
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
   }
   body.dark-mode header.bg-white {
-    background: rgba(24,37,29,.94) !important;
-    border-bottom-color: #304437 !important;
-    box-shadow: 0 7px 22px rgba(0,0,0,.16) !important;
+    background: rgba(22,34,28,.95) !important;
+    border-bottom-color: #34463a !important;
+    box-shadow: 0 7px 22px rgba(0,0,0,.20) !important;
   }
   #header-main-layout .text-sky-700 { color: var(--kpt-sage-700) !important; }
-  body.dark-mode #header-main-layout .text-sky-700 { color: #a9c9a7 !important; }
+  body.dark-mode #header-main-layout .text-sky-700 { color: #a9c2a7 !important; }
   .tab-btn.active {
     border-bottom-color: var(--kpt-sage-700) !important;
-    color: var(--kpt-sage-800) !important;
+    color: var(--kpt-forest-900) !important;
   }
   body.dark-mode .tab-btn.active {
-    border-bottom-color: #9fbd9f !important;
-    color: #b7d2b4 !important;
+    border-bottom-color: #9bb39b !important;
+    color: #bfd2bc !important;
   }
   .phase-btn.active,
   .budget-subtab.active {
@@ -18520,73 +18538,99 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   }
   body.dark-mode .phase-btn.active,
   body.dark-mode .budget-subtab.active {
-    background-color: #55765d !important;
+    background-color: #526d58 !important;
     color: #f4faf2 !important;
   }
-
-  /* Dashboard is the first page to receive the more visible visual polish. */
-  #sec-dashboard .kpt-dash-hero {
-    background: linear-gradient(132deg, #456b50 0%, #5d7f60 49%, #2e4938 100%) !important;
-    box-shadow: 0 18px 42px rgba(54,91,62,.17) !important;
+  .mobile-nav-item.active {
+    color: #536f59 !important;
+    background: #e9eee6 !important;
   }
-  #sec-dashboard .kpt-dash-hero-orb-two { background: rgba(208,226,198,.12) !important; }
+  #mobile-nav-postnatal .mobile-nav-item.active {
+    color: #536f59 !important;
+    background: #e9eee6 !important;
+  }
+  body.dark-mode .mobile-nav-item.active,
+  body.dark-mode #mobile-nav-postnatal .mobile-nav-item.active {
+    color: #c4d8c1 !important;
+    background: #2a4031 !important;
+  }
+
+  /* Dashboard mixes forest, warm clay and blue-grey instead of an all-green wash. */
+  #sec-dashboard .kpt-dash-hero {
+    background: linear-gradient(132deg, #354e43 0%, #536963 52%, #4b5b65 100%) !important;
+    box-shadow: 0 18px 42px rgba(48,67,59,.18) !important;
+  }
+  #sec-dashboard .kpt-dash-hero-orb-two { background: rgba(203,151,126,.17) !important; }
   #sec-dashboard .kpt-dash-card {
-    border-color: #e5ece2 !important;
-    box-shadow: 0 6px 20px rgba(48,76,58,.05) !important;
+    background: #fffefa !important;
+    border-color: #e4e5dc !important;
+    box-shadow: 0 6px 20px rgba(43,57,48,.055) !important;
   }
   #sec-dashboard .kpt-dash-card:hover {
-    border-color: #cbdcc8 !important;
-    box-shadow: 0 12px 28px rgba(48,76,58,.085) !important;
+    border-color: #cbd5c9 !important;
+    box-shadow: 0 12px 28px rgba(43,57,48,.09) !important;
   }
-  #sec-dashboard .kpt-dash-tag-sky { color: #45694d !important; background: #e8f0e5 !important; }
-  #sec-dashboard .kpt-dash-icon-sky { color: #557b5b !important; background: #e8f0e5 !important; }
+  #sec-dashboard .kpt-dash-tag-sky { color: #617c8a !important; background: #e9eff1 !important; }
+  #sec-dashboard .kpt-dash-icon-sky { color: #617c8a !important; background: #e9eff1 !important; }
   #sec-dashboard .kpt-dash-quick-panel {
-    background: linear-gradient(135deg, #f5f8f1 0%, #f8f8f3 56%, #edf3e9 100%) !important;
-    border-color: #e2eadf !important;
+    background: linear-gradient(135deg, #f0eee5 0%, #eef0e8 54%, #e9eef0 100%) !important;
+    border-color: #dfe3dc !important;
     box-shadow: var(--kpt-soft-shadow) !important;
   }
-  #sec-dashboard .kpt-dash-shortcut { border-color: #e4ebe1 !important; }
-  #sec-dashboard .kpt-dash-shortcut:hover { border-color: #b9cfb6 !important; }
+  #sec-dashboard .kpt-dash-shortcut { border-color: #e2e5dd !important; }
+  #sec-dashboard .kpt-dash-shortcut:hover { border-color: #c5d0c4 !important; }
   #sec-dashboard .kpt-dash-shortcut:focus-visible,
-  #sec-dashboard button:focus-visible { outline-color: rgba(91,132,93,.42) !important; }
-  #sec-dashboard .kpt-dashboard-eyebrow { color: #5b7e5d !important; }
+  #sec-dashboard button:focus-visible { outline-color: rgba(91,120,98,.45) !important; }
+  #sec-dashboard .kpt-dashboard-eyebrow { color: #9b705e !important; }
   body.dark-mode #sec-dashboard .kpt-dash-hero {
-    background: linear-gradient(132deg, #31543d 0%, #426448 49%, #233a2d 100%) !important;
-    box-shadow: 0 18px 42px rgba(0,0,0,.24) !important;
+    background: linear-gradient(132deg, #263f33 0%, #354f4d 52%, #303f49 100%) !important;
+    box-shadow: 0 18px 42px rgba(0,0,0,.27) !important;
   }
   body.dark-mode #sec-dashboard .kpt-dash-card {
-    background: #1d2b22 !important;
-    border-color: #34483a !important;
-    box-shadow: 0 7px 22px rgba(0,0,0,.16) !important;
+    background: #202e26 !important;
+    border-color: #3b4b40 !important;
+    box-shadow: 0 7px 22px rgba(0,0,0,.19) !important;
   }
-  body.dark-mode #sec-dashboard .kpt-dash-card:hover { border-color: #506b54 !important; }
-  body.dark-mode #sec-dashboard .kpt-dash-tag-sky { color: #c5ddc1 !important; background: #304a36 !important; }
-  body.dark-mode #sec-dashboard .kpt-dash-icon-sky { color: #c5ddc1 !important; background: #304a36 !important; }
+  body.dark-mode #sec-dashboard .kpt-dash-card:hover { border-color: #607765 !important; }
+  body.dark-mode #sec-dashboard .kpt-dash-tag-sky,
+  body.dark-mode #sec-dashboard .kpt-dash-icon-sky { color: #c0d0d4 !important; background: #34474c !important; }
   body.dark-mode #sec-dashboard .kpt-dash-quick-panel {
-    background: linear-gradient(135deg, #1c2b21 0%, #202e24 58%, #26372a 100%) !important;
-    border-color: #354a39 !important;
+    background: linear-gradient(135deg, #202d27 0%, #27332d 55%, #29373b 100%) !important;
+    border-color: #3c4c42 !important;
   }
   body.dark-mode #sec-dashboard .kpt-dash-shortcut {
-    background: #26372a !important;
-    border-color: #3a4e3d !important;
+    background: #29372f !important;
+    border-color: #405148 !important;
   }
-  body.dark-mode #sec-dashboard .kpt-dash-shortcut:hover { border-color: #657f63 !important; }
-  body.dark-mode #sec-dashboard .kpt-dashboard-eyebrow { color: #a9c9a7 !important; }
+  body.dark-mode #sec-dashboard .kpt-dash-shortcut:hover { border-color: #718675 !important; }
+  body.dark-mode #sec-dashboard .kpt-dashboard-eyebrow { color: #d0a18c !important; }
 
-  /* Keep background decoration behind content and almost imperceptible on phones. */
+  /* Responsive ambient treatment: fewer/smaller leaves and softer colour blooms on phones. */
   @media (max-width: 640px) {
-    .kpt-ambient-leaf { width: 13px; height: 7px; opacity: .075; }
-    .kpt-leaf-c, .kpt-leaf-d { display: none; }
-    body.dark-mode .kpt-ambient-leaf { opacity: .07; }
+    .kpt-ambient-leaf { width:16px; height:10px; }
+    .kpt-leaf-d, .kpt-leaf-f { display:none; }
+    .kpt-leaf-a, .kpt-leaf-b, .kpt-leaf-c, .kpt-leaf-e { --kpt-leaf-opacity:.13; }
+    #kpt-ambient-bg::before {
+      background:
+        radial-gradient(ellipse at 8% 16%, rgba(117,145,119,.14), transparent 36%),
+        radial-gradient(ellipse at 90% 80%, rgba(185,130,109,.09), transparent 38%),
+        radial-gradient(ellipse at 88% 20%, rgba(127,150,163,.08), transparent 35%);
+    }
+    body.dark-mode #kpt-ambient-bg::before {
+      background:
+        radial-gradient(ellipse at 8% 16%, rgba(104,137,111,.10), transparent 38%),
+        radial-gradient(ellipse at 90% 80%, rgba(156,112,95,.055), transparent 40%),
+        radial-gradient(ellipse at 88% 20%, rgba(103,129,145,.065), transparent 36%);
+    }
     header.bg-white { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .kpt-ambient-leaf { animation: none !important; }
+    .kpt-ambient-leaf { animation:none !important; opacity:.075; transform:none !important; }
     #sec-dashboard .kpt-dash-card,
     #sec-dashboard .kpt-dash-shortcut,
-    #sec-dashboard .kpt-dash-progress-fill { transition: none !important; }
+    #sec-dashboard .kpt-dash-progress-fill { transition:none !important; }
     #sec-dashboard .kpt-dash-card:hover,
-    #sec-dashboard .kpt-dash-shortcut:hover { transform: none !important; }
+    #sec-dashboard .kpt-dash-shortcut:hover { transform:none !important; }
   }
 </style>
 
