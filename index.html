@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.30: Panduan Perawatan accordion & poster gallery -->
+    <!-- Keluarga Pohon Teduh 6.13.31: Hijri mobile, independent labor accordions, hospital shortlists, and gift acquisition -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.30">
+    <meta name="application-version" content="6.13.31">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -4085,7 +4085,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     </div>
                     <div class="siaga-guide-panel rounded-2xl border border-sky-100 bg-sky-50/80 p-3 sm:p-4 space-y-3">
                         <div class="siaga-guide-intro flex items-start gap-2"><i class="fa-solid fa-circle-info text-sky-700 mt-0.5"></i><p class="text-xs text-sky-900 leading-relaxed">Panduan ini membantu pendamping memberi dukungan dan berkomunikasi dengan tenaga kesehatan. Penilaian pembukaan, kondisi ibu-bayi, tindakan, dan keputusan klinis tetap dilakukan oleh dokter/bidan. Ikuti instruksi fasilitas kesehatan serta keinginan ibu.</p></div>
-                        <details class="siaga-guide-step" open>
+                        <details class="siaga-guide-step">
                             <summary><span class="siaga-step-number">1</span><span><strong>Kala I — Pembukaan awal sampai lengkap (0–10 cm)</strong><small>Fase laten dan fase aktif</small></span></summary>
                             <div class="siaga-guide-content">
                                 <p><strong>Yang dilakukan suami:</strong></p>
@@ -5749,18 +5749,32 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                         <input type="number" id="form-item-actual" min="0" step="1" placeholder="0" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
                     </div>
                     <div>
-                        <label class="font-semibold text-slate-700">Tanggal Pembelian <span class="text-slate-400 font-normal">(opsional)</span></label>
+                        <label class="font-semibold text-slate-700"><span id="form-item-date-label">Tanggal Pembelian</span> <span class="text-slate-400 font-normal">(opsional)</span></label>
                         <input type="date" id="form-item-purchase-date" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
                     </div>
                 </div>
 
                 <div>
                     <label class="font-semibold text-slate-700">Status Item</label>
-                    <select id="form-item-status" class="w-full mt-1 p-2.5 min-h-[44px] border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none bg-white font-semibold">
+                    <select id="form-item-status" onchange="toggleShoppingAcquisitionFields()" class="w-full mt-1 p-2.5 min-h-[44px] border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none bg-white font-semibold">
                         <option value="Prioritas">🚨 Prioritas</option>
                         <option value="Opsional">⏳ Opsional</option>
-                        <option value="Selesai">✅ Selesai dibeli</option>
+                        <option value="Selesai">✅ Selesai dipenuhi</option>
                     </select>
+                </div>
+
+                <div id="shopping-acquisition-panel" class="hidden rounded-2xl border border-emerald-100 bg-emerald-50/60 p-3 space-y-3">
+                    <div><label class="font-semibold text-slate-700">Cara memperoleh</label>
+                        <select id="form-item-acquisition-type" onchange="toggleShoppingAcquisitionFields()" class="w-full mt-1 p-2.5 min-h-[44px] border border-slate-200 rounded-xl bg-white font-semibold text-slate-800">
+                            <option value="purchase">🛍️ Dibeli</option>
+                            <option value="gift">🎁 Hadiah</option>
+                        </select>
+                    </div>
+                    <div id="shopping-gift-details" class="hidden space-y-2 rounded-xl border border-emerald-200 bg-white/80 p-3">
+                        <div class="text-xs font-bold text-emerald-800"><i class="fa-solid fa-gift mr-1"></i> Detail hadiah</div>
+                        <div><label class="font-semibold text-slate-700">Pemberi hadiah <span class="font-normal text-slate-400">(opsional)</span></label><input type="text" id="form-item-gift-from" maxlength="120" placeholder="Nama keluarga/teman" class="w-full mt-1 p-2.5 min-h-[42px] border border-slate-200 rounded-xl bg-white text-slate-800"></div>
+                        <p class="text-[10px] text-emerald-800 leading-relaxed">Pengeluaran aktual otomatis menjadi Rp0. Tanggal di atas akan dicatat sebagai tanggal diterima.</p>
+                    </div>
                 </div>
 
                 <div class="pt-3 flex justify-end gap-2">
@@ -5810,6 +5824,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 <div class="rounded-2xl border border-slate-200 shadow-sm overflow-hidden" id="detail-rs-matrix-container">
                     <!-- Dynamic desktop matrix and mobile price cards rendered via JS -->
                 </div>
+                <div id="detail-rs-final-combo" class="rounded-2xl border border-sky-100 bg-sky-50/70 p-3 sm:p-4 space-y-3"></div>
                 <div id="detail-rs-verification" class="hospital-detail-verification grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
             </div>
 
@@ -6776,6 +6791,27 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
             if (rs.methods.length === 0) rs.methods = ["Spontan Normal", "SC ERACS"];
             if (rs.classes.length === 0) rs.classes = ["VIP", "Kelas 1"];
+
+            // Multi-select shortlists are stored on each hospital. When upgrading older
+            // records, seed the current legacy selection only into the hospital that was
+            // starred at the time; other hospitals start with an empty shortlist.
+            const isLegacyPrimary = Number(rs.id) === Number(appState && appState.priorityRSId);
+            if (!Array.isArray(rs.favoriteMethods)) {
+                rs.favoriteMethods = [];
+                if (isLegacyPrimary && appState.priorityMethod && rs.methods.includes(appState.priorityMethod)) {
+                    rs.favoriteMethods.push(appState.priorityMethod);
+                }
+            } else {
+                rs.favoriteMethods = [...new Set(rs.favoriteMethods.map(String).filter(value => rs.methods.includes(value)))];
+            }
+            if (!Array.isArray(rs.favoriteClasses)) {
+                rs.favoriteClasses = [];
+                if (isLegacyPrimary && appState.priorityClass && rs.classes.includes(appState.priorityClass)) {
+                    rs.favoriteClasses.push(appState.priorityClass);
+                }
+            } else {
+                rs.favoriteClasses = [...new Set(rs.favoriteClasses.map(String).filter(value => rs.classes.includes(value)))];
+            }
 
             if (!rs.images || !Array.isArray(rs.images) || rs.images.length === 0) {
                 if (rs.image) {
@@ -7844,8 +7880,27 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 if (dobEl) dobEl.innerText = dobDate.toLocaleDateString('id-ID', options);
                 if (hijriEl) {
                     try {
-                        const formatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' });
-                        hijriEl.innerText = formatter.format(dobDate).replace(/\s*(AH|H)\s*$/i, '') + ' H';
+                        // Build the date from its calendar components at UTC noon so device
+                        // timezone differences cannot move a date-only birth record.
+                        const hijriDate = new Date(Date.UTC(dobDate.getFullYear(), dobDate.getMonth(), dobDate.getDate(), 12, 0, 0));
+                        const formatter = new Intl.DateTimeFormat('en-US-u-ca-islamic-nu-latn', {
+                            day: 'numeric', month: 'numeric', year: 'numeric', timeZone: 'UTC'
+                        });
+                        const parts = formatter.formatToParts(hijriDate);
+                        const partValue = type => (parts.find(part => part.type === type) || {}).value || '';
+                        const hijriDay = Number(partValue('day'));
+                        const hijriMonth = Number(partValue('month'));
+                        const hijriYear = Number(partValue('year'));
+                        const hijriMonthsId = [
+                            'Muharam', 'Safar', 'Rabiulawal', 'Rabiulakhir',
+                            'Jumadilawal', 'Jumadilakhir', 'Rajab', 'Syakban',
+                            'Ramadan', 'Syawal', 'Zulkaidah', 'Zulhijah'
+                        ];
+                        if (hijriDay > 0 && hijriMonth >= 1 && hijriMonth <= 12 && hijriYear > 0) {
+                            hijriEl.innerText = `${hijriDay} ${hijriMonthsId[hijriMonth - 1]} ${hijriYear} H`;
+                        } else {
+                            hijriEl.innerText = '';
+                        }
                     } catch (_) { hijriEl.innerText = ''; }
                 }
                 const todayKey = getLocalDateKey();
@@ -7965,16 +8020,16 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 normalizeHospitalMatrix(priorityRS);
                 rsNameEl.innerText = priorityRS.name;
                 
-                let methodText = appState.priorityMethod ? appState.priorityMethod : 'Belum dipilih';
-                let classText = appState.priorityClass ? appState.priorityClass : 'Belum dipilih';
-                
+                const hasFinalMethod = !!appState.priorityMethod && (priorityRS.favoriteMethods || []).includes(appState.priorityMethod);
+                const hasFinalClass = !!appState.priorityClass && (priorityRS.favoriteClasses || []).includes(appState.priorityClass);
+                const methodText = hasFinalMethod && hasFinalClass ? appState.priorityMethod : 'Belum dipilih';
+                const classText = hasFinalMethod && hasFinalClass ? appState.priorityClass : 'Belum dipilih';
+
                 let priceSnippet = '';
-                if (appState.priorityMethod && appState.priorityClass) {
+                if (hasFinalMethod && hasFinalClass) {
                     const priceKey = `${appState.priorityClass}_${appState.priorityMethod}`;
                     const foundPrice = priorityRS.matrixPrices ? priorityRS.matrixPrices[priceKey] : null;
-                    if (foundPrice) {
-                        priceSnippet = ` (${foundPrice})`;
-                    }
+                    if (foundPrice) priceSnippet = ` (${foundPrice})`;
                 }
 
                 if (rsPkgEl) rsPkgEl.innerText = `Metode: ${methodText} • Kelas: ${classText}${priceSnippet}`;
@@ -9053,7 +9108,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                                 <select onchange="updateStatusBelanja(${item.id}, this.value)" class="p-1.5 rounded-lg text-2xs font-bold border border-slate-200 cursor-pointer outline-none focus:ring-2 focus:ring-sky-500 ${item.status === 'Selesai' || (!item.status && item.done) ? 'text-emerald-700 bg-emerald-50' : (item.status === 'Opsional' ? 'text-slate-500 bg-slate-100' : 'text-rose-700 bg-rose-50')} transition">
                                     <option value="Prioritas" ${item.status === 'Prioritas' || (!item.status && !item.done) ? 'selected' : ''} class="text-rose-600 font-bold">🚨 Prioritas</option>
                                     <option value="Opsional" ${item.status === 'Opsional' ? 'selected' : ''} class="text-slate-500 font-bold">⏳ Opsional</option>
-                                    <option value="Selesai" ${item.status === 'Selesai' || (!item.status && item.done) ? 'selected' : ''} class="text-emerald-600 font-bold">✅ Selesai</option>
+                                    <option value="Selesai" ${item.status === 'Selesai' || (!item.status && item.done) ? 'selected' : ''} class="text-emerald-600 font-bold">✅ Selesai dipenuhi</option>
                                 </select>
                             </td>
                             <td class="p-3">
@@ -9074,7 +9129,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                             <td class="p-3 text-slate-500">${getShoppingItemEstimate(item) ? `Rp ${getShoppingItemEstimate(item).toLocaleString('id-ID')}` : '<span class="italic text-slate-400">Belum diisi</span>'}</td>
                             <td class="p-3 font-bold ${item.done ? 'text-emerald-700' : 'text-slate-300'}">
                                 Rp ${Number(item.actual || 0).toLocaleString('id-ID')}
-                                ${item.done && item.purchaseDate ? `<div class="text-2xs font-normal text-slate-400 mt-0.5">${kptEscapeHtml(item.purchaseDate)}</div>` : ''}
+                                ${item.done && item.acquisitionType === 'gift' ? `<div class="text-2xs font-bold text-emerald-700 mt-0.5"><i class="fa-solid fa-gift mr-1"></i>Hadiah${item.giftFrom ? ` dari ${kptEscapeHtml(item.giftFrom)}` : ''}</div>` : ''}
+                                ${item.done && item.purchaseDate ? `<div class="text-2xs font-normal text-slate-400 mt-0.5">${kptEscapeHtml(item.purchaseDate)}${item.acquisitionType === 'gift' ? ' · diterima' : ''}</div>` : ''}
                             </td>
                             <td class="p-3 text-center space-x-1">
                                 <button onclick="openShoppingItemModal(${item.id})" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs transition">
@@ -9133,9 +9189,15 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         function updateStatusBelanja(id, statusBaru) {
             const item = appState.shoppingItems.find(i => i.id === id);
             if (item) {
-                // Simpan status teks yang baru dipilih
                 item.status = statusBaru;
                 item.done = (statusBaru === 'Selesai');
+                if (item.done) {
+                    if (!['purchase', 'gift'].includes(item.acquisitionType)) item.acquisitionType = 'purchase';
+                    if (item.acquisitionType === 'gift') item.actual = 0;
+                } else {
+                    item.acquisitionType = null;
+                    item.giftFrom = '';
+                }
             }
             renderShoppingItems();
             renderBudgetOverview();
@@ -9169,6 +9231,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     document.getElementById('form-item-actual').value = item.actual || 0;
                     document.getElementById('form-item-purchase-date').value = item.purchaseDate || '';
                     document.getElementById('form-item-status').value = item.status || (item.done ? 'Selesai' : 'Prioritas');
+                    document.getElementById('form-item-acquisition-type').value = item.acquisitionType === 'gift' ? 'gift' : 'purchase';
+                    document.getElementById('form-item-gift-from').value = item.giftFrom || '';
                     editorAlternatives = getShoppingAlternatives(item).map((a, idx) => ({ ...a, id: a.id || `alt-${Date.now()}-${idx + 1}`, isPreferred: String(a.id) === String(item.selectedAlternativeId) || (!item.selectedAlternativeId && (a.isPreferred || idx === 0)) }));
                 }
             } else {
@@ -9177,11 +9241,34 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 document.getElementById('form-item-main-category').value = appState.activeBudgetSubCategory || 'Keperluan Baby';
             }
             renderShoppingAlternativeEditor(editorAlternatives);
+            toggleShoppingAcquisitionFields();
             document.getElementById('modal-shopping-item').classList.remove('hidden');
         }
 
         function closeShoppingItemModal() {
             document.getElementById('modal-shopping-item').classList.add('hidden');
+        }
+
+        function toggleShoppingAcquisitionFields() {
+            const status = document.getElementById('form-item-status')?.value || 'Prioritas';
+            const panel = document.getElementById('shopping-acquisition-panel');
+            const typeSelect = document.getElementById('form-item-acquisition-type');
+            const giftDetails = document.getElementById('shopping-gift-details');
+            const actualInput = document.getElementById('form-item-actual');
+            const dateLabel = document.getElementById('form-item-date-label');
+            const isCompleted = status === 'Selesai';
+            const isGift = isCompleted && typeSelect && typeSelect.value === 'gift';
+            if (panel) panel.classList.toggle('hidden', !isCompleted);
+            if (giftDetails) giftDetails.classList.toggle('hidden', !isGift);
+            if (dateLabel) dateLabel.textContent = isGift ? 'Tanggal Diterima' : 'Tanggal Pembelian';
+            if (actualInput) {
+                if (isGift) actualInput.value = '0';
+                actualInput.readOnly = isGift;
+                actualInput.classList.toggle('bg-slate-100', isGift);
+                actualInput.classList.toggle('text-slate-500', isGift);
+            }
+            // Keep the typed giver while the panel is temporarily hidden; the save routine
+            // clears gift metadata only if the item is ultimately not marked complete.
         }
 
         function saveShoppingItemForm(event) {
@@ -9191,7 +9278,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             const category = document.getElementById('form-item-category').value.trim() || 'Umum';
             const name = document.getElementById('form-item-name').value.trim();
             const qty = document.getElementById('form-item-qty').value.trim() || '1';
-            const actual = Number(document.getElementById('form-item-actual').value) || 0;
+            let actual = Number(document.getElementById('form-item-actual').value) || 0;
             const purchaseDate = document.getElementById('form-item-purchase-date').value || '';
             const base = id ? (appState.shoppingItems || []).find(i => String(i.id) === String(id)) : null;
             const statusInput = document.getElementById('form-item-status');
@@ -9200,6 +9287,10 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 ? statusInput.value
                 : (validStatuses.includes(base?.status) ? base.status : (base?.done ? 'Selesai' : 'Prioritas'));
             const done = status === 'Selesai';
+            const acquisitionSelect = document.getElementById('form-item-acquisition-type');
+            const acquisitionType = done ? (acquisitionSelect && acquisitionSelect.value === 'gift' ? 'gift' : 'purchase') : '';
+            const giftFrom = acquisitionType === 'gift' ? (document.getElementById('form-item-gift-from').value || '').trim() : '';
+            if (acquisitionType === 'gift') actual = 0;
             const alternatives = collectShoppingAlternativeEditor().map((a, idx) => ({ ...a, id: a.id || `alt-${Date.now()}-${idx + 1}` }));
             if (!alternatives.length) { alert('Tambahkan minimal satu pilihan merek/produk.'); return; }
             let preferred = alternatives.find(a => a.isPreferred) || alternatives[0];
@@ -9211,7 +9302,9 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 // Legacy aliases retained so older dashboard, chart and backup code stay compatible.
                 brand: preferred.brand || '', link: preferred.link || '', budget: Number(preferred.budget || 0),
                 alternatives, selectedAlternativeId: String(preferred.id),
-                actual, done, status, purchaseDate
+                actual, done, status, purchaseDate,
+                acquisitionType: acquisitionType || null,
+                giftFrom: acquisitionType === 'gift' ? giftFrom : ''
             };
             if (base) {
                 const index = appState.shoppingItems.findIndex(i => String(i.id) === String(id));
@@ -10504,11 +10597,13 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
         function togglePriorityRS(id, e) {
             if (e) e.stopPropagation();
-            if (Number(appState.priorityRSId) === Number(id)) {
-                appState.priorityRSId = null;
-            } else {
-                appState.priorityRSId = Number(id);
-            }
+            const isAlreadyPrimary = Number(appState.priorityRSId) === Number(id);
+            appState.priorityRSId = isAlreadyPrimary ? null : Number(id);
+            // The dashboard has one final method/class pair for the currently starred RS.
+            // Changing that RS clears only the final pair; each hospital's shortlist remains.
+            appState.priorityMethod = null;
+            appState.priorityClass = null;
+            appState.priorityDoctor = null;
             renderHospitals();
             renderDashboardWidgets();
             saveToLocalStorage();
@@ -10560,14 +10655,14 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     <thead><tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
                         <th class="p-3 text-slate-500 text-2xs uppercase tracking-wider border-r border-slate-200 bg-slate-200/50 min-w-[120px]">Kelas \\ Metode</th>
                         ${rs.methods.map((method, mIdx) => {
-                            const selected = isPriority && appState.priorityMethod === method;
-                            return `<th class="p-3 text-center border-r border-slate-200 ${selected ? 'bg-amber-100 text-amber-900' : ''}"><div class="flex items-center justify-center gap-1.5"><span>${hospitalEscapeHtml(method)}</span><button type="button" onclick="selectPriorityMethodByIndex(${Number(rs.id)}, ${mIdx})" class="min-w-[30px] min-h-[30px] rounded-lg ${selected ? 'text-amber-500' : 'text-slate-300'}" title="${selected ? 'Batalkan pilihan metode' : 'Pilih metode'}"><i class="fa-solid fa-star"></i></button></div></th>`;
+                            const selected = (rs.favoriteMethods || []).includes(method);
+                            return `<th class="p-3 text-center border-r border-slate-200 ${selected ? 'bg-amber-100 text-amber-900' : ''}"><div class="flex items-center justify-center gap-1.5"><span>${hospitalEscapeHtml(method)}</span><button type="button" onclick="selectPriorityMethodByIndex(${Number(rs.id)}, ${mIdx})" class="min-w-[30px] min-h-[30px] rounded-lg ${selected ? 'text-amber-500' : 'text-slate-300'}" title="${selected ? 'Hapus dari shortlist metode' : 'Tambahkan ke shortlist metode'}"><i class="fa-solid fa-star"></i></button></div></th>`;
                         }).join('')}
                     </tr></thead>
                     <tbody class="divide-y divide-slate-100">
                         ${rs.classes.map((roomClass, cIdx) => {
-                            const selected = isPriority && appState.priorityClass === roomClass;
-                            return `<tr><td class="p-3 font-bold border-r border-slate-200 ${selected ? 'bg-amber-100 text-amber-900' : 'bg-slate-50 text-slate-700'} min-w-[120px]"><div class="flex items-center justify-between gap-1.5"><span>${hospitalEscapeHtml(roomClass)}</span><button type="button" onclick="selectPriorityClassByIndex(${Number(rs.id)}, ${cIdx})" class="min-w-[30px] min-h-[30px] rounded-lg ${selected ? 'text-amber-500' : 'text-slate-300'}" title="${selected ? 'Batalkan pilihan kelas' : 'Pilih kelas'}"><i class="fa-solid fa-star"></i></button></div></td>
+                            const selected = (rs.favoriteClasses || []).includes(roomClass);
+                            return `<tr><td class="p-3 font-bold border-r border-slate-200 ${selected ? 'bg-amber-100 text-amber-900' : 'bg-slate-50 text-slate-700'} min-w-[120px]"><div class="flex items-center justify-between gap-1.5"><span>${hospitalEscapeHtml(roomClass)}</span><button type="button" onclick="selectPriorityClassByIndex(${Number(rs.id)}, ${cIdx})" class="min-w-[30px] min-h-[30px] rounded-lg ${selected ? 'text-amber-500' : 'text-slate-300'}" title="${selected ? 'Hapus dari shortlist kelas' : 'Tambahkan ke shortlist kelas'}"><i class="fa-solid fa-star"></i></button></div></td>
                                 ${rs.methods.map(method => {
                                     const priceVal = (rs.matrixPrices && rs.matrixPrices[`${roomClass}_${method}`]) || '-';
                                     const chosen = isPriority && appState.priorityClass === roomClass && appState.priorityMethod === method;
@@ -10577,15 +10672,16 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     </tbody>
                 </table>`;
             const mobileMatrixHtml = rs.classes.map(roomClass => {
-                const selectedClass = isPriority && appState.priorityClass === roomClass;
-                return `<article class="hospital-matrix-mobile-card"><div class="flex items-center justify-between gap-2"><h4>${hospitalEscapeHtml(roomClass)}</h4><button type="button" onclick="selectPriorityClassByIndex(${Number(rs.id)}, ${rs.classes.indexOf(roomClass)})" class="min-w-[44px] min-h-[44px] rounded-xl ${selectedClass ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-400'}" aria-label="Pilih ${hospitalEscapeHtml(roomClass)}"><i class="fa-solid fa-star"></i></button></div>
+                const selectedClass = (rs.favoriteClasses || []).includes(roomClass);
+                return `<article class="hospital-matrix-mobile-card"><div class="flex items-center justify-between gap-2"><h4>${hospitalEscapeHtml(roomClass)}</h4><button type="button" onclick="selectPriorityClassByIndex(${Number(rs.id)}, ${rs.classes.indexOf(roomClass)})" class="min-w-[44px] min-h-[44px] rounded-xl ${selectedClass ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-400'}" aria-label="${selectedClass ? 'Hapus kelas dari shortlist' : 'Tambahkan kelas ke shortlist'}: ${hospitalEscapeHtml(roomClass)}"><i class="fa-solid fa-star"></i></button></div>
                     ${rs.methods.map((method, idx) => {
                         const priceVal = (rs.matrixPrices && rs.matrixPrices[`${roomClass}_${method}`]) || '-';
-                        const selectedMethod = isPriority && appState.priorityMethod === method;
-                        return `<div class="hospital-matrix-mobile-row"><span>${hospitalEscapeHtml(method)}</span><div class="flex items-center gap-2"><strong>${hospitalEscapeHtml(priceVal)}</strong><button type="button" onclick="selectPriorityMethodByIndex(${Number(rs.id)}, ${idx})" class="min-w-[44px] min-h-[44px] rounded-lg ${selectedMethod ? 'text-amber-500' : 'text-slate-300'}" aria-label="Pilih ${hospitalEscapeHtml(method)}"><i class="fa-solid fa-star"></i></button></div></div>`;
+                        const selectedMethod = (rs.favoriteMethods || []).includes(method);
+                        return `<div class="hospital-matrix-mobile-row"><span>${hospitalEscapeHtml(method)}</span><div class="flex items-center gap-2"><strong>${hospitalEscapeHtml(priceVal)}</strong><button type="button" onclick="selectPriorityMethodByIndex(${Number(rs.id)}, ${idx})" class="min-w-[44px] min-h-[44px] rounded-lg ${selectedMethod ? 'text-amber-500' : 'text-slate-300'}" aria-label="${selectedMethod ? 'Hapus metode dari shortlist' : 'Tambahkan metode ke shortlist'}: ${hospitalEscapeHtml(method)}"><i class="fa-solid fa-star"></i></button></div></div>`;
                     }).join('')}</article>`;
             }).join('');
             matrixContainer.innerHTML = `<div class="hospital-matrix-desktop">${tableHtml}</div><div class="hospital-matrix-mobile">${mobileMatrixHtml}</div>`;
+            renderHospitalFinalCombination(rs);
 
             const verification = document.getElementById('detail-rs-verification');
             if (verification) {
@@ -10664,14 +10760,23 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             if (rs) renderHospitalDetailCarousel(rs);
         }
 
-        function selectPriorityClass(rsId, className) {
-            if (appState.priorityRSId !== Number(rsId)) {
-                appState.priorityRSId = Number(rsId);
-            }
-            if (appState.priorityClass === className) {
-                appState.priorityClass = null;
-            } else {
-                appState.priorityClass = className;
+        function toggleHospitalShortlist(rsId, kind, value) {
+            const rs = (appState.hospitals || []).find(item => Number(item.id) === Number(rsId));
+            if (!rs || !['method', 'class'].includes(kind) || !value) return;
+            normalizeHospitalMatrix(rs);
+            const key = kind === 'method' ? 'favoriteMethods' : 'favoriteClasses';
+            const list = Array.isArray(rs[key]) ? rs[key] : [];
+            const exists = list.includes(value);
+            rs[key] = exists ? list.filter(item => item !== value) : [...list, value];
+
+            // If a shortlisted value is removed from the current primary RS and it
+            // participates in the final pair, clear the pair to avoid a stale dashboard.
+            if (Number(appState.priorityRSId) === Number(rs.id)) {
+                const removedFinalValue = exists && ((kind === 'method' && appState.priorityMethod === value) || (kind === 'class' && appState.priorityClass === value));
+                if (removedFinalValue) {
+                    appState.priorityMethod = null;
+                    appState.priorityClass = null;
+                }
             }
             renderHospitals();
             renderDashboardWidgets();
@@ -10679,16 +10784,68 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             openHospitalDetail(Number(rsId));
         }
 
+        function selectPriorityClass(rsId, className) {
+            toggleHospitalShortlist(rsId, 'class', className);
+        }
+
         function selectPriorityMethod(rsId, methodName) {
-            if (appState.priorityRSId !== Number(rsId)) {
-                appState.priorityRSId = Number(rsId);
+            toggleHospitalShortlist(rsId, 'method', methodName);
+        }
+
+        function renderHospitalFinalCombination(rs) {
+            const host = document.getElementById('detail-rs-final-combo');
+            if (!host || !rs) return;
+            const isPrimary = Number(appState.priorityRSId) === Number(rs.id);
+            if (!isPrimary) {
+                host.innerHTML = `<div class="flex items-start gap-2 text-slate-600"><i class="fa-solid fa-circle-info text-sky-600 mt-0.5"></i><div><strong class="block text-xs text-slate-700">Kombinasi final untuk Dashboard</strong><p class="text-[11px] leading-relaxed mt-1">Kombinasi final hanya ditetapkan pada RS yang dibintangi sebagai RS Utama. Shortlist metode dan kelas di RS ini tetap tersimpan.</p></div></div>`;
+                return;
             }
-            if (appState.priorityMethod === methodName) {
-                appState.priorityMethod = null;
-            } else {
-                appState.priorityMethod = methodName;
+            const methods = Array.isArray(rs.favoriteMethods) ? rs.favoriteMethods : [];
+            const classes = Array.isArray(rs.favoriteClasses) ? rs.favoriteClasses : [];
+            const currentMethod = methods.includes(appState.priorityMethod) ? appState.priorityMethod : '';
+            const currentClass = classes.includes(appState.priorityClass) ? appState.priorityClass : '';
+            const hasFinal = !!(currentMethod && currentClass);
+            const methodOptions = methods.map(value => `<option value="${hospitalEscapeHtml(value)}" ${value === currentMethod ? 'selected' : ''}>${hospitalEscapeHtml(value)}</option>`).join('');
+            const classOptions = classes.map(value => `<option value="${hospitalEscapeHtml(value)}" ${value === currentClass ? 'selected' : ''}>${hospitalEscapeHtml(value)}</option>`).join('');
+            const canChoose = methods.length > 0 && classes.length > 0;
+            host.innerHTML = `
+                <div class="flex items-start gap-2"><i class="fa-solid fa-bullseye text-sky-700 mt-0.5"></i><div class="min-w-0"><strong class="block text-xs text-sky-900">Kombinasi final untuk Dashboard</strong><p class="text-[10px] text-slate-600 mt-0.5">Pilih satu metode dan satu kelas dari shortlist RS Utama. Favorit lain tetap tersimpan sebagai alternatif.</p></div></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <label class="block text-[11px] font-bold text-slate-700">Metode persalinan<select id="hospital-final-method" class="w-full mt-1 min-h-[44px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" ${methods.length ? '' : 'disabled'}><option value="">Pilih metode favorit</option>${methodOptions}</select></label>
+                    <label class="block text-[11px] font-bold text-slate-700">Kelas kamar<select id="hospital-final-class" class="w-full mt-1 min-h-[44px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" ${classes.length ? '' : 'disabled'}><option value="">Pilih kelas favorit</option>${classOptions}</select></label>
+                </div>
+                ${!canChoose ? '<p class="text-[10px] text-amber-800 bg-amber-100/80 rounded-lg p-2">Bintangi minimal satu metode dan satu kelas pada matriks di atas untuk menentukan kombinasi final.</p>' : ''}
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="setHospitalFinalCombination(${Number(rs.id)})" ${canChoose ? '' : 'disabled'} class="min-h-[42px] px-4 rounded-xl bg-sky-600 text-white text-[11px] font-bold disabled:opacity-40 disabled:cursor-not-allowed"><i class="fa-solid fa-check mr-1"></i> Tetapkan kombinasi final</button>
+                    ${hasFinal ? `<button type="button" onclick="clearHospitalFinalCombination(${Number(rs.id)})" class="min-h-[42px] px-3 rounded-xl border border-slate-200 bg-white text-slate-600 text-[11px] font-bold">Hapus pilihan final</button><span class="text-[10px] text-emerald-700 font-semibold">Saat ini: ${hospitalEscapeHtml(currentMethod)} · ${hospitalEscapeHtml(currentClass)}</span>` : ''}
+                </div>`;
+        }
+
+        function setHospitalFinalCombination(rsId) {
+            if (Number(appState.priorityRSId) !== Number(rsId)) {
+                alert('Jadikan rumah sakit ini sebagai RS Utama terlebih dahulu.');
+                return;
             }
-            renderHospitals();
+            const rs = (appState.hospitals || []).find(item => Number(item.id) === Number(rsId));
+            if (!rs) return;
+            normalizeHospitalMatrix(rs);
+            const method = document.getElementById('hospital-final-method')?.value || '';
+            const roomClass = document.getElementById('hospital-final-class')?.value || '';
+            if (!rs.favoriteMethods.includes(method) || !rs.favoriteClasses.includes(roomClass)) {
+                alert('Pilih satu metode dan satu kelas yang sudah dibintangi pada RS Utama.');
+                return;
+            }
+            appState.priorityMethod = method;
+            appState.priorityClass = roomClass;
+            renderDashboardWidgets();
+            saveToLocalStorage();
+            openHospitalDetail(Number(rsId));
+        }
+
+        function clearHospitalFinalCombination(rsId) {
+            if (Number(appState.priorityRSId) !== Number(rsId)) return;
+            appState.priorityMethod = null;
+            appState.priorityClass = null;
             renderDashboardWidgets();
             saveToLocalStorage();
             openHospitalDetail(Number(rsId));
@@ -10697,6 +10854,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         function selectPriorityDoctor(rsId, docName) {
             if (appState.priorityRSId !== Number(rsId)) {
                 appState.priorityRSId = Number(rsId);
+                appState.priorityMethod = null;
+                appState.priorityClass = null;
             }
             if (appState.priorityDoctor === docName) {
                 appState.priorityDoctor = null;
@@ -10973,7 +11132,12 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         function deleteHospital(id) {
             appState.hospitals = appState.hospitals.filter(h => Number(h.id) !== Number(id));
             hospitalCompareSelection = hospitalCompareSelection.filter(item => Number(item) !== Number(id));
-            if (Number(appState.priorityRSId) === Number(id)) appState.priorityRSId = null;
+            if (Number(appState.priorityRSId) === Number(id)) {
+                appState.priorityRSId = null;
+                appState.priorityMethod = null;
+                appState.priorityClass = null;
+                appState.priorityDoctor = null;
+            }
             renderHospitals();
             renderDashboardWidgets();
             saveToLocalStorage();
@@ -12377,7 +12541,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.30',
+                    appVersion: '6.13.31',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -18159,6 +18323,42 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
     #auth-gate .auth-card { margin: auto 0; }
     #auth-gate .auth-brand-logo-wrap { width: 120px; height: 120px; }
   }
+</style>
+
+
+<style id="kpt-61331-dark-mode-refinements">
+  body.dark-mode #detail-rs-final-combo {
+    background: #172554 !important;
+    border-color: #334e78 !important;
+    color: #e2e8f0 !important;
+  }
+  body.dark-mode #detail-rs-final-combo strong,
+  body.dark-mode #detail-rs-final-combo label { color: #e2e8f0 !important; }
+  body.dark-mode #detail-rs-final-combo p { color: #cbd5e1 !important; }
+  body.dark-mode #detail-rs-final-combo select {
+    color: #f1f5f9 !important;
+    background: #0f172a !important;
+    border-color: #475569 !important;
+  }
+  body.dark-mode #detail-rs-final-combo button[onclick*="clearHospitalFinalCombination"] {
+    color: #e2e8f0 !important;
+    background: #334155 !important;
+    border-color: #475569 !important;
+  }
+  body.dark-mode #shopping-acquisition-panel {
+    background: rgba(6, 78, 59, .24) !important;
+    border-color: rgba(52, 211, 153, .25) !important;
+  }
+  body.dark-mode #shopping-acquisition-panel label { color: #e2e8f0 !important; }
+  body.dark-mode #shopping-acquisition-panel select,
+  body.dark-mode #shopping-gift-details,
+  body.dark-mode #shopping-gift-details input {
+    color: #e2e8f0 !important;
+    background: #1e293b !important;
+    border-color: #475569 !important;
+  }
+  body.dark-mode #shopping-gift-details > div:first-child,
+  body.dark-mode #shopping-gift-details p { color: #a7f3d0 !important; }
 </style>
 
 </body>
