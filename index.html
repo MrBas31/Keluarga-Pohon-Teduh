@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.14.1: Botanical Palette & Ambient Motion — deeper layered canvas and visible leaf drift -->
+    <!-- Keluarga Pohon Teduh 6.14.2: Colorful Ambient Leaves — original app palette restored and detailed leaf motion -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.14.1">
+    <meta name="application-version" content="6.14.2">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3420,14 +3420,16 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
-    <!-- Calm Botanical ambient background: decorative only, never interactive. -->
+    <!-- Colorful ambient leaves: decorative only, hidden from assistive technology. -->
     <div id="kpt-ambient-bg" aria-hidden="true">
-        <span class="kpt-ambient-leaf kpt-leaf-a"></span>
-        <span class="kpt-ambient-leaf kpt-leaf-b"></span>
-        <span class="kpt-ambient-leaf kpt-leaf-c"></span>
-        <span class="kpt-ambient-leaf kpt-leaf-d"></span>
-        <span class="kpt-ambient-leaf kpt-leaf-e"></span>
-        <span class="kpt-ambient-leaf kpt-leaf-f"></span>
+        <span class="kpt-ambient-leaf kpt-leaf-a"><svg viewBox="0 0 72 48" focusable="false"><path class="leaf-blade" d="M4 42C7 21 32 3 67 4C64 28 39 48 4 42Z"/><path class="leaf-vein-main" d="M7 40C25 29 45 15 64 7"/><path class="leaf-vein-side" d="M21 31C18 25 13 22 10 20M21 31C29 27 32 20 34 14M36 23C34 17 35 13 37 9M36 23C45 20 49 14 51 9M49 15C50 12 54 9 57 8"/><path class="leaf-highlight" d="M8 38C20 25 39 12 59 7"/></svg></span>
+        <span class="kpt-ambient-leaf kpt-leaf-b"><svg viewBox="0 0 72 48" focusable="false"><path class="leaf-blade" d="M4 42C8 19 35 2 67 5C61 29 38 47 4 42Z"/><path class="leaf-vein-main" d="M7 40C25 29 45 16 64 8"/><path class="leaf-vein-side" d="M20 32C17 25 13 22 10 19M20 32C28 27 31 20 33 14M36 23C34 18 35 14 37 10M36 23C44 20 48 14 50 10M49 16C51 12 54 10 57 9"/><path class="leaf-highlight" d="M8 38C23 23 41 12 60 8"/></svg></span>
+        <span class="kpt-ambient-leaf kpt-leaf-c"><svg viewBox="0 0 72 48" focusable="false"><path class="leaf-blade" d="M4 42C7 20 34 4 66 4C63 29 39 47 4 42Z"/><path class="leaf-vein-main" d="M7 40C24 30 43 16 63 7"/><path class="leaf-vein-side" d="M20 32C18 26 13 22 10 20M20 32C27 27 31 20 33 14M35 24C34 18 35 14 36 10M35 24C44 20 48 14 50 9M48 16C51 12 54 10 57 8"/><path class="leaf-highlight" d="M8 38C22 24 41 12 59 7"/></svg></span>
+        <span class="kpt-ambient-leaf kpt-leaf-d"><svg viewBox="0 0 72 48" focusable="false"><path class="leaf-blade" d="M4 42C8 20 33 4 67 5C62 28 39 47 4 42Z"/><path class="leaf-vein-main" d="M7 40C25 29 45 16 64 8"/><path class="leaf-vein-side" d="M21 31C18 25 13 22 10 20M21 31C28 26 32 20 34 14M36 23C34 17 35 13 37 10M36 23C45 20 49 14 51 10M49 16C51 12 54 9 57 9"/><path class="leaf-highlight" d="M8 38C23 24 42 12 60 8"/></svg></span>
+        <span class="kpt-ambient-leaf kpt-leaf-e"><svg viewBox="0 0 72 48" focusable="false"><path class="leaf-blade" d="M4 42C8 19 34 3 66 4C63 29 38 47 4 42Z"/><path class="leaf-vein-main" d="M7 40C25 29 44 16 63 7"/><path class="leaf-vein-side" d="M20 32C18 25 13 22 10 19M20 32C28 27 31 20 33 14M36 23C34 17 35 13 37 9M36 23C44 20 49 14 51 9M49 16C51 12 54 9 57 8"/><path class="leaf-highlight" d="M8 38C21 24 40 12 59 7"/></svg></span>
+        <span class="kpt-ambient-leaf kpt-leaf-f"><svg viewBox="0 0 72 48" focusable="false"><path class="leaf-blade" d="M4 42C8 20 33 4 67 5C62 29 39 47 4 42Z"/><path class="leaf-vein-main" d="M7 40C25 29 45 16 64 8"/><path class="leaf-vein-side" d="M21 31C18 25 13 22 10 19M21 31C29 27 32 20 34 14M36 23C34 17 35 14 37 10M36 23C44 20 49 14 51 10M49 16C51 12 54 10 57 9"/><path class="leaf-highlight" d="M8 38C22 24 41 12 60 8"/></svg></span>
+        <span class="kpt-ambient-leaf kpt-leaf-g"><svg viewBox="0 0 72 48" focusable="false"><path class="leaf-blade" d="M4 42C8 19 34 3 66 4C63 28 39 47 4 42Z"/><path class="leaf-vein-main" d="M7 40C25 29 44 16 63 7"/><path class="leaf-vein-side" d="M21 31C18 25 13 22 10 20M21 31C28 27 32 20 34 14M36 23C34 17 35 13 37 9M36 23C45 20 49 14 51 9M49 16C51 12 54 9 57 8"/><path class="leaf-highlight" d="M8 38C22 24 41 12 59 7"/></svg></span>
+        <span class="kpt-ambient-leaf kpt-leaf-h"><svg viewBox="0 0 72 48" focusable="false"><path class="leaf-blade" d="M4 42C8 20 34 3 67 5C62 29 39 47 4 42Z"/><path class="leaf-vein-main" d="M7 40C25 29 45 16 64 8"/><path class="leaf-vein-side" d="M20 32C18 25 13 22 10 19M20 32C28 27 32 20 34 14M36 23C34 17 35 13 37 10M36 23C45 20 49 14 51 10M49 16C51 12 54 10 57 9"/><path class="leaf-highlight" d="M8 38C22 24 41 12 60 8"/></svg></span>
     </div>
 
     <!-- AUTHENTICATION GATE: aplikasi dan data ditahan sampai UID diizinkan -->
@@ -12550,7 +12552,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.14.1',
+                    appVersion: '6.14.2',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
@@ -18372,49 +18374,25 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
 
 
-<style id="kpt-calm-botanical-visual-refresh-6141">
+<style id="kpt-colorful-ambient-motion-6142">
   /* ==========================================================
-     KPT 6.14.1 — BOTANICAL PALETTE & AMBIENT MOTION
-     Presentation-only refinement. No data model or app workflow changes.
+     KPT 6.14.2 — ORIGINAL MULTICOLOUR PALETTE + AMBIENT LEAVES
+     Palette overrides from the botanical experiment are removed.
+     Existing app components retain their original semantic colours.
      ========================================================== */
   :root {
-    /* Six coordinated tones: forest, sage, cream, terracotta, blue-grey, ochre. */
-    --kpt-forest-950: #263a31;
-    --kpt-forest-900: #344a3e;
-    --kpt-sage-700: #5d7862;
-    --kpt-sage-600: #708a73;
-    --kpt-sage-500: #8fa48d;
-    --kpt-cream: #e8e1d4;
-    --kpt-terracotta: #b9826d;
-    --kpt-dusty-blue: #7f96a3;
-    --kpt-soft-ochre: #bda374;
-    --kpt-page-start: #dce3da;
-    --kpt-page-mid: #e2e4dc;
-    --kpt-page-end: #e8dfd5;
-    --kpt-surface: rgba(255,255,255,.96);
-    --kpt-border: #d6ded5;
-    --kpt-soft-shadow: 0 9px 25px rgba(38,58,49,.075);
+    /* Original page canvas: slate-50 with the original mobile slate tint. */
+    --kpt-page-start: #f8fafc;
+    --kpt-page-mid: #f7f9fc;
+    --kpt-page-end: #f5f8fc;
   }
-
   body.dark-mode {
-    --kpt-forest-950: #e2ebe1;
-    --kpt-forest-900: #c7d8c8;
-    --kpt-sage-700: #9bb39b;
-    --kpt-sage-600: #86a18a;
-    --kpt-sage-500: #6f8b75;
-    --kpt-page-start: #101a16;
-    --kpt-page-mid: #14211b;
-    --kpt-page-end: #1b2521;
-    --kpt-surface: rgba(32,45,37,.97);
-    --kpt-border: #3a4a3e;
-    --kpt-soft-shadow: 0 11px 30px rgba(0,0,0,.24);
+    /* Original Night Mode page canvas. Cards remain slate-800 via existing CSS. */
+    --kpt-page-start: #0f172a;
+    --kpt-page-mid: #111c30;
+    --kpt-page-end: #0f172a;
   }
 
-  /*
-     The ambient layer must sit ABOVE the document canvas but BELOW app content.
-     The previous negative z-index placed it behind the root canvas in some browsers,
-     making both the gradient and leaves effectively invisible.
-  */
   html { background-color: var(--kpt-page-start); }
   body,
   body.dark-mode {
@@ -18429,208 +18407,176 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
     overflow: hidden;
     pointer-events: none;
     user-select: none;
-    background: linear-gradient(132deg,
+    background: linear-gradient(136deg,
       var(--kpt-page-start) 0%,
-      var(--kpt-page-mid) 52%,
+      var(--kpt-page-mid) 53%,
       var(--kpt-page-end) 100%);
     contain: paint;
   }
-  /* Keep the main content above the decorative layer without changing modal stacking. */
+  /* Quiet colour blooms echo the original app's blue, teal, amber, rose and violet accents. */
+  #kpt-ambient-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 8% 16%, rgba(96,165,250,.075), transparent 32%),
+      radial-gradient(ellipse at 88% 18%, rgba(45,212,191,.055), transparent 31%),
+      radial-gradient(ellipse at 82% 84%, rgba(251,146,60,.045), transparent 34%),
+      radial-gradient(ellipse at 20% 86%, rgba(167,139,250,.045), transparent 32%),
+      radial-gradient(ellipse at 56% 48%, rgba(244,114,182,.025), transparent 40%);
+  }
+  body.dark-mode #kpt-ambient-bg::before {
+    background:
+      radial-gradient(ellipse at 8% 16%, rgba(59,130,246,.105), transparent 34%),
+      radial-gradient(ellipse at 88% 18%, rgba(20,184,166,.075), transparent 32%),
+      radial-gradient(ellipse at 82% 84%, rgba(249,115,22,.065), transparent 35%),
+      radial-gradient(ellipse at 20% 86%, rgba(139,92,246,.075), transparent 33%),
+      radial-gradient(ellipse at 56% 48%, rgba(236,72,153,.035), transparent 42%);
+  }
+
+  /* The decorative canvas stays behind app content and never captures input. */
   body > header,
   body > main,
   body > #kpt-public-policy-footer {
     position: relative;
     z-index: 1;
   }
-  #kpt-ambient-bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 9% 15%, rgba(117,145,119,.18), transparent 34%),
-      radial-gradient(ellipse at 88% 22%, rgba(127,150,163,.13), transparent 32%),
-      radial-gradient(ellipse at 82% 84%, rgba(185,130,109,.13), transparent 36%),
-      radial-gradient(ellipse at 24% 88%, rgba(189,163,116,.09), transparent 34%);
+  /* Keep the previous glass-header refinement without changing its original colours. */
+  header.bg-white {
+    background: rgba(255,255,255,.92) !important;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
-  body.dark-mode #kpt-ambient-bg::before {
-    background:
-      radial-gradient(ellipse at 9% 15%, rgba(104,137,111,.13), transparent 35%),
-      radial-gradient(ellipse at 88% 22%, rgba(103,129,145,.10), transparent 34%),
-      radial-gradient(ellipse at 82% 84%, rgba(156,112,95,.075), transparent 36%),
-      radial-gradient(ellipse at 24% 88%, rgba(171,145,99,.055), transparent 34%);
+  body.dark-mode header.bg-white {
+    background: rgba(30,41,59,.94) !important;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
-  /* Small, translucent leaves in several muted palette colours. */
+  /* Detailed leaf artwork: soft fill, outer contour, central vein and side veins. */
   .kpt-ambient-leaf {
     position: absolute;
     display: block;
-    width: 21px;
-    height: 13px;
-    border-radius: 100% 0 100% 0;
-    border: 1px solid rgba(255,255,255,.22);
-    background: linear-gradient(135deg, var(--kpt-leaf-light), var(--kpt-leaf-dark));
-    box-shadow: 0 2px 7px rgba(40,57,47,.09);
+    width: var(--leaf-width, 36px);
+    height: var(--leaf-height, 25px);
     opacity: 0;
     transform-origin: 50% 50%;
     will-change: transform, opacity;
-    animation-name: kpt-leaf-drift;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    filter: drop-shadow(0 2px 3px rgba(15,23,42,.10));
+    animation: kpt-leaf-drift var(--leaf-duration, 22s) ease-in-out var(--leaf-delay, 0s) infinite;
   }
-  .kpt-ambient-leaf::after {
-    content: "";
-    position: absolute;
-    left: 13%;
-    top: 49%;
-    width: 76%;
-    height: 1px;
-    border-radius: 99px;
-    background: rgba(255,255,255,.36);
-    transform: rotate(-19deg);
-    transform-origin: center;
+  .kpt-ambient-leaf svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .kpt-ambient-leaf .leaf-blade {
+    fill: var(--leaf-fill);
+    stroke: var(--leaf-outline);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+  .kpt-ambient-leaf .leaf-vein-main {
+    fill: none;
+    stroke: var(--leaf-vein);
+    stroke-width: 1.55;
+    stroke-linecap: round;
+    opacity: .88;
+  }
+  .kpt-ambient-leaf .leaf-vein-side {
+    fill: none;
+    stroke: var(--leaf-vein);
+    stroke-width: 1.05;
+    stroke-linecap: round;
+    opacity: .68;
+  }
+  .kpt-ambient-leaf .leaf-highlight {
+    fill: none;
+    stroke: rgba(255,255,255,.62);
+    stroke-width: 1;
+    stroke-linecap: round;
+    opacity: .72;
   }
   body.dark-mode .kpt-ambient-leaf {
-    border-color: rgba(225,235,225,.12);
-    box-shadow: 0 2px 8px rgba(0,0,0,.16);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,.24));
   }
-  body.dark-mode .kpt-ambient-leaf::after { background: rgba(240,245,235,.26); }
+  body.dark-mode .kpt-ambient-leaf .leaf-vein-main,
+  body.dark-mode .kpt-ambient-leaf .leaf-vein-side { opacity: .86; }
 
-  .kpt-leaf-a { left: 7%; top: -5%; --kpt-leaf-light:#a8b89f; --kpt-leaf-dark:#718b73; --kpt-leaf-opacity:.19; --kpt-leaf-drift:34px; --kpt-leaf-turn:295deg; animation-duration:43s; animation-delay:-23s; }
-  .kpt-leaf-b { left: 24%; top: -14%; width:17px; height:11px; --kpt-leaf-light:#d0a18d; --kpt-leaf-dark:#b9826d; --kpt-leaf-opacity:.16; --kpt-leaf-drift:-28px; --kpt-leaf-turn:330deg; animation-duration:51s; animation-delay:-8s; }
-  .kpt-leaf-c { left: 43%; top: -7%; width:19px; height:12px; --kpt-leaf-light:#a5b7bf; --kpt-leaf-dark:#7f96a3; --kpt-leaf-opacity:.17; --kpt-leaf-drift:42px; --kpt-leaf-turn:305deg; animation-duration:47s; animation-delay:-31s; }
-  .kpt-leaf-d { right: 31%; top: -16%; width:16px; height:10px; --kpt-leaf-light:#d4c39e; --kpt-leaf-dark:#bda374; --kpt-leaf-opacity:.16; --kpt-leaf-drift:-35px; --kpt-leaf-turn:320deg; animation-duration:55s; animation-delay:-17s; }
-  .kpt-leaf-e { right: 14%; top: -8%; --kpt-leaf-light:#aabca5; --kpt-leaf-dark:#78947b; --kpt-leaf-opacity:.18; --kpt-leaf-drift:27px; --kpt-leaf-turn:285deg; animation-duration:45s; animation-delay:-35s; }
-  .kpt-leaf-f { right: 4%; top: -19%; width:16px; height:10px; --kpt-leaf-light:#b5c0c1; --kpt-leaf-dark:#839ba2; --kpt-leaf-opacity:.14; --kpt-leaf-drift:-23px; --kpt-leaf-turn:310deg; animation-duration:57s; animation-delay:-27s; }
+  .kpt-leaf-a {
+    left: 7%; top: -9%; --leaf-width: 42px; --leaf-height: 30px;
+    --leaf-fill: rgba(96,165,250,.53); --leaf-outline: rgba(59,130,246,.72); --leaf-vein: rgba(255,255,255,.92);
+    --leaf-mid-x: 30px; --leaf-end-x: -12px; --leaf-rotation: 245deg; --leaf-duration: 21s; --leaf-delay: -8s; --leaf-opacity: .43;
+  }
+  .kpt-leaf-b {
+    left: 22%; top: -15%; --leaf-width: 34px; --leaf-height: 24px;
+    --leaf-fill: rgba(251,113,133,.49); --leaf-outline: rgba(244,63,94,.68); --leaf-vein: rgba(255,255,255,.94);
+    --leaf-mid-x: -25px; --leaf-end-x: 13px; --leaf-rotation: 285deg; --leaf-duration: 24s; --leaf-delay: -17s; --leaf-opacity: .40;
+  }
+  .kpt-leaf-c {
+    left: 39%; top: -7%; --leaf-width: 38px; --leaf-height: 27px;
+    --leaf-fill: rgba(251,191,36,.49); --leaf-outline: rgba(217,119,6,.68); --leaf-vein: rgba(255,255,255,.94);
+    --leaf-mid-x: 24px; --leaf-end-x: -16px; --leaf-rotation: 220deg; --leaf-duration: 19s; --leaf-delay: -4s; --leaf-opacity: .42;
+  }
+  .kpt-leaf-d {
+    left: 57%; top: -17%; --leaf-width: 31px; --leaf-height: 22px;
+    --leaf-fill: rgba(45,212,191,.48); --leaf-outline: rgba(13,148,136,.70); --leaf-vein: rgba(255,255,255,.94);
+    --leaf-mid-x: -29px; --leaf-end-x: 15px; --leaf-rotation: 265deg; --leaf-duration: 23s; --leaf-delay: -13s; --leaf-opacity: .40;
+  }
+  .kpt-leaf-e {
+    left: 72%; top: -11%; --leaf-width: 40px; --leaf-height: 28px;
+    --leaf-fill: rgba(167,139,250,.50); --leaf-outline: rgba(139,92,246,.70); --leaf-vein: rgba(255,255,255,.94);
+    --leaf-mid-x: 27px; --leaf-end-x: -14px; --leaf-rotation: 235deg; --leaf-duration: 25s; --leaf-delay: -20s; --leaf-opacity: .42;
+  }
+  .kpt-leaf-f {
+    right: 6%; top: -19%; --leaf-width: 35px; --leaf-height: 25px;
+    --leaf-fill: rgba(251,146,60,.49); --leaf-outline: rgba(234,88,12,.68); --leaf-vein: rgba(255,255,255,.94);
+    --leaf-mid-x: -23px; --leaf-end-x: 12px; --leaf-rotation: 280deg; --leaf-duration: 20s; --leaf-delay: -11s; --leaf-opacity: .41;
+  }
+  .kpt-leaf-g {
+    left: 88%; top: -5%; --leaf-width: 30px; --leaf-height: 22px;
+    --leaf-fill: rgba(34,211,238,.48); --leaf-outline: rgba(8,145,178,.68); --leaf-vein: rgba(255,255,255,.94);
+    --leaf-mid-x: -18px; --leaf-end-x: 10px; --leaf-rotation: 255deg; --leaf-duration: 22s; --leaf-delay: -2s; --leaf-opacity: .38;
+  }
+  .kpt-leaf-h {
+    left: 51%; top: -22%; --leaf-width: 33px; --leaf-height: 23px;
+    --leaf-fill: rgba(244,114,182,.47); --leaf-outline: rgba(219,39,119,.64); --leaf-vein: rgba(255,255,255,.94);
+    --leaf-mid-x: 21px; --leaf-end-x: -11px; --leaf-rotation: 275deg; --leaf-duration: 26s; --leaf-delay: -23s; --leaf-opacity: .39;
+  }
+
+  body.dark-mode .kpt-leaf-a { --leaf-fill: rgba(96,165,250,.66); --leaf-outline: rgba(147,197,253,.88); }
+  body.dark-mode .kpt-leaf-b { --leaf-fill: rgba(251,113,133,.63); --leaf-outline: rgba(253,164,175,.86); }
+  body.dark-mode .kpt-leaf-c { --leaf-fill: rgba(251,191,36,.64); --leaf-outline: rgba(252,211,77,.88); }
+  body.dark-mode .kpt-leaf-d { --leaf-fill: rgba(45,212,191,.63); --leaf-outline: rgba(94,234,212,.86); }
+  body.dark-mode .kpt-leaf-e { --leaf-fill: rgba(167,139,250,.66); --leaf-outline: rgba(196,181,253,.88); }
+  body.dark-mode .kpt-leaf-f { --leaf-fill: rgba(251,146,60,.64); --leaf-outline: rgba(253,186,116,.88); }
+  body.dark-mode .kpt-leaf-g { --leaf-fill: rgba(34,211,238,.62); --leaf-outline: rgba(103,232,249,.86); }
+  body.dark-mode .kpt-leaf-h { --leaf-fill: rgba(244,114,182,.63); --leaf-outline: rgba(249,168,212,.86); }
+
   @keyframes kpt-leaf-drift {
-    0% { opacity:0; transform:translate3d(0,-12vh,0) rotate(-28deg) scale(.82); }
-    12% { opacity:var(--kpt-leaf-opacity,.16); }
-    78% { opacity:var(--kpt-leaf-opacity,.16); }
-    100% { opacity:0; transform:translate3d(var(--kpt-leaf-drift,30px),116vh,0) rotate(var(--kpt-leaf-turn,300deg)) scale(1.04); }
+    0% { opacity: 0; transform: translate3d(0,-12vh,0) rotate(-22deg) scale(.82); }
+    9% { opacity: var(--leaf-opacity,.4); }
+    48% { opacity: var(--leaf-opacity,.4); transform: translate3d(var(--leaf-mid-x,24px),48vh,0) rotate(112deg) scale(1.04); }
+    84% { opacity: var(--leaf-opacity,.4); }
+    100% { opacity: 0; transform: translate3d(var(--leaf-end-x,-12px),112vh,0) rotate(var(--leaf-rotation,255deg)) scale(.9); }
   }
 
-  /* Header and active navigation use forest/sage; other semantic colours remain intact. */
-  header.bg-white {
-    background: rgba(250,250,246,.93) !important;
-    border-bottom-color: var(--kpt-border) !important;
-    box-shadow: 0 5px 20px rgba(43,68,49,.055) !important;
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-  }
-  body.dark-mode header.bg-white {
-    background: rgba(22,34,28,.95) !important;
-    border-bottom-color: #34463a !important;
-    box-shadow: 0 7px 22px rgba(0,0,0,.20) !important;
-  }
-  #header-main-layout .text-sky-700 { color: var(--kpt-sage-700) !important; }
-  body.dark-mode #header-main-layout .text-sky-700 { color: #a9c2a7 !important; }
-  .tab-btn.active {
-    border-bottom-color: var(--kpt-sage-700) !important;
-    color: var(--kpt-forest-900) !important;
-  }
-  body.dark-mode .tab-btn.active {
-    border-bottom-color: #9bb39b !important;
-    color: #bfd2bc !important;
-  }
-  .phase-btn.active,
-  .budget-subtab.active {
-    background-color: var(--kpt-sage-700) !important;
-    color: #fff !important;
-  }
-  body.dark-mode .phase-btn.active,
-  body.dark-mode .budget-subtab.active {
-    background-color: #526d58 !important;
-    color: #f4faf2 !important;
-  }
-  .mobile-nav-item.active {
-    color: #536f59 !important;
-    background: #e9eee6 !important;
-  }
-  #mobile-nav-postnatal .mobile-nav-item.active {
-    color: #536f59 !important;
-    background: #e9eee6 !important;
-  }
-  body.dark-mode .mobile-nav-item.active,
-  body.dark-mode #mobile-nav-postnatal .mobile-nav-item.active {
-    color: #c4d8c1 !important;
-    background: #2a4031 !important;
-  }
-
-  /* Dashboard mixes forest, warm clay and blue-grey instead of an all-green wash. */
-  #sec-dashboard .kpt-dash-hero {
-    background: linear-gradient(132deg, #354e43 0%, #536963 52%, #4b5b65 100%) !important;
-    box-shadow: 0 18px 42px rgba(48,67,59,.18) !important;
-  }
-  #sec-dashboard .kpt-dash-hero-orb-two { background: rgba(203,151,126,.17) !important; }
-  #sec-dashboard .kpt-dash-card {
-    background: #fffefa !important;
-    border-color: #e4e5dc !important;
-    box-shadow: 0 6px 20px rgba(43,57,48,.055) !important;
-  }
-  #sec-dashboard .kpt-dash-card:hover {
-    border-color: #cbd5c9 !important;
-    box-shadow: 0 12px 28px rgba(43,57,48,.09) !important;
-  }
-  #sec-dashboard .kpt-dash-tag-sky { color: #617c8a !important; background: #e9eff1 !important; }
-  #sec-dashboard .kpt-dash-icon-sky { color: #617c8a !important; background: #e9eff1 !important; }
-  #sec-dashboard .kpt-dash-quick-panel {
-    background: linear-gradient(135deg, #f0eee5 0%, #eef0e8 54%, #e9eef0 100%) !important;
-    border-color: #dfe3dc !important;
-    box-shadow: var(--kpt-soft-shadow) !important;
-  }
-  #sec-dashboard .kpt-dash-shortcut { border-color: #e2e5dd !important; }
-  #sec-dashboard .kpt-dash-shortcut:hover { border-color: #c5d0c4 !important; }
-  #sec-dashboard .kpt-dash-shortcut:focus-visible,
-  #sec-dashboard button:focus-visible { outline-color: rgba(91,120,98,.45) !important; }
-  #sec-dashboard .kpt-dashboard-eyebrow { color: #9b705e !important; }
-  body.dark-mode #sec-dashboard .kpt-dash-hero {
-    background: linear-gradient(132deg, #263f33 0%, #354f4d 52%, #303f49 100%) !important;
-    box-shadow: 0 18px 42px rgba(0,0,0,.27) !important;
-  }
-  body.dark-mode #sec-dashboard .kpt-dash-card {
-    background: #202e26 !important;
-    border-color: #3b4b40 !important;
-    box-shadow: 0 7px 22px rgba(0,0,0,.19) !important;
-  }
-  body.dark-mode #sec-dashboard .kpt-dash-card:hover { border-color: #607765 !important; }
-  body.dark-mode #sec-dashboard .kpt-dash-tag-sky,
-  body.dark-mode #sec-dashboard .kpt-dash-icon-sky { color: #c0d0d4 !important; background: #34474c !important; }
-  body.dark-mode #sec-dashboard .kpt-dash-quick-panel {
-    background: linear-gradient(135deg, #202d27 0%, #27332d 55%, #29373b 100%) !important;
-    border-color: #3c4c42 !important;
-  }
-  body.dark-mode #sec-dashboard .kpt-dash-shortcut {
-    background: #29372f !important;
-    border-color: #405148 !important;
-  }
-  body.dark-mode #sec-dashboard .kpt-dash-shortcut:hover { border-color: #718675 !important; }
-  body.dark-mode #sec-dashboard .kpt-dashboard-eyebrow { color: #d0a18c !important; }
-
-  /* Responsive ambient treatment: fewer/smaller leaves and softer colour blooms on phones. */
-  @media (max-width: 640px) {
-    .kpt-ambient-leaf { width:16px; height:10px; }
-    .kpt-leaf-d, .kpt-leaf-f { display:none; }
-    .kpt-leaf-a, .kpt-leaf-b, .kpt-leaf-c, .kpt-leaf-e { --kpt-leaf-opacity:.13; }
-    #kpt-ambient-bg::before {
-      background:
-        radial-gradient(ellipse at 8% 16%, rgba(117,145,119,.14), transparent 36%),
-        radial-gradient(ellipse at 90% 80%, rgba(185,130,109,.09), transparent 38%),
-        radial-gradient(ellipse at 88% 20%, rgba(127,150,163,.08), transparent 35%);
-    }
-    body.dark-mode #kpt-ambient-bg::before {
-      background:
-        radial-gradient(ellipse at 8% 16%, rgba(104,137,111,.10), transparent 38%),
-        radial-gradient(ellipse at 90% 80%, rgba(156,112,95,.055), transparent 40%),
-        radial-gradient(ellipse at 88% 20%, rgba(103,129,145,.065), transparent 36%);
-    }
-    header.bg-white { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  @media (max-width: 767px) {
+    /* Mobile keeps a few larger leaves, with a slightly softer presence. */
+    .kpt-ambient-leaf { filter: drop-shadow(0 1px 2px rgba(15,23,42,.09)); }
+    .kpt-leaf-a { --leaf-width: 34px; --leaf-height: 24px; --leaf-opacity: .37; }
+    .kpt-leaf-b { --leaf-width: 29px; --leaf-height: 21px; --leaf-opacity: .35; }
+    .kpt-leaf-c { --leaf-width: 32px; --leaf-height: 23px; --leaf-opacity: .37; }
+    .kpt-leaf-d, .kpt-leaf-h { display: none; }
+    .kpt-leaf-e { --leaf-width: 33px; --leaf-height: 23px; --leaf-opacity: .36; }
+    .kpt-leaf-f { --leaf-width: 29px; --leaf-height: 21px; --leaf-opacity: .36; }
+    .kpt-leaf-g { --leaf-width: 27px; --leaf-height: 20px; --leaf-opacity: .34; }
+    body.dark-mode .kpt-ambient-leaf { filter: drop-shadow(0 1px 3px rgba(0,0,0,.22)); }
+    header.bg-white { -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .kpt-ambient-leaf { animation:none !important; opacity:.075; transform:none !important; }
-    #sec-dashboard .kpt-dash-card,
-    #sec-dashboard .kpt-dash-shortcut,
-    #sec-dashboard .kpt-dash-progress-fill { transition:none !important; }
-    #sec-dashboard .kpt-dash-card:hover,
-    #sec-dashboard .kpt-dash-shortcut:hover { transform:none !important; }
+    .kpt-ambient-leaf { animation: none !important; opacity: 0 !important; }
   }
 </style>
 
