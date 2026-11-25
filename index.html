@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.33 — Care Guide Favorites Folder -->
+    <!-- Keluarga Pohon Teduh 6.13.34 — Care Guide Mobile Add Button Fit -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.33">
+    <meta name="application-version" content="6.13.34">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3417,6 +3417,25 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   @media(min-width:768px) and (max-width:1023px){.kpt-care-folder-grid{gap:7px}.kpt-care-folder{padding:10px;min-height:142px}.kpt-care-folder-name{font-size:10px}.kpt-care-folder small{font-size:8px}}
   @media(max-width:767px){.kpt-knowledge-accordion-button{min-height:68px;padding:11px}.kpt-knowledge-accordion-icon{width:38px;height:38px;flex-basis:38px}.kpt-knowledge-accordion-copy strong{font-size:12px}.kpt-knowledge-accordion-copy small{font-size:9px}.kpt-care-folder-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.kpt-care-folder{min-height:108px;padding:7px 4px;align-items:center;text-align:center;border-radius:12px}.kpt-care-folder-icon{width:29px;height:29px;flex:0 0 29px;border-radius:9px;font-size:13px;margin-bottom:7px}.kpt-care-folder-name{font-size:8px;line-height:1.25;overflow-wrap:anywhere}.kpt-care-folder small{display:none}.kpt-care-folder-count{font-size:7px;line-height:1.2;padding-top:6px;overflow-wrap:anywhere}.kpt-care-panel-intro{align-items:flex-start}.kpt-care-panel-intro p{max-width:100%}.kpt-care-add-button{min-height:44px;padding:8px 10px;font-size:10px}.kpt-care-viewer-heading{align-items:flex-start}.kpt-care-viewer-heading>div{width:100%}.kpt-care-search{flex:1;min-width:0}.kpt-care-gallery-stage{min-height:260px;padding:10px 39px}.kpt-care-poster-button{min-height:220px}.kpt-care-poster-image{max-height:62vh}.kpt-care-gallery-arrow{width:40px;height:44px}.kpt-care-gallery-arrow.is-prev{left:5px}.kpt-care-gallery-arrow.is-next{right:5px}.kpt-care-lightbox-image{inset:60px 42px 66px;width:calc(100% - 84px);height:calc(100% - 126px)}.kpt-care-lightbox-caption{left:44px;right:44px}}
   @media(max-width:360px){.kpt-care-folder-grid{gap:3px}.kpt-care-folder{padding:6px 2px;min-height:102px}.kpt-care-folder-name{font-size:7.5px}.kpt-care-folder-count{font-size:6.5px}}
+</style>
+
+<style id="kpt-care-mobile-cta-61334">
+  /* Keep the add-guide CTA inside the panel on narrow screens. */
+  @media (max-width: 767px) {
+    .kpt-care-panel-intro { align-items: stretch; flex-wrap: wrap; }
+    .kpt-care-panel-intro > div { flex: 1 1 100%; min-width: 0; }
+    .kpt-care-panel-intro > .kpt-care-add-button {
+      display: flex;
+      flex: 1 1 100%;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      white-space: normal;
+      line-height: 1.35;
+      text-align: center;
+    }
+    .kpt-care-panel-intro > .kpt-care-add-button i { flex: 0 0 auto; }
+  }
 </style>
 
 </head>
@@ -12577,7 +12596,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.33',
+                    appVersion: '6.13.34',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
