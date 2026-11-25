@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.32 — Care Guide Cross-Device Sync Refresh -->
+    <!-- Keluarga Pohon Teduh 6.13.33 — Care Guide Favorites Folder -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.32">
+    <meta name="application-version" content="6.13.33">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3392,11 +3392,11 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   .kpt-knowledge-accordion-panel{padding:14px;border-top:1px solid #e2e8f0;background:#fbfdff}
   .kpt-care-panel-intro{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}.kpt-care-panel-intro strong{font-size:13px;color:#172f45}.kpt-care-panel-intro p{font-size:10px;color:#64748b;line-height:1.5;margin-top:3px;max-width:540px}
   .kpt-care-add-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:9px 13px;border-radius:12px;background:#0f8b82;color:#fff;font-size:11px;font-weight:850;white-space:nowrap;box-shadow:0 4px 12px rgba(15,139,130,.16)}.kpt-care-add-button:hover{background:#0f766e}
-  .kpt-care-folder-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+  .kpt-care-folder-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
   .kpt-care-folder{display:flex;min-width:0;min-height:158px;flex-direction:column;align-items:flex-start;text-align:left;padding:13px;border:1px solid transparent;border-radius:17px;transition:transform .16s,box-shadow .16s}
   .kpt-care-folder:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,23,42,.08)}.kpt-care-folder-icon{display:flex;width:38px;height:38px;align-items:center;justify-content:center;border-radius:12px;font-size:17px;margin-bottom:10px}
   .kpt-care-folder-name{font-size:12px;font-weight:900;line-height:1.3;color:#172f45}.kpt-care-folder small{display:block;font-size:9px;line-height:1.4;color:#64748b;margin-top:5px;min-height:25px}.kpt-care-folder-count{margin-top:auto;padding-top:9px;font-size:9px;font-weight:800;color:#475569}
-  .folder-blue{background:#eff6ff;border-color:#dbeafe}.folder-blue .kpt-care-folder-icon{background:#dbeafe;color:#1d4ed8}.folder-pink{background:#fdf2f8;border-color:#fce7f3}.folder-pink .kpt-care-folder-icon{background:#fce7f3;color:#be185d}.folder-green{background:#f0fdf4;border-color:#dcfce7}.folder-green .kpt-care-folder-icon{background:#dcfce7;color:#15803d}.folder-amber{background:#fffbeb;border-color:#fef3c7}.folder-amber .kpt-care-folder-icon{background:#fef3c7;color:#b45309}
+  .folder-blue{background:#eff6ff;border-color:#dbeafe}.folder-blue .kpt-care-folder-icon{background:#dbeafe;color:#1d4ed8}.folder-pink{background:#fdf2f8;border-color:#fce7f3}.folder-pink .kpt-care-folder-icon{background:#fce7f3;color:#be185d}.folder-green{background:#f0fdf4;border-color:#dcfce7}.folder-green .kpt-care-folder-icon{background:#dcfce7;color:#15803d}.folder-amber{background:#fffbeb;border-color:#fef3c7}.folder-amber .kpt-care-folder-icon{background:#fef3c7;color:#b45309}.folder-favorite{background:#f5f3ff;border-color:#ede9fe}.folder-favorite .kpt-care-folder-icon{background:#ede9fe;color:#7c3aed}
   .kpt-care-viewer-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:2px 0 14px;flex-wrap:wrap}.kpt-care-back-button{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:8px 11px;border-radius:11px;background:#e2e8f0;color:#334155;font-size:10px;font-weight:850}
   .kpt-care-search{position:relative;display:flex;align-items:center;min-width:170px}.kpt-care-search i{position:absolute;left:11px;color:#94a3b8;font-size:11px}.kpt-care-search input{width:100%;min-height:44px;padding:8px 10px 8px 30px;border:1px solid #dbe4ee;border-radius:11px;background:#fff;color:#334155;font-size:11px;outline:none}
   .kpt-care-age-filter{min-height:44px;max-width:145px;padding:8px 10px;border:1px solid #dbe4ee;border-radius:11px;background:#fff;color:#334155;font-size:10px;outline:none}.kpt-care-slide-counter{padding:5px 9px;border-radius:999px;background:#e0f2fe;color:#075985;font-size:10px;font-weight:850;white-space:nowrap}
@@ -3411,11 +3411,12 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   body.dark-mode .kpt-knowledge-heading h2{color:#f8fafc}body.dark-mode .kpt-knowledge-heading p{color:#94a3b8}body.dark-mode .kpt-knowledge-eyebrow{color:#67e8f9}
   body.dark-mode .kpt-knowledge-accordion{background:#1e293b;border-color:#334155}body.dark-mode .kpt-knowledge-accordion-button{background:#1e293b;color:#f8fafc}body.dark-mode .kpt-knowledge-accordion-button:hover{background:#26364b}body.dark-mode .kpt-knowledge-accordion-copy small{color:#94a3b8}body.dark-mode .kpt-knowledge-count{background:#334155;color:#cbd5e1}body.dark-mode .kpt-knowledge-accordion-panel{background:#172334;border-color:#334155}
   body.dark-mode .kpt-care-panel-intro strong,body.dark-mode .kpt-care-folder-name,body.dark-mode .kpt-care-slide-title{color:#f1f5f9}body.dark-mode .kpt-care-panel-intro p,body.dark-mode .kpt-care-folder small,body.dark-mode .kpt-care-slide-meta,body.dark-mode .kpt-care-slide-notes{color:#cbd5e1}
-  body.dark-mode .folder-blue{background:#172b43;border-color:#284967}body.dark-mode .folder-blue .kpt-care-folder-icon{background:#1e3a5f;color:#93c5fd}body.dark-mode .folder-pink{background:#3a2336;border-color:#63344f}body.dark-mode .folder-pink .kpt-care-folder-icon{background:#5b2b4b;color:#f9a8d4}body.dark-mode .folder-green{background:#18352e;border-color:#285648}body.dark-mode .folder-green .kpt-care-folder-icon{background:#1e5141;color:#86efac}body.dark-mode .folder-amber{background:#382f1c;border-color:#66502b}body.dark-mode .folder-amber .kpt-care-folder-icon{background:#59431e;color:#fcd34d}body.dark-mode .kpt-care-folder-count{color:#cbd5e1}
+  body.dark-mode .folder-blue{background:#172b43;border-color:#284967}body.dark-mode .folder-blue .kpt-care-folder-icon{background:#1e3a5f;color:#93c5fd}body.dark-mode .folder-pink{background:#3a2336;border-color:#63344f}body.dark-mode .folder-pink .kpt-care-folder-icon{background:#5b2b4b;color:#f9a8d4}body.dark-mode .folder-green{background:#18352e;border-color:#285648}body.dark-mode .folder-green .kpt-care-folder-icon{background:#1e5141;color:#86efac}body.dark-mode .folder-amber{background:#382f1c;border-color:#66502b}body.dark-mode .folder-amber .kpt-care-folder-icon{background:#59431e;color:#fcd34d}body.dark-mode .folder-favorite{background:#30254b;border-color:#514078}body.dark-mode .folder-favorite .kpt-care-folder-icon{background:#49366f;color:#ddd6fe}body.dark-mode .kpt-care-folder-count{color:#cbd5e1}
   body.dark-mode .kpt-care-back-button{background:#334155;color:#e2e8f0}body.dark-mode .kpt-care-search input,body.dark-mode .kpt-care-age-filter,body.dark-mode .kpt-care-gallery-arrow,body.dark-mode .kpt-care-small-action{background:#26364b;color:#e2e8f0;border-color:#475569}body.dark-mode .kpt-care-slide-counter{background:#123b4b;color:#a5f3fc}body.dark-mode .kpt-care-gallery-stage{background:linear-gradient(135deg,#0f172a,#1e293b);border-color:#334155}body.dark-mode .kpt-care-empty{background:#1e293b;border-color:#475569;color:#cbd5e1}body.dark-mode .kpt-care-empty strong{color:#f1f5f9}body.dark-mode .kpt-care-storage-note{background:#123451;color:#bae6fd}
   body.dark-mode .kpt-care-editor-card{background:#1e293b;color:#f8fafc}body.dark-mode .kpt-care-editor-header{background:#172334;border-color:#334155}body.dark-mode .kpt-care-field label,body.dark-mode .kpt-care-upload-box label{color:#e2e8f0}body.dark-mode .kpt-care-field input,body.dark-mode .kpt-care-field select,body.dark-mode .kpt-care-field textarea{background:#0f172a;color:#f8fafc;border-color:#475569}body.dark-mode .kpt-care-field small,body.dark-mode .kpt-care-upload-box small{color:#94a3b8}body.dark-mode .kpt-care-upload-box,body.dark-mode .kpt-care-existing-page{background:#172334;border-color:#475569}body.dark-mode .kpt-care-editor-close,body.dark-mode .kpt-care-cancel-button{background:#334155;color:#e2e8f0}body.dark-mode .kpt-care-existing-page{border-color:#475569}
-  @media(min-width:768px) and (max-width:1023px){.kpt-care-folder-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-  @media(max-width:767px){.kpt-knowledge-accordion-button{min-height:68px;padding:11px}.kpt-knowledge-accordion-icon{width:38px;height:38px;flex-basis:38px}.kpt-knowledge-accordion-copy strong{font-size:12px}.kpt-knowledge-accordion-copy small{font-size:9px}.kpt-care-folder-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.kpt-care-folder{min-height:145px;padding:11px}.kpt-care-folder-name{font-size:11px}.kpt-care-folder small{font-size:8px}.kpt-care-panel-intro{align-items:flex-start}.kpt-care-panel-intro p{max-width:100%}.kpt-care-add-button{min-height:44px;padding:8px 10px;font-size:10px}.kpt-care-viewer-heading{align-items:flex-start}.kpt-care-viewer-heading>div{width:100%}.kpt-care-search{flex:1;min-width:0}.kpt-care-gallery-stage{min-height:260px;padding:10px 39px}.kpt-care-poster-button{min-height:220px}.kpt-care-poster-image{max-height:62vh}.kpt-care-gallery-arrow{width:40px;height:44px}.kpt-care-gallery-arrow.is-prev{left:5px}.kpt-care-gallery-arrow.is-next{right:5px}.kpt-care-lightbox-image{inset:60px 42px 66px;width:calc(100% - 84px);height:calc(100% - 126px)}.kpt-care-lightbox-caption{left:44px;right:44px}}
+  @media(min-width:768px) and (max-width:1023px){.kpt-care-folder-grid{gap:7px}.kpt-care-folder{padding:10px;min-height:142px}.kpt-care-folder-name{font-size:10px}.kpt-care-folder small{font-size:8px}}
+  @media(max-width:767px){.kpt-knowledge-accordion-button{min-height:68px;padding:11px}.kpt-knowledge-accordion-icon{width:38px;height:38px;flex-basis:38px}.kpt-knowledge-accordion-copy strong{font-size:12px}.kpt-knowledge-accordion-copy small{font-size:9px}.kpt-care-folder-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.kpt-care-folder{min-height:108px;padding:7px 4px;align-items:center;text-align:center;border-radius:12px}.kpt-care-folder-icon{width:29px;height:29px;flex:0 0 29px;border-radius:9px;font-size:13px;margin-bottom:7px}.kpt-care-folder-name{font-size:8px;line-height:1.25;overflow-wrap:anywhere}.kpt-care-folder small{display:none}.kpt-care-folder-count{font-size:7px;line-height:1.2;padding-top:6px;overflow-wrap:anywhere}.kpt-care-panel-intro{align-items:flex-start}.kpt-care-panel-intro p{max-width:100%}.kpt-care-add-button{min-height:44px;padding:8px 10px;font-size:10px}.kpt-care-viewer-heading{align-items:flex-start}.kpt-care-viewer-heading>div{width:100%}.kpt-care-search{flex:1;min-width:0}.kpt-care-gallery-stage{min-height:260px;padding:10px 39px}.kpt-care-poster-button{min-height:220px}.kpt-care-poster-image{max-height:62vh}.kpt-care-gallery-arrow{width:40px;height:44px}.kpt-care-gallery-arrow.is-prev{left:5px}.kpt-care-gallery-arrow.is-next{right:5px}.kpt-care-lightbox-image{inset:60px 42px 66px;width:calc(100% - 84px);height:calc(100% - 126px)}.kpt-care-lightbox-caption{left:44px;right:44px}}
+  @media(max-width:360px){.kpt-care-folder-grid{gap:3px}.kpt-care-folder{padding:6px 2px;min-height:102px}.kpt-care-folder-name{font-size:7.5px}.kpt-care-folder-count{font-size:6.5px}}
 </style>
 
 </head>
@@ -4263,8 +4264,11 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                             <button type="button" class="kpt-care-folder folder-green" onclick="openCareGuideFolder('kesehatan')">
                                 <span class="kpt-care-folder-icon"><i class="fa-solid fa-heart-pulse"></i></span><span class="kpt-care-folder-name">Kesehatan & Keselamatan</span><small>Tanda bahaya, tidur aman, kebersihan</small><span class="kpt-care-folder-count" id="kpt-care-count-kesehatan">0 panduan</span>
                             </button>
-                            <button type="button" class="kpt-care-folder folder-amber" onclick="openCareGuideFolder('tumbuh-kembang')">
+                            <button type="button" class="kpt-care-folder folder-amber" onclick="openCareGuideFolder('tumbuh-kembang')" aria-label="Buka kategori Tumbuh Kembang" title="Tumbuh Kembang">
                                 <span class="kpt-care-folder-icon"><i class="fa-solid fa-shapes"></i></span><span class="kpt-care-folder-name">Tumbuh Kembang</span><small>Tummy time, tidur, bermain, stimulasi</small><span class="kpt-care-folder-count" id="kpt-care-count-tumbuh-kembang">0 panduan</span>
+                            </button>
+                            <button type="button" class="kpt-care-folder folder-favorite" onclick="openCareGuideFolder('favorit')" aria-label="Buka semua panduan favorit" title="Favorit dari seluruh kategori">
+                                <span class="kpt-care-folder-icon"><i class="fa-solid fa-star"></i></span><span class="kpt-care-folder-name">Favorit</span><small>Kumpulan panduan pilihan dari semua kategori</small><span class="kpt-care-folder-count" id="kpt-care-count-favorit">0 panduan</span>
                             </button>
                         </div>
                         <div id="kpt-care-folder-viewer" class="hidden mt-4">
@@ -11305,8 +11309,18 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             if (!appState || !Array.isArray(appState.careGuides)) appState.careGuides = [];
             return appState.careGuides;
         }
+        const KPT_CARE_GUIDE_FAVORITES_ID = 'favorit';
+        const KPT_CARE_GUIDE_FAVORITES_FOLDER = {
+            id:KPT_CARE_GUIDE_FAVORITES_ID,
+            title:'Panduan Favorit',
+            subtitle:'Kumpulan panduan pilihan dari seluruh kategori'
+        };
         function kptCareGuideFolder(category) {
+            if (category === KPT_CARE_GUIDE_FAVORITES_ID) return KPT_CARE_GUIDE_FAVORITES_FOLDER;
             return KPT_CARE_GUIDE_FOLDERS.find(folder => folder.id === category) || KPT_CARE_GUIDE_FOLDERS[0];
+        }
+        function isKptCareGuideFolder(category) {
+            return category === KPT_CARE_GUIDE_FAVORITES_ID || KPT_CARE_GUIDE_FOLDERS.some(folder => folder.id === category);
         }
         function toggleKnowledgePanel(panelName) {
             const map = panelName === 'care'
@@ -11329,10 +11343,13 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 const el = document.getElementById('kpt-care-count-' + folder.id);
                 if (el) el.textContent = count + ' panduan';
             });
+            const favoriteCount = guides.filter(guide => guide && guide.favorite === true).length;
+            const favoriteCountEl = document.getElementById('kpt-care-count-favorit');
+            if (favoriteCountEl) favoriteCountEl.textContent = favoriteCount + ' panduan';
             if (activeCareGuideCategory) renderCareGuideGallery();
         }
         function openCareGuideFolder(category) {
-            if (!KPT_CARE_GUIDE_FOLDERS.some(folder => folder.id === category)) return;
+            if (!isKptCareGuideFolder(category)) return;
             activeCareGuideCategory = category;
             activeCareGuideSlideIndex = 0;
             const grid = document.getElementById('kpt-care-folder-grid');
@@ -11363,7 +11380,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             const search = String(document.getElementById('kpt-care-search-input')?.value || '').trim().toLowerCase();
             const ageFilter = String(document.getElementById('kpt-care-age-filter')?.value || 'ALL');
             const guides = kptGetCareGuides()
-                .filter(guide => guide && guide.category === category)
+                .filter(guide => guide && (category === KPT_CARE_GUIDE_FAVORITES_ID ? guide.favorite === true : guide.category === category))
                 .filter(guide => ageFilter === 'ALL' || String(guide.ageRange || 'Semua usia') === ageFilter || String(guide.ageRange || 'Semua usia') === 'Semua usia')
                 .filter(guide => !search || [guide.title, guide.source, guide.notes, guide.ageRange].some(value => String(value || '').toLowerCase().includes(search)))
                 .sort((a,b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
@@ -11392,8 +11409,14 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 dots.innerHTML = '';
                 if (counter) counter.textContent = '0/0';
                 empty.classList.remove('hidden');
-                const guidesExist = kptGetCareGuides().some(guide => guide && guide.category === activeCareGuideCategory);
-                empty.innerHTML = '<i class="fa-solid fa-images text-3xl mb-2"></i><strong>' + (guidesExist ? 'Panduan tidak ditemukan' : 'Folder ini masih kosong') + '</strong><span>' + (guidesExist ? 'Coba kata kunci lain.' : 'Tambahkan poster atau beberapa halaman panduan untuk mulai mengisi folder.') + '</span><div class="mt-3"><button type="button" class="kpt-care-add-button" onclick="openCareGuideModal()"><i class="fa-solid fa-plus"></i> Tambah Panduan</button></div>';
+                const guidesExist = kptGetCareGuides().some(guide => guide && (activeCareGuideCategory === KPT_CARE_GUIDE_FAVORITES_ID ? guide.favorite === true : guide.category === activeCareGuideCategory));
+                const isFavoritesFolder = activeCareGuideCategory === KPT_CARE_GUIDE_FAVORITES_ID;
+                const emptyTitle = guidesExist ? 'Panduan tidak ditemukan' : (isFavoritesFolder ? 'Belum ada panduan favorit' : 'Folder ini masih kosong');
+                const emptyMessage = guidesExist ? 'Coba kata kunci atau filter usia lain.' : (isFavoritesFolder ? 'Tekan tombol Favorit pada panduan untuk mengumpulkannya di sini.' : 'Tambahkan poster atau beberapa halaman panduan untuk mulai mengisi folder.');
+                const emptyAction = isFavoritesFolder && !guidesExist
+                    ? '<button type="button" class="kpt-care-add-button" onclick="closeCareGuideFolder()"><i class="fa-solid fa-folder-open"></i> Lihat semua kategori</button>'
+                    : '<button type="button" class="kpt-care-add-button" onclick="openCareGuideModal()"><i class="fa-solid fa-plus"></i> Tambah Panduan</button>';
+                empty.innerHTML = '<i class="fa-solid fa-' + (isFavoritesFolder ? 'star' : 'images') + ' text-3xl mb-2"></i><strong>' + emptyTitle + '</strong><span>' + emptyMessage + '</span><div class="mt-3">' + emptyAction + '</div>';
                 return;
             }
             if (activeCareGuideSlideIndex >= slides.length) activeCareGuideSlideIndex = slides.length - 1;
@@ -11415,7 +11438,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     ${guide.notes ? `<p class="kpt-care-slide-notes">${kptCareGuideEscape(guide.notes)}</p>` : ''}
                     ${guide.sourceUrl && /^https:\/\//i.test(guide.sourceUrl) ? `<div class="text-center"><a class="text-[10px] font-bold text-sky-700 hover:underline" href="${kptCareGuideEscape(guide.sourceUrl)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Buka sumber asli</a></div>` : ''}
                     <div class="kpt-care-gallery-actions">
-                        <button type="button" class="kpt-care-small-action favorite ${guide.favorite ? 'active' : ''}" onclick="toggleCareGuideFavorite('${kptCareGuideEscape(guide.id)}')"><i class="fa-${guide.favorite ? 'solid' : 'regular'} fa-star"></i> ${guide.favorite ? 'Favorit' : 'Simpan favorit'}</button>
+                        <button type="button" class="kpt-care-small-action favorite ${guide.favorite ? 'active' : ''}" onclick="toggleCareGuideFavorite('${kptCareGuideEscape(guide.id)}')"><i class="fa-${guide.favorite ? 'solid' : 'regular'} fa-star"></i> ${guide.favorite ? 'Hapus favorit' : 'Simpan favorit'}</button>
                         <button type="button" class="kpt-care-small-action" onclick="openCareGuideModal('${kptCareGuideEscape(guide.id)}')"><i class="fa-solid fa-pen"></i> Edit informasi</button>
                         <button type="button" class="kpt-care-small-action danger" onclick="deleteCareGuide('${kptCareGuideEscape(guide.id)}')"><i class="fa-solid fa-trash"></i> Hapus</button>
                     </div>
@@ -11493,7 +11516,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             document.getElementById('kpt-care-editor-title').textContent = guide ? 'Edit Panduan' : 'Tambah Panduan';
             document.getElementById('kpt-care-guide-id').value = guide ? guide.id : '';
             document.getElementById('kpt-care-guide-title').value = guide ? (guide.title || '') : '';
-            document.getElementById('kpt-care-guide-category').value = guide ? guide.category : (activeCareGuideCategory || 'perawatan');
+            document.getElementById('kpt-care-guide-category').value = guide ? guide.category : (activeCareGuideCategory && activeCareGuideCategory !== KPT_CARE_GUIDE_FAVORITES_ID ? activeCareGuideCategory : 'perawatan');
             document.getElementById('kpt-care-guide-age').value = guide ? (guide.ageRange || 'Semua usia') : 'Semua usia';
             document.getElementById('kpt-care-guide-source').value = guide ? (guide.source || '') : '';
             document.getElementById('kpt-care-guide-source-url').value = guide ? (guide.sourceUrl || '') : '';
@@ -12554,7 +12577,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.32',
+                    appVersion: '6.13.33',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
