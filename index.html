@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.31: Hijri mobile, independent labor accordions, hospital shortlists, and gift acquisition -->
+    <!-- Keluarga Pohon Teduh 6.13.32 — Care Guide Cross-Device Sync Refresh -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.31">
+    <meta name="application-version" content="6.13.32">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -11456,6 +11456,12 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         function renderCareGuideFullscreen() {
             if (!careGuideFullscreenOpen) return;
             const slides = getCareGuideSlides(activeCareGuideCategory);
+            if (!slides.length) {
+                closeCareGuideFullscreen();
+                return;
+            }
+            if (activeCareGuideSlideIndex >= slides.length) activeCareGuideSlideIndex = slides.length - 1;
+            if (activeCareGuideSlideIndex < 0) activeCareGuideSlideIndex = 0;
             const slide = slides[activeCareGuideSlideIndex];
             const image = document.getElementById('kpt-care-lightbox-image');
             const caption = document.getElementById('kpt-care-lightbox-caption');
@@ -12184,6 +12190,13 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
           if (namesVisible && has('babyNames')) renderBabyNames();
           if (referencesVisible && has('references')) renderReferences();
 
+          // Care guide metadata is shared through Firebase appState. Refresh its
+          // folder counts and active gallery when another device changes careGuides.
+          if (has('careGuides')) {
+            renderCareGuideFolders();
+            if (careGuideFullscreenOpen) renderCareGuideFullscreen();
+          }
+
           if (postDashboardVisible && has('babyName', 'babyGender', 'babyBirthDate', 'babyBorn', 'babyProfile', 'kmsData')) renderBabyProfile();
           if (postLogVisible && has('dailyLogs')) {
             renderDailyLogs();
@@ -12541,7 +12554,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.31',
+                    appVersion: '6.13.32',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
