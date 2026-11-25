@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.34 — Care Guide Mobile Add Button Fit -->
+    <!-- Keluarga Pohon Teduh 6.13.35 — Global Navigation Drawer Prototype 7.0 -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.34">
+    <meta name="application-version" content="6.13.35">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3438,6 +3438,155 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   }
 </style>
 
+<style id="kpt-global-navigation-prototype-61335">
+    /* 6.13.35 — Global Navigation Drawer prototype. Existing data/modules remain unchanged. */
+    .kpt-context-trigger { display:flex; align-items:center; gap:.75rem; min-width:0; width:100%; max-width:320px; padding:.55rem .8rem; border:1px solid #e2e8f0; border-radius:15px; background:#f8fafc; color:#1e293b; text-align:left; box-shadow:0 2px 8px rgba(15,23,42,.035); transition:border-color .18s ease,background .18s ease,box-shadow .18s ease; }
+    .kpt-context-trigger:hover { border-color:#99c8bc; background:#f2faf7; box-shadow:0 4px 14px rgba(15,23,42,.06); }
+    .kpt-context-trigger:focus-visible { outline:3px solid rgba(13,148,136,.3); outline-offset:2px; }
+    .kpt-context-trigger-icon { display:flex; align-items:center; justify-content:center; flex:0 0 38px; width:38px; height:38px; border-radius:12px; background:#e0f2fe; color:#0369a1; font-size:1rem; }
+    .kpt-context-trigger-copy { display:flex; flex-direction:column; gap:.05rem; min-width:0; flex:1; }
+    .kpt-context-eyebrow { color:#0f766e; font-size:.55rem; line-height:1.15; font-weight:900; letter-spacing:.13em; }
+    .kpt-context-trigger-copy strong { color:#1e293b; font-size:.82rem; line-height:1.2; font-weight:850; }
+    .kpt-context-trigger-copy small { color:#64748b; font-size:.65rem; line-height:1.25; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .kpt-context-trigger-hint { display:flex; align-items:center; gap:.35rem; color:#64748b; font-size:.62rem; font-weight:750; white-space:nowrap; }
+    .kpt-context-chevron { color:#94a3b8; font-size:.7rem; }
+    #legacy-phase-switcher { display:none !important; }
+
+    .kpt-global-navigation-layer { position:fixed; inset:0; z-index:120; visibility:hidden; pointer-events:none; }
+    .kpt-global-navigation-layer.is-open { visibility:visible; pointer-events:auto; }
+    .kpt-global-navigation-backdrop { position:absolute; inset:0; width:100%; height:100%; border:0; background:rgba(15,23,42,.42); opacity:0; backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px); transition:opacity .22s ease; }
+    .kpt-global-navigation-layer.is-open .kpt-global-navigation-backdrop { opacity:1; }
+    .kpt-global-navigation { position:absolute; inset:0 auto 0 0; display:flex; flex-direction:column; width:min(370px,calc(100vw - 42px)); max-height:100dvh; padding:0; overflow:hidden; background:#fff; color:#1e293b; border-right:1px solid #e2e8f0; box-shadow:18px 0 55px rgba(15,23,42,.18); transform:translateX(-103%); transition:transform .24s cubic-bezier(.2,.75,.25,1); outline:none; }
+    .kpt-global-navigation-layer.is-open .kpt-global-navigation { transform:translateX(0); }
+    .kpt-drawer-header { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:.75rem; padding:calc(1rem + env(safe-area-inset-top)) 1rem .9rem; border-bottom:1px solid #edf2f7; }
+    .kpt-drawer-logo { width:42px; height:42px; object-fit:contain; border-radius:13px; }
+    .kpt-drawer-close { display:flex; flex:0 0 40px; width:40px; height:40px; align-items:center; justify-content:center; border:1px solid #e2e8f0; border-radius:13px; background:#f8fafc; color:#64748b; font-size:1rem; }
+    .kpt-drawer-scroll { flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:.65rem .8rem 1rem; }
+    .kpt-drawer-section { padding:.8rem .15rem .65rem; border-bottom:1px solid #edf2f7; }
+    .kpt-drawer-section:last-child { border-bottom:0; }
+    .kpt-drawer-section-heading { display:flex; align-items:center; gap:.55rem; padding:0 .35rem .5rem; }
+    .kpt-drawer-section-heading h3 { color:#64748b; font-size:.62rem; font-weight:900; letter-spacing:.14em; }
+    .kpt-drawer-section-note { margin-left:auto; color:#94a3b8; font-size:.58rem; font-weight:750; }
+    .kpt-drawer-section-icon { display:flex; width:29px; height:29px; flex:0 0 29px; align-items:center; justify-content:center; border-radius:10px; font-size:.77rem; }
+    .kpt-drawer-item { display:flex; width:100%; min-height:52px; align-items:center; gap:.75rem; padding:.55rem .7rem; border:1px solid transparent; border-radius:13px; background:transparent; color:#475569; text-align:left; transition:background .16s ease,border-color .16s ease,color .16s ease; }
+    .kpt-drawer-item > i:first-child { display:flex; width:20px; justify-content:center; color:#64748b; font-size:.92rem; }
+    .kpt-drawer-item > span { display:flex; flex:1; min-width:0; flex-direction:column; gap:.12rem; }
+    .kpt-drawer-item strong,.kpt-drawer-profile strong { color:#334155; font-size:.77rem; line-height:1.25; font-weight:800; }
+    .kpt-drawer-item small,.kpt-drawer-profile small { color:#94a3b8; font-size:.64rem; line-height:1.3; }
+    .kpt-drawer-chevron { color:#cbd5e1; font-size:.62rem; }
+    .kpt-drawer-item:hover,.kpt-drawer-profile:hover { background:#f8fafc; border-color:#e2e8f0; }
+    .kpt-drawer-item.is-active,.kpt-drawer-profile.is-active { background:#ecfdf5; border-color:#a7f3d0; }
+    .kpt-drawer-item.is-active > i:first-child { color:#059669; }
+    .kpt-drawer-item.is-active strong,.kpt-drawer-profile.is-active strong { color:#047857; }
+    .kpt-drawer-profile { display:flex; width:100%; min-height:56px; align-items:center; gap:.7rem; padding:.65rem .7rem; border:1px solid transparent; border-radius:13px; background:transparent; text-align:left; }
+    .kpt-drawer-profile > span:nth-child(2) { display:flex; flex:1; min-width:0; flex-direction:column; gap:.15rem; }
+    .kpt-drawer-profile-dot { width:10px; height:10px; flex:0 0 10px; border-radius:50%; box-shadow:0 0 0 4px #f1f5f9; }
+    .kpt-drawer-profile-dot.pregnancy { background:#ec4899; }
+    .kpt-drawer-profile-dot.child { background:#0ea5e9; }
+    .kpt-drawer-current { padding:.25rem .45rem; border-radius:999px; background:#d1fae5; color:#047857; font-size:.55rem; font-weight:900; }
+    .kpt-drawer-future-note { display:flex; align-items:flex-start; gap:.45rem; margin:.25rem .45rem .15rem 2.35rem; color:#94a3b8; font-size:.59rem; line-height:1.45; }
+    .kpt-drawer-future-note i { margin-top:.1rem; color:#0d9488; }
+    .kpt-drawer-footer { flex:0 0 auto; padding:.7rem 1rem calc(.8rem + env(safe-area-inset-bottom)); border-top:1px solid #edf2f7; background:#fbfdff; }
+    .kpt-drawer-footer-action { display:flex; width:100%; min-height:44px; align-items:center; gap:.65rem; padding:.6rem .7rem; border:1px solid #e2e8f0; border-radius:12px; background:#fff; color:#475569; text-align:left; font-size:.73rem; font-weight:800; }
+    .kpt-drawer-footer-action > i:first-child { color:#0284c7; }
+    .kpt-drawer-footer p { margin:.55rem .2rem 0; color:#94a3b8; font-size:.57rem; line-height:1.45; }
+    body.kpt-global-nav-open { overflow:hidden !important; }
+
+    .kpt-family-hero { isolation:isolate; min-height:190px; background:linear-gradient(128deg,#0f766e 0%,#0d9488 42%,#1e40af 100%); box-shadow:0 16px 38px rgba(13,148,136,.13); }
+    .kpt-family-hero-orb { position:absolute; z-index:-1; border:1px solid rgba(255,255,255,.13); border-radius:999px; background:rgba(255,255,255,.08); pointer-events:none; }
+    .kpt-family-hero-orb-one { width:270px; height:270px; right:-80px; top:-145px; }
+    .kpt-family-hero-orb-two { width:190px; height:190px; right:100px; bottom:-145px; background:rgba(167,243,208,.09); }
+    .kpt-family-action-card { position:relative; display:flex; min-width:0; min-height:126px; align-items:flex-start; gap:.8rem; padding:1rem; border:1px solid #e5edf2; border-radius:19px; background:#fff; box-shadow:0 5px 18px rgba(15,23,42,.035); transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease; }
+    .kpt-family-action-card:hover { transform:translateY(-2px); border-color:#b7d8d0; box-shadow:0 10px 25px rgba(15,23,42,.07); }
+    .kpt-family-action-card:focus-visible,.kpt-family-profile-link:focus-visible,.kpt-drawer-item:focus-visible,.kpt-drawer-profile:focus-visible { outline:3px solid rgba(13,148,136,.28); outline-offset:2px; }
+    .kpt-family-action-icon { display:flex; width:43px; height:43px; flex:0 0 43px; align-items:center; justify-content:center; border-radius:14px; font-size:1rem; }
+    .kpt-family-action-copy { display:flex; flex:1; min-width:0; flex-direction:column; gap:.28rem; }
+    .kpt-family-action-copy strong { color:#1e293b; font-size:.82rem; line-height:1.3; font-weight:850; }
+    .kpt-family-action-copy small { color:#64748b; font-size:.67rem; line-height:1.4; }
+    .kpt-family-action-copy em { margin-top:.15rem; color:#0f766e; font-size:.61rem; line-height:1.3; font-style:normal; font-weight:800; }
+    .kpt-family-action-arrow { margin-left:auto; padding-top:.2rem; color:#94a3b8; font-size:.7rem; }
+    .kpt-family-future-card { display:flex; min-width:0; align-items:center; gap:.7rem; padding:.85rem; border:1px dashed #cbd5e1; border-radius:16px; background:#f8fafc; }
+    .kpt-family-future-icon { display:flex; flex:0 0 36px; width:36px; height:36px; align-items:center; justify-content:center; border-radius:11px; background:#e2e8f0; color:#64748b; }
+    .kpt-family-future-card > div { display:flex; flex:1; min-width:0; flex-direction:column; gap:.12rem; }
+    .kpt-family-future-card strong { color:#475569; font-size:.7rem; font-weight:850; }
+    .kpt-family-future-card small { color:#94a3b8; font-size:.59rem; line-height:1.35; }
+    .kpt-coming-soon { flex:0 0 auto; padding:.25rem .4rem; border-radius:999px; background:#e2e8f0; color:#64748b; font-size:.5rem; font-weight:850; }
+    .kpt-family-profile-link { display:flex; min-width:0; min-height:56px; align-items:center; gap:.65rem; padding:.65rem .75rem; border:1px solid #e8eef3; border-radius:13px; background:#fbfdff; text-align:left; }
+    .kpt-family-profile-link > span { display:flex; min-width:0; flex-direction:column; gap:.12rem; }
+    .kpt-family-profile-link strong { color:#334155; font-size:.7rem; font-weight:850; }
+    .kpt-family-profile-link small { color:#94a3b8; font-size:.59rem; }
+    .kpt-family-profile-link > i:last-child { color:#94a3b8; font-size:.63rem; }
+
+    #family-nav-tabs .tab-btn.active { border-bottom-color:#0d9488; color:#0f766e; }
+    body.dark-mode .kpt-context-trigger { background:#1e293b; border-color:#334155; color:#f8fafc; }
+    body.dark-mode .kpt-context-trigger:hover { background:#26384a; border-color:#3b766a; }
+    body.dark-mode .kpt-context-trigger-icon { background:#0c4a6e; color:#7dd3fc; }
+    body.dark-mode .kpt-context-eyebrow { color:#5eead4; }
+    body.dark-mode .kpt-context-trigger-copy strong { color:#f1f5f9; }
+    body.dark-mode .kpt-context-trigger-copy small,.dark-mode .kpt-context-trigger-hint { color:#94a3b8; }
+    body.dark-mode .kpt-global-navigation { background:#1e293b; color:#f8fafc; border-color:#334155; }
+    body.dark-mode .kpt-drawer-header,body.dark-mode .kpt-drawer-section { border-color:#334155; }
+    body.dark-mode .kpt-drawer-close { background:#334155; color:#cbd5e1; border-color:#475569; }
+    body.dark-mode .kpt-drawer-section-heading h3 { color:#94a3b8; }
+    body.dark-mode .kpt-drawer-item { color:#cbd5e1; }
+    body.dark-mode .kpt-drawer-item > i:first-child { color:#94a3b8; }
+    body.dark-mode .kpt-drawer-item strong,body.dark-mode .kpt-drawer-profile strong { color:#e2e8f0; }
+    body.dark-mode .kpt-drawer-item:hover,body.dark-mode .kpt-drawer-profile:hover { background:#263449; border-color:#475569; }
+    body.dark-mode .kpt-drawer-item.is-active,body.dark-mode .kpt-drawer-profile.is-active { background:#073b35; border-color:#115e59; }
+    body.dark-mode .kpt-drawer-item.is-active strong,body.dark-mode .kpt-drawer-profile.is-active strong { color:#99f6e4; }
+    body.dark-mode .kpt-drawer-footer { background:#172337; border-color:#334155; }
+    body.dark-mode .kpt-drawer-footer-action { background:#263449; border-color:#475569; color:#e2e8f0; }
+    body.dark-mode .kpt-family-action-card { background:#1e293b; border-color:#334155; }
+    body.dark-mode .kpt-family-action-card:hover { border-color:#3b766a; }
+    body.dark-mode .kpt-family-action-copy strong { color:#f1f5f9; }
+    body.dark-mode .kpt-family-action-copy small { color:#94a3b8; }
+    body.dark-mode .kpt-family-action-copy em { color:#5eead4; }
+    body.dark-mode .kpt-family-future-card { background:#172337; border-color:#475569; }
+    body.dark-mode .kpt-family-future-icon { background:#334155; color:#94a3b8; }
+    body.dark-mode .kpt-family-future-card strong,body.dark-mode .kpt-family-profile-link strong { color:#e2e8f0; }
+    body.dark-mode .kpt-family-profile-link { background:#172337; border-color:#334155; }
+
+    @media (max-width: 767px) {
+        #header-main-layout { grid-template-areas:"brand actions" "context context" !important; grid-template-columns:minmax(0,1fr) auto !important; gap:.55rem .4rem !important; }
+        #header-main-layout > div:first-child { grid-area:brand !important; }
+        #kpt-context-trigger { grid-area:context !important; width:100% !important; max-width:none !important; padding:.38rem .6rem; }
+        #header-actions { grid-area:actions !important; }
+        .kpt-context-trigger { max-width:none; min-height:43px; padding:.38rem .6rem; gap:.55rem; border-radius:13px; }
+        .kpt-context-trigger-icon { width:34px; height:34px; flex-basis:34px; border-radius:11px; }
+        .kpt-context-trigger-copy strong { font-size:.75rem; }
+        .kpt-context-trigger-copy small { font-size:.61rem; }
+        .kpt-context-trigger-hint { font-size:.58rem; }
+        .kpt-context-trigger-hint i { font-size:.8rem; }
+        .kpt-context-chevron { margin-left:.05rem; }
+        #prenatal-nav-tabs,#postnatal-nav-tabs,#family-nav-tabs { display:none !important; }
+        #container-family-hub { gap:1rem !important; }
+        .kpt-family-hero { min-height:168px; padding:1.2rem !important; border-radius:23px; }
+        .kpt-family-hero-orb-one { right:-155px; }
+        .kpt-family-hero-orb-two { right:35px; }
+        .kpt-family-action-card { min-height:94px; padding:.85rem; border-radius:16px; }
+        .kpt-family-action-icon { width:39px; height:39px; flex-basis:39px; border-radius:12px; }
+        .kpt-family-action-copy strong { font-size:.76rem; }
+        .kpt-family-action-copy small { font-size:.64rem; }
+        .kpt-family-future-card { align-items:flex-start; flex-wrap:wrap; }
+        .kpt-coming-soon { margin-left:2.85rem; }
+        .kpt-global-navigation { width:min(350px,calc(100vw - 34px)); }
+        .kpt-drawer-header { padding-top:calc(.85rem + env(safe-area-inset-top)); }
+        .kpt-drawer-scroll { padding-left:.7rem; padding-right:.7rem; }
+        .kpt-drawer-item,.kpt-drawer-profile { min-height:54px; }
+        #mobile-nav-family { display:flex; }
+        #mobile-nav-family.hidden { display:none !important; }
+        body.auth-locked .kpt-global-navigation-layer { display:none !important; }
+    }
+    @media (min-width: 768px) {
+        #family-nav-tabs { display:flex; }
+        #family-nav-tabs.hidden { display:none !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .kpt-global-navigation-backdrop,.kpt-global-navigation,.kpt-context-trigger,.kpt-family-action-card { transition:none !important; }
+        .kpt-family-action-card:hover { transform:none; }
+    }
+</style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -3516,14 +3665,21 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 </div>
             </div>
 
-            <!-- PHASE SWITCHER: DIPERTAHANKAN -->
-            <div class="flex bg-slate-100 p-1 rounded-xl w-full lg:w-auto lg:flex-shrink-0 xl:justify-self-center">
-                <button onclick="switchPhase('prenatal')" id="btn-prenatal" class="phase-btn active flex-1 lg:flex-initial px-3 xl:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
-                    <i class="fa-solid fa-person-pregnant mr-1.5"></i> 🤰 Fase Kehamilan
-                </button>
-                <button onclick="switchPhase('postnatal')" id="btn-postnatal" class="phase-btn flex-1 lg:flex-initial px-3 xl:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
-                    <i class="fa-solid fa-baby mr-1.5"></i> 👶 Bayi Lahir
-                </button>
+            <!-- GLOBAL CONTEXT NAVIGATION: one compact entry point for Family Hub and profiles. -->
+            <button type="button" id="kpt-context-trigger" class="kpt-context-trigger" onclick="kptToggleGlobalNavigation()" aria-haspopup="dialog" aria-controls="kpt-global-navigation" aria-expanded="false">
+                <span class="kpt-context-trigger-icon"><i id="kpt-context-icon" class="fa-solid fa-heart-pulse"></i></span>
+                <span class="kpt-context-trigger-copy">
+                    <span class="kpt-context-eyebrow">RUANG AKTIF</span>
+                    <strong id="kpt-context-title">Kehamilan</strong>
+                    <small id="kpt-context-subtitle">Kehamilan Saat Ini</small>
+                </span>
+                <span class="kpt-context-trigger-hint"><i class="fa-solid fa-bars"></i><span>Ganti ruang</span></span>
+                <i class="fa-solid fa-chevron-down kpt-context-chevron"></i>
+            </button>
+            <!-- Hidden compatibility controls: legacy scripts still address these IDs. -->
+            <div id="legacy-phase-switcher" class="hidden" aria-hidden="true">
+                <button type="button" onclick="switchPhase('prenatal')" id="btn-prenatal" class="phase-btn active">Fase Kehamilan</button>
+                <button type="button" onclick="switchPhase('postnatal')" id="btn-postnatal" class="phase-btn">Fase Bayi Lahir</button>
             </div>
 
             <!-- ACTIONS: profil Google diringkas menjadi satu avatar -->
@@ -3621,10 +3777,70 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 <i class="fa-solid fa-book-bookmark mr-1"></i> Pustaka Edukasi
             </button>
         </nav>
+
+        <!-- FAMILY HUB NAV: visible only while browsing family-wide tools. -->
+        <nav id="family-nav-tabs" class="max-w-7xl mx-auto px-4 flex space-x-6 overflow-x-auto text-sm border-t border-slate-100 pt-1 hidden no-scrollbar" aria-label="Navigasi ruang keluarga">
+            <button type="button" id="kpt-family-tab-home" class="tab-btn active py-2.5 whitespace-nowrap" onclick="kptNavigateFamilySpace('home')"><i class="fa-solid fa-house mr-1"></i> Beranda Keluarga</button>
+            <button type="button" id="kpt-family-tab-shopping" class="tab-btn py-2.5 whitespace-nowrap" onclick="kptNavigateFamilySpace('shopping')"><i class="fa-solid fa-cart-shopping mr-1"></i> Belanja Bulanan</button>
+            <button type="button" id="kpt-family-tab-library" class="tab-btn py-2.5 whitespace-nowrap" onclick="kptNavigateFamilySpace('library')"><i class="fa-solid fa-book-open mr-1"></i> Pustaka &amp; Panduan</button>
+            <button type="button" id="kpt-family-tab-directory" class="tab-btn py-2.5 whitespace-nowrap" onclick="kptNavigateFamilySpace('directory')"><i class="fa-solid fa-hospital-user mr-1"></i> Direktori Kesehatan</button>
+        </nav>
     </header>
 
     <!-- CONTENT CONTAINER -->
     <main class="max-w-6xl mx-auto px-4 py-6">
+
+        <!-- FAMILY HUB LANDING: navigation prototype only; no Firebase schema migration. -->
+        <section id="container-family-hub" class="hidden space-y-6" aria-labelledby="kpt-family-hub-title">
+            <div class="kpt-family-hero relative overflow-hidden rounded-3xl p-5 sm:p-7">
+                <div class="kpt-family-hero-orb kpt-family-hero-orb-one" aria-hidden="true"></div>
+                <div class="kpt-family-hero-orb kpt-family-hero-orb-two" aria-hidden="true"></div>
+                <div class="relative z-10 max-w-2xl">
+                    <div class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[.16em] text-white/90"><i class="fa-solid fa-house-heart"></i> Family Hub</div>
+                    <h2 id="kpt-family-hub-title" class="mt-4 font-brand text-2xl sm:text-3xl font-bold text-white tracking-tight">Ruang untuk seluruh keluarga.</h2>
+                    <p class="mt-2 max-w-xl text-sm leading-relaxed text-white/85">Kebutuhan bersama, panduan, dan layanan keluarga dalam satu tempat yang mudah dijangkau.</p>
+                </div>
+            </div>
+
+            <div class="flex items-end justify-between gap-3">
+                <div>
+                    <p class="text-[10px] font-extrabold uppercase tracking-[.16em] text-teal-700 dark:text-teal-300">AKSES CEPAT</p>
+                    <h3 class="mt-1 text-lg font-extrabold text-slate-800 dark:text-white">Kebutuhan keluarga</h3>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-400">Ruang bersama</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
+                <button type="button" class="kpt-family-action-card text-left" onclick="kptNavigateFamilySpace('shopping')">
+                    <span class="kpt-family-action-icon tone-sky"><i class="fa-solid fa-cart-shopping"></i></span>
+                    <span class="kpt-family-action-copy"><strong>Keuangan &amp; Belanja</strong><small>Belanja Bulanan dan kebutuhan rutin keluarga</small><em id="kpt-family-shopping-count">Buka daftar belanja</em></span>
+                    <i class="fa-solid fa-arrow-up-right-from-square kpt-family-action-arrow"></i>
+                </button>
+                <button type="button" class="kpt-family-action-card text-left" onclick="kptNavigateFamilySpace('library')">
+                    <span class="kpt-family-action-icon tone-emerald"><i class="fa-solid fa-book-open-reader"></i></span>
+                    <span class="kpt-family-action-copy"><strong>Pustaka &amp; Panduan</strong><small>Materi edukasi, poster perawatan, dan referensi</small><em id="kpt-family-library-count">Buka pustaka keluarga</em></span>
+                    <i class="fa-solid fa-arrow-up-right-from-square kpt-family-action-arrow"></i>
+                </button>
+                <button type="button" class="kpt-family-action-card text-left" onclick="kptNavigateFamilySpace('directory')">
+                    <span class="kpt-family-action-icon tone-rose"><i class="fa-solid fa-hospital-user"></i></span>
+                    <span class="kpt-family-action-copy"><strong>Direktori Kesehatan</strong><small>RS, klinik, dokter, dan informasi layanan</small><em id="kpt-family-directory-count">Buka direktori keluarga</em></span>
+                    <i class="fa-solid fa-arrow-up-right-from-square kpt-family-action-arrow"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="kpt-family-future-card"><span class="kpt-family-future-icon"><i class="fa-solid fa-folder-open"></i></span><div><strong>Dokumen Keluarga</strong><small>Arsip identitas dan dokumen penting · tahap berikutnya</small></div><span class="kpt-coming-soon">Direncanakan</span></div>
+                <div class="kpt-family-future-card"><span class="kpt-family-future-icon"><i class="fa-solid fa-calendar-days"></i></span><div><strong>Kalender &amp; Agenda</strong><small>Kontrol, imunisasi, dan agenda keluarga · tahap berikutnya</small></div><span class="kpt-coming-soon">Direncanakan</span></div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800">
+                <div class="flex items-center justify-between gap-2 mb-3"><div><p class="text-[10px] font-extrabold uppercase tracking-[.14em] text-slate-400">PROFIL KELUARGA</p><h3 class="mt-1 text-sm font-extrabold text-slate-800 dark:text-white">Lanjutkan perjalanan</h3></div><i class="fa-solid fa-people-roof text-slate-300 text-xl"></i></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button type="button" class="kpt-family-profile-link" onclick="kptNavigateProfile('pregnancy')"><i class="fa-solid fa-heart-pulse text-pink-500"></i><span><strong>Kehamilan Saat Ini</strong><small>Buka persiapan dan catatan kehamilan</small></span><i class="fa-solid fa-chevron-right ml-auto"></i></button>
+                    <button type="button" class="kpt-family-profile-link" onclick="kptNavigateProfile('child')"><i class="fa-solid fa-baby text-sky-500"></i><span><strong id="kpt-family-child-name">Profil Si Kecil</strong><small>Buka pengasuhan dan catatan anak</small></span><i class="fa-solid fa-chevron-right ml-auto"></i></button>
+                </div>
+            </div>
+        </section>
 
         <!-- KONTEN FASE KEHAMILAN -->
         <div id="container-prenatal-phase" class="space-y-6">
@@ -5234,6 +5450,52 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         </div>
 
     </main>
+
+    <!-- GLOBAL NAVIGATION DRAWER: profile/space switcher shared by desktop and mobile. -->
+    <div id="kpt-global-navigation-layer" class="kpt-global-navigation-layer" aria-hidden="true">
+        <button type="button" class="kpt-global-navigation-backdrop" aria-label="Tutup navigasi" onclick="kptCloseGlobalNavigation()"></button>
+        <aside id="kpt-global-navigation" class="kpt-global-navigation" role="dialog" aria-modal="true" aria-labelledby="kpt-global-navigation-title" tabindex="-1">
+            <div class="kpt-drawer-header">
+                <div class="flex items-center gap-3 min-w-0"><img src="Keluarga Pohon Teduh.png" alt="" class="kpt-drawer-logo"><div class="min-w-0"><h2 id="kpt-global-navigation-title" class="font-brand text-base font-bold text-slate-800 dark:text-white">Keluarga Pohon Teduh</h2><p class="text-[10px] text-slate-500 dark:text-slate-400">Pilih ruang dan profil keluarga</p></div></div>
+                <button type="button" class="kpt-drawer-close" onclick="kptCloseGlobalNavigation()" aria-label="Tutup navigasi"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="kpt-drawer-scroll">
+                <section class="kpt-drawer-section" aria-labelledby="kpt-drawer-family-heading">
+                    <div class="kpt-drawer-section-heading"><span class="kpt-drawer-section-icon tone-emerald"><i class="fa-solid fa-house"></i></span><h3 id="kpt-drawer-family-heading">KELUARGA</h3><span class="kpt-drawer-section-note">Bersama</span></div>
+                    <button type="button" class="kpt-drawer-item" data-kpt-target="family-home" onclick="kptNavigateFamilySpace('home')"><i class="fa-solid fa-house-chimney"></i><span><strong>Beranda Keluarga</strong><small>Ringkasan kebutuhan bersama</small></span><i class="fa-solid fa-chevron-right kpt-drawer-chevron"></i></button>
+                    <button type="button" class="kpt-drawer-item" data-kpt-target="family-shopping" onclick="kptNavigateFamilySpace('shopping')"><i class="fa-solid fa-cart-shopping"></i><span><strong>Keuangan &amp; Belanja</strong><small>Belanja Bulanan keluarga</small></span><i class="fa-solid fa-chevron-right kpt-drawer-chevron"></i></button>
+                    <button type="button" class="kpt-drawer-item" data-kpt-target="family-library" onclick="kptNavigateFamilySpace('library')"><i class="fa-solid fa-book-open"></i><span><strong>Pustaka &amp; Panduan</strong><small>Katalog edukasi bersama</small></span><i class="fa-solid fa-chevron-right kpt-drawer-chevron"></i></button>
+                    <button type="button" class="kpt-drawer-item" data-kpt-target="family-directory" onclick="kptNavigateFamilySpace('directory')"><i class="fa-solid fa-hospital-user"></i><span><strong>Direktori Kesehatan</strong><small>Fasilitas dan dokter keluarga</small></span><i class="fa-solid fa-chevron-right kpt-drawer-chevron"></i></button>
+                </section>
+
+                <section class="kpt-drawer-section" aria-labelledby="kpt-drawer-pregnancy-heading">
+                    <div class="kpt-drawer-section-heading"><span class="kpt-drawer-section-icon tone-rose"><i class="fa-solid fa-heart-pulse"></i></span><h3 id="kpt-drawer-pregnancy-heading">KEHAMILAN</h3></div>
+                    <button type="button" class="kpt-drawer-profile" data-kpt-target="pregnancy" onclick="kptNavigateProfile('pregnancy')"><span class="kpt-drawer-profile-dot pregnancy"></span><span class="min-w-0"><strong>Kehamilan Saat Ini</strong><small>Persiapan, medis, dan persalinan</small></span><span class="kpt-drawer-current hidden">Aktif</span></button>
+                    <div class="kpt-drawer-future-note"><i class="fa-solid fa-circle-info"></i><span>Profil kehamilan tambahan akan tersedia setelah fondasi Multi-Pregnancy diaktifkan.</span></div>
+                </section>
+
+                <section class="kpt-drawer-section" aria-labelledby="kpt-drawer-child-heading">
+                    <div class="kpt-drawer-section-heading"><span class="kpt-drawer-section-icon tone-sky"><i class="fa-solid fa-baby"></i></span><h3 id="kpt-drawer-child-heading">ANAK-ANAK</h3></div>
+                    <button type="button" class="kpt-drawer-profile" data-kpt-target="child" onclick="kptNavigateProfile('child')"><span class="kpt-drawer-profile-dot child"></span><span class="min-w-0"><strong id="kpt-drawer-child-name">Profil Si Kecil</strong><small>Pengasuhan, kesehatan, dan tumbuh kembang</small></span><span class="kpt-drawer-current hidden">Aktif</span></button>
+                    <div class="kpt-drawer-future-note"><i class="fa-solid fa-circle-info"></i><span>Profil anak tambahan akan tersedia setelah fondasi Multi-Child diaktifkan.</span></div>
+                </section>
+            </div>
+
+            <div class="kpt-drawer-footer">
+                <button type="button" class="kpt-drawer-footer-action" onclick="kptCloseGlobalNavigation(); openBackupCenter();"><i class="fa-solid fa-shield-halved"></i><span>Backup &amp; Recovery</span><i class="fa-solid fa-chevron-right ml-auto"></i></button>
+                <p><i class="fa-solid fa-lock mr-1"></i> Data keluarga tetap tersimpan bersama. Pilihan ruang hanya mengatur tampilan perangkat ini.</p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- MOBILE FAMILY HUB SHORTCUTS: shown only when the family-wide space is active. -->
+    <nav id="mobile-nav-family" class="mobile-bottom-nav hidden" aria-label="Navigasi ruang keluarga">
+        <button type="button" class="mobile-nav-item" data-nav-key="home" onclick="kptNavigateFamilySpace('home')" aria-label="Beranda keluarga"><i class="fa-solid fa-house"></i><span>Beranda</span></button>
+        <button type="button" class="mobile-nav-item" data-nav-key="shopping" onclick="kptNavigateFamilySpace('shopping')" aria-label="Belanja bulanan"><i class="fa-solid fa-cart-shopping"></i><span>Belanja</span></button>
+        <button type="button" class="mobile-nav-item" data-nav-key="library" onclick="kptNavigateFamilySpace('library')" aria-label="Pustaka dan panduan"><i class="fa-solid fa-book-open"></i><span>Pustaka</span></button>
+        <button type="button" class="mobile-nav-item" data-nav-key="menu" onclick="kptToggleGlobalNavigation()" aria-label="Pilih ruang atau profil"><i class="fa-solid fa-layer-group"></i><span>Ruang</span></button>
+    </nav>
 
     <!-- MOBILE BOTTOM NAVIGATION: menu utama yang nyaman dijangkau ibu jari -->
     <nav id="mobile-nav-prenatal" class="mobile-bottom-nav hidden" aria-label="Navigasi fase kehamilan">
@@ -6933,6 +7195,11 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         }
 
         function lockApplicationUI() {
+            const navLayer = document.getElementById('kpt-global-navigation-layer');
+            if (navLayer) { navLayer.classList.remove('is-open'); navLayer.setAttribute('aria-hidden','true'); }
+            const navTrigger = document.getElementById('kpt-context-trigger');
+            if (navTrigger) navTrigger.setAttribute('aria-expanded','false');
+            document.body.classList.remove('kpt-global-nav-open');
             document.body.classList.add('auth-locked');
             const gate = document.getElementById('auth-gate');
             if (gate) gate.classList.remove('hidden');
@@ -6997,6 +7264,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             try {
                 localStorage.removeItem(LOCAL_STATE_KEY);
                 localStorage.removeItem(LOCAL_BASELINE_KEY);
+                localStorage.removeItem(KPT_NAV_PREFERENCE_KEY);
             } catch (e) {}
             auth.signOut().catch(error => console.error('Gagal logout:', error));
         }
@@ -7019,6 +7287,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             try {
                 localStorage.removeItem(LOCAL_STATE_KEY);
                 localStorage.removeItem(LOCAL_BASELINE_KEY);
+                localStorage.removeItem(KPT_NAV_PREFERENCE_KEY);
             } catch (e) {}
             const email = document.getElementById('auth-denied-email');
             const uid = document.getElementById('auth-denied-uid');
@@ -7067,10 +7336,18 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             if (applicationInitialized) return;
             applicationInitialized = true;
             loadThemePreference();
+            // Restore local navigation preference for this device. The authoritative cloud snapshot
+            // below will be used only as a fallback when this device has no saved preference.
+            const localNavPreference = kptReadStoredNavigationPreference();
+            if (localNavPreference) {
+                kptUiPhase = localNavPreference.phase;
+                kptUiCurrentTab = localNavPreference.currentTab || 'dashboard';
+                kptUiCurrentPostnatalTab = localNavPreference.currentPostnatalTab || 'post-dashboard';
+                kptActiveSpace = localNavPreference.space || (kptUiPhase === 'prenatal' ? 'pregnancy' : 'child');
+                kptFamilyActiveTarget = localNavPreference.familyTarget || 'home';
+            }
             initRealtimeSync();
-
-            appState.currentTab = appState.currentTab || 'dashboard';
-            switchPhase(appState.phase || 'prenatal');
+            switchPhase(kptUiPhase || 'prenatal');
             calculatePregnancyData();
             renderGallery();
             startGalleryAutoSlide();
@@ -7095,6 +7372,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             if (typeof updateWakeWindow === 'function') updateWakeWindow();
             if (typeof renderPostShopping === 'function') renderPostShopping();
             updateDashboardWidgets();
+            kptUpdateNavigationChrome();
+            updateMobileNavigation();
         }
 
         function handleAuthStateChanged(user) {
@@ -7306,11 +7585,11 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         function startGalleryAutoSlide() {
             if (galleryAutoInterval) clearInterval(galleryAutoInterval);
             galleryAutoInterval = setInterval(() => {
-                if (appState.phase === 'prenatal') {
+                if (kptUiPhase === 'prenatal') {
                     if (appState.gallery && appState.gallery.length > 1) {
                         nextGallerySlide('prenatal');
                     }
-                } else if (appState.phase === 'postnatal') {
+                } else if (kptUiPhase === 'postnatal') {
                     if (appState.postnatalGallery && appState.postnatalGallery.length > 1) {
                         nextGallerySlide('postnatal');
                     }
@@ -7490,6 +7769,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             // Konfirmasi kelahiran hanya menandai status; tanggal lahir tetap berasal
             // dari isian profil orang tua, bukan waktu tombol ditekan.
             appState.babyBorn = true;
+            kptUiCurrentPostnatalTab = 'post-dashboard';
             switchPhase('postnatal');
             saveToLocalStorage();
         }
@@ -7502,21 +7782,242 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             saveToLocalStorage();
         }
 
-        // MOBILE NAVIGATION (6.7): shortcuts follow the active family phase.
+        // GLOBAL NAVIGATION PROTOTYPE (6.13.35)
+        // The active room is a device-local UI context. Legacy appState and Firebase schema remain unchanged.
+        let kptActiveSpace = 'pregnancy'; // family | pregnancy | child
+        let kptFamilyActiveTarget = 'home'; // home | shopping | library | directory
+        let kptDrawerLastFocus = null;
+        const KPT_NAV_PREFERENCE_KEY = 'kptNavigationPreference61335';
+        let kptUiPhase = 'prenatal';
+        let kptUiCurrentTab = 'dashboard';
+        let kptUiCurrentPostnatalTab = 'post-dashboard';
+        let kptNavPreferenceReady = false;
+
+        function kptReadStoredNavigationPreference() {
+            try {
+                const raw = localStorage.getItem(KPT_NAV_PREFERENCE_KEY);
+                if (!raw) return null;
+                const value = JSON.parse(raw);
+                if (!value || !['prenatal','postnatal'].includes(value.phase)) return null;
+                if (value.currentTab && !['dashboard','budget','hospital','medis','siaga','names','referensi'].includes(value.currentTab)) return null;
+                if (value.currentPostnatalTab && !['post-dashboard','post-log','post-belanja','rs-dsa','post-medis','post-stimulasi','post-pustaka'].includes(value.currentPostnatalTab)) return null;
+                if (value.space && !['family','pregnancy','child'].includes(value.space)) return null;
+                if (value.familyTarget && !['home','shopping','library','directory'].includes(value.familyTarget)) return null;
+                return value;
+            } catch (error) {
+                console.warn('Preferensi navigasi lokal tidak dapat dibaca:', error);
+                return null;
+            }
+        }
+
+        function kptPersistNavigationPreference() {
+            if (!kptNavPreferenceReady) return;
+            try {
+                localStorage.setItem(KPT_NAV_PREFERENCE_KEY, JSON.stringify({
+                    phase:kptUiPhase,
+                    currentTab:kptUiCurrentTab,
+                    currentPostnatalTab:kptUiCurrentPostnatalTab,
+                    space:kptActiveSpace,
+                    familyTarget:kptFamilyActiveTarget
+                }));
+            } catch (error) {
+                console.warn('Preferensi navigasi perangkat tidak dapat disimpan:', error);
+            }
+        }
+
+        function kptRestoreNavigationPreferenceFromCloud() {
+            const stored = kptReadStoredNavigationPreference();
+            kptUiPhase = stored ? stored.phase : (appState.phase || 'prenatal');
+            kptUiCurrentTab = stored ? (stored.currentTab || 'dashboard') : (appState.currentTab || 'dashboard');
+            kptUiCurrentPostnatalTab = stored ? (stored.currentPostnatalTab || 'post-dashboard') : (appState.currentPostnatalTab || 'post-dashboard');
+            kptNavPreferenceReady = true;
+
+            if (stored && stored.space === 'family') {
+                kptActiveSpace = 'family';
+                kptFamilyActiveTarget = stored.familyTarget || 'home';
+                kptNavigateFamilySpace(kptFamilyActiveTarget);
+            } else {
+                kptActiveSpace = kptUiPhase === 'prenatal' ? 'pregnancy' : 'child';
+                kptFamilyActiveTarget = 'home';
+                switchPhase(kptUiPhase);
+            }
+        }
+
+        function kptGetBabyDisplayName() {
+            const profileName = appState && appState.babyProfile && (appState.babyProfile.name || appState.babyProfile.babyName);
+            return String((appState && appState.babyName) || profileName || 'Profil Si Kecil').trim() || 'Profil Si Kecil';
+        }
+
+        function kptRenderFamilyHub() {
+            const shoppingCount = Array.isArray(appState.postnatalShopping) ? appState.postnatalShopping.length : 0;
+            const referenceCount = (Array.isArray(appState.references) ? appState.references.length : 0) + (Array.isArray(appState.careGuides) ? appState.careGuides.length : 0);
+            const directoryCount = Array.isArray(appState.rsDsa) ? appState.rsDsa.length : 0;
+            const shopping = document.getElementById('kpt-family-shopping-count');
+            const library = document.getElementById('kpt-family-library-count');
+            const directory = document.getElementById('kpt-family-directory-count');
+            const childName = document.getElementById('kpt-family-child-name');
+            const drawerChild = document.getElementById('kpt-drawer-child-name');
+            if (shopping) shopping.textContent = shoppingCount ? shoppingCount.toLocaleString('id-ID') + ' item dalam daftar saat ini' : 'Daftar kebutuhan dan anggaran';
+            if (library) library.textContent = referenceCount ? referenceCount.toLocaleString('id-ID') + ' materi dan panduan tersimpan' : 'Kumpulan materi dan panduan';
+            if (directory) directory.textContent = directoryCount ? directoryCount.toLocaleString('id-ID') + ' fasilitas tersimpan' : 'Fasilitas dan dokter keluarga';
+            if (childName) childName.textContent = kptGetBabyDisplayName();
+            if (drawerChild) drawerChild.textContent = kptGetBabyDisplayName();
+        }
+
+        function kptUpdateNavigationChrome() {
+            const familyMode = kptActiveSpace === 'family';
+            const prenatalNav = document.getElementById('prenatal-nav-tabs');
+            const postnatalNav = document.getElementById('postnatal-nav-tabs');
+            const familyNav = document.getElementById('family-nav-tabs');
+            if (prenatalNav) prenatalNav.classList.toggle('hidden', familyMode || kptUiPhase !== 'prenatal');
+            if (postnatalNav) postnatalNav.classList.toggle('hidden', familyMode || kptUiPhase !== 'postnatal');
+            if (familyNav) familyNav.classList.toggle('hidden', !familyMode);
+
+            const title = document.getElementById('kpt-context-title');
+            const subtitle = document.getElementById('kpt-context-subtitle');
+            const icon = document.getElementById('kpt-context-icon');
+            const target = familyMode ? kptFamilyActiveTarget : (kptActiveSpace === 'child' ? 'child' : 'pregnancy');
+            const contexts = {
+                family: {
+                    home:['Keluarga','Beranda Keluarga','fa-house'],
+                    shopping:['Keluarga','Belanja Bulanan','fa-cart-shopping'],
+                    library:['Keluarga','Pustaka & Panduan','fa-book-open'],
+                    directory:['Keluarga','Direktori Kesehatan','fa-hospital-user']
+                },
+                pregnancy:['Kehamilan','Kehamilan Saat Ini','fa-heart-pulse'],
+                child:['Anak-anak',kptGetBabyDisplayName(),'fa-baby']
+            };
+            const info = familyMode ? contexts.family[target] || contexts.family.home : contexts[target];
+            if (title) title.textContent = info[0];
+            if (subtitle) subtitle.textContent = info[1];
+            if (icon) icon.className = 'fa-solid ' + info[2];
+
+            const drawer = document.getElementById('kpt-global-navigation');
+            if (drawer) {
+                drawer.querySelectorAll('[data-kpt-target]').forEach(button => {
+                    const active = button.dataset.kptTarget === (familyMode ? 'family-' + target : target);
+                    button.classList.toggle('is-active', active);
+                    const current = button.querySelector('.kpt-drawer-current');
+                    if (current) current.classList.toggle('hidden', !active);
+                });
+            }
+            ['home','shopping','library','directory'].forEach(key => {
+                const button = document.getElementById('kpt-family-tab-' + key);
+                if (button) button.classList.toggle('active', familyMode && key === kptFamilyActiveTarget);
+            });
+            kptRenderFamilyHub();
+        }
+
+        function kptOpenGlobalNavigation() {
+            const layer = document.getElementById('kpt-global-navigation-layer');
+            const trigger = document.getElementById('kpt-context-trigger');
+            const drawer = document.getElementById('kpt-global-navigation');
+            if (!layer || !drawer) return;
+            closeProfileMenu();
+            closeMobileMoreMenu();
+            kptDrawerLastFocus = document.activeElement;
+            kptUpdateNavigationChrome();
+            layer.classList.add('is-open');
+            layer.setAttribute('aria-hidden','false');
+            document.body.classList.add('kpt-global-nav-open');
+            if (trigger) trigger.setAttribute('aria-expanded','true');
+            const firstAction = drawer.querySelector('button:not([disabled])');
+            if (firstAction) firstAction.focus({preventScroll:true});
+        }
+
+        function kptCloseGlobalNavigation(restoreFocus = true) {
+            const layer = document.getElementById('kpt-global-navigation-layer');
+            const trigger = document.getElementById('kpt-context-trigger');
+            if (!layer) return;
+            layer.classList.remove('is-open');
+            layer.setAttribute('aria-hidden','true');
+            document.body.classList.remove('kpt-global-nav-open');
+            if (trigger) trigger.setAttribute('aria-expanded','false');
+            if (restoreFocus && trigger) trigger.focus({preventScroll:true});
+        }
+
+        function kptToggleGlobalNavigation() {
+            const layer = document.getElementById('kpt-global-navigation-layer');
+            if (layer && layer.classList.contains('is-open')) kptCloseGlobalNavigation(false);
+            else kptOpenGlobalNavigation();
+        }
+
+        function kptNavigateProfile(profileType) {
+            kptCloseGlobalNavigation(false);
+            if (profileType === 'pregnancy') {
+                if (kptUiCurrentTab === 'referensi') kptUiCurrentTab = 'dashboard';
+                switchPhase('prenatal');
+            } else if (profileType === 'child') {
+                if (['post-belanja','rs-dsa','post-pustaka'].includes(kptUiCurrentPostnatalTab)) kptUiCurrentPostnatalTab = 'post-dashboard';
+                switchPhase('postnatal');
+            }
+        }
+
+        function kptNavigateFamilySpace(target) {
+            const validTargets = ['home','shopping','library','directory'];
+            if (!validTargets.includes(target)) return;
+            kptCloseGlobalNavigation(false);
+            closeMobileMoreMenu();
+            kptActiveSpace = 'family';
+            kptFamilyActiveTarget = target;
+
+            if (target === 'home') {
+                const prenatal = document.getElementById('container-prenatal-phase');
+                const postnatal = document.getElementById('container-postnatal-phase');
+                const family = document.getElementById('container-family-hub');
+                if (prenatal) prenatal.classList.add('hidden');
+                if (postnatal) postnatal.classList.add('hidden');
+                if (family) family.classList.remove('hidden');
+                kptRenderFamilyHub();
+            } else if (target === 'shopping') {
+                kptUiCurrentPostnatalTab = 'post-belanja';
+                switchPhase('postnatal');
+                kptActiveSpace = 'family'; kptFamilyActiveTarget = 'shopping';
+            } else if (target === 'library') {
+                kptUiCurrentTab = 'referensi';
+                switchPhase('prenatal');
+                kptActiveSpace = 'family'; kptFamilyActiveTarget = 'library';
+            } else if (target === 'directory') {
+                kptUiCurrentPostnatalTab = 'rs-dsa';
+                switchPhase('postnatal');
+                kptActiveSpace = 'family'; kptFamilyActiveTarget = 'directory';
+            }
+            kptUpdateNavigationChrome();
+            updateMobileNavigation();
+            kptPersistNavigationPreference();
+            resetMainPageScroll();
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                const layer = document.getElementById('kpt-global-navigation-layer');
+                if (layer && layer.classList.contains('is-open')) kptCloseGlobalNavigation();
+            }
+        });
+
+        // MOBILE NAVIGATION (6.7): shortcuts follow the active space and profile.
         function updateMobileNavigation() {
-            const phase = appState.phase || 'prenatal';
+            const phase = kptUiPhase || 'prenatal';
+            const familyMode = kptActiveSpace === 'family';
             const prenatalNav = document.getElementById('mobile-nav-prenatal');
             const postnatalNav = document.getElementById('mobile-nav-postnatal');
-            if (prenatalNav) prenatalNav.classList.toggle('hidden', phase !== 'prenatal');
-            if (postnatalNav) postnatalNav.classList.toggle('hidden', phase !== 'postnatal');
+            const familyNav = document.getElementById('mobile-nav-family');
+            if (prenatalNav) prenatalNav.classList.toggle('hidden', familyMode || phase !== 'prenatal');
+            if (postnatalNav) postnatalNav.classList.toggle('hidden', familyMode || phase !== 'postnatal');
+            if (familyNav) familyNav.classList.toggle('hidden', !familyMode);
 
-            const current = phase === 'prenatal' ? (appState.currentTab || 'dashboard') : (appState.currentPostnatalTab || 'post-dashboard');
-            const activeKey = phase === 'prenatal'
-                ? ({ dashboard: 'home', budget: 'budget', hospital: 'hospital', medis: 'medical' }[current] || 'more')
-                : ({ 'post-dashboard': 'home', 'post-log': 'log', 'post-medis': 'medical', 'post-stimulasi': 'growth' }[current] || 'more');
+            const current = phase === 'prenatal' ? (kptUiCurrentTab || 'dashboard') : (kptUiCurrentPostnatalTab || 'post-dashboard');
+            const activeKey = familyMode
+                ? ({ home:'home', shopping:'shopping', library:'library', directory:'menu' }[kptFamilyActiveTarget] || 'menu')
+                : phase === 'prenatal'
+                    ? ({ dashboard: 'home', budget: 'budget', hospital: 'hospital', medis: 'medical' }[current] || 'more')
+                    : ({ 'post-dashboard': 'home', 'post-log': 'log', 'post-medis': 'medical', 'post-stimulasi': 'growth' }[current] || 'more');
             document.querySelectorAll('.mobile-bottom-nav .mobile-nav-item').forEach(btn => {
-                const active = btn.closest('#mobile-nav-prenatal') ? phase === 'prenatal' && btn.dataset.navKey === activeKey
-                    : phase === 'postnatal' && btn.dataset.navKey === activeKey;
+                const nav = btn.closest('#mobile-nav-prenatal') ? 'pregnancy'
+                    : btn.closest('#mobile-nav-postnatal') ? 'child'
+                    : btn.closest('#mobile-nav-family') ? 'family' : '';
+                const expectedSpace = familyMode ? 'family' : (phase === 'prenatal' ? 'pregnancy' : 'child');
+                const active = nav === expectedSpace && btn.dataset.navKey === activeKey;
                 btn.classList.toggle('active', active);
                 if (active) btn.setAttribute('aria-current', 'page');
                 else btn.removeAttribute('aria-current');
@@ -7525,10 +8026,11 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
             const preMore = document.getElementById('mobile-more-prenatal');
             const postMore = document.getElementById('mobile-more-postnatal');
-            if (preMore) preMore.classList.toggle('hidden', phase !== 'prenatal');
-            if (postMore) postMore.classList.toggle('hidden', phase !== 'postnatal');
+            if (preMore) preMore.classList.toggle('hidden', familyMode || phase !== 'prenatal');
+            if (postMore) postMore.classList.toggle('hidden', familyMode || phase !== 'postnatal');
             const phaseLabel = document.getElementById('mobile-more-phase-label');
             if (phaseLabel) phaseLabel.textContent = phase === 'prenatal' ? 'FASE KEHAMILAN' : 'FASE BAYI LAHIR';
+            kptUpdateNavigationChrome();
         }
 
         function toggleMobileMoreMenu(forceOpen) {
@@ -7551,44 +8053,39 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 switchPhase('prenatal');
                 switchTab('referensi');
             } else if (tabId.startsWith('post-') || tabId === 'rs-dsa') {
-                if (appState.phase !== 'postnatal') switchPhase('postnatal');
+                if (kptUiPhase !== 'postnatal') switchPhase('postnatal');
                 switchPostnatalTab(tabId);
             } else {
-                if (appState.phase !== 'prenatal') switchPhase('prenatal');
+                if (kptUiPhase !== 'prenatal') switchPhase('prenatal');
                 switchTab(tabId);
             }
         }
 
         // SWITCH PHASE (TERISOLASI RAPI ANTARA PRENATAL & POSTNATAL)
         function switchPhase(phase) {
-            appState.phase = phase;
+            kptUiPhase = phase;
+            kptActiveSpace = phase === 'prenatal' ? 'pregnancy' : 'child';
+            kptFamilyActiveTarget = 'home';
             document.getElementById('btn-prenatal').classList.toggle('active', phase === 'prenatal');
             document.getElementById('btn-postnatal').classList.toggle('active', phase === 'postnatal');
-            
-            const prenatalNav = document.getElementById('prenatal-nav-tabs');
-            const postnatalNav = document.getElementById('postnatal-nav-tabs');
 
             const containerPrenatal = document.getElementById('container-prenatal-phase');
             const containerPostnatal = document.getElementById('container-postnatal-phase');
+            const familyContainer = document.getElementById('container-family-hub');
+            if (familyContainer) familyContainer.classList.add('hidden');
 
             if (phase === 'prenatal') {
-                prenatalNav.classList.remove('hidden');
-                postnatalNav.classList.add('hidden');
-
                 containerPrenatal.classList.remove('hidden');
                 containerPostnatal.classList.add('hidden');
-
-                switchTab(appState.currentTab || 'dashboard');
+                switchTab(kptUiCurrentTab || 'dashboard');
             } else {
-                prenatalNav.classList.add('hidden');
-                postnatalNav.classList.remove('hidden');
-
                 containerPrenatal.classList.add('hidden');
                 containerPostnatal.classList.remove('hidden');
-                switchPostnatalTab(appState.currentPostnatalTab || 'post-dashboard');
+                switchPostnatalTab(kptUiCurrentPostnatalTab || 'post-dashboard');
             }
+            kptUpdateNavigationChrome();
             updateMobileNavigation();
-            saveToLocalStorage();
+            kptPersistNavigationPreference();
         }
 
         // KEMBALI KE POSISI PALING ATAS SETIAP KALI BERPINDAH MENU.
@@ -7614,7 +8111,9 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
         // SWITCH TAB (UNTUK MENU FASE KEHAMILAN)
         function switchTab(tabId) {
-            appState.currentTab = tabId;
+            kptUiCurrentTab = tabId;
+            kptActiveSpace = tabId === 'referensi' ? 'family' : 'pregnancy';
+            if (tabId === 'referensi') kptFamilyActiveTarget = 'library';
             const tabs = ['dashboard', 'budget', 'hospital', 'medis', 'siaga', 'names', 'referensi'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
@@ -7649,13 +8148,18 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             } else if (tabId === 'referensi') {
                 renderReferences();
             }
+            kptUpdateNavigationChrome();
             updateMobileNavigation();
+            kptPersistNavigationPreference();
             resetMainPageScroll();
         }
 
         // SWITCH TAB (UNTUK MENU FASE BAYI LAHIR)
         function switchPostnatalTab(tabId) {
-            appState.currentPostnatalTab = tabId;
+            kptUiCurrentPostnatalTab = tabId;
+            kptActiveSpace = (tabId === 'post-belanja' || tabId === 'rs-dsa') ? 'family' : 'child';
+            if (tabId === 'post-belanja') kptFamilyActiveTarget = 'shopping';
+            if (tabId === 'rs-dsa') kptFamilyActiveTarget = 'directory';
             const tabs = ['post-dashboard', 'post-log', 'post-belanja', 'rs-dsa', 'post-medis', 'post-stimulasi', 'post-pustaka'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
@@ -7682,8 +8186,9 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             } else if (tabId === 'post-stimulasi') {
                 renderStimulationModule();
             }
+            kptUpdateNavigationChrome();
             updateMobileNavigation();
-            saveToLocalStorage();
+            kptPersistNavigationPreference();
             resetMainPageScroll();
         }
 
@@ -12133,8 +12638,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
               hasCompletedCloudBootstrap = true;
               persistLocalSyncState();
               isRemoteUpdate = true;
-              // Restore the cloud-saved phase and tab after the authoritative snapshot arrives.
-              switchPhase(appState.phase || 'prenatal');
+              // Keep UI navigation per device; cloud phase/tab are legacy fallback values only.
+              kptRestoreNavigationPreferenceFromCloud();
               refreshAllViews();
               isRemoteUpdate = false;
               unlockApplicationAfterCloudReady();
@@ -12193,6 +12698,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
           if (!isFullRefresh && changed.size === 0) return;
           const has = (...keys) => isFullRefresh || keys.some(key => changed.has(key));
 
+          const familyHub = document.getElementById('container-family-hub');
+          if (familyHub && !familyHub.classList.contains('hidden') && has('postnatalShopping','references','careGuides','rsDsa','babyName','babyProfile')) kptRenderFamilyHub();
           if (has('hpht', 'hpl')) calculatePregnancyData();
           if (has('gallery', 'postnatalGallery')) renderGallery();
 
@@ -12596,7 +13103,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 _kptBackup: {
                     format: KPT_BACKUP_FORMAT,
                     formatVersion: KPT_BACKUP_FORMAT_VERSION,
-                    appVersion: '6.13.34',
+                    appVersion: '6.13.35',
                     createdAt: createdAt.toISOString(),
                     createdAtLocal: createdAt.toLocaleString('id-ID'),
                     localDate: getLocalDateKey(createdAt),
