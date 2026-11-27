@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.34 — Care Guide Mobile Add Button Fit -->
+    <!-- Keluarga Pohon Teduh 6.13.35 — Bag-first Hospital Bag Organizer -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.34">
+    <meta name="application-version" content="6.13.35">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3438,6 +3438,102 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
   }
 </style>
 
+
+<style id="kpt-hospital-bag-61335">
+/* 6.13.35 — Bag-first Hospital Bag Organizer. All styles are scoped. */
+#hospital-bag-summary{display:grid;gap:8px}
+.kpt-hbag-summary-card{border:1px solid #dbeafe;background:linear-gradient(135deg,#f0f9ff,#f8fafc);border-radius:15px;padding:12px 14px}
+.kpt-hbag-summary-track{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.kpt-hbag-summary-fill{height:100%;background:#0d9488;border-radius:999px;transition:width .2s ease}
+#hospital-bag-container{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}
+@media(min-width:1024px){#hospital-bag-container{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+.kpt-hbag-owner-card{min-width:0;overflow:hidden;border:1px solid #e2e8f0;border-radius:17px;background:#fff;box-shadow:0 2px 8px rgba(15,23,42,.035)}
+.kpt-hbag-owner-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+.kpt-hbag-owner-title{display:flex;align-items:center;gap:9px;min-width:0}
+.kpt-hbag-owner-icon{width:38px;height:38px;flex:0 0 38px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:#e0f2fe;color:#0369a1;font-size:16px}
+.kpt-hbag-owner-title strong{display:block;color:#0f172a;font-size:13px;line-height:1.3}
+.kpt-hbag-owner-title small{display:block;margin-top:3px;color:#64748b;font-size:10px}
+.kpt-hbag-owner-progress{flex:0 0 auto;text-align:right;color:#475569;font-size:10px;font-weight:700;white-space:nowrap}
+.kpt-hbag-owner-body{padding:11px;display:grid;gap:9px}
+.kpt-hbag-btn{min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:10px;padding:8px 11px;font-size:11px;font-weight:700;line-height:1.2;transition:background-color .15s ease,border-color .15s ease,transform .15s ease}
+.kpt-hbag-btn:active{transform:scale(.98)}
+.kpt-hbag-btn-primary{background:#0284c7;color:#fff}
+.kpt-hbag-btn-primary:hover{background:#0369a1}
+.kpt-hbag-btn-soft{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+.kpt-hbag-btn-soft:hover{background:#e2e8f0}
+.kpt-hbag-btn-danger{background:#fff1f2;color:#be123c;border:1px solid #ffe4e6}
+.kpt-hbag-btn-danger:hover{background:#ffe4e6}
+.kpt-hbag-btn:disabled{opacity:.42;cursor:not-allowed;transform:none}
+.kpt-hbag-pouch{min-width:0;border:1px solid #dbeafe;border-radius:13px;background:#fff;overflow:hidden}
+.kpt-hbag-pouch-head{display:flex;align-items:center;gap:8px;padding:10px 11px;background:#f0f9ff}
+.kpt-hbag-pouch-toggle{display:flex;align-items:center;gap:9px;flex:1;min-width:0;min-height:40px;text-align:left;color:#0c4a6e}
+.kpt-hbag-pouch-toggle .pouch-name{min-width:0;font-size:12px;font-weight:800;overflow-wrap:anywhere}
+.kpt-hbag-pouch-toggle .pouch-count{flex:0 0 auto;font-size:10px;color:#475569;font-weight:700;background:#fff;border:1px solid #dbeafe;border-radius:999px;padding:4px 7px}
+.kpt-hbag-pouch-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}
+.kpt-hbag-icon-btn{width:38px;height:38px;min-width:38px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;background:#fff;border:1px solid #dbeafe;color:#475569}
+.kpt-hbag-icon-btn.danger{color:#be123c;background:#fff7f8;border-color:#ffe4e6}
+.kpt-hbag-pouch-body{padding:10px;display:grid;gap:9px;background:#fff}
+.kpt-hbag-items{display:grid;gap:7px}
+.kpt-hbag-item{display:grid;grid-template-columns:26px minmax(0,1fr) auto;align-items:center;gap:8px;padding:9px;border:1px solid #e2e8f0;border-radius:11px;background:#fff;min-width:0}
+.kpt-hbag-item-check{width:22px;height:22px;min-width:22px;accent-color:#0d9488;cursor:pointer}
+.kpt-hbag-item-main{min-width:0;display:grid;gap:3px}
+.kpt-hbag-item-name{font-size:12px;font-weight:700;color:#1e293b;line-height:1.35;overflow-wrap:anywhere}
+.kpt-hbag-item-qty{font-size:10px;color:#64748b}
+.kpt-hbag-item.is-packed .kpt-hbag-item-name{text-decoration:line-through;color:#94a3b8}
+.kpt-hbag-item-actions{display:flex;align-items:center;gap:4px}
+.kpt-hbag-item-actions button{width:34px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;background:#f1f5f9;color:#475569}
+.kpt-hbag-item-actions button.delete{background:#fff1f2;color:#be123c}
+.kpt-hbag-status{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:4px 7px;font-size:9px;font-weight:800;white-space:nowrap;color:#92400e;background:#fef3c7}
+.kpt-hbag-status.packed{color:#065f46;background:#d1fae5}
+.kpt-hbag-empty{padding:12px;border:1px dashed #cbd5e1;border-radius:10px;color:#64748b;font-size:11px;text-align:center;background:#f8fafc}
+.kpt-hbag-owner-empty{padding:15px 10px;text-align:center;color:#64748b;font-size:11px}
+.kpt-hbag-modal-backdrop{position:fixed;inset:0;z-index:100050;background:rgba(15,23,42,.62);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;padding:10px}
+.kpt-hbag-modal{width:100%;max-width:560px;max-height:min(88vh,820px);overflow:auto;background:#fff;color:#0f172a;border:1px solid #e2e8f0;border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.25);padding:17px;overscroll-behavior:contain}
+.kpt-hbag-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.kpt-hbag-modal-head h3{font-size:17px;font-weight:800;line-height:1.3;color:#0f172a}
+.kpt-hbag-modal-head p{margin-top:4px;color:#64748b;font-size:11px;line-height:1.45}
+.kpt-hbag-modal-close{width:42px;height:42px;flex:0 0 42px;border-radius:11px;background:#f1f5f9;color:#475569}
+.kpt-hbag-field{display:grid;gap:6px;min-width:0}
+.kpt-hbag-field label{font-size:11px;font-weight:700;color:#334155}
+.kpt-hbag-field input,.kpt-hbag-field select{width:100%;min-width:0;min-height:44px;border:1px solid #cbd5e1;border-radius:11px;background:#fff;color:#0f172a;padding:10px 11px;font:inherit;font-size:13px;outline:none}
+.kpt-hbag-field input:focus,.kpt-hbag-field select:focus{border-color:#0ea5e9;box-shadow:0 0 0 3px rgba(14,165,233,.14)}
+.kpt-hbag-entry-row{border:1px solid #e2e8f0;border-radius:13px;padding:10px;display:grid;grid-template-columns:minmax(0,1fr) minmax(95px,.42fr) 38px;gap:8px;align-items:end;background:#f8fafc}
+.kpt-hbag-entry-row .kpt-hbag-field input{min-height:44px}
+.kpt-hbag-entry-remove{height:44px;width:38px;border-radius:10px;background:#fff1f2;color:#be123c}
+.kpt-hbag-modal-footer{display:flex;gap:8px;margin-top:16px}
+.kpt-hbag-modal-footer button{flex:1;min-height:46px}
+body.dark-mode .kpt-hbag-summary-card{background:linear-gradient(135deg,#102d42,#172337);border-color:#164e63}
+body.dark-mode .kpt-hbag-summary-track{background:#334155}
+body.dark-mode .kpt-hbag-owner-card{background:#172337;border-color:#334155;box-shadow:none}
+body.dark-mode .kpt-hbag-owner-head{background:#1e293b;border-color:#334155}
+body.dark-mode .kpt-hbag-owner-title strong{color:#f1f5f9}
+body.dark-mode .kpt-hbag-owner-title small,body.dark-mode .kpt-hbag-owner-progress{color:#cbd5e1}
+body.dark-mode .kpt-hbag-owner-icon{background:#12314a;color:#7dd3fc}
+body.dark-mode .kpt-hbag-pouch{background:#172337;border-color:#334155}
+body.dark-mode .kpt-hbag-pouch-head{background:#12314a}
+body.dark-mode .kpt-hbag-pouch-toggle{color:#bae6fd}
+body.dark-mode .kpt-hbag-pouch-toggle .pouch-count{background:#1e293b;border-color:#334155;color:#cbd5e1}
+body.dark-mode .kpt-hbag-icon-btn{background:#1e293b;border-color:#334155;color:#e2e8f0}
+body.dark-mode .kpt-hbag-icon-btn.danger{background:#4c1d26;border-color:#7f1d1d;color:#fecdd3}
+body.dark-mode .kpt-hbag-pouch-body{background:#172337}
+body.dark-mode .kpt-hbag-item{background:#1e293b;border-color:#3b4b61}
+body.dark-mode .kpt-hbag-item-name{color:#f1f5f9}
+body.dark-mode .kpt-hbag-item.is-packed .kpt-hbag-item-name{color:#94a3b8}
+body.dark-mode .kpt-hbag-item-qty{color:#cbd5e1}
+body.dark-mode .kpt-hbag-item-actions button{background:#334155;color:#f1f5f9}
+body.dark-mode .kpt-hbag-item-actions button.delete{background:#4c1d26;color:#fecdd3}
+body.dark-mode .kpt-hbag-empty,body.dark-mode .kpt-hbag-owner-empty{background:#0f172a;border-color:#475569;color:#94a3b8}
+body.dark-mode .kpt-hbag-modal{background:#1e293b;color:#f8fafc;border-color:#334155}
+body.dark-mode .kpt-hbag-modal-head h3{color:#f8fafc}
+body.dark-mode .kpt-hbag-modal-head p,body.dark-mode .kpt-hbag-field label{color:#cbd5e1}
+body.dark-mode .kpt-hbag-field input,body.dark-mode .kpt-hbag-field select{background:#0f172a;color:#f8fafc;border-color:#475569}
+body.dark-mode .kpt-hbag-entry-row{background:#172337;border-color:#334155}
+body.dark-mode .kpt-hbag-modal-close{background:#334155;color:#e2e8f0}
+body.dark-mode .kpt-hbag-entry-remove{background:#4c1d26;color:#fecdd3}
+@media(min-width:768px){.kpt-hbag-modal-backdrop{align-items:center;padding:20px}.kpt-hbag-modal{padding:21px}}
+@media(max-width:420px){.kpt-hbag-owner-head{padding:11px}.kpt-hbag-owner-body{padding:8px}.kpt-hbag-pouch-head{padding:8px}.kpt-hbag-item{grid-template-columns:25px minmax(0,1fr) auto;gap:6px;padding:8px}.kpt-hbag-item-actions button{width:32px;height:36px}.kpt-hbag-status{font-size:8px;padding:4px 6px}.kpt-hbag-modal{border-radius:20px;padding:14px}.kpt-hbag-entry-row{grid-template-columns:minmax(0,1fr) minmax(82px,.4fr) 34px;gap:6px}.kpt-hbag-entry-remove{width:34px}}
+</style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12 auth-locked" onclick="closeAllDropdowns()">
 
@@ -3757,7 +3853,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                                 </div>
                                 <div>
                                     <h3 class="text-sm font-bold text-slate-800">Tas Melahirkan</h3>
-                                    <div class="mt-2 text-2xl font-extrabold tracking-tight text-emerald-700 tabular-nums" id="dash-bag-status">0% Siap</div>
+                                    <div class="mt-2 text-2xl font-extrabold tracking-tight text-emerald-700 tabular-nums" id="dash-bag-status">0% Dikemas</div>
                                     <p class="text-[11px] text-slate-500 mt-1">Kelengkapan hospital bag</p>
                                 </div>
                             </div>
@@ -4053,7 +4149,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                         </div>
                     </div>
                     <div class="grid grid-cols-3 gap-2 sm:gap-3">
-                        <div class="rounded-xl bg-white/90 border border-slate-100 p-3"><p class="text-[10px] text-slate-500">Hospital Bag</p><strong id="siaga-bag-progress" class="text-base sm:text-lg text-slate-800">0/0</strong><p class="text-[10px] text-slate-400">barang siap</p></div>
+                        <div class="rounded-xl bg-white/90 border border-slate-100 p-3"><p class="text-[10px] text-slate-500">Hospital Bag</p><strong id="siaga-bag-progress" class="text-base sm:text-lg text-slate-800">0/0</strong><p class="text-[10px] text-slate-400">barang dikemas</p></div>
                         <div class="rounded-xl bg-white/90 border border-slate-100 p-3"><p class="text-[10px] text-slate-500">Rumah</p><strong id="siaga-departure-progress" class="text-base sm:text-lg text-slate-800">0/0</strong><p class="text-[10px] text-slate-400">ceklist selesai</p></div>
                         <div class="rounded-xl bg-white/90 border border-slate-100 p-3"><p class="text-[10px] text-slate-500">Pulang RS</p><strong id="siaga-discharge-progress" class="text-base sm:text-lg text-slate-800">0/0</strong><p class="text-[10px] text-slate-400">hal terkonfirmasi</p></div>
                     </div>
@@ -4074,20 +4170,17 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3" id="emergency-contacts-container"></div>
                 </div>
 
-                <!-- HOSPITAL BAG + ZIPLOCK GROUPING -->
+                <!-- HOSPITAL BAG ORGANIZER — BAG FIRST -->
                 <div id="siaga-bag" class="siaga-panel scroll-mt-24 space-y-3">
                     <div class="siaga-panel-heading">
-                        <div><h2 class="siaga-title">🎒 Hospital Bag Organizer</h2></div>
-                        <button onclick="openHospitalBagModal()" class="siaga-add-button"><i class="fa-solid fa-plus"></i><span>Tambah Barang</span></button>
+                        <div>
+                            <h2 class="siaga-title">🎒 Hospital Bag Organizer</h2>
+                            <p class="text-xs text-slate-500 mt-1">Kelompokkan perlengkapan berdasarkan tas dan kantongnya.</p>
+                        </div>
                     </div>
-                    <div class="flex flex-wrap gap-2 text-[11px]">
-                        <span class="siaga-helper-chip"><i class="fa-solid fa-file-lines"></i> Dokumen</span>
-                        <span class="siaga-helper-chip"><i class="fa-solid fa-person-dress"></i> Ibu</span>
-                        <span class="siaga-helper-chip"><i class="fa-solid fa-person"></i> Pendamping</span>
-                        <span class="siaga-helper-chip"><i class="fa-solid fa-baby"></i> Bayi</span>
-                    </div>
-                    <div class="hidden lg:grid siaga-bag-desktop-grid" id="hospital-bag-desktop"></div>
-                    <div class="lg:hidden space-y-3" id="hospital-bag-mobile"></div>
+                    <div id="hospital-bag-summary"></div>
+                    <div id="hospital-bag-container" aria-live="polite"></div>
+                    <div id="hospital-bag-dialog-root"></div>
                 </div>
 
                 <!-- HOUSE CHECKLIST -->
@@ -5640,55 +5733,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
         </div>
     </div>
 
-    <!-- MODAL: EDIT / TAMBAH ITEM TAS MELAHIRKAN -->
-    <div id="modal-hospital-bag" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
-            <button onclick="closeHospitalBagModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-lg">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <h2 id="modal-bag-title" class="text-lg font-bold text-slate-800">Tambah Barang Tas Melahirkan</h2>
-
-            <form id="hospital-bag-form" onsubmit="saveHospitalBagForm(event)" class="space-y-3 text-xs">
-                <input type="hidden" id="form-bag-id">
-
-                <div>
-                    <label class="font-semibold text-slate-700">Kategori Pemilik / Peruntukan</label>
-                    <select id="form-bag-category" required class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none font-medium bg-slate-50">
-                        <option value="Dokumen">Dokumen</option>
-                        <option value="Istri">Istri</option>
-                        <option value="Suami">Suami</option>
-                        <option value="Bayi">Bayi</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="font-semibold text-slate-700">Nama Barang / Rincian</label>
-                    <input type="text" id="form-bag-name" required placeholder="misal: Baju Kancing Depan / Diapers Dewasa" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="font-semibold text-slate-700">Jumlah (Qty)</label>
-                    <input type="text" id="form-bag-qty" placeholder="misal: 3 set / 1 pak / 1 map" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
-                </div>
-                <div>
-                    <label class="font-semibold text-slate-700">Label Paket / Ziplock (Opsional)</label>
-                    <input type="text" id="form-bag-package" placeholder="misal: Ziplock 01 - Dokumen / Bayi Set 1" class="w-full mt-1 p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none">
-                    <p class="mt-1 text-[10px] text-slate-500">Gunakan label yang sama untuk barang dalam satu kantong agar tampil berkelompok.</p>
-                </div>
-
-                <div class="pt-1 flex items-center gap-2">
-                    <input type="checkbox" id="form-bag-done" class="w-4 h-4 text-sky-600 rounded">
-                    <label for="form-bag-done" class="font-semibold text-slate-700">Sudah Dimasukkan Ke Tas (Ceklis Status)</label>
-                </div>
-
-                <div class="pt-3 flex justify-end gap-2">
-                    <button type="button" onclick="closeHospitalBagModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl">Simpan Barang</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <!-- Hospital Bag dialogs are rendered on demand in #hospital-bag-dialog-root. -->
 
     <!-- MODAL: EDIT / TAMBAH PERAN SUAMI -->
     <div id="modal-husband-role" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="event.stopPropagation()">
@@ -6678,6 +6723,8 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
                 emergencyContacts: [],
                 departureChecklist: [],
                 hospitalBag: [],
+                hospitalBagPouches: [],
+                hospitalBagStructureVersion: 0,
                 husbandRoles: [],
                 birthPlan: [],
                 affirmations: [],
@@ -8070,7 +8117,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             const bagPercent = totalBag > 0 ? Math.round((doneBag / totalBag) * 100) : 0;
 
             const bagStatEl = document.getElementById('dash-bag-status');
-            if (bagStatEl) bagStatEl.innerText = `${bagPercent}% Siap`;
+            if (bagStatEl) bagStatEl.innerText = `${bagPercent}% Dikemas`;
             const bagBarEl = document.getElementById('dash-bag-progress-bar');
             if (bagBarEl) bagBarEl.style.width = `${bagPercent}%`;
 
@@ -9450,147 +9497,409 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             }
         }
 
-        // HOSPITAL BAG TABLE
-        function renderHospitalBagTable() {
-            const desktop = document.getElementById('hospital-bag-desktop');
-            const mobile = document.getElementById('hospital-bag-mobile');
-            if (!desktop && !mobile) return;
-            if (!Array.isArray(appState.hospitalBag)) appState.hospitalBag = [];
+        // HOSPITAL BAG ORGANIZER 6.13.35 — BAG FIRST / POUCH REQUIRED
+        const HOSPITAL_BAG_OWNERS = ['Dokumen', 'Istri', 'Suami', 'Bayi'];
+        const HOSPITAL_BAG_OWNER_META = {
+            Dokumen: { icon: 'fa-file-lines', desc: 'Dokumen dan administrasi persalinan' },
+            Istri: { icon: 'fa-person-dress', desc: 'Perlengkapan ibu selama persalinan dan rawat inap' },
+            Suami: { icon: 'fa-person', desc: 'Perlengkapan pendamping' },
+            Bayi: { icon: 'fa-baby', desc: 'Perlengkapan bayi baru lahir' }
+        };
+        let hospitalBagOpenPouchIds = new Set();
 
-            const owners = ['Dokumen', 'Istri', 'Suami', 'Bayi'];
-            const grouped = Object.fromEntries(owners.map(owner => [owner, []]));
-            appState.hospitalBag.forEach(item => {
-                const owner = owners.includes(item.category) ? item.category : 'Dokumen';
-                grouped[owner].push(item);
+        function hospitalBagIdArg(value) {
+            return siagaEscapeHtml(JSON.stringify(String(value ?? '')));
+        }
+
+        function hospitalBagNewId(prefix) {
+            return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+        }
+
+        function hospitalBagHash(value) {
+            let hash = 2166136261;
+            const input = String(value);
+            for (let i = 0; i < input.length; i++) {
+                hash ^= input.charCodeAt(i);
+                hash = Math.imul(hash, 16777619);
+            }
+            return (hash >>> 0).toString(36);
+        }
+
+        function hospitalBagNameKey(value) {
+            return String(value ?? '').trim().replace(/\s+/g, ' ').toLocaleLowerCase('id');
+        }
+
+        // Idempotent migration: legacy packageLabel groups become pouches.
+        // Existing item IDs and all item details are preserved.
+        function ensureHospitalBagStructure() {
+            let changed = false;
+            const originalPouches = Array.isArray(appState.hospitalBagPouches) ? appState.hospitalBagPouches : [];
+            const originalItems = Array.isArray(appState.hospitalBag) ? appState.hospitalBag : [];
+            const originalPouchesJson = JSON.stringify(originalPouches);
+            const originalItemsJson = JSON.stringify(originalItems);
+            const pouches = [];
+            const seenPouchIds = new Set();
+
+            originalPouches.forEach((source, index) => {
+                if (!source || typeof source !== 'object') { changed = true; return; }
+                const category = HOSPITAL_BAG_OWNERS.includes(source.category) ? source.category : 'Dokumen';
+                const name = String(source.name ?? source.label ?? '').trim() || 'Kantong Baru';
+                let id = String(source.id ?? '').trim();
+                if (!id) { id = `legacy-pouch-${category.toLowerCase()}-${hospitalBagHash(category + '|' + hospitalBagNameKey(name) + '|' + index)}`; changed = true; }
+                while (seenPouchIds.has(id)) { id = `${id}-${index + 1}`; changed = true; }
+                seenPouchIds.add(id);
+                if (String(source.id ?? '') !== id || source.category !== category || source.name !== name) changed = true;
+                pouches.push({ ...source, id, category, name });
             });
 
-            let desktopHtml = '';
-            let mobileHtml = '';
+            const items = originalItems.map((source, index) => {
+                if (!source || typeof source !== 'object') { changed = true; return source; }
+                const item = { ...source };
+                const category = HOSPITAL_BAG_OWNERS.includes(item.category) ? item.category : 'Dokumen';
+                if (item.category !== category) { item.category = category; changed = true; }
 
-            owners.forEach(owner => {
-                const items = grouped[owner] || [];
-                const done = items.filter(item => item.done).length;
-                const packageGroups = new Map();
-                items.forEach(item => {
-                    const label = String(item.packageLabel || '').trim() || 'Belum diberi label paket';
-                    if (!packageGroups.has(label)) packageGroups.set(label, []);
-                    packageGroups.get(label).push(item);
-                });
+                let pouch = item.pouchId !== undefined && item.pouchId !== null
+                    ? pouches.find(entry => String(entry.id) === String(item.pouchId) && entry.category === category)
+                    : null;
 
-                // Desktop: each owner/category is a card; the four cards are arranged in two columns.
-                let desktopItemsHtml = '';
-                if (!items.length) {
-                    desktopItemsHtml = `<p class="siaga-bag-empty">Belum ada barang.</p>`;
-                } else {
-                    packageGroups.forEach((packageItems, label) => {
-                        desktopItemsHtml += `<div class="siaga-bag-package-heading"><i class="fa-solid fa-tag"></i><span>${siagaEscapeHtml(label)}</span></div>`;
-                        packageItems.forEach(item => {
-                            const name = siagaEscapeHtml(item.name || 'Barang');
-                            const qty = siagaEscapeHtml(item.qty || '1');
-                            const itemId = Number(item.id);
-                            desktopItemsHtml += `
-                                <div class="siaga-bag-desktop-item ${item.done ? 'is-done' : ''}">
-                                    <label class="siaga-bag-desktop-check" aria-label="Tandai ${name} siap">
-                                        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleHospitalBagDone(${itemId})">
-                                    </label>
-                                    <div class="siaga-bag-desktop-name"><span>${name}</span><small>Jumlah: ${qty}</small></div>
-                                    <span class="siaga-bag-desktop-status ${item.done ? 'done' : ''}">${item.done ? 'Siap' : 'Belum'}</span>
-                                    <div class="siaga-bag-desktop-actions">
-                                        <button type="button" onclick="openHospitalBagModal(${itemId})" aria-label="Edit ${name}" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                                        <button type="button" class="delete" onclick="deleteHospitalBagItem(${itemId})" aria-label="Hapus ${name}" title="Hapus"><i class="fa-solid fa-trash"></i></button>
-                                    </div>
-                                </div>`;
-                        });
-                    });
+                const legacyLabel = String(item.packageLabel ?? '').trim().replace(/\s+/g, ' ');
+                if (!pouch && legacyLabel) {
+                    pouch = pouches.find(entry => entry.category === category && hospitalBagNameKey(entry.name) === hospitalBagNameKey(legacyLabel));
                 }
 
-                desktopHtml += `
-                    <section class="siaga-bag-owner-card">
-                        <div class="siaga-bag-owner-heading">
-                            <strong><i class="fa-solid fa-box-archive"></i> ${owner}</strong>
-                            <span>${done}/${items.length} siap ${items.length && done === items.length ? '· Lengkap' : ''}</span>
-                        </div>
-                        <div class="siaga-bag-owner-content">${desktopItemsHtml}</div>
-                    </section>`;
+                if (!pouch) {
+                    const pouchName = legacyLabel || 'Kantong Belum Diatur';
+                    const existingByName = pouches.find(entry => entry.category === category && hospitalBagNameKey(entry.name) === hospitalBagNameKey(pouchName));
+                    if (existingByName) {
+                        pouch = existingByName;
+                    } else {
+                        let pouchId = `legacy-${category.toLowerCase()}-${hospitalBagHash(category + '|' + hospitalBagNameKey(pouchName))}`;
+                        let suffix = 1;
+                        while (seenPouchIds.has(pouchId)) pouchId = `legacy-${category.toLowerCase()}-${hospitalBagHash(category + '|' + hospitalBagNameKey(pouchName))}-${suffix++}`;
+                        pouch = { id: pouchId, category, name: pouchName };
+                        pouches.push(pouch);
+                        seenPouchIds.add(pouchId);
+                        changed = true;
+                    }
+                }
 
-                // Mobile: preserve the familiar vertical cards and package grouping.
-                mobileHtml += `<section class="rounded-2xl border border-slate-200 overflow-hidden"><div class="px-3 py-2.5 bg-slate-100 flex items-center justify-between"><strong class="text-xs uppercase tracking-wide text-sky-800">${owner}</strong><span class="text-[10px] text-slate-500">${done}/${items.length} siap</span></div><div class="p-2.5 space-y-3">`;
-                if (!items.length) mobileHtml += `<p class="text-xs text-slate-400 italic p-2">Belum ada barang.</p>`;
-                packageGroups.forEach((packageItems, label) => {
-                    mobileHtml += `<div class="space-y-2"><div class="text-[10px] font-bold text-sky-800 px-1"><i class="fa-solid fa-tag mr-1"></i>${siagaEscapeHtml(label)}</div>`;
-                    packageItems.forEach(item => {
-                        const name = siagaEscapeHtml(item.name || 'Barang');
-                        const qty = siagaEscapeHtml(item.qty || '1');
-                        const itemId = Number(item.id);
-                        mobileHtml += `<article class="rounded-xl border border-slate-200 bg-white p-3 space-y-2"><div class="flex items-start gap-2"><input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleHospitalBagDone(${itemId})" class="w-5 h-5 mt-0.5 rounded text-sky-600 shrink-0" aria-label="Tandai ${name} siap"><div class="min-w-0 flex-1"><p class="text-sm font-semibold ${item.done ? 'line-through text-slate-400' : 'text-slate-800'} break-words">${name}</p><p class="text-xs text-slate-500 mt-1">Jumlah: <strong class="text-slate-700">${qty}</strong></p></div><span class="text-[10px] rounded-full px-2 py-1 ${item.done ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${item.done ? 'Siap' : 'Belum'}</span></div><div class="flex gap-2 pt-1"><button onclick="openHospitalBagModal(${itemId})" class="flex-1 min-h-[40px] rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold"><i class="fa-solid fa-pen mr-1"></i>Edit</button><button onclick="deleteHospitalBagItem(${itemId})" class="min-h-[40px] px-4 rounded-lg bg-rose-50 text-rose-600 text-xs font-semibold"><i class="fa-solid fa-trash mr-1"></i>Hapus</button></div></article>`;
-                    });
-                    mobileHtml += `</div>`;
-                });
-                mobileHtml += `</div></section>`;
+                if (String(item.pouchId ?? '') !== String(pouch.id)) { item.pouchId = pouch.id; changed = true; }
+                if (String(item.packageLabel ?? '') !== pouch.name) { item.packageLabel = pouch.name; changed = true; }
+                if (item.qty === undefined || item.qty === null || String(item.qty).trim() === '') { item.qty = '1'; changed = true; }
+                if (typeof item.done !== 'boolean') { item.done = !!item.done; changed = true; }
+                if (item.id === undefined || item.id === null || item.id === '') { item.id = `legacy-item-${hospitalBagHash(category + '|' + String(item.name || '') + '|' + String(item.qty || '') + '|' + index)}`; changed = true; }
+                return item;
             });
 
-            if (desktop) desktop.innerHTML = desktopHtml;
-            if (mobile) mobile.innerHTML = mobileHtml;
+            if (!Array.isArray(appState.hospitalBagPouches) || JSON.stringify(pouches) !== originalPouchesJson) changed = true;
+            if (!Array.isArray(appState.hospitalBag) || JSON.stringify(items) !== originalItemsJson) changed = true;
+            appState.hospitalBagPouches = pouches;
+            appState.hospitalBag = items;
+            if (Number(appState.hospitalBagStructureVersion || 0) < 1) {
+                appState.hospitalBagStructureVersion = 1;
+                changed = true;
+            }
+            return changed;
+        }
+
+        function renderHospitalBagTable() {
+            const container = document.getElementById('hospital-bag-container');
+            const summary = document.getElementById('hospital-bag-summary');
+            if (!container) return;
+
+            const migrated = ensureHospitalBagStructure();
+            if (migrated && typeof saveToLocalStorage === 'function') saveToLocalStorage();
+            const items = Array.isArray(appState.hospitalBag) ? appState.hospitalBag : [];
+            const pouches = Array.isArray(appState.hospitalBagPouches) ? appState.hospitalBagPouches : [];
+            const total = items.length;
+            const packed = items.filter(item => item && item.done === true).length;
+            const percent = total ? Math.round(packed / total * 100) : 0;
+
+            if (summary) {
+                summary.innerHTML = `
+                    <div class="kpt-hbag-summary-card">
+                        <div class="flex items-center justify-between gap-3">
+                            <div><p class="text-[10px] uppercase tracking-wider font-bold text-sky-800">Progres pengemasan</p><strong class="text-xl sm:text-2xl text-slate-800 tabular-nums">${packed}/${total}</strong><span class="text-xs text-slate-500 ml-1">barang sudah dikemas</span></div>
+                            <strong class="text-lg text-teal-700 tabular-nums">${percent}%</strong>
+                        </div>
+                        <div class="kpt-hbag-summary-track mt-2"><div class="kpt-hbag-summary-fill" style="width:${percent}%"></div></div>
+                    </div>`;
+            }
+
+            const ownerHtml = HOSPITAL_BAG_OWNERS.map(owner => {
+                const ownerPouches = pouches.filter(pouch => pouch.category === owner);
+                const ownerItems = items.filter(item => item && item.category === owner);
+                const ownerPacked = ownerItems.filter(item => item.done === true).length;
+                const meta = HOSPITAL_BAG_OWNER_META[owner];
+                const pouchHtml = ownerPouches.map(pouch => {
+                    const pouchId = String(pouch.id);
+                    const safePouchId = siagaEscapeHtml(pouchId);
+                    const pouchItems = items.filter(item => item && String(item.pouchId ?? '') === pouchId);
+                    const pouchPacked = pouchItems.filter(item => item.done === true).length;
+                    const isOpen = hospitalBagOpenPouchIds.has(pouchId);
+                    const rows = pouchItems.length ? pouchItems.map(item => {
+                        const idArg = hospitalBagIdArg(item.id);
+                        const itemName = siagaEscapeHtml(item.name || 'Barang');
+                        const qty = siagaEscapeHtml(item.qty || '1');
+                        const isPacked = item.done === true;
+                        return `
+                            <article class="kpt-hbag-item ${isPacked ? 'is-packed' : ''}">
+                                <input class="kpt-hbag-item-check" type="checkbox" ${isPacked ? 'checked' : ''} onchange="toggleHospitalBagDone(${idArg})" aria-label="Tandai sudah dikemas: ${itemName}">
+                                <div class="kpt-hbag-item-main">
+                                    <span class="kpt-hbag-item-name">${itemName}</span>
+                                    <span class="kpt-hbag-item-qty">Jumlah: ${qty}</span>
+                                </div>
+                                <div class="flex flex-col items-end gap-1">
+                                    <span class="kpt-hbag-status ${isPacked ? 'packed' : ''}">${isPacked ? 'Sudah dikemas' : 'Belum dikemas'}</span>
+                                    <div class="kpt-hbag-item-actions">
+                                        <button type="button" onclick="openHospitalBagItemModal(${hospitalBagIdArg(pouchId)},${idArg})" aria-label="Edit ${itemName}" title="Edit barang"><i class="fa-solid fa-pen"></i></button>
+                                        <button type="button" onclick="openHospitalBagMoveModal(${idArg})" aria-label="Pindahkan ${itemName}" title="Pindahkan barang"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
+                                        <button type="button" class="delete" onclick="deleteHospitalBagItem(${idArg})" aria-label="Hapus ${itemName}" title="Hapus barang"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </article>`;
+                    }).join('') : `<div class="kpt-hbag-empty">Kantong ini masih kosong. Tambahkan barang yang akan disimpan di sini.</div>`;
+
+                    return `
+                        <article class="kpt-hbag-pouch">
+                            <div class="kpt-hbag-pouch-head">
+                                <button type="button" class="kpt-hbag-pouch-toggle" data-pouch-toggle="${safePouchId}" aria-expanded="${isOpen}" onclick="toggleHospitalBagPouch(${hospitalBagIdArg(pouchId)})">
+                                    <i class="fa-solid ${isOpen ? 'fa-chevron-down' : 'fa-chevron-right'} text-[11px]" aria-hidden="true"></i>
+                                    <span class="pouch-name">${siagaEscapeHtml(pouch.name)}</span>
+                                    <span class="pouch-count">${pouchPacked}/${pouchItems.length} dikemas</span>
+                                </button>
+                                <div class="kpt-hbag-pouch-actions">
+                                    <button type="button" class="kpt-hbag-icon-btn" onclick="openHospitalBagPouchModal('${owner}',${hospitalBagIdArg(pouchId)})" aria-label="Edit ${siagaEscapeHtml(pouch.name)}" title="Edit kantong"><i class="fa-solid fa-pen"></i></button>
+                                    <button type="button" class="kpt-hbag-icon-btn danger" onclick="deleteHospitalBagPouch(${hospitalBagIdArg(pouchId)})" ${pouchItems.length ? 'disabled' : ''} aria-label="Hapus kantong kosong" title="${pouchItems.length ? 'Kosongkan kantong terlebih dahulu' : 'Hapus kantong kosong'}"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </div>
+                            ${isOpen ? `<div class="kpt-hbag-pouch-body"><div class="kpt-hbag-items">${rows}</div><button type="button" class="kpt-hbag-btn kpt-hbag-btn-primary w-full" onclick="openHospitalBagItemModal(${hospitalBagIdArg(pouchId)})"><i class="fa-solid fa-plus"></i> Tambah Barang</button></div>` : ''}
+                        </article>`;
+                }).join('');
+
+                return `
+                    <section class="kpt-hbag-owner-card">
+                        <header class="kpt-hbag-owner-head">
+                            <div class="kpt-hbag-owner-title">
+                                <span class="kpt-hbag-owner-icon"><i class="fa-solid ${meta.icon}"></i></span>
+                                <div><strong>Tas ${owner === 'Istri' ? 'Ibu' : owner === 'Suami' ? 'Suami' : owner}</strong><small>${meta.desc}</small></div>
+                            </div>
+                            <div class="kpt-hbag-owner-progress">${ownerPacked}/${ownerItems.length}<br><span class="font-normal">dikemas</span></div>
+                        </header>
+                        <div class="kpt-hbag-owner-body">
+                            ${pouchHtml || `<div class="kpt-hbag-owner-empty">Belum ada kantong di tas ini.</div>`}
+                            <button type="button" class="kpt-hbag-btn kpt-hbag-btn-soft w-full" onclick="openHospitalBagPouchModal('${owner}')"><i class="fa-solid fa-plus"></i> Tambah Kantong</button>
+                        </div>
+                    </section>`;
+            }).join('');
+
+            container.innerHTML = ownerHtml;
             renderDashboardWidgets();
             renderSiagaOverview();
         }
 
-                function openHospitalBagModal(id = null) {
-            const form = document.getElementById('hospital-bag-form');
-            form.reset();
+        function toggleHospitalBagPouch(pouchId) {
+            const id = String(pouchId);
+            if (hospitalBagOpenPouchIds.has(id)) hospitalBagOpenPouchIds.delete(id);
+            else hospitalBagOpenPouchIds.add(id);
+            renderHospitalBagTable();
+        }
 
-            if (id) {
-                const item = appState.hospitalBag.find(i => i.id === id);
-                if (item) {
-                    document.getElementById('modal-bag-title').innerText = "Edit Barang Tas Melahirkan";
-                    document.getElementById('form-bag-id').value = item.id;
-                    document.getElementById('form-bag-category').value = item.category || 'Dokumen';
-                    document.getElementById('form-bag-name').value = item.name || '';
-                    document.getElementById('form-bag-qty').value = item.qty || '';
-                    document.getElementById('form-bag-package').value = item.packageLabel || '';
-                    document.getElementById('form-bag-done').checked = !!item.done;
-                }
-            } else {
-                document.getElementById('modal-bag-title').innerText = "Tambah Barang Tas Melahirkan";
-                document.getElementById('form-bag-id').value = "";
-            }
-
-            document.getElementById('modal-hospital-bag').classList.remove('hidden');
+        function openHospitalBagDialog(content) {
+            const root = document.getElementById('hospital-bag-dialog-root');
+            if (!root) return;
+            root.innerHTML = `<div class="kpt-hbag-modal-backdrop" onclick="closeHospitalBagModal()"><section class="kpt-hbag-modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()">${content}</section></div>`;
+            document.body.style.overflow = 'hidden';
+            const firstField = root.querySelector('input:not([type="hidden"]),select');
+            if (firstField) setTimeout(() => firstField.focus(), 30);
         }
 
         function closeHospitalBagModal() {
-            document.getElementById('modal-hospital-bag').classList.add('hidden');
+            const root = document.getElementById('hospital-bag-dialog-root');
+            if (root) root.innerHTML = '';
+            document.body.style.overflow = '';
+        }
+
+        function openHospitalBagPouchModal(category, pouchId = null) {
+            const pouch = pouchId ? (appState.hospitalBagPouches || []).find(item => String(item.id) === String(pouchId)) : null;
+            const owner = pouch ? pouch.category : category;
+            if (!HOSPITAL_BAG_OWNERS.includes(owner)) return;
+            const title = pouch ? 'Ubah Nama Kantong' : 'Tambah Kantong';
+            openHospitalBagDialog(`
+                <div class="kpt-hbag-modal-head"><div><h3>${title}</h3><p>Tas ${owner === 'Istri' ? 'Ibu' : owner === 'Suami' ? 'Suami' : owner} · Setiap barang harus berada di dalam kantong.</p></div><button type="button" class="kpt-hbag-modal-close" onclick="closeHospitalBagModal()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button></div>
+                <form id="hospital-bag-pouch-form" onsubmit="saveHospitalBagPouch(event)">
+                    <input type="hidden" id="hospital-bag-pouch-id" value="${pouch ? siagaEscapeHtml(pouch.id) : ''}">
+                    <input type="hidden" id="hospital-bag-pouch-owner" value="${owner}">
+                    <div class="kpt-hbag-field"><label for="hospital-bag-pouch-name">Nama kantong / pouch</label><input id="hospital-bag-pouch-name" type="text" maxlength="100" required value="${pouch ? siagaEscapeHtml(pouch.name) : ''}" placeholder="Contoh: Ziplock 01 - Pakaian masuk RS"></div>
+                    <div class="kpt-hbag-modal-footer"><button type="button" class="kpt-hbag-btn kpt-hbag-btn-soft" onclick="closeHospitalBagModal()">Batal</button><button type="submit" class="kpt-hbag-btn kpt-hbag-btn-primary">Simpan Kantong</button></div>
+                </form>`);
+        }
+
+        function saveHospitalBagPouch(event) {
+            event.preventDefault();
+            const id = String(document.getElementById('hospital-bag-pouch-id').value || '');
+            const category = document.getElementById('hospital-bag-pouch-owner').value;
+            const name = document.getElementById('hospital-bag-pouch-name').value.trim();
+            if (!HOSPITAL_BAG_OWNERS.includes(category) || !name) { alert('Nama kantong wajib diisi.'); return; }
+            const duplicate = (appState.hospitalBagPouches || []).some(item => item.category === category && hospitalBagNameKey(item.name) === hospitalBagNameKey(name) && String(item.id) !== id);
+            if (duplicate) { alert('Nama kantong tersebut sudah digunakan pada tas ini. Gunakan nama yang berbeda.'); return; }
+
+            if (id) {
+                const pouch = appState.hospitalBagPouches.find(item => String(item.id) === id);
+                if (!pouch) { alert('Kantong tidak ditemukan. Muat ulang lalu coba kembali.'); return; }
+                pouch.name = name;
+                (appState.hospitalBag || []).forEach(item => { if (String(item.pouchId ?? '') === id) item.packageLabel = name; });
+                hospitalBagOpenPouchIds.add(id);
+            } else {
+                const newId = hospitalBagNewId('pouch');
+                appState.hospitalBagPouches.push({ id: newId, category, name });
+                hospitalBagOpenPouchIds.add(newId);
+            }
+            closeHospitalBagModal();
+            renderHospitalBagTable();
+            saveToLocalStorage();
+        }
+
+        function deleteHospitalBagPouch(pouchId) {
+            const id = String(pouchId);
+            const pouch = (appState.hospitalBagPouches || []).find(item => String(item.id) === id);
+            if (!pouch) return;
+            const hasItems = (appState.hospitalBag || []).some(item => String(item.pouchId ?? '') === id);
+            if (hasItems) { alert('Kantong belum bisa dihapus karena masih berisi barang. Pindahkan atau hapus barang terlebih dahulu.'); return; }
+            if (!confirm(`Hapus kantong "${pouch.name}"?`)) return;
+            appState.hospitalBagPouches = appState.hospitalBagPouches.filter(item => String(item.id) !== id);
+            hospitalBagOpenPouchIds.delete(id);
+            renderHospitalBagTable();
+            saveToLocalStorage();
+        }
+
+        function addHospitalBagEntryRow(name = '', qty = '1', removable = true) {
+            const container = document.getElementById('hospital-bag-entry-rows');
+            if (!container) return;
+            const row = document.createElement('div');
+            row.className = 'kpt-hbag-entry-row';
+            row.innerHTML = `
+                <div class="kpt-hbag-field"><label>Nama barang</label><input type="text" data-hbag-name maxlength="140" value="${siagaEscapeHtml(name)}" placeholder="Contoh: Baju newborn"></div>
+                <div class="kpt-hbag-field"><label>Jumlah</label><input type="text" data-hbag-qty maxlength="50" value="${siagaEscapeHtml(qty || '1')}" placeholder="1 set"></div>
+                <button type="button" class="kpt-hbag-entry-remove ${removable ? '' : 'invisible'}" ${removable ? 'onclick="this.closest(\'.kpt-hbag-entry-row\').remove()"' : 'disabled'} aria-label="Hapus baris"><i class="fa-solid fa-xmark"></i></button>`;
+            container.appendChild(row);
+        }
+
+        function openHospitalBagItemModal(pouchId, itemId = null) {
+            const pouch = (appState.hospitalBagPouches || []).find(item => String(item.id) === String(pouchId));
+            if (!pouch) { alert('Kantong tidak ditemukan.'); return; }
+            const existing = itemId !== null && itemId !== undefined
+                ? (appState.hospitalBag || []).find(item => String(item.id) === String(itemId))
+                : null;
+            if (itemId !== null && itemId !== undefined && !existing) { alert('Barang tidak ditemukan.'); return; }
+            const editMode = !!existing;
+            const content = `
+                <div class="kpt-hbag-modal-head"><div><h3>${editMode ? 'Edit Barang' : 'Tambah Beberapa Barang'}</h3><p>Tas ${pouch.category === 'Istri' ? 'Ibu' : pouch.category === 'Suami' ? 'Suami' : pouch.category} · ${siagaEscapeHtml(pouch.name)}</p></div><button type="button" class="kpt-hbag-modal-close" onclick="closeHospitalBagModal()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button></div>
+                <form id="hospital-bag-item-form" onsubmit="saveHospitalBagForm(event)">
+                    <input type="hidden" id="form-bag-id" value="${editMode ? siagaEscapeHtml(existing.id) : ''}">
+                    <input type="hidden" id="form-bag-pouch-id" value="${siagaEscapeHtml(pouch.id)}">
+                    <div id="hospital-bag-entry-rows" class="grid gap-2"></div>
+                    ${editMode ? '' : '<button type="button" class="kpt-hbag-btn kpt-hbag-btn-soft w-full mt-2" onclick="addHospitalBagEntryRow()"><i class="fa-solid fa-plus"></i> Tambah Baris Barang</button>'}
+                    <p class="text-[10px] text-slate-500 mt-3">${editMode ? 'Perubahan nama dan jumlah tidak mengubah status pengemasan.' : 'Isi beberapa barang sekaligus. Barang baru otomatis berstatus belum dikemas.'}</p>
+                    <div class="kpt-hbag-modal-footer"><button type="button" class="kpt-hbag-btn kpt-hbag-btn-soft" onclick="closeHospitalBagModal()">Batal</button><button type="submit" class="kpt-hbag-btn kpt-hbag-btn-primary">${editMode ? 'Simpan Perubahan' : 'Simpan Semua Barang'}</button></div>
+                </form>`;
+            openHospitalBagDialog(content);
+            if (editMode) addHospitalBagEntryRow(existing.name || '', existing.qty || '1', false);
+            else addHospitalBagEntryRow('', '1', true);
+            const firstNameInput = document.querySelector('#hospital-bag-entry-rows [data-hbag-name]');
+            if (firstNameInput) setTimeout(() => firstNameInput.focus(), 35);
         }
 
         function saveHospitalBagForm(event) {
             event.preventDefault();
-            const id = document.getElementById('form-bag-id').value;
-            const category = document.getElementById('form-bag-category').value;
-            const name = document.getElementById('form-bag-name').value.trim();
-            const qty = document.getElementById('form-bag-qty').value.trim() || '1';
-            const packageLabel = document.getElementById('form-bag-package').value.trim();
-            const done = document.getElementById('form-bag-done').checked;
+            const id = String(document.getElementById('form-bag-id').value || '');
+            const pouchId = String(document.getElementById('form-bag-pouch-id').value || '');
+            const pouch = (appState.hospitalBagPouches || []).find(item => String(item.id) === pouchId);
+            if (!pouch) { alert('Kantong tujuan tidak ditemukan.'); return; }
+            const rows = Array.from(document.querySelectorAll('#hospital-bag-entry-rows .kpt-hbag-entry-row'));
+            const entries = rows.map(row => ({
+                name: String(row.querySelector('[data-hbag-name]')?.value || '').trim(),
+                qty: String(row.querySelector('[data-hbag-qty]')?.value || '').trim() || '1'
+            })).filter(entry => entry.name);
+            if (!entries.length) { alert('Masukkan minimal satu nama barang.'); return; }
 
             if (id) {
-                const index = appState.hospitalBag.findIndex(i => i.id == id);
-                if (index !== -1) {
-                    appState.hospitalBag[index] = { ...appState.hospitalBag[index], id: Number(id), category, name, qty, packageLabel, done };
-                }
+                const existing = (appState.hospitalBag || []).find(item => String(item.id) === id);
+                if (!existing) { alert('Barang tidak ditemukan.'); return; }
+                existing.name = entries[0].name;
+                existing.qty = entries[0].qty;
+                existing.category = pouch.category;
+                existing.pouchId = pouch.id;
+                existing.packageLabel = pouch.name;
             } else {
-                appState.hospitalBag.push({ id: Date.now(), category, name, qty, packageLabel, done });
+                const usedIds = new Set((appState.hospitalBag || []).map(item => String(item.id)));
+                entries.forEach((entry, index) => {
+                    let newId = Date.now() + Math.floor(Math.random() * 1000000) + index;
+                    while (usedIds.has(String(newId))) newId++;
+                    usedIds.add(String(newId));
+                    appState.hospitalBag.push({
+                        id: newId,
+                        category: pouch.category,
+                        pouchId: pouch.id,
+                        packageLabel: pouch.name,
+                        name: entry.name,
+                        qty: entry.qty,
+                        done: false
+                    });
+                });
             }
-
+            hospitalBagOpenPouchIds.add(pouchId);
+            closeHospitalBagModal();
             renderHospitalBagTable();
             saveToLocalStorage();
+        }
+
+        function openHospitalBagMoveModal(itemId) {
+            const item = (appState.hospitalBag || []).find(entry => String(entry.id) === String(itemId));
+            if (!item) return;
+            const destinations = (appState.hospitalBagPouches || []).filter(pouch => String(pouch.id) !== String(item.pouchId));
+            if (!destinations.length) { alert('Belum ada kantong tujuan lain. Buat kantong lain terlebih dahulu.'); return; }
+            const options = destinations.map(pouch => `<option value="${siagaEscapeHtml(pouch.id)}">Tas ${pouch.category === 'Istri' ? 'Ibu' : pouch.category === 'Suami' ? 'Suami' : pouch.category} · ${siagaEscapeHtml(pouch.name)}</option>`).join('');
+            openHospitalBagDialog(`
+                <div class="kpt-hbag-modal-head"><div><h3>Pindahkan Barang</h3><p>${siagaEscapeHtml(item.name || 'Barang')} · ${siagaEscapeHtml(item.qty || '1')}</p></div><button type="button" class="kpt-hbag-modal-close" onclick="closeHospitalBagModal()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button></div>
+                <form onsubmit="saveHospitalBagMove(event)"><input type="hidden" id="hospital-bag-move-item-id" value="${siagaEscapeHtml(item.id)}">
+                    <div class="kpt-hbag-field"><label for="hospital-bag-move-target">Pilih kantong tujuan</label><select id="hospital-bag-move-target" required>${options}</select></div>
+                    <p class="text-[10px] text-slate-500 mt-3">Status pengemasan akan dipertahankan. Pindahkan barang secara fisik sesuai lokasi barunya sebelum menandai checklist berikutnya.</p>
+                    <div class="kpt-hbag-modal-footer"><button type="button" class="kpt-hbag-btn kpt-hbag-btn-soft" onclick="closeHospitalBagModal()">Batal</button><button type="submit" class="kpt-hbag-btn kpt-hbag-btn-primary">Pindahkan</button></div>
+                </form>`);
+        }
+
+        function saveHospitalBagMove(event) {
+            event.preventDefault();
+            const itemId = String(document.getElementById('hospital-bag-move-item-id').value || '');
+            const targetId = String(document.getElementById('hospital-bag-move-target').value || '');
+            const item = (appState.hospitalBag || []).find(entry => String(entry.id) === itemId);
+            const target = (appState.hospitalBagPouches || []).find(pouch => String(pouch.id) === targetId);
+            if (!item || !target) { alert('Barang atau kantong tujuan tidak ditemukan.'); return; }
+            item.pouchId = target.id;
+            item.category = target.category;
+            item.packageLabel = target.name;
+            hospitalBagOpenPouchIds.add(targetId);
             closeHospitalBagModal();
+            renderHospitalBagTable();
+            saveToLocalStorage();
+        }
+
+        function toggleHospitalBagDone(itemId) {
+            const item = (appState.hospitalBag || []).find(entry => String(entry.id) === String(itemId));
+            if (!item) return;
+            item.done = !item.done;
+            renderHospitalBagTable();
+            saveToLocalStorage();
         }
 
         function deleteHospitalBagItem(id) {
-            if (confirm("Hapus barang dari tas melahirkan?")) {
-                appState.hospitalBag = appState.hospitalBag.filter(i => i.id !== id);
-                renderHospitalBagTable();
-                saveToLocalStorage();
-            }
+            const item = (appState.hospitalBag || []).find(entry => String(entry.id) === String(id));
+            if (!item) return;
+            if (!confirm(`Hapus barang "${item.name || 'Barang'}" dari Hospital Bag?`)) return;
+            appState.hospitalBag = appState.hospitalBag.filter(entry => String(entry.id) !== String(id));
+            renderHospitalBagTable();
+            saveToLocalStorage();
         }
 
         // DEPARTURE CHECKLIST
@@ -12220,10 +12529,10 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
             if (has('contractions')) renderContractionLogs();
             if (has('medicalRecords')) renderMedicalRecords();
           }
-          if (siagaVisible && has('emergencyContacts', 'hospitalBag', 'departureChecklist', 'husbandRoles', 'postpartumChecklist', 'siagaDepartureDefaultsSeeded', 'siagaPostpartumDefaultsSeeded')) {
+          if (siagaVisible && has('emergencyContacts', 'hospitalBag', 'hospitalBagPouches', 'departureChecklist', 'husbandRoles', 'postpartumChecklist', 'siagaDepartureDefaultsSeeded', 'siagaPostpartumDefaultsSeeded')) {
             ensureSiagaDefaults();
             if (has('emergencyContacts')) renderEmergencyContacts();
-            if (has('hospitalBag')) renderHospitalBagTable();
+            if (has('hospitalBag', 'hospitalBagPouches')) renderHospitalBagTable();
             if (has('departureChecklist', 'siagaDepartureDefaultsSeeded')) renderDepartureChecklist();
             if (has('husbandRoles')) renderHusbandRoles();
             if (has('postpartumChecklist', 'siagaPostpartumDefaultsSeeded')) renderPostpartumChecklist();
@@ -12260,7 +12569,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
           const prenatalDashboardKeys = [
             'shoppingItems', 'hospitals', 'priorityRSId', 'priorityMethod',
-            'priorityClass', 'priorityDoctor', 'hospitalBag', 'babyNames'
+            'priorityClass', 'priorityDoctor', 'hospitalBag', 'hospitalBagPouches', 'babyNames'
           ];
           if (prenatalDashboardVisible && has(...prenatalDashboardKeys)) renderDashboardWidgets();
 
