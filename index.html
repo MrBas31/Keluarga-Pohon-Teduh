@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.37 — Hospital Bag Column Width Fix -->
+    <!-- Keluarga Pohon Teduh 6.13.38 — HPHT & HPL Settings -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.37">
+    <meta name="application-version" content="6.13.38">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3804,7 +3804,7 @@ body.dark-mode .kpt-hbag-layout-conflict{background:#422f12;border-color:#854d0e
                                 <p class="text-xs md:text-sm text-sky-100 font-medium">Satu perjalanan, begitu banyak momen berharga.</p>
                                 <div class="flex flex-wrap items-center gap-3">
                                     <h2 class="text-2xl md:text-3xl lg:text-[2.05rem] font-extrabold font-brand tracking-tight leading-tight" id="hpl-display-text">HPL: --</h2>
-                                    <button type="button" onclick="editHPL()" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-xs font-semibold text-white transition" title="Edit tanggal HPL">
+                                    <button type="button" onclick="editHPL()" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-xs font-semibold text-white transition" title="Atur tanggal HPHT dan HPL" aria-label="Atur tanggal HPHT dan HPL">
                                         <i class="fa-solid fa-pen-to-square"></i><span>Ubah HPL</span>
                                     </button>
                                 </div>
@@ -5566,6 +5566,44 @@ body.dark-mode .kpt-hbag-layout-conflict{background:#422f12;border-color:#854d0e
                     Iya, Yakin! 🎉
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PENGATURAN HPHT & HPL -->
+    <div id="modal-pregnancy-dates" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden items-center justify-center p-3 sm:p-4" onclick="if(event.target===this) closePregnancyDatesModal()">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl relative border border-slate-200 dark:border-slate-700">
+            <button type="button" onclick="closePregnancyDatesModal()" class="absolute top-4 right-4 w-10 h-10 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700" aria-label="Tutup pengaturan tanggal kehamilan">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="pr-10">
+                <div class="w-11 h-11 rounded-2xl bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300 flex items-center justify-center mb-3">
+                    <i class="fa-solid fa-calendar-days text-lg"></i>
+                </div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 dark:text-slate-100">Atur HPHT & HPL</h2>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Lengkapi tanggal awal kehamilan dan perkiraan hari lahir untuk memperbarui ringkasan dashboard.</p>
+            </div>
+            <form id="pregnancy-dates-form" onsubmit="savePregnancyDates(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                        <label for="form-pregnancy-hpht" class="block text-xs font-bold text-slate-700 dark:text-slate-200">HPHT</label>
+                        <input type="date" id="form-pregnancy-hpht" class="w-full min-h-11 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2.5 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500" aria-describedby="pregnancy-hpht-help">
+                        <p id="pregnancy-hpht-help" class="text-[10px] leading-relaxed text-slate-500 dark:text-slate-400">Hari pertama haid terakhir.</p>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label for="form-pregnancy-hpl" class="block text-xs font-bold text-slate-700 dark:text-slate-200">HPL</label>
+                        <input type="date" id="form-pregnancy-hpl" class="w-full min-h-11 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-2.5 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500" aria-describedby="pregnancy-hpl-help">
+                        <p id="pregnancy-hpl-help" class="text-[10px] leading-relaxed text-slate-500 dark:text-slate-400">Perkiraan hari lahir sesuai informasi pemeriksaan.</p>
+                    </div>
+                </div>
+                <div class="rounded-xl border border-sky-100 dark:border-sky-900 bg-sky-50 dark:bg-sky-950/50 p-3">
+                    <p class="text-[11px] leading-relaxed text-sky-900 dark:text-sky-200"><i class="fa-solid fa-circle-info mr-1"></i> HPHT digunakan untuk menghitung usia kehamilan. HPL digunakan untuk menghitung perkiraan hari menuju persalinan. Keduanya diisi secara terpisah; perubahan HPHT tidak otomatis mengubah HPL.</p>
+                </div>
+                <p id="pregnancy-dates-error" class="hidden text-xs font-semibold text-rose-600 dark:text-rose-300" role="alert" aria-live="polite"></p>
+                <div class="flex flex-col-reverse sm:flex-row gap-2 pt-1">
+                    <button type="button" onclick="closePregnancyDatesModal()" class="flex-1 min-h-11 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-100 text-sm font-semibold">Batal</button>
+                    <button type="submit" class="flex-1 min-h-11 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold shadow-sm"><i class="fa-solid fa-floppy-disk mr-1.5"></i>Simpan Tanggal</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -7793,15 +7831,78 @@ body.dark-mode .kpt-hbag-layout-conflict{background:#422f12;border-color:#854d0e
             resetMainPageScroll();
         }
 
-        // EDIT HPL
+        // PENGATURAN HPHT & HPL — satu pintu untuk tanggal kehamilan.
         function editHPL() {
-            const current = appState.hpl || '2026-12-16';
-            const newHpl = prompt("Masukkan Tanggal HPL Baru (Format: YYYY-MM-DD):", current);
-            if (newHpl && newHpl.trim()) {
-                appState.hpl = newHpl.trim();
-                saveToLocalStorage();
-                calculatePregnancyData();
+            const form = document.getElementById('pregnancy-dates-form');
+            const hphtInput = document.getElementById('form-pregnancy-hpht');
+            const hplInput = document.getElementById('form-pregnancy-hpl');
+            const errorEl = document.getElementById('pregnancy-dates-error');
+            if (!form || !hphtInput || !hplInput) return;
+            form.reset();
+            hphtInput.value = String(appState.hpht || '');
+            hplInput.value = String(appState.hpl || '');
+            if (errorEl) {
+                errorEl.textContent = '';
+                errorEl.classList.add('hidden');
             }
+            const modal = document.getElementById('modal-pregnancy-dates');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.classList.add('overflow-hidden');
+            }
+        }
+
+        function closePregnancyDatesModal() {
+            const modal = document.getElementById('modal-pregnancy-dates');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        function showPregnancyDatesError(message) {
+            const errorEl = document.getElementById('pregnancy-dates-error');
+            if (!errorEl) return;
+            errorEl.textContent = message;
+            errorEl.classList.remove('hidden');
+        }
+
+        function isValidPregnancyDate(value) {
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))) return false;
+            const parsed = parseLocalDateValue(value);
+            return Number.isFinite(parsed.getTime());
+        }
+
+        function savePregnancyDates(event) {
+            event.preventDefault();
+            const hpht = String(document.getElementById('form-pregnancy-hpht')?.value || '').trim();
+            const hpl = String(document.getElementById('form-pregnancy-hpl')?.value || '').trim();
+
+            if (!hpht && !hpl) {
+                showPregnancyDatesError('Isi minimal salah satu tanggal. Lengkapi HPHT dan HPL agar seluruh ringkasan kehamilan dapat ditampilkan.');
+                return;
+            }
+            if (hpht && !isValidPregnancyDate(hpht)) {
+                showPregnancyDatesError('Tanggal HPHT tidak valid. Periksa kembali tanggal yang dipilih.');
+                return;
+            }
+            if (hpl && !isValidPregnancyDate(hpl)) {
+                showPregnancyDatesError('Tanggal HPL tidak valid. Periksa kembali tanggal yang dipilih.');
+                return;
+            }
+            if (hpht && hpl && hpht >= hpl) {
+                showPregnancyDatesError('HPL harus berada setelah tanggal HPHT. Silakan periksa kembali kedua tanggal.');
+                return;
+            }
+
+            // Kedua nilai disimpan secara eksplisit; HPL tidak dihitung otomatis dari HPHT.
+            appState.hpht = hpht;
+            appState.hpl = hpl;
+            saveToLocalStorage();
+            calculatePregnancyData();
+            closePregnancyDatesModal();
         }
 
         // ==========================================================
@@ -8077,42 +8178,45 @@ body.dark-mode .kpt-hbag-layout-conflict{background:#422f12;border-color:#854d0e
             if (typeof renderPostnatalStimulationDashboardWidget === 'function') renderPostnatalStimulationDashboardWidget();
         }
 
-        // PREGNANCY CALCULATOR
+        // PREGNANCY CALCULATOR — HPHT dan HPL dihitung mandiri.
         function calculatePregnancyData() {
             const hplTextEl = document.getElementById('hpl-display-text');
             const daysRemEl = document.getElementById('days-remaining');
             const gestAgeEl = document.getElementById('gestational-age');
             const triEl = document.getElementById('current-trimester');
-            if (!appState.hpl || !appState.hpht) {
+            const todayKey = getLocalDateKey(new Date());
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+
+            const hasValidHpl = isValidPregnancyDate(appState.hpl);
+            if (hasValidHpl) {
+                const hplDate = parseLocalDateValue(appState.hpl);
+                if (hplTextEl) hplTextEl.innerText = `HPL: ${hplDate.toLocaleDateString('id-ID', options)}`;
+                const diffDays = daysBetweenCalendarDates(todayKey, appState.hpl);
+                if (daysRemEl) daysRemEl.innerText = Number.isFinite(diffDays) && diffDays > 0 ? diffDays : 0;
+            } else {
                 if (hplTextEl) hplTextEl.innerText = 'HPL: --';
                 if (daysRemEl) daysRemEl.innerText = '--';
+            }
+
+            const hasValidHpht = isValidPregnancyDate(appState.hpht);
+            if (hasValidHpht) {
+                const ageDays = daysBetweenCalendarDates(appState.hpht, todayKey);
+                if (Number.isFinite(ageDays) && ageDays >= 0) {
+                    const weeks = Math.floor(ageDays / 7);
+                    const days = ageDays % 7;
+                    if (gestAgeEl) gestAgeEl.innerText = `${weeks}w ${days}d`;
+                    let trimesterText = 'Trimester 1';
+                    if (weeks >= 28) trimesterText = 'Trimester 3';
+                    else if (weeks >= 13) trimesterText = 'Trimester 2';
+                    if (triEl) triEl.innerText = trimesterText;
+                } else {
+                    if (gestAgeEl) gestAgeEl.innerText = '--';
+                    if (triEl) triEl.innerText = '--';
+                }
+            } else {
                 if (gestAgeEl) gestAgeEl.innerText = '--';
                 if (triEl) triEl.innerText = '--';
-                return;
             }
-            const hplDate = parseLocalDateValue(appState.hpl);
-            const today = new Date();
-            
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            if (hplTextEl) hplTextEl.innerText = `HPL: ${hplDate.toLocaleDateString('id-ID', options)}`;
-
-            const todayKey = getLocalDateKey(today);
-            const diffDays = daysBetweenCalendarDates(todayKey, appState.hpl);
-            if (daysRemEl) daysRemEl.innerText = Number.isFinite(diffDays) && diffDays > 0 ? diffDays : 0;
-
-            const ageDays = daysBetweenCalendarDates(appState.hpht, todayKey);
-            const weeks = Math.floor(ageDays / 7);
-            const days = ageDays % 7;
-            
-            if (gestAgeEl) gestAgeEl.innerText = `${weeks}w ${days}d`;
-
-            let trimesterText = "Trimester 1";
-            if (weeks >= 28) {
-                trimesterText = "Trimester 3";
-            } else if (weeks >= 13) {
-                trimesterText = "Trimester 2";
-            }
-            if (triEl) triEl.innerText = trimesterText;
         }
 
         // RENDER DASHBOARD WIDGETS
