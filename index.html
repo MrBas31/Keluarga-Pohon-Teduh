@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <!-- Keluarga Pohon Teduh 6.13.35 — Bag-first Hospital Bag Organizer -->
+    <!-- Keluarga Pohon Teduh 6.13.36 — Shared Hospital Bag Layout -->
 <html lang="id">
 <head>
     <!-- Firebase App (Core) & Realtime Database SDK -->
@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-version" content="6.13.35">
+    <meta name="application-version" content="6.13.36">
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CYC2fUamhaVstC_ieZzuTZSJ6s3Ibh1c">
     <title>Keluarga Pohon Teduh - Baby &amp; Household Planner</title>
     <!-- Tailwind CSS CDN: dark variants follow the in-app theme toggle -->
@@ -3440,7 +3440,7 @@ body.dark-mode #modal-shopping-item input[type="radio"] {
 
 
 <style id="kpt-hospital-bag-61335">
-/* 6.13.35 — Bag-first Hospital Bag Organizer. All styles are scoped. */
+/* Bag-first Hospital Bag Organizer base styles retained from 6.13.35. */
 #hospital-bag-summary{display:grid;gap:8px}
 .kpt-hbag-summary-card{border:1px solid #dbeafe;background:linear-gradient(135deg,#f0f9ff,#f8fafc);border-radius:15px;padding:12px 14px}
 .kpt-hbag-summary-track{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
@@ -3532,6 +3532,53 @@ body.dark-mode .kpt-hbag-modal-close{background:#334155;color:#e2e8f0}
 body.dark-mode .kpt-hbag-entry-remove{background:#4c1d26;color:#fecdd3}
 @media(min-width:768px){.kpt-hbag-modal-backdrop{align-items:center;padding:20px}.kpt-hbag-modal{padding:21px}}
 @media(max-width:420px){.kpt-hbag-owner-head{padding:11px}.kpt-hbag-owner-body{padding:8px}.kpt-hbag-pouch-head{padding:8px}.kpt-hbag-item{grid-template-columns:25px minmax(0,1fr) auto;gap:6px;padding:8px}.kpt-hbag-item-actions button{width:32px;height:36px}.kpt-hbag-status{font-size:8px;padding:4px 6px}.kpt-hbag-modal{border-radius:20px;padding:14px}.kpt-hbag-entry-row{grid-template-columns:minmax(0,1fr) minmax(82px,.4fr) 34px;gap:6px}.kpt-hbag-entry-remove{width:34px}}
+</style>
+
+<style id="kpt-hbag-shared-layout-61336">
+/* 6.13.36 — Two independent desktop columns and shared Firebase layout controls. */
+#hospital-bag-layout-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.kpt-hbag-panel-heading{align-items:center}
+.kpt-hbag-layout-desktop{display:none}
+.kpt-hbag-layout-mobile{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}
+.kpt-hbag-layout-column{display:grid;align-content:start;gap:14px;min-width:0}
+.kpt-hbag-layout-edit-note{padding:9px 11px;border:1px solid #bae6fd;border-radius:11px;background:#f0f9ff;color:#075985;font-size:11px;line-height:1.45}
+.kpt-hbag-owner-card.is-layout-editing{border-style:dashed;border-color:#0ea5e9;box-shadow:0 0 0 2px rgba(14,165,233,.10)}
+.kpt-hbag-owner-card.is-layout-dragging{opacity:.45}
+.kpt-hbag-owner-card.is-layout-drop-target{outline:3px solid rgba(14,165,233,.35);outline-offset:2px}
+.kpt-hbag-layout-grip{display:none;align-items:center;justify-content:center;width:34px;height:38px;border-radius:9px;background:#e0f2fe;color:#0369a1;cursor:grab;touch-action:none}
+.kpt-hbag-layout-controls{display:none;align-items:center;gap:5px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1px dashed #cbd5e1}
+.kpt-hbag-owner-card.is-layout-editing .kpt-hbag-layout-controls{display:flex}
+.kpt-hbag-layout-control{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:42px;min-height:42px;padding:7px 10px;border:1px solid #cbd5e1;border-radius:9px;background:#f8fafc;color:#334155;font-size:11px;font-weight:700}
+.kpt-hbag-layout-control:disabled{opacity:.35;cursor:not-allowed}
+.kpt-hbag-layout-control.move-column{margin-left:auto}
+.kpt-hbag-layout-save{background:#0284c7;color:white;border-color:#0284c7}
+.kpt-hbag-layout-reset{background:#fff7ed;color:#9a3412;border-color:#fed7aa}
+.kpt-hbag-layout-conflict{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border:1px solid #fcd34d;border-radius:11px;background:#fffbeb;color:#92400e;font-size:11px;line-height:1.45}
+body.dark-mode .kpt-hbag-layout-edit-note{background:#12314a;border-color:#164e63;color:#bae6fd}
+body.dark-mode .kpt-hbag-layout-grip{background:#12314a;color:#7dd3fc}
+body.dark-mode .kpt-hbag-layout-controls{border-color:#475569}
+body.dark-mode .kpt-hbag-layout-control{background:#26364b;color:#e2e8f0;border-color:#475569}
+body.dark-mode .kpt-hbag-layout-control.move-column{background:#12314a;color:#bae6fd;border-color:#164e63}
+body.dark-mode .kpt-hbag-layout-save{background:#0369a1;color:white;border-color:#0369a1}
+body.dark-mode .kpt-hbag-layout-reset{background:#422b1b;color:#fed7aa;border-color:#854d0e}
+body.dark-mode .kpt-hbag-layout-conflict{background:#422f12;border-color:#854d0e;color:#fde68a}
+@media(min-width:768px){
+  .kpt-hbag-layout-desktop{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+  .kpt-hbag-layout-mobile{display:none}
+  .kpt-hbag-layout-grip{display:inline-flex}
+  .kpt-hbag-owner-card.is-layout-editing{cursor:grab}
+  .kpt-hbag-layout-controls{gap:6px}
+}
+@media(max-width:767px){
+  .kpt-hbag-panel-heading{align-items:flex-start;flex-wrap:wrap}
+  .kpt-hbag-panel-heading>div:first-child{flex:1 1 100%;min-width:0}
+  #hospital-bag-layout-toolbar{width:100%;justify-content:stretch}
+  #hospital-bag-layout-toolbar>button{flex:1;min-height:44px}
+  .kpt-hbag-layout-edit-note{font-size:10px}
+  .kpt-hbag-layout-controls{gap:6px}
+  .kpt-hbag-layout-control{min-width:44px;min-height:44px}
+  .kpt-hbag-layout-control.move-column{margin-left:auto}
+}
 </style>
 
 </head>
@@ -4172,11 +4219,12 @@ body.dark-mode .kpt-hbag-entry-remove{background:#4c1d26;color:#fecdd3}
 
                 <!-- HOSPITAL BAG ORGANIZER — BAG FIRST -->
                 <div id="siaga-bag" class="siaga-panel scroll-mt-24 space-y-3">
-                    <div class="siaga-panel-heading">
+                    <div class="siaga-panel-heading kpt-hbag-panel-heading">
                         <div>
                             <h2 class="siaga-title">🎒 Hospital Bag Organizer</h2>
                             <p class="text-xs text-slate-500 mt-1">Kelompokkan perlengkapan berdasarkan tas dan kantongnya.</p>
                         </div>
+                        <div id="hospital-bag-layout-toolbar"></div>
                     </div>
                     <div id="hospital-bag-summary"></div>
                     <div id="hospital-bag-container" aria-live="polite"></div>
@@ -6725,6 +6773,15 @@ body.dark-mode .kpt-hbag-entry-remove{background:#4c1d26;color:#fecdd3}
                 hospitalBag: [],
                 hospitalBagPouches: [],
                 hospitalBagStructureVersion: 0,
+                hospitalBagLayout: {
+                    version: 1,
+                    positions: {
+                        Istri: { column: 'left', order: 0 },
+                        Bayi: { column: 'right', order: 0 },
+                        Dokumen: { column: 'left', order: 1 },
+                        Suami: { column: 'right', order: 1 }
+                    }
+                },
                 husbandRoles: [],
                 birthPlan: [],
                 affirmations: [],
@@ -9602,13 +9659,233 @@ body.dark-mode .kpt-hbag-entry-remove{background:#4c1d26;color:#fecdd3}
             return changed;
         }
 
+        // Shared Hospital Bag layout (6.13.36). The same Firebase configuration
+        // drives the two independent desktop columns and the row-wise mobile order.
+        const HOSPITAL_BAG_DEFAULT_LAYOUT = {
+            version: 1,
+            positions: {
+                Istri: { column: 'left', order: 0 },
+                Bayi: { column: 'right', order: 0 },
+                Dokumen: { column: 'left', order: 1 },
+                Suami: { column: 'right', order: 1 }
+            }
+        };
+        let hospitalBagLayoutEditing = false;
+        let hospitalBagLayoutDraft = null;
+        let hospitalBagLayoutBase = null;
+        let hospitalBagLayoutRemoteConflict = false;
+        let hospitalBagDraggedOwner = null;
+
+        function hospitalBagCloneLayout(value) {
+            return JSON.parse(JSON.stringify(value || HOSPITAL_BAG_DEFAULT_LAYOUT));
+        }
+
+        function hospitalBagNormalizeLayout(source) {
+            const rawPositions = source && typeof source === 'object' && source.positions && typeof source.positions === 'object'
+                ? source.positions : {};
+            const columns = { left: [], right: [] };
+            HOSPITAL_BAG_OWNERS.forEach((owner, fallbackIndex) => {
+                const raw = rawPositions[owner] && typeof rawPositions[owner] === 'object' ? rawPositions[owner] : HOSPITAL_BAG_DEFAULT_LAYOUT.positions[owner];
+                const column = raw && raw.column === 'right' ? 'right' : raw && raw.column === 'left' ? 'left' : HOSPITAL_BAG_DEFAULT_LAYOUT.positions[owner].column;
+                const orderValue = Number(raw && raw.order);
+                columns[column].push({ owner, order: Number.isFinite(orderValue) && orderValue >= 0 ? orderValue : HOSPITAL_BAG_DEFAULT_LAYOUT.positions[owner].order, fallbackIndex });
+            });
+            const positions = {};
+            ['left', 'right'].forEach(column => {
+                columns[column].sort((a, b) => a.order - b.order || a.fallbackIndex - b.fallbackIndex);
+                columns[column].forEach((entry, index) => {
+                    positions[entry.owner] = { column, order: index };
+                });
+            });
+            return { version: 1, positions };
+        }
+
+        function ensureHospitalBagLayout() {
+            const normalized = hospitalBagNormalizeLayout(appState.hospitalBagLayout);
+            const changed = JSON.stringify(appState.hospitalBagLayout || null) !== JSON.stringify(normalized);
+            if (changed) appState.hospitalBagLayout = normalized;
+            return changed;
+        }
+
+        function hospitalBagLayoutColumns(layout) {
+            const normalized = hospitalBagNormalizeLayout(layout);
+            const columns = { left: [], right: [] };
+            HOSPITAL_BAG_OWNERS.forEach(owner => {
+                const position = normalized.positions[owner];
+                columns[position.column].push(owner);
+            });
+            ['left', 'right'].forEach(column => {
+                columns[column].sort((a, b) => normalized.positions[a].order - normalized.positions[b].order);
+            });
+            return columns;
+        }
+
+        function hospitalBagLayoutToPositions(columns) {
+            const positions = {};
+            ['left', 'right'].forEach(column => {
+                (columns[column] || []).forEach((owner, index) => {
+                    positions[owner] = { column, order: index };
+                });
+            });
+            return { version: 1, positions };
+        }
+
+        function hospitalBagLayoutStartEditing() {
+            ensureHospitalBagLayout();
+            hospitalBagLayoutBase = hospitalBagCloneLayout(appState.hospitalBagLayout);
+            hospitalBagLayoutDraft = hospitalBagCloneLayout(appState.hospitalBagLayout);
+            hospitalBagLayoutEditing = true;
+            hospitalBagLayoutRemoteConflict = false;
+            renderHospitalBagTable();
+        }
+
+        function hospitalBagLayoutCancelEditing() {
+            hospitalBagLayoutEditing = false;
+            hospitalBagLayoutDraft = null;
+            hospitalBagLayoutBase = null;
+            hospitalBagLayoutRemoteConflict = false;
+            hospitalBagDraggedOwner = null;
+            renderHospitalBagTable();
+        }
+
+        function hospitalBagLayoutSave() {
+            if (hospitalBagLayoutRemoteConflict) {
+                alert('Layout berubah dari perangkat lain saat mode pengaturan terbuka. Muat layout terbaru terlebih dahulu agar perubahan tidak saling menimpa.');
+                return;
+            }
+            appState.hospitalBagLayout = hospitalBagNormalizeLayout(hospitalBagLayoutDraft || appState.hospitalBagLayout);
+            hospitalBagLayoutEditing = false;
+            hospitalBagLayoutDraft = null;
+            hospitalBagLayoutBase = null;
+            hospitalBagLayoutRemoteConflict = false;
+            hospitalBagDraggedOwner = null;
+            saveToLocalStorage();
+            renderHospitalBagTable();
+        }
+
+        function hospitalBagLayoutResetDraft() {
+            if (!hospitalBagLayoutEditing || hospitalBagLayoutRemoteConflict) return;
+            hospitalBagLayoutDraft = hospitalBagCloneLayout(HOSPITAL_BAG_DEFAULT_LAYOUT);
+            renderHospitalBagTable();
+        }
+
+        function hospitalBagLayoutMove(owner, direction) {
+            if (!hospitalBagLayoutEditing || hospitalBagLayoutRemoteConflict || !HOSPITAL_BAG_OWNERS.includes(owner)) return;
+            const columns = hospitalBagLayoutColumns(hospitalBagLayoutDraft || appState.hospitalBagLayout);
+            const currentColumn = columns.left.includes(owner) ? 'left' : 'right';
+            const otherColumn = currentColumn === 'left' ? 'right' : 'left';
+            const currentList = columns[currentColumn];
+            const currentIndex = currentList.indexOf(owner);
+
+            if (direction === 'up' || direction === 'down') {
+                const targetIndex = currentIndex + (direction === 'up' ? -1 : 1);
+                if (targetIndex < 0 || targetIndex >= currentList.length) return;
+                [currentList[currentIndex], currentList[targetIndex]] = [currentList[targetIndex], currentList[currentIndex]];
+            } else if (direction === 'left' || direction === 'right') {
+                const destination = direction;
+                if (destination === currentColumn) return;
+                currentList.splice(currentIndex, 1);
+                columns[destination].push(owner);
+            }
+            hospitalBagLayoutDraft = hospitalBagLayoutToPositions(columns);
+            renderHospitalBagTable();
+        }
+
+        function hospitalBagLayoutDragStart(event, owner) {
+            if (!hospitalBagLayoutEditing || hospitalBagLayoutRemoteConflict) { event.preventDefault(); return; }
+            hospitalBagDraggedOwner = owner;
+            if (event.dataTransfer) {
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', owner);
+            }
+            if (event.currentTarget) event.currentTarget.classList.add('is-layout-dragging');
+        }
+
+        function hospitalBagLayoutDragEnd(event) {
+            hospitalBagDraggedOwner = null;
+            if (event.currentTarget) event.currentTarget.classList.remove('is-layout-dragging');
+            document.querySelectorAll('.kpt-hbag-owner-card.is-layout-drop-target').forEach(el => el.classList.remove('is-layout-drop-target'));
+        }
+
+        function hospitalBagLayoutDragOver(event) {
+            if (!hospitalBagLayoutEditing || hospitalBagLayoutRemoteConflict || !hospitalBagDraggedOwner) return;
+            event.preventDefault();
+            if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+            const card = event.target && event.target.closest ? event.target.closest('.kpt-hbag-owner-card') : null;
+            document.querySelectorAll('.kpt-hbag-owner-card.is-layout-drop-target').forEach(el => { if (el !== card) el.classList.remove('is-layout-drop-target'); });
+            if (card) card.classList.add('is-layout-drop-target');
+        }
+
+        function hospitalBagLayoutDrop(event, targetOwner = null, targetColumn = null) {
+            if (!hospitalBagLayoutEditing || hospitalBagLayoutRemoteConflict) return;
+            event.preventDefault();
+            event.stopPropagation();
+            const dragged = hospitalBagDraggedOwner || (event.dataTransfer ? event.dataTransfer.getData('text/plain') : '');
+            hospitalBagDraggedOwner = null;
+            document.querySelectorAll('.kpt-hbag-owner-card.is-layout-dragging,.kpt-hbag-owner-card.is-layout-drop-target').forEach(el => el.classList.remove('is-layout-dragging', 'is-layout-drop-target'));
+            if (!HOSPITAL_BAG_OWNERS.includes(dragged)) return;
+
+            const columns = hospitalBagLayoutColumns(hospitalBagLayoutDraft || appState.hospitalBagLayout);
+            const sourceColumn = columns.left.includes(dragged) ? 'left' : 'right';
+            const destinationColumn = targetColumn === 'right' ? 'right' : targetColumn === 'left' ? 'left' : sourceColumn;
+            columns[sourceColumn] = columns[sourceColumn].filter(owner => owner !== dragged);
+            if (targetOwner && HOSPITAL_BAG_OWNERS.includes(targetOwner) && targetOwner !== dragged) {
+                const destinationIndex = columns[destinationColumn].indexOf(targetOwner);
+                if (destinationIndex >= 0) columns[destinationColumn].splice(destinationIndex, 0, dragged);
+                else columns[destinationColumn].push(dragged);
+            } else {
+                columns[destinationColumn].push(dragged);
+            }
+            hospitalBagLayoutDraft = hospitalBagLayoutToPositions(columns);
+            renderHospitalBagTable();
+        }
+
+        function renderHospitalBagLayoutToolbar() {
+            const toolbar = document.getElementById('hospital-bag-layout-toolbar');
+            if (!toolbar) return;
+            if (!hospitalBagLayoutEditing) {
+                toolbar.innerHTML = `<button type="button" class="kpt-hbag-btn kpt-hbag-btn-soft" onclick="hospitalBagLayoutStartEditing()"><i class="fa-solid fa-sliders"></i> Atur Layout</button>`;
+                return;
+            }
+            if (hospitalBagLayoutRemoteConflict) {
+                toolbar.innerHTML = `<button type="button" class="kpt-hbag-btn kpt-hbag-btn-soft" onclick="hospitalBagLayoutCancelEditing()"><i class="fa-solid fa-rotate"></i> Batal & Muat Terbaru</button>`;
+                return;
+            }
+            toolbar.innerHTML = `
+                <button type="button" class="kpt-hbag-btn kpt-hbag-btn-soft" onclick="hospitalBagLayoutCancelEditing()">Batal</button>
+                <button type="button" class="kpt-hbag-btn kpt-hbag-layout-reset" onclick="hospitalBagLayoutResetDraft()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                <button type="button" class="kpt-hbag-btn kpt-hbag-layout-save" onclick="hospitalBagLayoutSave()"><i class="fa-solid fa-cloud-arrow-up"></i> Simpan Layout</button>`;
+        }
+
+        function hospitalBagLayoutCardControls(owner, column, index, count) {
+            if (!hospitalBagLayoutEditing) return '';
+            const leftDisabled = index <= 0 ? 'disabled' : '';
+            const rightDisabled = index >= count - 1 ? 'disabled' : '';
+            const destination = column === 'left' ? 'right' : 'left';
+            const directionIcon = destination === 'right' ? 'fa-arrow-right' : 'fa-arrow-left';
+            return `
+                <div class="kpt-hbag-layout-controls" aria-label="Atur posisi Tas ${owner === 'Istri' ? 'Ibu' : owner}">
+                    <button type="button" class="kpt-hbag-layout-control" onclick="hospitalBagLayoutMove('${owner}','up')" ${leftDisabled} aria-label="Geser ke atas" title="Geser ke atas"><i class="fa-solid fa-arrow-up"></i></button>
+                    <button type="button" class="kpt-hbag-layout-control" onclick="hospitalBagLayoutMove('${owner}','down')" ${rightDisabled} aria-label="Geser ke bawah" title="Geser ke bawah"><i class="fa-solid fa-arrow-down"></i></button>
+                    <button type="button" class="kpt-hbag-layout-control move-column" onclick="hospitalBagLayoutMove('${owner}','${destination}')" aria-label="Pindah ke kolom ${destination === 'left' ? 'kiri' : 'kanan'}" title="Pindah ke kolom ${destination === 'left' ? 'kiri' : 'kanan'}"><i class="fa-solid ${directionIcon}"></i><span>Pindah kolom</span></button>
+                </div>`;
+        }
+
         function renderHospitalBagTable() {
             const container = document.getElementById('hospital-bag-container');
             const summary = document.getElementById('hospital-bag-summary');
             if (!container) return;
 
             const migrated = ensureHospitalBagStructure();
-            if (migrated && typeof saveToLocalStorage === 'function') saveToLocalStorage();
+            const layoutChanged = ensureHospitalBagLayout();
+            if ((migrated || layoutChanged) && typeof saveToLocalStorage === 'function') saveToLocalStorage();
+
+            const latestLayout = hospitalBagNormalizeLayout(appState.hospitalBagLayout);
+            if (hospitalBagLayoutEditing && isRemoteUpdate && hospitalBagLayoutBase && JSON.stringify(latestLayout) !== JSON.stringify(hospitalBagLayoutBase)) {
+                hospitalBagLayoutRemoteConflict = true;
+            }
+            const activeLayout = hospitalBagLayoutEditing && hospitalBagLayoutDraft ? hospitalBagNormalizeLayout(hospitalBagLayoutDraft) : latestLayout;
+            const columns = hospitalBagLayoutColumns(activeLayout);
             const items = Array.isArray(appState.hospitalBag) ? appState.hospitalBag : [];
             const pouches = Array.isArray(appState.hospitalBagPouches) ? appState.hospitalBagPouches : [];
             const total = items.length;
@@ -9626,7 +9903,9 @@ body.dark-mode .kpt-hbag-entry-remove{background:#4c1d26;color:#fecdd3}
                     </div>`;
             }
 
-            const ownerHtml = HOSPITAL_BAG_OWNERS.map(owner => {
+            renderHospitalBagLayoutToolbar();
+
+            const buildOwnerCard = (owner, column, index, count) => {
                 const ownerPouches = pouches.filter(pouch => pouch.category === owner);
                 const ownerItems = items.filter(item => item && item.category === owner);
                 const ownerPacked = ownerItems.filter(item => item.done === true).length;
@@ -9677,10 +9956,12 @@ body.dark-mode .kpt-hbag-entry-remove{background:#4c1d26;color:#fecdd3}
                         </article>`;
                 }).join('');
 
+                const isEditing = hospitalBagLayoutEditing;
                 return `
-                    <section class="kpt-hbag-owner-card">
+                    <section class="kpt-hbag-owner-card ${isEditing ? 'is-layout-editing' : ''}" data-hbag-owner="${owner}" ${isEditing ? `draggable="true" ondragstart="hospitalBagLayoutDragStart(event,'${owner}')" ondragend="hospitalBagLayoutDragEnd(event)" ondragover="hospitalBagLayoutDragOver(event)" ondrop="hospitalBagLayoutDrop(event,'${owner}','${column}')"` : ''}>
                         <header class="kpt-hbag-owner-head">
                             <div class="kpt-hbag-owner-title">
+                                ${isEditing ? `<span class="kpt-hbag-layout-grip" title="Geser untuk mengatur posisi" aria-hidden="true"><i class="fa-solid fa-grip-vertical"></i></span>` : ''}
                                 <span class="kpt-hbag-owner-icon"><i class="fa-solid ${meta.icon}"></i></span>
                                 <div><strong>Tas ${owner === 'Istri' ? 'Ibu' : owner === 'Suami' ? 'Suami' : owner}</strong><small>${meta.desc}</small></div>
                             </div>
@@ -9689,11 +9970,25 @@ body.dark-mode .kpt-hbag-entry-remove{background:#4c1d26;color:#fecdd3}
                         <div class="kpt-hbag-owner-body">
                             ${pouchHtml || `<div class="kpt-hbag-owner-empty">Belum ada kantong di tas ini.</div>`}
                             <button type="button" class="kpt-hbag-btn kpt-hbag-btn-soft w-full" onclick="openHospitalBagPouchModal('${owner}')"><i class="fa-solid fa-plus"></i> Tambah Kantong</button>
+                            ${hospitalBagLayoutCardControls(owner, column, index, count)}
                         </div>
                     </section>`;
-            }).join('');
+            };
 
-            container.innerHTML = ownerHtml;
+            const desktopColumnHtml = column => columns[column].map((owner, index) => buildOwnerCard(owner, column, index, columns[column].length)).join('');
+            const mobileOwners = [];
+            for (let index = 0; index < Math.max(columns.left.length, columns.right.length); index++) {
+                if (columns.left[index]) mobileOwners.push({ owner: columns.left[index], column: 'left', index, count: columns.left.length });
+                if (columns.right[index]) mobileOwners.push({ owner: columns.right[index], column: 'right', index, count: columns.right.length });
+            }
+            const mobileHtml = mobileOwners.map(entry => buildOwnerCard(entry.owner, entry.column, entry.index, entry.count)).join('');
+            const conflictNote = hospitalBagLayoutEditing && hospitalBagLayoutRemoteConflict
+                ? `<div class="kpt-hbag-layout-conflict"><i class="fa-solid fa-triangle-exclamation mt-0.5"></i><div><strong>Layout berubah di perangkat lain.</strong><br>Draft di perangkat ini tidak akan ditimpa. Batalkan mode pengaturan untuk memuat susunan terbaru.</div></div>`
+                : hospitalBagLayoutEditing
+                    ? `<div class="kpt-hbag-layout-edit-note"><i class="fa-solid fa-hand-pointer mr-1"></i> Geser kartu untuk mengatur posisi di PC. Di HP, gunakan tombol panah dan pindah kolom pada setiap tas. Perubahan baru dibagikan setelah menekan Simpan Layout.</div>`
+                    : '';
+
+            container.innerHTML = `${conflictNote}<div class="kpt-hbag-layout-desktop"><div class="kpt-hbag-layout-column" data-hbag-column="left" ondragover="hospitalBagLayoutDragOver(event)" ondrop="hospitalBagLayoutDrop(event,null,'left')">${desktopColumnHtml('left')}</div><div class="kpt-hbag-layout-column" data-hbag-column="right" ondragover="hospitalBagLayoutDragOver(event)" ondrop="hospitalBagLayoutDrop(event,null,'right')">${desktopColumnHtml('right')}</div></div><div class="kpt-hbag-layout-mobile">${mobileHtml}</div>`;
             renderDashboardWidgets();
             renderSiagaOverview();
         }
@@ -12529,10 +12824,10 @@ body.dark-mode .kpt-hbag-entry-remove{background:#4c1d26;color:#fecdd3}
             if (has('contractions')) renderContractionLogs();
             if (has('medicalRecords')) renderMedicalRecords();
           }
-          if (siagaVisible && has('emergencyContacts', 'hospitalBag', 'hospitalBagPouches', 'departureChecklist', 'husbandRoles', 'postpartumChecklist', 'siagaDepartureDefaultsSeeded', 'siagaPostpartumDefaultsSeeded')) {
+          if (siagaVisible && has('emergencyContacts', 'hospitalBag', 'hospitalBagPouches', 'hospitalBagLayout', 'departureChecklist', 'husbandRoles', 'postpartumChecklist', 'siagaDepartureDefaultsSeeded', 'siagaPostpartumDefaultsSeeded')) {
             ensureSiagaDefaults();
             if (has('emergencyContacts')) renderEmergencyContacts();
-            if (has('hospitalBag', 'hospitalBagPouches')) renderHospitalBagTable();
+            if (has('hospitalBag', 'hospitalBagPouches', 'hospitalBagLayout')) renderHospitalBagTable();
             if (has('departureChecklist', 'siagaDepartureDefaultsSeeded')) renderDepartureChecklist();
             if (has('husbandRoles')) renderHusbandRoles();
             if (has('postpartumChecklist', 'siagaPostpartumDefaultsSeeded')) renderPostpartumChecklist();
